@@ -1,0 +1,25 @@
+/*
+Theme Name: Linea 3 Estudio Legal
+Theme URI: https://linea3legal.com
+Author: Linea 3 Developer
+Author URI: https://linea3legal.com
+Description: Tema hijo profesional y moderno para Linea 3 Estudio Legal. Basado en Twenty Twenty-Five. Optimizado para Full Site Editing (FSE).
+Version: 1.0.0
+Requires at least: 6.7
+Tested up to: 6.9.4
+Requires PHP: 8.2
+License: GNU General Public License v2 or later
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
+Template: twentytwentyfive
+Text Domain: linea3-legal-child
+
+This theme, like WordPress, is licensed under the GPL.
+Use it to make something cool, have fun, and share what you've learned with others.
+*/
+
+/* 
+ * NOTA: Este tema es un Block Theme moderno. 
+ * Todos los estilos globales e integraciones deben manejarse mediante theme.json.
+ * Usa este archivo SOLO para utilidades muy específicas que no puedan resolverse 
+ * a través del Site Editor o variables CSS nativas.
+ */

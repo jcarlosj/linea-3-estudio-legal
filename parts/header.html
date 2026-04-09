@@ -62,11 +62,20 @@
 		document.addEventListener('DOMContentLoaded', function() {
 			var toggleBtn = document.getElementById('search-toggle-btn');
 			var searchContainer = document.querySelector('.floating-search-container');
+			
 			if (toggleBtn && searchContainer) {
 				toggleBtn.addEventListener('click', function(e) {
 					e.preventDefault();
 					searchContainer.classList.toggle('is-open');
 				});
+
+				// Ocultar inmediatamente el cajón al dar clic en el botón "Buscar" mientras procesa la búsqueda
+				var searchForm = searchContainer.querySelector('form');
+				if (searchForm) {
+					searchForm.addEventListener('submit', function() {
+						searchContainer.classList.remove('is-open');
+					});
+				}
 			}
 		});
 	</script>

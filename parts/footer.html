@@ -1,27 +1,48 @@
-<!-- wp:group {"tagName":"footer","layout":{"type":"constrained"},"style":{"spacing":{"padding":{"top":"var:preset|spacing|40","bottom":"var:preset|spacing|40"}},"color":{"background":"var:preset|color|primary","text":"var:preset|color|white"}}} -->
-<footer class="wp-block-group has-white-color has-primary-background-color has-text-color has-background" style="padding-top:var(--wp--preset--spacing--40);padding-bottom:var(--wp--preset--spacing--40)">
-	<!-- wp:columns -->
-	<div class="wp-block-columns">
-		<!-- wp:column -->
-		<div class="wp-block-column">
-			<!-- wp:site-title /-->
-			<!-- wp:paragraph -->
-			<p>Estudio Legal Profesional.</p>
+<!-- wp:group {"tagName":"footer","align":"full","layout":{"type":"constrained"},"style":{"color":{"background":"var:preset|color|base"},"spacing":{"padding":{"top":"var:preset|spacing|60","bottom":"var:preset|spacing|60"}},"border":{"top":{"color":"var:preset|color|primary","style":"solid","width":"1px"}}}} -->
+<footer class="wp-block-group alignfull has-base-background-color has-background" style="border-top-color:var(--wp--preset--color--primary);border-top-style:solid;border-top-width:1px;padding-top:var(--wp--preset--spacing--60);padding-bottom:var(--wp--preset--spacing--60)">
+	<!-- wp:columns {"align":"wide","style":{"spacing":{"blockGap":{"top":"var:preset|spacing|50","left":"var:preset|spacing|50"}}}} -->
+	<div class="wp-block-columns alignwide">
+		<!-- wp:column {"width":"25%"} -->
+		<div class="wp-block-column" style="flex-basis:25%">
+			<!-- wp:site-title {"level":0,"style":{"typography":{"fontSize":"var:preset|font-size|small"},"elements":{"link":{"color":{"text":"var:preset|color|text-muted"}}}}} /-->
+			
+			<!-- wp:social-links {"iconColor":"text-muted","iconColorValue":"var(--wp--preset--color--text-muted)","size":"has-small-icon-size","style":{"spacing":{"margin":{"top":"var:preset|spacing|30"}}}} -->
+			<ul class="wp-block-social-links has-small-icon-size has-icon-color" style="margin-top:var(--wp--preset--spacing--30)"><!-- wp:social-link {"url":"#","service":"linkedin"} /--><!-- wp:social-link {"url":"#","service":"instagram"} /--></ul>
+			<!-- /wp:social-links -->
+		</div>
+		<!-- /wp:column -->
+
+		<!-- wp:column {"width":"25%"} -->
+		<div class="wp-block-column" style="flex-basis:25%">
+			<!-- wp:heading {"level":4,"style":{"color":{"text":"var:preset|color|text-main"},"typography":{"fontSize":"var:preset|font-size|small"}}} -->
+			<h4 class="wp-block-heading has-text-main-color has-text-color has-small-font-size">Oficina Central</h4>
+			<!-- /wp:heading -->
+			<!-- wp:paragraph {"style":{"color":{"text":"var:preset|color|text-muted"},"typography":{"fontSize":"var:preset|font-size|small"}}} -->
+			<p class="has-text-muted-color has-text-color has-small-font-size">Avenida de los Fundadores No 123<br>Piso 8, Suite Ejecutiva<br>Bogotá, Colombia</p>
 			<!-- /wp:paragraph -->
 		</div>
 		<!-- /wp:column -->
-		<!-- wp:column -->
-		<div class="wp-block-column">
-			<!-- wp:heading {"level":3} -->
-			<h3>Enlaces Rápidos</h3>
+
+		<!-- wp:column {"width":"25%"} -->
+		<div class="wp-block-column" style="flex-basis:25%">
+			<!-- wp:heading {"level":4,"style":{"color":{"text":"var:preset|color|text-main"},"typography":{"fontSize":"var:preset|font-size|small"}}} -->
+			<h4 class="wp-block-heading has-text-main-color has-text-color has-small-font-size">Contacto</h4>
 			<!-- /wp:heading -->
-			<!-- wp:navigation {"layout":{"type":"flex","orientation":"vertical"}} /-->
+			<!-- wp:paragraph {"style":{"color":{"text":"var:preset|color|text-muted"},"typography":{"fontSize":"var:preset|font-size|small"}}} -->
+			<p class="has-text-muted-color has-text-color has-small-font-size">contacto@linea3legal.com<br>+57 1 234 5678</p>
+			<!-- /wp:paragraph -->
+		</div>
+		<!-- /wp:column -->
+
+		<!-- wp:column {"width":"25%"} -->
+		<div class="wp-block-column" style="flex-basis:25%">
+			<!-- wp:heading {"level":4,"style":{"color":{"text":"var:preset|color|text-main"},"typography":{"fontSize":"var:preset|font-size|small"}}} -->
+			<h4 class="wp-block-heading has-text-main-color has-text-color has-small-font-size">Enlaces</h4>
+			<!-- /wp:heading -->
+			<!-- wp:navigation {"orientation":"vertical","style":{"typography":{"fontSize":"var:preset|font-size|small"},"color":{"text":"var:preset|color|text-muted"}}} /-->
 		</div>
 		<!-- /wp:column -->
 	</div>
 	<!-- /wp:columns -->
-	<!-- wp:paragraph {"align":"center","style":{"typography":{"fontSize":"var:preset|font-size|small"}}} -->
-	<p class="has-text-align-center has-small-font-size">© <!-- wp:site-title {"level":0} /-->. Todos los derechos reservados.</p>
-	<!-- /wp:paragraph -->
 </footer>
 <!-- /wp:group -->

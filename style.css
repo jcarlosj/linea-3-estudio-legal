@@ -1,9 +1,9 @@
 /*
-Theme Name: Linea 3 Estudio Legal
+Theme Name: Linea 3 Legal Dark
 Theme URI: https://linea3legal.com
 Author: Linea 3 Developer
 Author URI: https://linea3legal.com
-Description: Tema hijo profesional y moderno para Linea 3 Estudio Legal. Basado en Twenty Twenty-Five. Optimizado para Full Site Editing (FSE).
+Description: Tema oscuro profesional adaptado de Figma para Linea 3 Estudio Legal. Arquitectura de Bloques. Basado en Twenty Twenty-Five.
 Version: 1.0.0
 Requires at least: 6.7
 Tested up to: 6.9.4
@@ -11,15 +11,183 @@ Requires PHP: 8.2
 License: GNU General Public License v2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Template: twentytwentyfive
-Text Domain: linea3-legal-child
+Text Domain: linea3-legal-dark
 
 This theme, like WordPress, is licensed under the GPL.
-Use it to make something cool, have fun, and share what you've learned with others.
 */
 
-/* 
- * NOTA: Este tema es un Block Theme moderno. 
- * Todos los estilos globales e integraciones deben manejarse mediante theme.json.
- * Usa este archivo SOLO para utilidades muy específicas que no puedan resolverse 
- * a través del Site Editor o variables CSS nativas.
- */
+/* --- SISTEMA RESPONSIVO MOBILE FIRST --- */
+
+/* 1. COMPORTAMIENTO DEL LOGO Y HEADER */
+.responsive-logo-wrapper {
+    display: flex !important;
+    align-items: center !important;
+    height: auto !important;
+}
+
+.responsive-logo-wrapper img {
+    width: auto !important;
+    height: auto !important;
+    max-height: 40px !important;
+    transition: max-height 0.3s ease;
+}
+
+/* 2. COMPORTAMIENTOS BÁSICOS PARA BOTONES DE CABECERA */
+.search-btn, .cta-legal-btn {
+    align-self: center; 
+    flex-shrink: 0;
+}
+
+.cta-legal-btn .wp-block-button__link,
+.search-btn .wp-block-button__link {
+    height: 48px !important; /* Altura estandarizada inquebrantable */
+    box-sizing: border-box !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+}
+
+.cta-legal-btn .wp-block-button__link {
+    gap: 8px; /* Espacio entre icono y texto */
+}
+
+/* 4. COMPORTAMIENTO DEL BOTÓN "BUSCAR" (Siempre cuadrado) */
+.search-btn .wp-block-button__link {
+    background-color: transparent !important;
+    border: 1px solid var(--wp--preset--color--primary) !important;
+    color: var(--wp--preset--color--primary) !important; /* Mismo color del borde */
+    width: 48px !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}
+
+/* Centrado perfecto eliminando márgenes o line-height residual de WordPress */
+.search-btn .btn-icon,
+.cta-legal-btn .btn-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    line-height: 0;
+}
+
+/* Comportamiento Móvil de Botones (< 1024px) */
+@media (max-width: 1023px) {
+    /* El botón Consultar se vuelve un cuadrado exacto en móvil */
+    .cta-legal-btn .wp-block-button__link {
+        width: 48px !important;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
+}
+
+/* Estado Base (Mobile Portrait: < 768px) */
+.cta-legal-btn .btn-text {
+    display: none; /* Ocultar texto en móvil */
+}
+.cta-legal-btn .btn-icon {
+    display: flex;
+}
+
+/* 3. COMPORTAMIENTO DEL MENÚ NAVEGACIÓN (Forzar hamburguesa hasta 767px) */
+@media (max-width: 767px) {
+    .wp-block-navigation__responsive-container:not(.hidden-by-default):not(.is-menu-open) {
+        display: none !important;
+    }
+    .wp-block-navigation__responsive-container-open {
+        display: flex !important;
+    }
+}
+
+/* --- TRANSICIÓN A (Mobile Landscape / Tablet Portrait: >= 768px) --- */
+@media (min-width: 768px) {
+    /* Logo */
+    .responsive-logo-wrapper img {
+        max-height: 60px !important;
+    }
+    
+
+}
+
+/* --- TRANSICIÓN B (Tablet Landscape / Desktop: >= 1024px) --- */
+@media (min-width: 1024px) {
+    /* Logo */
+    .responsive-logo-wrapper img {
+        max-height: 80px !important;
+    }
+    
+    /* Mostrar texto del Botón CTA y ocultar ícono para mantener la alineación */
+    .cta-legal-btn .btn-text {
+        display: inline-flex;
+    }
+    .cta-legal-btn .btn-icon {
+        display: none;
+    }
+}
+
+/* 5. BUSCADOR FLOTANTE TIPO DROPDOWN */
+.floating-search-container {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background-color: var(--wp--preset--color--base) !important;
+    padding: 30px 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0px 10px 30px rgba(0,0,0,0.5);
+    
+    /* Animación Toggle */
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all 0.3s ease;
+    z-index: 998;
+}
+
+.floating-search-container.is-open {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+/* Diseño interno del buscador wp:search */
+.floating-search-container .wp-block-search__inside-wrapper {
+    max-width: 800px;
+    margin: 0 auto;
+    border: none;
+    padding: 0;
+    flex-direction: row !important; /* Asegurar alineación horizontal en todos los tamaños */
+}
+
+.floating-search-container .wp-block-search__input {
+    background-color: #ffffff !important;
+    color: #111111 !important;
+    border: none !important;
+    padding: 15px 20px !important;
+    font-size: 1rem;
+    border-radius: 0 !important;
+    flex-grow: 1;
+}
+
+.floating-search-container .wp-block-search__input::placeholder {
+    color: #666666 !important;
+}
+
+.floating-search-container .wp-block-search__button {
+    background-color: #0b1a28 !important; /* Fondo oscuro */
+    color: #ffffff !important;
+    border: none !important;
+    padding: 15px 30px !important;
+    font-weight: bold;
+    letter-spacing: 1px;
+    border-radius: 0 !important;
+    transition: background-color 0.3s ease;
+    white-space: nowrap;
+}
+
+.floating-search-container .wp-block-search__button:hover {
+    background-color: var(--wp--preset--color--primary) !important;
+}
+

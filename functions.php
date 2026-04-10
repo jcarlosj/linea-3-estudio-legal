@@ -29,7 +29,7 @@ function linea3_legal_child_enqueue_styles(): void {
 		'linea3-legal-child-style',
 		get_stylesheet_uri(),
 		array(),
-		wp_get_theme()->get( 'Version' )
+		filemtime( get_stylesheet_directory() . '/style.css' ) // Cache-busting automático
 	);
 }
 add_action( 'wp_enqueue_scripts', 'linea3_legal_child_enqueue_styles' );

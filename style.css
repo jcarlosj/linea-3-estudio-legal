@@ -205,3 +205,247 @@ This theme, like WordPress, is licensed under the GPL.
     background-color: var(--wp--preset--color--primary) !important;
 }
 
+/* 8. REJILLA RESPONSIVA INTELIGENTE DEL FOOTER (FSE OVERRIDES) */
+
+/* Contenedor principal con padding de WP por defecto */
+.footer-grid-container {
+    display: grid !important;
+    gap: 32px;
+    box-sizing: border-box;
+    width: 100%;
+}
+
+/* Permitir que la grilla atraviese los contenedores en Mobile y Desktop (Wrappers invisibles) */
+.footer-top-group, .footer-mid-group, .footer-bottom-group {
+    display: contents;
+}
+
+/* 1. MOBILE PORTRAIT (< 768px) */
+@media (max-width: 767px) {
+    .footer-grid-container {
+        grid-template-columns: 1fr;
+        justify-items: center;
+        text-align: center;
+    }
+
+    /* Logo Switch */
+    .logo-vertical {
+        display: block !important;
+        max-height: 50px !important;
+        width: auto;
+    }
+    .logo-horizontal {
+        display: none !important;
+    }
+
+    /* Título Enlaces */
+    .footer-section-title-enlaces {
+        display: none !important;
+    }
+
+    /* Redes: Centrado */
+    .social-icons-outline {
+        justify-content: center !important;
+    }
+    
+    /* Enlaces: Centrado */
+    .footer-nav .wp-block-navigation__container,
+    .footer-nav ul.wp-block-navigation__container {
+        justify-content: center !important;
+    }
+}
+
+/* 2. MOBILE LANDSCAPE & TABLET PORTRAIT (768px to 1023px) */
+@media (min-width: 768px) and (max-width: 1023px) {
+    /* 1. Contenedor principal pasa a Flex Column para apilar grupos */
+    .footer-grid-container {
+        display: flex !important;
+        flex-direction: column;
+        align-items: center;
+        gap: 32px;
+    }
+
+    /* 2. Grupo Superior: Logo + Redes centrados */
+    .footer-top-group {
+        display: flex; /* Desactiva el display: contents global */
+        flex-direction: column;
+        align-items: center;
+        gap: 16px;
+        width: 100%;
+    }
+
+    /* 3. Grupo Medio: Oficina y Contacto lado a lado */
+    .footer-mid-group {
+        display: grid; /* Desactiva el display: contents global */
+        grid-template-columns: 1fr 1fr;
+        gap: 32px;
+        margin: 0 auto; /* Centrado horizontal del grupo */
+        align-items: flex-start; /* Alineación superior forzada de ambas columnas */
+        text-align: left;
+        width: max-content !important; /* Permite que el margin 0 auto funcione sobre el total disponible */
+        max-width: 100%;
+    }
+
+    .footer-mid-group h4 {
+        margin-top: 0 !important; /* Elimina desfases generados por encabezados */
+    }
+
+    /* 4. Grupo Inferior: Menú horizontal, título oculto */
+    .footer-bottom-group {
+        display: flex; /* Desactiva el display: contents global */
+        width: 100%;
+        justify-content: center;
+    }
+
+    .footer-section-title-enlaces { display: none !important; }
+    
+    .footer-col-links .footer-nav .wp-block-navigation__container,
+    .footer-col-links .footer-nav ul.wp-block-navigation__container {
+        display: flex !important;
+        flex-direction: row !important;
+        flex-wrap: wrap !important;
+        justify-content: center !important;
+        gap: 24px;
+    }
+
+    /* Logo Switch */
+    .logo-vertical {
+        display: block !important;
+        max-height: 80px !important; /* Mantener valor actual de logo estable */
+        width: auto;
+    }
+    .logo-horizontal {
+        display: none !important;
+    }
+}
+
+/* 3. DESKTOP (≥ 1024px) */
+@media (min-width: 1024px) {
+    .footer-grid-container {
+        grid-template-columns: repeat(4, 1fr) !important;
+        justify-items: start;
+        text-align: left;
+    }
+
+    /* 
+     * ELIMINANDO EL DISPLAY: CONTENTS DE ESTE GRUPO
+     * De este modo Logo y Sociales se convierten en 1 Sola Columna.
+     * Nos permite controlar matemáticamente el gap de ambos 
+     * acercando los elementos tal y como solicitó el usuario. 
+     */
+    .footer-top-group {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px; /* GAP REDUCIDO: Acerca Logo y Redes Sociales fuertemente */
+        grid-column: 1; /* Ocupan LA PRIMERA COLUMNA de la grid maestra */
+        grid-row: 1 / 3;
+        width: 100%;
+        margin-top: 0 !important;
+    }
+    
+    .social-icons-outline { margin-top: 0 !important; }
+
+    /* Asignar áreas explícitas para hijos remanentes */
+    .footer-col-office { grid-column: 2; grid-row: 1 / 3; }
+    .footer-col-contact { grid-column: 3; grid-row: 1 / 3; }
+    .footer-col-links { grid-column: 4; grid-row: 1 / 3; }
+
+    /* Logo Switch Desktop */
+    .logo-vertical { display: none !important; }
+    .logo-horizontal { display: block !important; max-width: 200px !important; height: auto; }
+    
+    .footer-section-title-enlaces { display: block !important; }
+    .footer-nav .wp-block-navigation__container { justify-content: flex-start !important; }
+}
+
+/* 4. Menú del footer - Ocultar hamburguesa y forzar horizontalidad */
+.footer-nav .wp-block-navigation__responsive-container-open {
+    display: none !important;
+}
+
+.footer-nav .wp-block-navigation__container {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: wrap;
+    gap: 24px;
+}
+
+/* 5. Redes Sociales - Reset de Fondos (Outline Puro) */
+.social-icons-outline {
+    margin-top: 24px !important;
+    gap: 15px;
+    justify-content: inherit;
+}
+
+.social-icons-outline .wp-social-link,
+.social-icons-outline .wp-block-social-link-anchor {
+    background-color: transparent !important;
+    border-radius: 6px !important;
+    border: 1px solid var(--wp--preset--color--primary) !important;
+    width: 48px !important;
+    height: 48px !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    padding: 0 !important;
+}
+
+/* IMPORTANTE: Sobrescribir colores nativos (rosa/azul) de WP asegurando outline puro */
+.social-icons-outline .wp-social-link svg {
+    background: transparent !important;
+    fill: var(--wp--preset--color--primary) !important;
+    color: var(--wp--preset--color--primary) !important;
+    width: 20px !important;
+    height: 20px !important;
+    transition: all 0.3s ease;
+}
+
+.social-icons-outline .wp-social-link:hover,
+.social-icons-outline .wp-block-social-link-anchor:hover {
+    background-color: var(--wp--preset--color--primary) !important;
+}
+
+.social-icons-outline .wp-social-link:hover svg,
+.social-icons-outline .wp-block-social-link-anchor:hover svg {
+    fill: var(--wp--preset--color--base) !important;
+    color: var(--wp--preset--color--base) !important;
+}
+
+/* ========================================================
+   9. CORRECCIÓN FINA DE ALINEACIÓN Y ORIENTACIÓN MENÚ 
+   ======================================================== */
+@media (min-width: 768px) {
+    
+    /* 1. Corrección de Alineación (Oficina & Contacto) */
+    /* Fuerza que los hijos se alineen a la parte superior del contenedor Grid/Flex */
+    .footer-mid-group,
+    .footer-grid-container {
+        align-items: start !important; 
+    }
+
+    /* Resetea los empujes de Gutenberg tanto en los contenedores de columna como en los Títulos */
+    .footer-grid-container .footer-col-office,
+    .footer-grid-container .footer-col-contact,
+    .footer-grid-container .footer-col-links,
+    .footer-mid-group .footer-col-office,
+    .footer-mid-group .footer-col-contact,
+    .footer-col-office h4,
+    .footer-col-contact h4,
+    .footer-col-office h2,
+    .footer-col-contact h2 {
+        margin-top: 0 !important;
+        margin-block-start: 0 !important;
+    }
+
+    /* 2. Corrección de Menú (Enlaces Verticales) */
+    /* Ultra-Target estricto para aniquilar la configuración horizontal global de `.footer-nav` */
+    .footer-grid-container .footer-col-links .footer-nav .wp-block-navigation__container,
+    .footer-grid-container .footer-col-links .footer-nav ul.wp-block-navigation__container {
+        display: flex !important;
+        flex-direction: column !important; /* Apila elementos verticalmente */
+        align-items: flex-start !important; /* Alinea a la izquierda */
+        gap: 12px !important; /* Separación vertical */
+    }
+}

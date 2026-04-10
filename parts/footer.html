@@ -1,48 +1,82 @@
-<!-- wp:group {"tagName":"footer","align":"full","layout":{"type":"constrained"},"style":{"color":{"background":"var:preset|color|base"},"spacing":{"padding":{"top":"var:preset|spacing|60","bottom":"var:preset|spacing|60"}},"border":{"top":{"color":"var:preset|color|primary","style":"solid","width":"1px"}}}} -->
+<!-- wp:group {"tagName":"footer","className":"alignwide","align":"full","style":{"color":{"background":"var:preset|color|base"},"spacing":{"padding":{"top":"var:preset|spacing|60","bottom":"var:preset|spacing|60"}},"border":{"top":{"color":"var:preset|color|primary","style":"solid","width":"1px"}}}} -->
 <footer class="wp-block-group alignfull has-base-background-color has-background" style="border-top-color:var(--wp--preset--color--primary);border-top-style:solid;border-top-width:1px;padding-top:var(--wp--preset--spacing--60);padding-bottom:var(--wp--preset--spacing--60)">
-	<!-- wp:columns {"align":"wide","style":{"spacing":{"blockGap":{"top":"var:preset|spacing|50","left":"var:preset|spacing|50"}}}} -->
-	<div class="wp-block-columns alignwide">
-		<!-- wp:column {"width":"25%"} -->
-		<div class="wp-block-column" style="flex-basis:25%">
-			<!-- wp:site-title {"level":0,"style":{"typography":{"fontSize":"var:preset|font-size|small"},"elements":{"link":{"color":{"text":"var:preset|color|text-muted"}}}}} /-->
-			
-			<!-- wp:social-links {"iconColor":"text-muted","iconColorValue":"var(--wp--preset--color--text-muted)","size":"has-small-icon-size","style":{"spacing":{"margin":{"top":"var:preset|spacing|30"}}}} -->
-			<ul class="wp-block-social-links has-small-icon-size has-icon-color" style="margin-top:var(--wp--preset--spacing--30)"><!-- wp:social-link {"url":"#","service":"linkedin"} /--><!-- wp:social-link {"url":"#","service":"instagram"} /--></ul>
-			<!-- /wp:social-links -->
-		</div>
-		<!-- /wp:column -->
 
-		<!-- wp:column {"width":"25%"} -->
-		<div class="wp-block-column" style="flex-basis:25%">
-			<!-- wp:heading {"level":4,"style":{"color":{"text":"var:preset|color|text-main"},"typography":{"fontSize":"var:preset|font-size|small"}}} -->
-			<h4 class="wp-block-heading has-text-main-color has-text-color has-small-font-size">Oficina Central</h4>
-			<!-- /wp:heading -->
-			<!-- wp:paragraph {"style":{"color":{"text":"var:preset|color|text-muted"},"typography":{"fontSize":"var:preset|font-size|small"}}} -->
-			<p class="has-text-muted-color has-text-color has-small-font-size">Avenida de los Fundadores No 123<br>Piso 8, Suite Ejecutiva<br>Bogotá, Colombia</p>
-			<!-- /wp:paragraph -->
-		</div>
-		<!-- /wp:column -->
+    <!-- INNER CONTAINER ALINEADO CON HEADER (NO-BACKGROUND) -->
+    <!-- wp:group {"className":"footer-grid-container alignwide"} -->
+    <div class="wp-block-group footer-grid-container alignwide" style="max-width: 1200px; margin: 0 auto; width: 100%; padding-left: var(--wp--preset--spacing--50, 20px); padding-right: var(--wp--preset--spacing--50, 20px); box-sizing: border-box;">
 
-		<!-- wp:column {"width":"25%"} -->
-		<div class="wp-block-column" style="flex-basis:25%">
-			<!-- wp:heading {"level":4,"style":{"color":{"text":"var:preset|color|text-main"},"typography":{"fontSize":"var:preset|font-size|small"}}} -->
-			<h4 class="wp-block-heading has-text-main-color has-text-color has-small-font-size">Contacto</h4>
-			<!-- /wp:heading -->
-			<!-- wp:paragraph {"style":{"color":{"text":"var:preset|color|text-muted"},"typography":{"fontSize":"var:preset|font-size|small"}}} -->
-			<p class="has-text-muted-color has-text-color has-small-font-size">contacto@linea3legal.com<br>+57 1 234 5678</p>
-			<!-- /wp:paragraph -->
-		</div>
-		<!-- /wp:column -->
+        <!-- wp:group {"className":"footer-top-group"} -->
+        <div class="wp-block-group footer-top-group">
+            <!-- 1. LOGO WRAPPER (Ambos logos presentes) -->
+            <!-- wp:group {"className":"footer-logo-switch"} -->
+            <div class="wp-block-group footer-logo-switch">
+               <!-- wp:html -->
+               <a href="/" class="footer-link-logo"><img src="/wp-content/uploads/logo-vertical-oscuro.png" alt="Logo Vertical" class="logo-vertical"/></a>
+               <a href="/" class="footer-link-logo"><img src="/wp-content/uploads/logo-horizontal-oscuro.png" alt="Logo Horizontal" class="logo-horizontal"/></a>
+               <!-- /wp:html -->
+            </div>
+            <!-- /wp:group -->
 
-		<!-- wp:column {"width":"25%"} -->
-		<div class="wp-block-column" style="flex-basis:25%">
-			<!-- wp:heading {"level":4,"style":{"color":{"text":"var:preset|color|text-main"},"typography":{"fontSize":"var:preset|font-size|small"}}} -->
-			<h4 class="wp-block-heading has-text-main-color has-text-color has-small-font-size">Enlaces</h4>
-			<!-- /wp:heading -->
-			<!-- wp:navigation {"orientation":"vertical","style":{"typography":{"fontSize":"var:preset|font-size|small"},"color":{"text":"var:preset|color|text-muted"}}} /-->
-		</div>
-		<!-- /wp:column -->
-	</div>
-	<!-- /wp:columns -->
+            <!-- 2. REDES SOCIALES -->
+            <!-- wp:social-links {"className":"social-icons-outline","iconColor":"primary","iconColorValue":"var(--wp--preset--color--primary)","size":"has-small-icon-size"} -->
+            <ul class="wp-block-social-links social-icons-outline has-small-icon-size has-icon-color">
+                <!-- wp:social-link {"url":"#","service":"instagram"} /-->
+                <!-- wp:social-link {"url":"#","service":"facebook"} /-->
+                <!-- wp:social-link {"url":"#","service":"linkedin"} /-->
+            </ul>
+            <!-- /wp:social-links -->
+        </div>
+        <!-- /wp:group -->
+
+        <!-- wp:group {"className":"footer-mid-group"} -->
+        <div class="wp-block-group footer-mid-group">
+            <!-- 3. OFICINA (Título + Texto) -->
+            <!-- wp:group {"className":"footer-col-office"} -->
+            <div class="wp-block-group footer-col-office">
+                <!-- wp:heading {"level":4,"style":{"color":{"text":"var:preset|color|text-main"},"typography":{"fontSize":"var:preset|font-size|small"}}} -->
+                <h4 class="wp-block-heading has-text-main-color has-text-color has-small-font-size">Oficina Central</h4>
+                <!-- /wp:heading -->
+                <!-- wp:paragraph {"style":{"color":{"text":"var:preset|color|text-muted"},"typography":{"fontSize":"var:preset|font-size|small"},"spacing":{"margin":{"top":"0"}}}} -->
+                <p class="has-text-muted-color has-text-color has-small-font-size" style="margin-top:0">Avenida de los Fundadores No 123<br>Piso 8, Suite Ejecutiva<br>Bogotá, Colombia</p>
+                <!-- /wp:paragraph -->
+            </div>
+            <!-- /wp:group -->
+
+            <!-- 4. CONTACTO (Título + Texto) -->
+            <!-- wp:group {"className":"footer-col-contact"} -->
+            <div class="wp-block-group footer-col-contact">
+                <!-- wp:heading {"level":4,"style":{"color":{"text":"var:preset|color|text-main"},"typography":{"fontSize":"var:preset|font-size|small"}}} -->
+                <h4 class="wp-block-heading has-text-main-color has-text-color has-small-font-size">Contacto</h4>
+                <!-- /wp:heading -->
+                <!-- wp:paragraph {"style":{"color":{"text":"var:preset|color|text-muted"},"typography":{"fontSize":"var:preset|font-size|small"},"spacing":{"margin":{"top":"0"}}}} -->
+                <p class="has-text-muted-color has-text-color has-small-font-size" style="margin-top:0">contacto@linea3legal.com<br>+57 1 234 5678<br>Lunes a Viernes: 8am - 6pm</p>
+                <!-- /wp:paragraph -->
+            </div>
+            <!-- /wp:group -->
+        </div>
+        <!-- /wp:group -->
+
+        <!-- wp:group {"className":"footer-bottom-group"} -->
+        <div class="wp-block-group footer-bottom-group">
+            <!-- 5. ENLACES (Título oculto en mobile + Links) -->
+            <!-- wp:group {"className":"footer-col-links"} -->
+            <div class="wp-block-group footer-col-links">
+                <!-- wp:heading {"level":4,"className":"footer-section-title-enlaces","style":{"color":{"text":"var:preset|color|text-main"},"typography":{"fontSize":"var:preset|font-size|small"}}} -->
+                <h4 class="wp-block-heading footer-section-title-enlaces has-text-main-color has-text-color has-small-font-size">Enlaces</h4>
+                <!-- /wp:heading -->
+                
+                <!-- wp:navigation {"overlayMenu":"never","className":"footer-nav","layout":{"type":"flex","flexWrap":"wrap","justifyContent":"left"},"style":{"typography":{"fontSize":"var:preset|font-size|small"},"color":{"text":"var:preset|color|text-muted"},"spacing":{"margin":{"top":"0"}}}} -->
+                    <!-- wp:navigation-link {"label":"Privacidad","url":"#","kind":"custom","isTopLevelLink":true} /-->
+                    <!-- wp:navigation-link {"label":"Términos de Servicio","url":"#","kind":"custom","isTopLevelLink":true} /-->
+                    <!-- wp:navigation-link {"label":"Contacto","url":"/contacto/","kind":"custom","isTopLevelLink":true} /-->
+                <!-- /wp:navigation -->
+            </div>
+            <!-- /wp:group -->
+        </div>
+        <!-- /wp:group -->
+
+    </div>
+    <!-- /wp:group -->
+
 </footer>
 <!-- /wp:group -->

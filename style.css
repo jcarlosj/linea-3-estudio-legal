@@ -708,4 +708,23 @@ This theme, like WordPress, is licensed under the GPL.
     color: #E8C170;
 }
 
+/* Contador de resultados */
+.search-result-count {
+    color: var(--wp--preset--color--text-muted);
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin: 0 auto 32px auto; /* Centrado en el viewport pero alineado internamente */
+    max-width: 1000px; /* Mismo ancho que .search-results-list */
+    width: 100%;
+    border-left: 2px solid #E8C170;
+    padding-left: 16px;
+    box-sizing: border-box;
+}
+
+.search-result-count .count-number {
+    color: #ffffff;
+    font-weight: 700;
+}
+
 /* ========== SEARCH PAGE STYLES - END ========== */

@@ -72,3 +72,51 @@ function linea3_legal_child_limit_search_results( $query ): void {
 	}
 }
 add_action( 'pre_get_posts', 'linea3_legal_child_limit_search_results' );
+
+/**
+ * Provides a fallback featured image if a post doesn't have one.
+ *
+ * @param string       $html              The post thumbnail HTML.
+ * @param int          $post_id           The post ID.
+ * @param int|string   $post_thumbnail_id The post thumbnail ID.
+ * @param string|array $size              The post thumbnail size.
+ * @param string       $attr              Query string of attributes.
+ * @return string The modified post thumbnail HTML.
+ */
+function linea3_legal_child_fallback_featured_image( $html, $post_id, $post_thumbnail_id, $size, $attr ) {
+	if ( empty( $html ) ) {
+		$placeholder_url = get_stylesheet_directory_uri() . '/assets/images/placeholder-legal.png';
+		$html = sprintf(
+			'<img src="%s" class="attachment-%s size-%s wp-post-image fallback-image" alt="" loading="lazy" />',
+			esc_url( $placeholder_url ),
+			esc_attr( (string) $size ),
+			esc_attr( (string) $size )
+		);
+	}
+	return $html;
+}
+add_filter( 'post_thumbnail_html', 'linea3_legal_child_fallback_featured_image', 10, 5 );
+
+/**
+ * Shortcode into the search template to display the results count.
+ */
+function linea3_legal_child_search_result_count() {
+	if ( ! is_search() ) {
+		return '';
+	}
+	global $wp_query;
+	$count = (int) $wp_query->found_posts;
+	
+	if ( $count === 0 ) {
+		return '';
+	}
+
+	$label = ( $count === 1 ) ? 'registro encontrado' : 'registros encontrados';
+	
+	return sprintf(
+		'<p class="search-result-count">Se han visualizado <span class="count-number">%d</span> %s</p>',
+		$count,
+		$label
+	);
+}
+add_shortcode( 'search_result_count', 'linea3_legal_child_search_result_count' );

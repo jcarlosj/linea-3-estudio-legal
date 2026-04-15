@@ -1,0 +1,86 @@
+<!-- wp:template-part {"slug":"header","tagName":"header","theme":"linea3-legal-child"} /-->
+
+<!-- wp:group {"tagName":"main","className":"search-page-main","layout":{"type":"constrained"}} -->
+<main class="wp-block-group search-page-main">
+
+	<!-- BLOQUE 1: Header de Búsqueda -->
+	<!-- wp:group {"align":"full","style":{"color":{"background":"var:preset|color|base"},"spacing":{"padding":{"top":"80px","bottom":"40px","left":"var:preset|spacing|50","right":"var:preset|spacing|50"}}},"layout":{"type":"constrained"}} -->
+	<div class="wp-block-group alignfull has-base-background-color has-background" style="padding-top:80px;padding-right:var(--wp--preset--spacing--50);padding-bottom:40px;padding-left:var(--wp--preset--spacing--50)">
+		<!-- wp:query-title {"type":"search","textAlign":"center","style":{"typography":{"fontStyle":"normal","fontWeight":"700"}}} /-->
+		<!-- wp:search {"label":"Buscar de nuevo","buttonText":" ","buttonUseIcon":true,"showLabel":false,"placeholder":"Buscar...","className":"search-results-bar-main"} /-->
+	</div>
+	<!-- /wp:group -->
+
+	<!-- BLOQUE 2: Lista de Resultados -->
+	<!-- wp:group {"align":"wide","style":{"spacing":{"margin":{"top":"40px","bottom":"60px"},"padding":{"left":"var:preset|spacing|50","right":"var:preset|spacing|50"}}},"layout":{"type":"constrained"}} -->
+	<div class="wp-block-group alignwide" style="margin-top:40px;margin-bottom:60px;padding-right:var(--wp--preset--spacing--50);padding-left:var(--wp--preset--spacing--50)">
+		<!-- wp:query {"query":{"perPage":10,"pages":0,"offset":0,"postType":"post","order":"desc","orderBy":"date","author":"","search":"","exclude":[],"sticky":"","inherit":true}} -->
+		<div class="wp-block-query">
+			<!-- wp:post-template {"className":"search-results-list"} -->
+				<!-- wp:group {"tagName":"article","className":"search-result-card"} -->
+				<article class="wp-block-group search-result-card">
+					<!-- wp:post-featured-image {"isLink":true,"style":{"spacing":{"margin":{"bottom":"0"}}}} /-->
+					
+					<!-- wp:group {"className":"search-card-content","layout":{"type":"constrained"}} -->
+					<div class="wp-block-group search-card-content">
+						<!-- wp:group {"className":"search-card-meta","layout":{"type":"flex","flexWrap":"wrap","justifyContent":"left"}} -->
+						<div class="wp-block-group search-card-meta">
+							<!-- wp:post-terms {"term":"category","className":"search-card-tag"} /-->
+							<!-- wp:paragraph {"className":"meta-separator"} --><p class="meta-separator">•</p><!-- /wp:paragraph -->
+							<!-- wp:post-date {"className":"search-card-date"} /-->
+						</div>
+						<!-- /wp:group -->
+
+						<!-- wp:post-title {"isLink":true,"level":3,"className":"search-card-title"} /-->
+						
+						<!-- wp:post-excerpt {"lines":3,"className":"search-card-excerpt"} /-->
+						
+						<!-- wp:read-more {"content":"EXPANDIR","className":"search-card-link"} /-->
+					</div>
+					<!-- /wp:group -->
+				</article>
+				<!-- /wp:group -->
+			<!-- /wp:post-template -->
+
+			<!-- BLOQUE 3: Paginación -->
+			<!-- wp:query-pagination {"layout":{"type":"flex","justifyContent":"center"},"className":"search-pagination"} -->
+				<!-- wp:query-pagination-previous {"label":"\u003c PREV"} /-->
+				<!-- wp:query-pagination-numbers /-->
+				<!-- wp:query-pagination-next {"label":"NEXT \u003e"} /-->
+			<!-- /wp:query-pagination -->
+
+			<!-- wp:query-no-results -->
+				<!-- wp:group {"style":{"spacing":{"padding":{"top":"40px","bottom":"40px"}}},"layout":{"type":"constrained"}} -->
+				<div class="wp-block-group" style="padding-top:40px;padding-bottom:40px">
+					<!-- wp:paragraph {"textAlign":"center"} -->
+					<p class="has-text-align-center">No se encontraron resultados para su búsqueda. Por favor, intente con otros términos o consulte nuestro blog.</p>
+					<!-- /wp:paragraph -->
+				</div>
+				<!-- /wp:group -->
+			<!-- /wp:query-no-results -->
+		</div>
+		<!-- /wp:query -->
+	</div>
+	<!-- /wp:group -->
+
+	<!-- BLOQUE 4: CTA Final -->
+	<!-- wp:group {"align":"full","style":{"color":{"background":"var:preset|color|text-main","text":"var:preset|color|base"},"spacing":{"padding":{"top":"100px","bottom":"100px","left":"var:preset|spacing|50","right":"var:preset|spacing|50"}}},"layout":{"type":"constrained"}} -->
+	<div class="wp-block-group alignfull has-text-main-background-color has-base-color has-text-color has-background" style="padding-top:100px;padding-right:var(--wp--preset--spacing--50);padding-bottom:100px;padding-left:var(--wp--preset--spacing--50)">
+		<!-- wp:heading {"textAlign":"center","level":2,"style":{"typography":{"fontStyle":"normal","fontWeight":"700"}}} -->
+		<h2 class="wp-block-heading has-text-align-center">¿Listo para elevar el estándar legal de su organización?</h2>
+		<!-- /wp:heading -->
+
+		<!-- wp:buttons {"layout":{"type":"flex","justifyContent":"center"}} -->
+		<div class="wp-block-buttons">
+			<!-- wp:button {"className":"is-style-fill"} -->
+			<div class="wp-block-button is-style-fill"><a class="wp-block-button__link wp-element-button" href="/contacto/">Agendar Consulta Estratégica</a></div>
+			<!-- /wp:button -->
+		</div>
+		<!-- /wp:buttons -->
+	</div>
+	<!-- /wp:group -->
+
+</main>
+<!-- /wp:group -->
+
+<!-- wp:template-part {"slug":"footer","tagName":"footer","theme":"linea3-legal-child"} /-->

@@ -22,16 +22,11 @@
 		<!-- wp:buttons -->
 		<div class="wp-block-buttons">
 			<!-- wp:button {"className":"search-btn"} -->
-			<div class="wp-block-button search-btn"><a class="wp-block-button__link wp-element-button"
-					href="#search" id="search-toggle-btn">
-					<span class="btn-icon">
-						<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-							stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-							<circle cx="11" cy="11" r="8"></circle>
-							<line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-						</svg>
-					</span>
-				</a></div>
+			<div class="wp-block-button search-btn"><a class="wp-block-button__link wp-element-button" href="#" aria-expanded="false">
+				<span class="btn-icon">
+					<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+				</span>
+			</a></div>
 			<!-- /wp:button -->
 
 			<!-- wp:button {"className":"cta-legal-btn"} -->
@@ -53,32 +48,9 @@
 
 	<!-- wp:group {"className":"floating-search-container","layout":{"type":"constrained"}} -->
 	<div class="wp-block-group floating-search-container">
-		<!-- wp:search {"showLabel":false,"placeholder":"Buscar en el archivo...","buttonText":"BUSCAR"} /-->
+		<!-- wp:search {"label":"Busca","showLabel":false,"placeholder":"Consulte nuestro archivo legal...","buttonText":"BUSCAR","width":100,"widthUnit":"%","className":"global-search-block"} /-->
 	</div>
 	<!-- /wp:group -->
 
-	<!-- wp:html -->
-	<script>
-		document.addEventListener('DOMContentLoaded', function() {
-			var toggleBtn = document.getElementById('search-toggle-btn');
-			var searchContainer = document.querySelector('.floating-search-container');
-			
-			if (toggleBtn && searchContainer) {
-				toggleBtn.addEventListener('click', function(e) {
-					e.preventDefault();
-					searchContainer.classList.toggle('is-open');
-				});
-
-				// Ocultar inmediatamente el cajón al dar clic en el botón "Buscar" mientras procesa la búsqueda
-				var searchForm = searchContainer.querySelector('form');
-				if (searchForm) {
-					searchForm.addEventListener('submit', function() {
-						searchContainer.classList.remove('is-open');
-					});
-				}
-			}
-		});
-	</script>
-	<!-- /wp:html -->
 </header>
 <!-- /wp:group -->

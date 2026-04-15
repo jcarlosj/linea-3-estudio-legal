@@ -449,3 +449,263 @@ This theme, like WordPress, is licensed under the GPL.
         gap: 12px !important; /* Separación vertical */
     }
 }
+
+/* ========== SEARCH PAGE STYLES - START ========== */
+
+/* Header y Barra de búsqueda */
+.search-results-bar-main .wp-block-search__inside-wrapper {
+    max-width: 800px;
+    margin: 30px auto 0;
+    border: none;
+    border-radius: 2px;
+    background: var(--wp--preset--color--surface);
+    display: flex;
+    overflow: hidden;
+}
+
+.search-results-bar-main .wp-block-search__input {
+    background: transparent;
+    border: none;
+    font-size: 1.1rem;
+    color: var(--wp--preset--color--text-main);
+    padding: 16px 24px;
+    margin: 0;
+    flex-grow: 1;
+}
+
+.search-results-bar-main .wp-block-search__input:focus {
+    outline: none;
+    box-shadow: none;
+}
+
+.search-results-bar-main .wp-block-search__button {
+    background: var(--wp--preset--color--primary);
+    color: var(--wp--preset--color--base);
+    border: none;
+    border-radius: 0;
+    font-weight: 700;
+    padding: 16px 24px;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.search-results-bar-main .wp-block-search__button:hover {
+    background: #e6b866; /* Un tono más brillante del gold */
+}
+
+.search-results-bar-main .wp-block-search__button svg {
+    fill: currentColor;
+    width: 20px;
+    height: 20px;
+}
+
+/* Lista de resultados responsive */
+.search-results-list {
+    display: flex;
+    flex-direction: column;
+    gap: 48px;
+    list-style: none;
+    padding: 0;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+/* Cards de resultados */
+.search-result-card {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    background: transparent;
+    border: none;
+}
+
+@media (min-width: 768px) {
+    .search-result-card {
+        flex-direction: row;
+        align-items: center;
+        gap: 40px;
+    }
+}
+
+/* Imagen Destacada */
+.search-result-card .wp-block-post-featured-image {
+    width: 100%;
+    flex-shrink: 0;
+}
+
+@media (min-width: 768px) {
+    .search-result-card .wp-block-post-featured-image {
+        width: 320px;
+    }
+}
+
+@media (min-width: 1024px) {
+    .search-result-card .wp-block-post-featured-image {
+        width: 400px;
+    }
+}
+
+.search-result-card .wp-block-post-featured-image img {
+    width: 100%;
+    height: 240px;
+    object-fit: cover;
+    display: block;
+    border-radius: 2px;
+}
+
+/* Contenido de Card */
+.search-result-card .search-card-content {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+/* Meta Data */
+.search-card-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.search-card-meta .search-card-tag a {
+    color: var(--wp--preset--color--primary) !important;
+    text-decoration: none;
+}
+
+.search-card-meta .meta-separator {
+    color: #4b5563;
+    margin: 0;
+}
+
+.search-card-meta .search-card-date {
+    color: var(--wp--preset--color--primary);
+}
+
+/* Título */
+.search-card-title {
+    margin: 0 0 16px 0;
+    font-size: 1.5rem;
+}
+
+.search-card-title a {
+    color: var(--wp--preset--color--primary);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.search-card-title a:hover {
+    color: #e6b866;
+}
+
+/* Extracto */
+.search-card-excerpt {
+    color: var(--wp--preset--color--text-muted);
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin: 0 0 24px 0;
+}
+
+/* Enlace Expandir */
+.search-card-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--wp--preset--color--primary) !important;
+    text-decoration: none;
+}
+
+.search-card-link::after {
+    content: "";
+    display: block;
+    width: 48px;
+    height: 1px;
+    background-color: var(--wp--preset--color--primary);
+    transition: width 0.3s ease;
+}
+
+.search-card-link:hover::after {
+    width: 64px;
+}
+
+/* Paginación */
+.search-pagination {
+    margin-top: 80px;
+    margin-bottom: 80px;
+}
+
+.search-pagination .wp-block-query-pagination-numbers {
+    display: flex !important;
+    gap: 12px;
+    justify-content: center;
+    align-items: center;
+}
+
+.search-pagination .page-numbers {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 40px;
+    height: 40px;
+    border: none;
+    background: transparent;
+    color: var(--wp--preset--color--text-muted);
+    border-radius: 0;
+    text-decoration: none;
+    font-size: 0.875rem;
+    font-family: monospace;
+    transition: all 0.3s ease;
+}
+
+.search-pagination .page-numbers.current,
+.search-pagination .page-numbers:not(.dots):hover {
+    background: #E8C170; /* Gold */
+    color: var(--wp--preset--color--base);
+}
+
+.search-pagination .page-numbers.dots {
+    background: transparent;
+    color: var(--wp--preset--color--text-muted);
+    border-color: transparent;
+}
+
+.search-pagination .wp-block-query-pagination-next,
+.search-pagination .wp-block-query-pagination-previous {
+    color: #ffffff;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    transition: color 0.3s ease;
+}
+
+.search-pagination .wp-block-query-pagination-next {
+    margin-left: 16px;
+}
+
+.search-pagination .wp-block-query-pagination-previous {
+    margin-right: 16px;
+}
+
+.search-pagination .wp-block-query-pagination-next:hover,
+.search-pagination .wp-block-query-pagination-previous:hover {
+    color: #E8C170;
+}
+
+/* ========== SEARCH PAGE STYLES - END ========== */

@@ -31,6 +31,15 @@ function linea3_legal_child_enqueue_styles(): void {
 		array(),
 		filemtime( get_stylesheet_directory() . '/style.css' ) // Cache-busting automático
 	);
+
+	// Enqueue search toggle script
+	wp_enqueue_script(
+		'linea3-legal-child-search',
+		get_stylesheet_directory_uri() . '/assets/js/search-toggle.js',
+		array(),
+		filemtime( get_stylesheet_directory() . '/assets/js/search-toggle.js' ),
+		true // Load in footer
+	);
 }
 add_action( 'wp_enqueue_scripts', 'linea3_legal_child_enqueue_styles' );
 
@@ -50,3 +59,16 @@ add_action( 'after_setup_theme', 'linea3_legal_child_setup' );
 
 // Espacio reservado para futuros hooks, filtros y registro de variaciones de bloques.
 // Mantenlo limpio y modular.
+
+/**
+ * Limit search results to specific post types to avoid template parts repetition.
+ *
+ * @param WP_Query $query The query object.
+ * @return void
+ */
+function linea3_legal_child_limit_search_results( $query ): void {
+	if ( $query->is_search() && ! is_admin() && $query->is_main_query() ) {
+		$query->set( 'post_type', array( 'post', 'page' ) );
+	}
+}
+add_action( 'pre_get_posts', 'linea3_legal_child_limit_search_results' );

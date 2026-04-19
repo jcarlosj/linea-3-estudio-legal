@@ -263,3 +263,32 @@ function antigravity_mailpit_smtp($phpmailer)
 if (isset($_SERVER['HTTP_HOST']) && strpos($_SERVER['HTTP_HOST'], 'localhost') !== false) {
 	add_action('phpmailer_init', 'antigravity_mailpit_smtp');
 }
+
+/**
+ * Registra categorías y patrones de bloques personalizados.
+ */
+function antigravity_register_block_patterns(): void
+{
+	// 1. Registrar categoría personalizada
+	register_block_pattern_category(
+		'antigravity-patterns',
+		array('label' => __('Linea 3 Estudio Legal Patterns', 'linea3-legal-child'))
+	);
+
+	// 2. Registrar Patrón de Consulta Estratégica
+	register_block_pattern(
+		'antigravity/cta-strategic-consultation',
+		array(
+			'title'       => __('Agendar Consulta', 'linea3-legal-child'),
+			'description' => __('Sección de llamada a la acción para agendar una consulta estratégica.', 'linea3-legal-child'),
+			'categories'  => array('featured', 'antigravity-patterns', 'call-to-action'),
+			'keywords'    => array('Agendar', 'Consulta', 'Legal', 'CTA', 'Estratégica'),
+			'postTypes'   => array('page'),
+			'blockTypes'  => array('core/paragraph', 'core/buttons', 'core/group'),
+			'inserter'    => true,
+			'content'     => '<!-- wp:group {"layout":{"type":"constrained"}} --><div class="wp-block-group"><!-- wp:template-part {"slug":"cta-strategic-consultation","theme":"' . get_stylesheet() . '"} /--></div><!-- /wp:group -->',
+		)
+	);
+}
+add_action('init', 'antigravity_register_block_patterns');
+

@@ -292,3 +292,96 @@ function antigravity_register_block_patterns(): void
 }
 add_action('init', 'antigravity_register_block_patterns');
 
+/**
+ * -----------------------------------------------------------------------------
+ * REGISTRO DE BLOQUES DINÁMICOS
+ * -----------------------------------------------------------------------------
+ */
+
+/**
+ * Registra el bloque dinámico 'antigravity/author-card'.
+ */
+function antigravity_register_dynamic_blocks(): void
+{
+	register_block_type('antigravity/author-card', array(
+		'render_callback' => 'antigravity_render_author_card',
+		'uses_context'    => array('postId'),
+	));
+}
+add_action('init', 'antigravity_register_dynamic_blocks');
+
+/**
+ * Añade campos personalizados al perfil de usuario (Especialidad).
+ * 
+ * @param array $methods Métodos de contacto del usuario.
+ * @return array Métodos actualizados.
+ */
+function antigravity_add_user_meta_fields($methods): array
+{
+	$methods['antigravity_user_specialty'] = __('Especialidad (Blog)', 'linea3-legal-child');
+	return $methods;
+}
+add_filter('user_contactmethods', 'antigravity_add_user_meta_fields');
+
+/**
+ * Renderizado del bloque de tarjeta de autor para los resultados de búsqueda/blog.
+ * 
+ * @param array $attributes Atributos del bloque.
+ * @param string $content Contenido del bloque.
+ * @param WP_Block $block Objeto del bloque.
+ * @return string HTML renderizado.
+ */
+function antigravity_render_author_card($attributes, $content, $block): string
+{
+	if (!isset($block->context['postId'])) {
+		return '';
+	}
+
+	$post_id   = $block->context['postId'];
+	$author_id = get_post_field('post_author', $post_id);
+
+	if (!$author_id) {
+		return '';
+	}
+
+	// 1. Extracción de datos
+	$avatar_url = get_avatar_url($author_id, array('size' => 120));
+	$name       = get_the_author_meta('display_name', $author_id);
+	$specialty  = get_the_author_meta('antigravity_user_specialty', $author_id);
+
+	// 2. Construcción de la estructura HTML
+	$output = '<div class="antigravity-author-card">';
+
+	// Columna Izquierda (Avatar)
+	$output .= '<div class="author-avatar-wrapper">';
+	$output .= sprintf(
+		'<img src="%s" alt="%s" class="author-avatar" />',
+		esc_url($avatar_url),
+		esc_attr($name)
+	);
+	$output .= '</div>';
+
+	// Columna Derecha (Datos)
+	$output .= '<div class="author-data-wrapper">';
+	$output .= sprintf('<h4 class="author-name">%s</h4>', esc_html($name));
+
+	if (!empty($specialty)) {
+		$output .= sprintf(
+			'<p class="author-specialty">%s</p>',
+			esc_html(sanitize_text_field($specialty))
+		);
+	}
+
+	$output .= sprintf(
+		'<a href="%s" class="author-profile-link">%s</a>',
+		esc_url(get_author_posts_url($author_id)),
+		esc_html__('Ver Perfil', 'linea3-legal-child')
+	);
+
+	$output .= '</div>'; // .author-data-wrapper
+	$output .= '</div>'; // .antigravity-author-card
+
+	return $output;
+}
+
+

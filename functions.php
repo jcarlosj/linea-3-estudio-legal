@@ -176,7 +176,7 @@ function antigravity_render_strategic_modal()
 					</div>
 
 					<div class="antigravity-form-group submit-group" style="text-align: right;">
-						<button type="submit" class="antigravity-btn-submit">Enviar Solicitud</button>
+						<button type="submit" class="antigravity-btn-submit">Agendar</button>
 					</div>
 				</form>
 			</div>

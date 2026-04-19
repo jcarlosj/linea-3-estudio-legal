@@ -19,6 +19,11 @@ This theme, like WordPress, is licensed under the GPL.
 /* --- SISTEMA RESPONSIVO MOBILE FIRST --- */
 
 /* 1. COMPORTAMIENTO DEL LOGO Y HEADER */
+header.wp-block-group, 
+footer.wp-block-group {
+    background-color: #0a2233 !important;
+}
+
 .responsive-logo-wrapper {
     display: flex !important;
     align-items: center !important;
@@ -212,7 +217,23 @@ This theme, like WordPress, is licensed under the GPL.
     display: grid !important;
     gap: 32px;
     box-sizing: border-box;
-    width: 100%;
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 !important;
+}
+
+/* Mirror header logo alignment strictly - Final Brute Force */
+footer.wp-block-group .footer-logo-switch {
+    display: flex !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+/* Forzar que los hijos de la grilla ocupen su espacio sin ser centrados por WP */
+.footer-grid-container > * {
+    max-width: none !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
 }
 
 /* Permitir que la grilla atraviese los contenedores en Mobile y Desktop (Wrappers invisibles) */
@@ -729,6 +750,48 @@ This theme, like WordPress, is licensed under the GPL.
 
 /* ========== SEARCH PAGE STYLES - END ========== */
 
+/* ========== CTA STRATEGIC CONSULTATION SECTION - START ========== */
+/* 
+ * Este estilo asegura que la franja azul claro siempre sea 100% ancho, 
+ * ignorando márgenes del contenedor padre si fuera necesario.
+ */
+.cta-full-width-section {
+    width: 100vw !important;
+    position: relative;
+    left: 50%;
+    right: 50%;
+    margin-left: -50vw !important;
+    margin-right: -50vw !important;
+    box-sizing: border-box;
+}
+
+.cta-full-width-section h2 {
+    font-size: clamp(2rem, 5vw, 3rem) !important;
+    max-width: 850px;
+    margin: 0 auto !important;
+}
+
+/* Ajuste del botón para que coincida con el estilo premium */
+.cta-full-width-section button.wp-block-button__link {
+    box-shadow: 0 4px 15px rgba(206, 158, 80, 0.3);
+    border-radius: 2px !important;
+    transition: all 0.3s ease !important;
+}
+
+.cta-full-width-section button.wp-block-button__link:hover {
+    background-color: #E8C170 !important;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(206, 158, 80, 0.4);
+}
+
+@media (max-width: 767px) {
+    .cta-full-width-section {
+        padding-top: 4rem !important;
+        padding-bottom: 4rem !important;
+    }
+}
+/* ========== CTA STRATEGIC CONSULTATION SECTION - END ========== */
+
 /* ========== MODAL STRATEGIC CONSULTATION - START ========== */
 .antigravity-modal-overlay {
     position: fixed;
@@ -755,7 +818,7 @@ This theme, like WordPress, is licensed under the GPL.
 }
 
 .antigravity-modal-content {
-    background-color: var(--wp--preset--color--base, #ffffff);
+    background-color: #0a2233;
     color: var(--wp--preset--color--text-main, #333333);
     border-radius: 8px; /* Ligeramente curvo */
     box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
@@ -795,12 +858,12 @@ This theme, like WordPress, is licensed under the GPL.
     top: 20px;
     right: 20px;
     background: transparent;
-    border: none;
-    font-size: 28px;
+    border: 1px solid var(--wp--preset--color--primary, #ce9e50);
+    font-size: 24px;
     line-height: 1;
-    color: var(--wp--preset--color--text-muted, #888);
+    color: var(--wp--preset--color--primary, #ce9e50);
     cursor: pointer;
-    transition: color 0.3s ease;
+    transition: all 0.3s ease;
     width: 40px;
     height: 40px;
     display: flex;
@@ -822,11 +885,11 @@ This theme, like WordPress, is licensed under the GPL.
     font-size: 1.8rem;
     font-weight: 700;
     margin: 0 0 10px 0;
-    color: var(--wp--preset--color--contrast, #1a202c);
+    color: var(--wp--preset--color--primary, #ce9e50);
 }
 
 .antigravity-modal-header p {
-    color: var(--wp--preset--color--text-muted, #718096);
+    color: #ffffff;
     font-size: 0.95rem;
     margin: 0;
 }
@@ -848,7 +911,7 @@ This theme, like WordPress, is licensed under the GPL.
 .antigravity-form-group label {
     font-size: 0.9rem;
     font-weight: 600;
-    color: var(--wp--preset--color--contrast, #2d3748);
+    color: #ffffff;
 }
 
 .antigravity-modal-form input[type="text"],

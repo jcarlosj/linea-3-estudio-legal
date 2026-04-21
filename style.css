@@ -1125,3 +1125,191 @@ html body .blog-listing-wrapper ul.wp-block-post-template.is-layout-grid {
 
 /* Cleanup */
 .author-specialty, .author-profile-link { display: none !important; }
+
+/* ========== LINEA 3 TEAM GRID PATTERN - START ========== */
+
+/* ========== NUESTRO CUERPO JURÍDICO (TEAM SECTION) - START ========== */
+
+.antigravity-team-section {
+    padding: 90px 0 !important; /* Espaciado ajustado (mitad del anterior) */
+    background-color: #051320; /* Retornamos al fondo azul profundo anterior */
+}
+
+/* Cabecera de la sección */
+.team-section-header {
+    margin-bottom: 80px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 40px;
+}
+
+.team-header-left {
+    flex: 1;
+}
+
+.team-header-right {
+    flex: 1;
+    text-align: right;
+}
+
+.team-title {
+    font-family: var(--wp--preset--font-family--serif, serif);
+    color: #ffffff;
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    margin: 0 !important;
+    line-height: 1;
+}
+
+.team-subtitle {
+    color: #c19b5a; /* Dorado */
+    text-transform: uppercase;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    margin: 12px 0 0 0 !important;
+}
+
+.team-corporate-phrase {
+    color: #ffffff;
+    font-family: var(--wp--preset--font-family--serif, serif);
+    font-style: italic;
+    font-size: 1.1rem;
+    line-height: 1.5;
+    margin: 0;
+    opacity: 0.7;
+    max-width: 420px;
+    margin-left: auto;
+}
+
+/* Grilla de tarjetas */
+.linea3-team-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 32px;
+    width: 100%;
+}
+
+@media screen and (min-width: 768px) {
+    .linea3-team-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media screen and (min-width: 1024px) {
+    .linea3-team-grid { grid-template-columns: repeat(3, 1fr); }
+}
+
+/* Card del Profesional */
+.linea3-team-card {
+    background-color: #071a2b; /* Fondo base (anterior color de hover) */
+    padding: 32px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* Alineado a la izquierda estricto */
+    text-align: left;
+    transition: all 0.4s ease;
+    border: none;
+    height: 100%;
+    box-sizing: border-box;
+}
+
+.linea3-team-card:hover {
+    transform: translateY(-8px);
+    background-color: #0a2233; /* Nuevo color de hover ligeramente más claro */
+}
+
+/* Imagen Rectangular */
+.linea3-team-card-image-wrap {
+    width: 100%;
+    aspect-ratio: 1 / 1.15; /* Rectangular fiel a la referencia */
+    overflow: hidden;
+    margin-bottom: 28px;
+    border: none;
+    padding: 0;
+}
+
+.linea3-team-card-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 0;
+    filter: grayscale(100%) brightness(0.8);
+    transition: all 0.5s ease;
+}
+
+.linea3-team-card:hover .linea3-team-card-image {
+    filter: grayscale(0%) brightness(1);
+}
+
+/* Tipografía de la Card */
+.linea3-team-job-title {
+    color: #c19b5a; /* Dorado */
+    text-transform: uppercase;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    margin: 0 0 10px 0;
+}
+
+.linea3-team-name {
+    font-family: var(--wp--preset--font-family--serif, serif);
+    color: #ffffff;
+    font-size: 24px;
+    font-weight: 600;
+    margin: 0 0 8px 0;
+    line-height: 1.2;
+}
+
+.linea3-team-specialty {
+    color: #a0a0a0;
+    font-size: 14px;
+    margin: 0 0 20px 0;
+    opacity: 0.8;
+}
+
+/* Redes Sociales a la Izquierda */
+.linea3-team-socials {
+    margin-top: auto;
+    width: 100%;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.linea3-team-social-icons {
+    display: flex;
+    justify-content: flex-start;
+    gap: 16px;
+}
+
+.linea3-team-social-icons a,
+.linea3-team-social-icons span {
+    color: #c19b5a;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    opacity: 0.8;
+}
+
+.linea3-team-social-icons a:hover {
+    color: #ffffff;
+    opacity: 1;
+    transform: translateY(-2px);
+}
+
+.linea3-team-icon-share {
+    cursor: default;
+}
+
+@media screen and (max-width: 767px) {
+    .team-section-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 30px;
+    }
+    .team-corporate-phrase {
+        text-align: left !important;
+        margin-left: 0;
+    }
+}
+
+/* ========== NUESTRO CUERPO JURÍDICO - END ========== */

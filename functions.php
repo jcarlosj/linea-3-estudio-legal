@@ -560,7 +560,7 @@ function antigravity_post_author_box_shortcode() {
 			<div class="author-avatar-wrap"><div style="width:64px;height:64px;background:#c19b5a;border-radius:12px"></div></div>
 			<div class="author-info-wrap">
 				<p class="author-name">Nombre del Autor</p>
-				<p class="author-job-title">Cargo Profesional</p>
+				<p class="author-specialty">Especialidad del Autor</p>
 				<p class="author-post-meta">21 de Abril, 2026 — 5 minutos de lectura</p>
 			</div>
 		</div>';
@@ -571,8 +571,16 @@ function antigravity_post_author_box_shortcode() {
 		$author_id = get_current_user_id();
 	}
 
-	$name      = get_the_author_meta('display_name', $author_id);
-	$job_title = get_the_author_meta('antigravity_user_job_title', $author_id);
+	$first_name = get_the_author_meta('first_name', $author_id);
+	$last_name  = get_the_author_meta('last_name', $author_id);
+	$name       = trim($first_name . ' ' . $last_name);
+	
+	// Fallback si no hay nombre completo
+	if (empty($name)) {
+		$name = get_the_author_meta('display_name', $author_id);
+	}
+
+	$specialty = get_user_meta($author_id, 'antigravity_user_specialty', true);
 	$avatar    = get_avatar($author_id, 80, '', $name, array('class' => 'single-author-avatar'));
 	
 	// Datos dinámicos: Fecha y Tiempo de Lectura
@@ -587,8 +595,8 @@ function antigravity_post_author_box_shortcode() {
 	$output .= '<div class="author-avatar-wrap">' . $avatar . '</div>';
 	$output .= '<div class="author-info-wrap">';
 	$output .= '<p class="author-name">' . esc_html($name) . '</p>';
-	if (!empty($job_title)) {
-		$output .= '<p class="author-job-title">' . esc_html($job_title) . '</p>';
+	if (!empty($specialty)) {
+		$output .= '<p class="author-specialty">' . esc_html($specialty) . '</p>';
 	}
 	$output .= '<p class="author-post-meta">' . esc_html($date) . ' — ' . esc_html($reading_time_text) . '</p>';
 	$output .= '</div>';

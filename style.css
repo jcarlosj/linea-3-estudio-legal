@@ -1102,7 +1102,7 @@ html body .blog-listing-wrapper ul.wp-block-post-template.is-layout-grid {
     }
 }
 
-.author-avatar-wrapper {
+.antigravity-author-card .author-avatar-wrapper {
     width: 35px !important;
     height: 35px !important;
     border-radius: 50% !important;
@@ -1110,21 +1110,22 @@ html body .blog-listing-wrapper ul.wp-block-post-template.is-layout-grid {
     flex-shrink: 0 !important;
 }
 
-.author-avatar {
+.antigravity-author-card .author-avatar {
     width: 100% !important;
     height: 100% !important;
     object-fit: cover !important;
 }
 
-.author-name {
+.antigravity-author-card .author-name {
     color: #a0a0a0 !important; /* Gris claro */
     font-size: 14px !important;
     margin: 0 !important;
     font-weight: 400 !important;
 }
 
-/* Cleanup */
-.author-specialty, .author-profile-link { display: none !important; }
+/* Cleanup: Solo para la tarjeta pequeña del grid */
+.antigravity-author-card .author-specialty, 
+.antigravity-author-card .author-profile-link { display: none !important; }
 
 /* ========== LINEA 3 TEAM GRID PATTERN - START ========== */
 
@@ -1333,21 +1334,21 @@ main.single-post-layout-pro {
 /* 1. HERO SECTION: Título antes de la imagen */
 .single-post-layout-pro .single-post-hero-section {
     width: 90%;
-    max-width: 1200px;
+    max-width: 960px; /* Aligned with info box and content */
     margin: 80px auto 60px;
-    padding: 0 0 0 32px !important; /* Espacio para la línea vertical */
-    border-left: 2px solid rgba(212, 168, 83, 0.4); /* Línea dorada sutil */
+    padding: 0 0 0 32px !important; /* Space for the vertical line */
+    border-left: 2px solid rgba(212, 168, 83, 0.4); /* Suble gold line */
     display: flex;
     flex-direction: column;
     justify-content: center;
 }
 
 .single-post-layout-pro .single-post-category {
-    font-size: 0.85rem;
+    font-size: clamp(0.75rem, 1vw, 0.85rem);
     text-transform: uppercase;
     letter-spacing: 2px;
     color: var(--wp--preset--color--primary);
-    margin: 0 0 20px 0 !important; /* Reset margin top para que la línea no suba */
+    margin: 0 0 20px 0 !important;
     display: block;
     font-weight: 600;
     line-height: 1;
@@ -1355,8 +1356,8 @@ main.single-post-layout-pro {
 
 .single-post-layout-pro .single-post-title {
     font-family: var(--wp--preset--font-family--serif, serif) !important;
-    font-size: clamp(2.5rem, 6vw, 4.5rem) !important;
-    line-height: 1.1 !important;
+    font-size: clamp(1.85rem, 4.5vw, 3.25rem) !important; /* Refined RWD scale */
+    line-height: 1.15 !important;
     color: var(--wp--preset--color--text-main) !important;
     margin: 0 !important;
     font-weight: 700;
@@ -1385,21 +1386,21 @@ main.single-post-layout-pro {
 /* 3. THE ACTOR: Bloque Flotante (Extracto y Autor) */
 .single-post-layout-pro .single-post-info-box-container {
     width: 90%;
-    max-width: 800px; /* Ancho de lectura de theme.json aprox */
-    margin: -120px auto 0 !important; /* Superposición agresiva sobre el 20% inferior */
+    max-width: 960px;
+    margin: -120px auto 0 !important;
     position: relative !important;
-    z-index: 100 !important; /* Inmune a otros elementos */
+    z-index: 100 !important;
 }
 
 .single-post-layout-pro .single-post-info-box-inner {
     background-color: #051320 !important;
-    padding: 40px 60px !important; /* Espacio para que el texto respire */
+    padding: 35px 50px !important;
     box-shadow: 0 40px 100px rgba(0,0,0,0.6);
     border: 1px solid rgba(255,255,255,0.05);
 }
 
 .single-post-layout-pro .single-post-excerpt {
-    font-size: 1.25rem;
+    font-size: clamp(1.05rem, 2vw, 1.25rem); /* RWD Excerpt */
     line-height: 1.6;
     color: var(--wp--preset--color--text-main);
     margin-bottom: 0;
@@ -1411,8 +1412,8 @@ main.single-post-layout-pro {
     display: flex;
     align-items: center;
     gap: 25px;
-    margin-top: 40px;
-    padding-top: 40px;
+    margin-top: 25px; /* Reducido de 35px */
+    padding-top: 25px; /* Reducido de 35px */
     border-top: 1px solid rgba(255,255,255,0.1);
 }
 
@@ -1425,14 +1426,14 @@ main.single-post-layout-pro {
 
 .single-post-layout-pro .author-name {
     font-weight: 700;
-    font-size: 1.2rem;
+    font-size: clamp(1.1rem, 1.5vw, 1.25rem);
     margin: 0;
     color: #ffffff;
 }
 
-.single-post-layout-pro .author-job-title {
+.single-post-layout-pro .author-specialty {
     color: var(--wp--preset--color--primary);
-    font-size: 0.85rem;
+    font-size: clamp(0.75rem, 1vw, 0.85rem);
     text-transform: uppercase;
     letter-spacing: 1.5px;
     margin: 4px 0 6px 0;
@@ -1440,7 +1441,7 @@ main.single-post-layout-pro {
 }
 
 .single-post-layout-pro .author-post-meta {
-    font-size: 0.85rem;
+    font-size: clamp(0.75rem, 1vw, 0.85rem);
     color: var(--wp--preset--color--text-muted);
     margin: 0;
 }
@@ -1448,15 +1449,31 @@ main.single-post-layout-pro {
 /* 4. CONTENT: Cuerpo del artículo */
 .single-post-layout-pro .single-post-content-container {
     width: 90%;
-    max-width: 800px; /* Alineado con el Info Box */
+    max-width: 960px;
     margin: 0 auto;
     padding: 80px 0 120px;
+}
+
+.single-post-layout-pro .single-post-content-container p {
+    font-size: clamp(1.05rem, 1.2vw, 1.15rem); /* RWD Body Text */
+    line-height: 1.8;
+    margin-bottom: 1.5em;
+    color: var(--wp--preset--color--text-main);
 }
 
 /* 5. PILARES DE RESPONSIVIDAD */
 @media screen and (max-width: 1023px) {
     .single-post-layout-pro .single-post-featured-img img {
         height: 300px !important; /* Altura Tablet */
+    }
+
+    .single-post-layout-pro .single-post-info-box-container,
+    .single-post-layout-pro .single-post-content-container {
+        max-width: 800px !important; /* Mantener ancho original en dispositivos no-desktop */
+    }
+
+    .single-post-layout-pro .single-post-info-box-inner {
+        padding: 30px 35px !important; /* Padding ajustado para Tablet */
     }
 }
 
@@ -1471,11 +1488,11 @@ main.single-post-layout-pro {
     }
 
     .single-post-layout-pro .single-post-info-box-inner {
-        padding: 30px 20px !important;
+        padding: 25px 20px !important; /* Padding compacto para Mobile */
     }
     
     .single-post-layout-pro .single-post-title {
-        font-size: 2.25rem !important;
+        font-size: 1.85rem !important;
     }
 
     .single-post-layout-pro .single-post-author-box {

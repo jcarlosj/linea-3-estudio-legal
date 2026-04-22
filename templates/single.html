@@ -1,18 +1,30 @@
-<!-- wp:template-part {"slug":"header","tagName":"header","theme":"linea3-legal-child"} /-->
+<!-- wp:template-part {"slug":"header","theme":"linea3-legal-child"} /-->
 
-<!-- wp:group {"tagName":"main","layout":{"type":"constrained"}} -->
-<main class="wp-block-group">
-	<!-- wp:group {"layout":{"type":"constrained"},"style":{"spacing":{"padding":{"top":"var:preset|spacing|50","bottom":"var:preset|spacing|50"}}}} -->
-	<div class="wp-block-group" style="padding-top:var(--wp--preset--spacing--50);padding-bottom:var(--wp--preset--spacing--50)">
-		<!-- wp:post-title {"level":1} /-->
-		<!-- wp:post-meta {"metaKey":"author"} /--> <!-- wp:post-date /-->
-		<!-- wp:post-content /-->
-		<!-- wp:post-terms {"term":"category"} /-->
-		<!-- wp:post-terms {"term":"post_tag"} /-->
-		<!-- wp:comments /-->
-	</div>
-	<!-- /wp:group -->
+<!-- wp:group {"tagName":"main","className":"single-post-layout-pro","layout":{"type":"default"}} -->
+<main class="wp-block-group single-post-layout-pro">
+
+    <!-- 1. HERO SECTION (Title above image) -->
+    <div class="single-post-hero-section">
+        <!-- wp:post-terms {"term":"category","className":"single-post-category"} /-->
+        <!-- wp:post-title {"level":1,"className":"single-post-title"} /-->
+    </div>
+
+    <!-- 2. IMAGE SECTION (Forced Full Width) -->
+    <!-- wp:post-featured-image {"align":"full","className":"single-post-featured-img"} /-->
+
+    <!-- 3. INFO-BOX SECTION (The Floating Actor) -->
+    <div class="single-post-info-box-container">
+        <div class="single-post-info-box-inner">
+            <!-- wp:post-excerpt {"className":"single-post-excerpt"} /-->
+            <!-- wp:shortcode -->[antigravity_post_author_box]<!-- /wp:shortcode -->
+        </div>
+    </div>
+
+    <!-- 4. ARTICLE CONTENT SECTION -->
+    <div class="single-post-content-container">
+        <!-- wp:post-content /-->
+    </div>
+
 </main>
-<!-- /wp:group -->
 
-<!-- wp:template-part {"slug":"footer","tagName":"footer","theme":"linea3-legal-child"} /-->
+<!-- wp:template-part {"slug":"footer","theme":"linea3-legal-child"} /-->

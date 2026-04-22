@@ -1313,3 +1313,181 @@ html body .blog-listing-wrapper ul.wp-block-post-template.is-layout-grid {
 }
 
 /* ========== NUESTRO CUERPO JURÍDICO - END ========== */
+
+/* ========== ARQUITECTURA FRONTEND V10: MAXIMUM SPECIFICITY & FORCE ========== */
+
+/* ========================================================
+   11. LAYOUT PRO: SINGLE POST REFACTOR (CINEMATIC)
+   ======================================================== */
+
+/* Aislamiento y Reseteo del Contenedor Main */
+main.single-post-layout-pro {
+    background-color: var(--wp--preset--color--base);
+    overflow-x: hidden;
+    padding: 0 !important;
+    margin: 0 !important;
+    display: flex;
+    flex-direction: column;
+}
+
+/* 1. HERO SECTION: Título antes de la imagen */
+.single-post-layout-pro .single-post-hero-section {
+    width: 90%;
+    max-width: 1200px;
+    margin: 80px auto 60px;
+    padding: 0 0 0 32px !important; /* Espacio para la línea vertical */
+    border-left: 2px solid rgba(212, 168, 83, 0.4); /* Línea dorada sutil */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.single-post-layout-pro .single-post-category {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--wp--preset--color--primary);
+    margin: 0 0 20px 0 !important; /* Reset margin top para que la línea no suba */
+    display: block;
+    font-weight: 600;
+    line-height: 1;
+}
+
+.single-post-layout-pro .single-post-title {
+    font-family: var(--wp--preset--font-family--serif, serif) !important;
+    font-size: clamp(2.5rem, 6vw, 4.5rem) !important;
+    line-height: 1.1 !important;
+    color: var(--wp--preset--color--text-main) !important;
+    margin: 0 !important;
+    font-weight: 700;
+}
+
+/* 2. THE STAGE: Imagen Destacada con Breakout real */
+.single-post-layout-pro .single-post-featured-img {
+    width: 100vw !important;
+    max-width: 100vw !important;
+    margin-left: 50% !important;
+    margin-right: 50% !important;
+    transform: translateX(-50%) !important;
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+    position: relative;
+    z-index: 1;
+}
+
+.single-post-layout-pro .single-post-featured-img img {
+    width: 100% !important;
+    height: 500px !important; /* Altura Desktop */
+    object-fit: cover !important;
+    display: block !important;
+}
+
+/* 3. THE ACTOR: Bloque Flotante (Extracto y Autor) */
+.single-post-layout-pro .single-post-info-box-container {
+    width: 90%;
+    max-width: 800px; /* Ancho de lectura de theme.json aprox */
+    margin: -120px auto 0 !important; /* Superposición agresiva sobre el 20% inferior */
+    position: relative !important;
+    z-index: 100 !important; /* Inmune a otros elementos */
+}
+
+.single-post-layout-pro .single-post-info-box-inner {
+    background-color: #051320 !important;
+    padding: 40px 60px !important; /* Espacio para que el texto respire */
+    box-shadow: 0 40px 100px rgba(0,0,0,0.6);
+    border: 1px solid rgba(255,255,255,0.05);
+}
+
+.single-post-layout-pro .single-post-excerpt {
+    font-size: 1.25rem;
+    line-height: 1.6;
+    color: var(--wp--preset--color--text-main);
+    margin-bottom: 0;
+    font-weight: 400;
+}
+
+/* Estilos para el Shortcode de Autor (Dinámico) */
+.single-post-layout-pro .single-post-author-box {
+    display: flex;
+    align-items: center;
+    gap: 25px;
+    margin-top: 40px;
+    padding-top: 40px;
+    border-top: 1px solid rgba(255,255,255,0.1);
+}
+
+.single-post-layout-pro .single-author-avatar {
+    border-radius: 4px;
+    width: 64px;
+    height: 64px;
+    object-fit: cover;
+}
+
+.single-post-layout-pro .author-name {
+    font-weight: 700;
+    font-size: 1.2rem;
+    margin: 0;
+    color: #ffffff;
+}
+
+.single-post-layout-pro .author-job-title {
+    color: var(--wp--preset--color--primary);
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin: 4px 0 6px 0;
+    font-weight: 600;
+}
+
+.single-post-layout-pro .author-post-meta {
+    font-size: 0.85rem;
+    color: var(--wp--preset--color--text-muted);
+    margin: 0;
+}
+
+/* 4. CONTENT: Cuerpo del artículo */
+.single-post-layout-pro .single-post-content-container {
+    width: 90%;
+    max-width: 800px; /* Alineado con el Info Box */
+    margin: 0 auto;
+    padding: 80px 0 120px;
+}
+
+/* 5. PILARES DE RESPONSIVIDAD */
+@media screen and (max-width: 1023px) {
+    .single-post-layout-pro .single-post-featured-img img {
+        height: 300px !important; /* Altura Tablet */
+    }
+}
+
+@media screen and (max-width: 767px) {
+    .single-post-layout-pro .single-post-featured-img img {
+        height: 220px !important; /* Altura Mobile */
+    }
+
+    .single-post-layout-pro .single-post-info-box-container {
+        margin-top: -40px !important; /* Reducción de margen para no tapar el motivo principal */
+        width: 94% !important;
+    }
+
+    .single-post-layout-pro .single-post-info-box-inner {
+        padding: 30px 20px !important;
+    }
+    
+    .single-post-layout-pro .single-post-title {
+        font-size: 2.25rem !important;
+    }
+
+    .single-post-layout-pro .single-post-author-box {
+        gap: 15px;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .single-post-layout-pro .single-author-avatar {
+        width: 50px;
+        height: 50px;
+    }
+}
+
+/* ========== FIN ARQUITECTURA FRONTEND V10 ========== */

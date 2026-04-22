@@ -546,3 +546,54 @@ function antigravity_render_team_grid($attributes): string
 
 	return $output;
 }
+
+/**
+ * 4. Shortcode para el Cuadro de Autor en Entradas Individuales
+ * Renderiza Avatar + Nombre + Cargo (Dorado)
+ */
+function antigravity_post_author_box_shortcode() {
+	global $post;
+
+	// En el editor de sitio, mostramos un placeholder para evitar errores visuales
+	if (is_admin() && !defined('DOING_AJAX')) {
+		return '<div class="single-post-author-box placeholder">
+			<div class="author-avatar-wrap"><div style="width:64px;height:64px;background:#c19b5a;border-radius:12px"></div></div>
+			<div class="author-info-wrap">
+				<p class="author-name">Nombre del Autor</p>
+				<p class="author-job-title">Cargo Profesional</p>
+				<p class="author-post-meta">21 de Abril, 2026 — 5 minutos de lectura</p>
+			</div>
+		</div>';
+	}
+
+	$author_id = get_the_author_meta('ID');
+	if (!$author_id) {
+		$author_id = get_current_user_id();
+	}
+
+	$name      = get_the_author_meta('display_name', $author_id);
+	$job_title = get_the_author_meta('antigravity_user_job_title', $author_id);
+	$avatar    = get_avatar($author_id, 80, '', $name, array('class' => 'single-author-avatar'));
+	
+	// Datos dinámicos: Fecha y Tiempo de Lectura
+	$date = get_the_date();
+	$content = get_post_field('post_content', $post->ID);
+	$word_count = str_word_count(strip_tags($content));
+	$reading_time = ceil($word_count / 200); // Promedio de 200 palabras por minuto
+	if ($reading_time < 1) $reading_time = 1;
+	$reading_time_text = sprintf(_n('%d min de lectura', '%d min de lectura', $reading_time, 'linea3-legal-child'), $reading_time);
+
+	$output  = '<div class="single-post-author-box">';
+	$output .= '<div class="author-avatar-wrap">' . $avatar . '</div>';
+	$output .= '<div class="author-info-wrap">';
+	$output .= '<p class="author-name">' . esc_html($name) . '</p>';
+	if (!empty($job_title)) {
+		$output .= '<p class="author-job-title">' . esc_html($job_title) . '</p>';
+	}
+	$output .= '<p class="author-post-meta">' . esc_html($date) . ' — ' . esc_html($reading_time_text) . '</p>';
+	$output .= '</div>';
+	$output .= '</div>';
+
+	return $output;
+}
+add_shortcode('antigravity_post_author_box', 'antigravity_post_author_box_shortcode');

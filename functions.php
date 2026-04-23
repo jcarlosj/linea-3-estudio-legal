@@ -86,14 +86,24 @@ function linea3_legal_child_limit_search_results($query): void
 add_action('pre_get_posts', 'linea3_legal_child_limit_search_results');
 
 /**
- * Provides a fallback featured image if a post doesn't have one.
- *
- * @param string       $html              The post thumbnail HTML.
- * @param int          $post_id           The post ID.
- * @param int|string   $post_thumbnail_id The post thumbnail ID.
- * @param string|array $size              The post thumbnail size.
- * @param string       $attr              Query string of attributes.
- * @return string The modified post thumbnail HTML.
+ * Helper para obtener el HTML de la imagen destacada con fallback.
+ */
+function antigravity_get_post_thumbnail_html($post_id, $size = 'medium_large', $attr = array()) {
+	$html = get_the_post_thumbnail($post_id, $size, $attr);
+	if (empty($html)) {
+		$placeholder_url = get_stylesheet_directory_uri() . '/assets/images/placeholder-legal.png';
+		$class = isset($attr['class']) ? $attr['class'] . ' fallback-image' : 'wp-post-image fallback-image';
+		$html = sprintf(
+			'<img src="%s" class="%s" alt="" loading="lazy" />',
+			esc_url($placeholder_url),
+			esc_attr($class)
+		);
+	}
+	return $html;
+}
+
+/**
+ * Provides a fallback featured image if a post doesn't have one (Filter version).
  */
 function linea3_legal_child_fallback_featured_image($html, $post_id, $post_thumbnail_id, $size, $attr)
 {
@@ -385,22 +395,13 @@ add_action('personal_options_update', 'antigravity_save_extra_profile_fields');
 add_action('edit_user_profile_update', 'antigravity_save_extra_profile_fields');
 
 /**
- * Renderizado del bloque de tarjeta de autor para los resultados de búsqueda/blog.
+ * Helper para obtener el HTML de la tarjeta de autor.
  * 
- * @param array $attributes Atributos del bloque.
- * @param string $content Contenido del bloque.
- * @param WP_Block $block Objeto del bloque.
- * @return string HTML renderizado.
+ * @param int $author_id ID del autor.
+ * @return string HTML de la tarjeta.
  */
-function antigravity_render_author_card($attributes, $content, $block): string
+function antigravity_get_author_card_html(int $author_id, int $post_id = 0): string
 {
-	if (!isset($block->context['postId'])) {
-		return '';
-	}
-
-	$post_id   = $block->context['postId'];
-	$author_id = get_post_field('post_author', $post_id);
-
 	if (!$author_id) {
 		return '';
 	}
@@ -410,7 +411,19 @@ function antigravity_render_author_card($attributes, $content, $block): string
 	$name       = get_the_author_meta('display_name', $author_id);
 	$specialty  = get_the_author_meta('antigravity_user_specialty', $author_id);
 
-	// 2. Construcción de la estructura HTML
+	// 2. Metadata (si hay post_id)
+	$meta_html = '';
+	if ($post_id > 0) {
+		$date = get_the_date('', $post_id);
+		$content = get_post_field('post_content', $post_id);
+		$word_count = str_word_count(strip_tags($content));
+		$reading_time = ceil($word_count / 200);
+		if ($reading_time < 1) $reading_time = 1;
+		$reading_time_text = sprintf(_n('%d min de lectura', '%d min de lectura', $reading_time, 'linea3-legal-child'), $reading_time);
+		$meta_html = sprintf('<p class="author-post-meta">%s — %s</p>', esc_html($date), esc_html($reading_time_text));
+	}
+
+	// 3. Construcción de la estructura HTML (Unificada con single post)
 	$output = '<div class="antigravity-author-card">';
 
 	// Columna Izquierda (Avatar)
@@ -433,16 +446,34 @@ function antigravity_render_author_card($attributes, $content, $block): string
 		);
 	}
 
-	$output .= sprintf(
-		'<a href="%s" class="author-profile-link">%s</a>',
-		esc_url(get_author_posts_url($author_id)),
-		esc_html__('Ver Perfil', 'linea3-legal-child')
-	);
+	if (!empty($meta_html)) {
+		$output .= $meta_html;
+	}
 
 	$output .= '</div>'; // .author-data-wrapper
 	$output .= '</div>'; // .antigravity-author-card
 
 	return $output;
+}
+
+/**
+ * Renderizado del bloque de tarjeta de autor para los resultados de búsqueda/blog.
+ * 
+ * @param array $attributes Atributos del bloque.
+ * @param string $content Contenido del bloque.
+ * @param WP_Block $block Objeto del bloque.
+ * @return string HTML renderizado.
+ */
+function antigravity_render_author_card($attributes, $content, $block): string
+{
+	if (!isset($block->context['postId'])) {
+		return '';
+	}
+
+	$post_id   = $block->context['postId'];
+	$author_id = (int) get_post_field('post_author', $post_id);
+
+	return antigravity_get_author_card_html($author_id, $post_id);
 }
 
 /**
@@ -566,10 +597,7 @@ function antigravity_post_author_box_shortcode() {
 		</div>';
 	}
 
-	$author_id = get_the_author_meta('ID');
-	if (!$author_id) {
-		$author_id = get_current_user_id();
-	}
+	$author_id = (int) get_post_field('post_author', $post->ID);
 
 	$first_name = get_the_author_meta('first_name', $author_id);
 	$last_name  = get_the_author_meta('last_name', $author_id);
@@ -605,3 +633,75 @@ function antigravity_post_author_box_shortcode() {
 	return $output;
 }
 add_shortcode('antigravity_post_author_box', 'antigravity_post_author_box_shortcode');
+/**
+ * 5. Shortcode para Publicaciones Relacionadas (Mismo Autor)
+ * Despliega las 3 últimas publicaciones del autor actual.
+ */
+function antigravity_related_posts_shortcode() {
+	if (!is_singular('post')) {
+		return '';
+	}
+
+	$current_post_id = get_the_ID();
+	$author_id       = get_post_field('post_author', $current_post_id);
+
+	$args = array(
+		'post_type'      => 'post',
+		'posts_per_page' => 3,
+		'post__not_in'   => array($current_post_id),
+		'author'         => $author_id,
+		'orderby'        => 'date',
+		'order'          => 'DESC',
+	);
+
+	$query = new WP_Query($args);
+
+	if (!$query->have_posts()) {
+		return '';
+	}
+
+	ob_start();
+	?>
+	<section class="related-posts-section">
+		<div class="related-posts-header">
+			<div class="related-header-left">
+				<p class="related-subtitle"><?php esc_html_e('MÁS COMO ESTO', 'linea3-legal-child'); ?></p>
+				<h2 class="related-title"><?php esc_html_e('Publicaciones Relacionadas', 'linea3-legal-child'); ?></h2>
+			</div>
+			<div class="related-header-right">
+				<a href="<?php echo esc_url(get_author_posts_url($author_id)); ?>" class="view-all-link">
+					<?php esc_html_e('Ver todas las publicaciones', 'linea3-legal-child'); ?>
+				</a>
+			</div>
+		</div>
+
+		<div class="blog-listing-wrapper">
+			<ul class="wp-block-post-template is-layout-grid columns-3">
+				<?php while ($query->have_posts()) : $query->the_post(); ?>
+					<li class="wp-block-post">
+						<article class="wp-block-group">
+							<div class="wp-block-post-featured-image">
+								<a href="<?php the_permalink(); ?>">
+									<?php echo antigravity_get_post_thumbnail_html(get_the_ID(), 'medium_large', array('class' => 'related-post-img')); ?>
+								</a>
+							</div>
+							
+							<div class="antigravity-card-content">
+								<div class="wp-block-post-terms">
+									<?php the_category(' '); ?>
+								</div>
+								<h3 class="wp-block-post-title">
+									<a href="<?php the_permalink(); ?>"><?php the_title(); ?></a>
+								</h3>
+								<?php echo antigravity_get_author_card_html((int) get_the_author_meta('ID'), get_the_ID()); ?>
+							</div>
+						</article>
+					</li>
+				<?php endwhile; wp_reset_postdata(); ?>
+			</ul>
+		</div>
+	</section>
+	<?php
+	return ob_get_clean();
+}
+add_shortcode('antigravity_related_posts', 'antigravity_related_posts_shortcode');

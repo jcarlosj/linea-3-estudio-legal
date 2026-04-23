@@ -1085,27 +1085,18 @@ html body .blog-listing-wrapper ul.wp-block-post-template.is-layout-grid {
 .antigravity-author-card {
     display: flex !important;
     align-items: center !important;
-    gap: 12px !important;
-    padding-top: 24px !important;
+    gap: 15px !important; /* Coincide con single post */
+    padding-top: 20px !important;
     border-top: 1px solid rgba(255, 255, 255, 0.08) !important;
     width: 100% !important;
-    margin-top: auto !important; /* Anclaje a la base */
-    
-    /* Mobile: Centrado */
-    justify-content: center !important;
-}
-
-/* Tablet/Desktop: Izquierda */
-@media screen and (min-width: 768px) {
-    .antigravity-author-card {
-        justify-content: flex-start !important;
-    }
+    margin-top: auto !important;
+    justify-content: flex-start !important;
 }
 
 .antigravity-author-card .author-avatar-wrapper {
-    width: 35px !important;
-    height: 35px !important;
-    border-radius: 50% !important;
+    width: 50px !important; /* Un poco más pequeño que en single pero más grande que antes */
+    height: 50px !important;
+    border-radius: 4px !important; /* Cuadrado con puntas redondeadas */
     overflow: hidden !important;
     flex-shrink: 0 !important;
 }
@@ -1117,15 +1108,29 @@ html body .blog-listing-wrapper ul.wp-block-post-template.is-layout-grid {
 }
 
 .antigravity-author-card .author-name {
-    color: #a0a0a0 !important; /* Gris claro */
-    font-size: 14px !important;
+    color: #ffffff !important;
+    font-size: 1rem !important;
     margin: 0 !important;
-    font-weight: 400 !important;
+    font-weight: 700 !important;
+    line-height: 1.2 !important;
 }
 
-/* Cleanup: Solo para la tarjeta pequeña del grid */
-.antigravity-author-card .author-specialty, 
-.antigravity-author-card .author-profile-link { display: none !important; }
+.antigravity-author-card .author-specialty {
+    color: var(--wp--preset--color--primary) !important;
+    font-size: 0.75rem !important;
+    text-transform: uppercase !important;
+    letter-spacing: 1px !important;
+    margin: 2px 0 4px 0 !important;
+    font-weight: 600 !important;
+    display: block !important;
+}
+
+.antigravity-author-card .author-post-meta {
+    font-size: 0.7rem !important;
+    color: var(--wp--preset--color--text-muted) !important;
+    margin: 0 !important;
+    display: block !important;
+}
 
 /* ========== LINEA 3 TEAM GRID PATTERN - START ========== */
 
@@ -1507,4 +1512,69 @@ main.single-post-layout-pro {
     }
 }
 
+
+/* ========== 12. RELATED POSTS SECTION ========== */
+.related-posts-section {
+    width: 90%;
+    max-width: 1200px;
+    margin: 80px auto;
+    padding-top: 80px;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.related-posts-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 50px;
+    gap: 30px;
+}
+
+.related-subtitle {
+    color: var(--wp--preset--color--primary);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 2.5px;
+    font-weight: 700;
+    margin: 0 0 10px 0;
+}
+
+.related-title {
+    font-family: var(--wp--preset--font-family--serif, serif);
+    font-size: clamp(2rem, 4vw, 3rem);
+    color: #ffffff;
+    margin: 0;
+    line-height: 1.1;
+}
+
+.view-all-link {
+    color: var(--wp--preset--color--primary);
+    text-decoration: none;
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-bottom: 1px solid rgba(212, 168, 83, 0.3);
+    padding-bottom: 4px;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+}
+
+.view-all-link:hover {
+    border-bottom-color: var(--wp--preset--color--primary);
+    color: #ffffff;
+}
+
+@media screen and (max-width: 767px) {
+    .related-posts-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .related-title {
+        font-size: 2rem;
+    }
+}
+
 /* ========== FIN ARQUITECTURA FRONTEND V10 ========== */
+

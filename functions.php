@@ -664,14 +664,14 @@ function antigravity_related_posts_shortcode() {
 	?>
 	<section class="related-posts-section">
 		<div class="related-posts-header">
-			<div class="related-header-left">
-				<p class="related-subtitle"><?php esc_html_e('MÁS COMO ESTO', 'linea3-legal-child'); ?></p>
-				<h2 class="related-title"><?php esc_html_e('Publicaciones Relacionadas', 'linea3-legal-child'); ?></h2>
-			</div>
-			<div class="related-header-right">
+			<div class="related-header-top">
+				<p class="related-subtitle"><?php esc_html_e('MÁS DEL MISMO AUTOR', 'linea3-legal-child'); ?></p>
 				<a href="<?php echo esc_url(get_author_posts_url($author_id)); ?>" class="view-all-link">
-					<?php esc_html_e('Ver todas las publicaciones', 'linea3-legal-child'); ?>
+					<?php esc_html_e('Ver todas sus publicaciones', 'linea3-legal-child'); ?>
 				</a>
+			</div>
+			<div class="related-header-main">
+				<h2 class="related-title"><?php esc_html_e('Publicaciones Relacionadas', 'linea3-legal-child'); ?></h2>
 			</div>
 		</div>
 

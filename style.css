@@ -1539,11 +1539,14 @@ main.single-post-layout-pro {
 }
 
 .related-posts-header {
+    margin-bottom: 50px;
+}
+
+.related-header-top {
     display: flex;
     justify-content: space-between;
-    align-items: flex-end;
-    margin-bottom: 50px;
-    gap: 30px;
+    align-items: center;
+    margin-bottom: 10px;
 }
 
 .related-subtitle {
@@ -1552,7 +1555,7 @@ main.single-post-layout-pro {
     text-transform: uppercase;
     letter-spacing: 2.5px;
     font-weight: 700;
-    margin: 0 0 10px 0;
+    margin: 0;
 }
 
 .related-title {

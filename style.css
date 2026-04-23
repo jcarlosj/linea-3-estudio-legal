@@ -1015,6 +1015,11 @@ html body .blog-listing-wrapper ul.wp-block-post-template.is-layout-grid {
     border: none !important;
     box-shadow: none !important;
     gap: 0 !important; /* Unión monolítica */
+    transition: all 0.4s ease !important; /* Animación de entrada */
+}
+
+.blog-listing-wrapper .wp-block-post:hover {
+    transform: translateY(-8px) !important;
 }
 
 /* Destacada: eliminar margen para unión monolítica */
@@ -1030,6 +1035,12 @@ html body .blog-listing-wrapper ul.wp-block-post-template.is-layout-grid {
     object-fit: cover !important;
     width: 100% !important;
     display: block !important;
+    filter: grayscale(100%) brightness(0.8) !important; /* Estado inicial como en Team */
+    transition: all 0.5s ease !important;
+}
+
+.blog-listing-wrapper .wp-block-post:hover .wp-block-post-featured-image img {
+    filter: grayscale(0%) brightness(1) !important; /* Revelar a color */
 }
 
 /* 4. Information Container (The Perfect Card) */
@@ -1040,10 +1051,15 @@ html body .blog-listing-wrapper ul.wp-block-post-template.is-layout-grid {
     display: flex !important;
     flex-direction: column !important;
     margin-top: -1px !important; /* Previene micro-líneas de renderizado */
+    transition: background-color 0.4s ease !important;
     
     /* Mobile: Centrado */
     text-align: center !important;
     align-items: center !important;
+}
+
+.blog-listing-wrapper .wp-block-post:hover .antigravity-card-content {
+    background-color: #0a2233 !important; /* Cambio sutil de fondo al hover */
 }
 
 /* Tablet/Desktop: Izquierda */

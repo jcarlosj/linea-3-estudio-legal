@@ -705,3 +705,48 @@ function antigravity_related_posts_shortcode() {
 	return ob_get_clean();
 }
 add_shortcode('antigravity_related_posts', 'antigravity_related_posts_shortcode');
+
+/**
+ * 6. ADICIÓN DE COLUMNAS PERSONALIZADAS AL ADMIN (ENTRADAS)
+ */
+
+/**
+ * Añade las columnas "Imagen" y "Extracto" a la lista de Entradas.
+ */
+function antigravity_add_posts_columns($columns) {
+	$new_columns = array();
+	foreach($columns as $key => $value) {
+		if ($key === 'title') {
+			$new_columns['title'] = $value;
+			$new_columns['featured_image'] = __('Imagen', 'linea3-legal-child');
+			$new_columns['has_excerpt'] = __('Extracto', 'linea3-legal-child');
+		} else {
+			$new_columns[$key] = $value;
+		}
+	}
+	return $new_columns;
+}
+add_filter('manage_posts_columns', 'antigravity_add_posts_columns');
+
+/**
+ * Renderiza el contenido de las columnas personalizadas.
+ */
+function antigravity_render_posts_columns($column, $post_id) {
+	switch ($column) {
+		case 'featured_image':
+			if (has_post_thumbnail($post_id)) {
+				echo get_the_post_thumbnail($post_id, array(50, 50), array('style' => 'border-radius: 6px; border: 1px solid rgba(0,0,0,0.1);'));
+			} else {
+				echo '<span style="color: #999; font-style: italic;">Sin imagen</span>';
+			}
+			break;
+		case 'has_excerpt':
+			if (has_excerpt($post_id)) {
+				echo '<span style="color: #2271b1; font-weight: bold; font-size: 1.2rem;">✔</span>';
+			} else {
+				echo '<span style="color: #d63638; font-weight: bold; font-size: 1.2rem;">✖</span>';
+			}
+			break;
+	}
+}
+add_action('manage_posts_custom_column', 'antigravity_render_posts_columns', 10, 2);

@@ -19,7 +19,7 @@ This theme, like WordPress, is licensed under the GPL.
 /* --- SISTEMA RESPONSIVO MOBILE FIRST --- */
 
 /* 1. COMPORTAMIENTO DEL LOGO Y HEADER */
-header.wp-block-group, 
+header.wp-block-group,
 footer.wp-block-group {
     background-color: #0a2233 !important;
 }
@@ -38,14 +38,16 @@ footer.wp-block-group {
 }
 
 /* 2. COMPORTAMIENTOS BÁSICOS PARA BOTONES DE CABECERA */
-.search-btn, .cta-legal-btn {
-    align-self: center; 
+.search-btn,
+.cta-legal-btn {
+    align-self: center;
     flex-shrink: 0;
 }
 
 .cta-legal-btn .wp-block-button__link,
 .search-btn .wp-block-button__link {
-    height: 48px !important; /* Altura estandarizada inquebrantable */
+    height: 48px !important;
+    /* Altura estandarizada inquebrantable */
     box-sizing: border-box !important;
     display: flex;
     align-items: center;
@@ -55,14 +57,16 @@ footer.wp-block-group {
 }
 
 .cta-legal-btn .wp-block-button__link {
-    gap: 8px; /* Espacio entre icono y texto */
+    gap: 8px;
+    /* Espacio entre icono y texto */
 }
 
 /* 4. COMPORTAMIENTO DEL BOTÓN "BUSCAR" (Siempre cuadrado) */
 .search-btn .wp-block-button__link {
     background-color: transparent !important;
     border: 1px solid var(--wp--preset--color--primary) !important;
-    color: var(--wp--preset--color--primary) !important; /* Mismo color del borde */
+    color: var(--wp--preset--color--primary) !important;
+    /* Mismo color del borde */
     width: 48px !important;
     padding-left: 0 !important;
     padding-right: 0 !important;
@@ -80,6 +84,7 @@ footer.wp-block-group {
 
 /* Comportamiento Móvil de Botones (< 1024px) */
 @media (max-width: 1023px) {
+
     /* El botón Consultar se vuelve un cuadrado exacto en móvil */
     .cta-legal-btn .wp-block-button__link {
         width: 48px !important;
@@ -90,8 +95,10 @@ footer.wp-block-group {
 
 /* Estado Base (Mobile Portrait: < 768px) */
 .cta-legal-btn .btn-text {
-    display: none; /* Ocultar texto en móvil */
+    display: none;
+    /* Ocultar texto en móvil */
 }
+
 .cta-legal-btn .btn-icon {
     display: flex;
 }
@@ -101,6 +108,7 @@ footer.wp-block-group {
     .wp-block-navigation__responsive-container:not(.hidden-by-default):not(.is-menu-open) {
         display: none !important;
     }
+
     .wp-block-navigation__responsive-container-open {
         display: flex !important;
     }
@@ -108,25 +116,28 @@ footer.wp-block-group {
 
 /* --- TRANSICIÓN A (Mobile Landscape / Tablet Portrait: >= 768px) --- */
 @media (min-width: 768px) {
+
     /* Logo */
     .responsive-logo-wrapper img {
         max-height: 60px !important;
     }
-    
+
 
 }
 
 /* --- TRANSICIÓN B (Tablet Landscape / Desktop: >= 1024px) --- */
 @media (min-width: 1024px) {
+
     /* Logo */
     .responsive-logo-wrapper img {
         max-height: 80px !important;
     }
-    
+
     /* Mostrar texto del Botón CTA y ocultar ícono para mantener la alineación */
     .cta-legal-btn .btn-text {
         display: inline-flex;
     }
+
     .cta-legal-btn .btn-icon {
         display: none;
     }
@@ -142,7 +153,7 @@ footer.wp-block-group {
     padding: 20px 20px;
     border-top: none;
     box-shadow: none;
-    
+
     /* Animación Toggle */
     opacity: 0;
     visibility: hidden;
@@ -162,11 +173,14 @@ footer.wp-block-group {
     max-width: 800px;
     margin: 0 auto;
     border: none;
-    padding: 5px; /* Separación interna para que el botón parezca encapsulado */
-    background-color: #ffffff; /* Fondea toda la caja interna en blanco brillante */
+    padding: 5px;
+    /* Separación interna para que el botón parezca encapsulado */
+    background-color: #ffffff;
+    /* Fondea toda la caja interna en blanco brillante */
     flex-direction: row !important;
     align-items: stretch;
-    box-shadow: 0px 15px 50px rgba(0,0,0,0.5); /* Sombra añadida solo a la caja blanca */
+    box-shadow: 0px 15px 50px rgba(0, 0, 0, 0.5);
+    /* Sombra añadida solo a la caja blanca */
 }
 
 .floating-search-container .wp-block-search__input {
@@ -193,7 +207,8 @@ footer.wp-block-group {
 }
 
 .floating-search-container .wp-block-search__button {
-    background-color: #05141f !important; /* Fondo súper azul oscuro casi negro */
+    background-color: #05141f !important;
+    /* Fondo súper azul oscuro casi negro */
     color: #ffffff !important;
     border: none !important;
     margin: 0 !important;
@@ -230,14 +245,16 @@ footer.wp-block-group .footer-logo-switch {
 }
 
 /* Forzar que los hijos de la grilla ocupen su espacio sin ser centrados por WP */
-.footer-grid-container > * {
+.footer-grid-container>* {
     max-width: none !important;
     margin-left: 0 !important;
     margin-right: 0 !important;
 }
 
 /* Permitir que la grilla atraviese los contenedores en Mobile y Desktop (Wrappers invisibles) */
-.footer-top-group, .footer-mid-group, .footer-bottom-group {
+.footer-top-group,
+.footer-mid-group,
+.footer-bottom-group {
     display: contents;
 }
 
@@ -255,6 +272,7 @@ footer.wp-block-group .footer-logo-switch {
         max-height: 50px !important;
         width: auto;
     }
+
     .logo-horizontal {
         display: none !important;
     }
@@ -268,7 +286,7 @@ footer.wp-block-group .footer-logo-switch {
     .social-icons-outline {
         justify-content: center !important;
     }
-    
+
     /* Enlaces: Centrado */
     .footer-nav .wp-block-navigation__container,
     .footer-nav ul.wp-block-navigation__container {
@@ -278,6 +296,7 @@ footer.wp-block-group .footer-logo-switch {
 
 /* 2. MOBILE LANDSCAPE & TABLET PORTRAIT (768px to 1023px) */
 @media (min-width: 768px) and (max-width: 1023px) {
+
     /* 1. Contenedor principal pasa a Flex Column para apilar grupos */
     .footer-grid-container {
         display: flex !important;
@@ -288,7 +307,8 @@ footer.wp-block-group .footer-logo-switch {
 
     /* 2. Grupo Superior: Logo + Redes centrados */
     .footer-top-group {
-        display: flex; /* Desactiva el display: contents global */
+        display: flex;
+        /* Desactiva el display: contents global */
         flex-direction: column;
         align-items: center;
         gap: 16px;
@@ -297,29 +317,37 @@ footer.wp-block-group .footer-logo-switch {
 
     /* 3. Grupo Medio: Oficina y Contacto lado a lado */
     .footer-mid-group {
-        display: grid; /* Desactiva el display: contents global */
+        display: grid;
+        /* Desactiva el display: contents global */
         grid-template-columns: 1fr 1fr;
         gap: 32px;
-        margin: 0 auto; /* Centrado horizontal del grupo */
-        align-items: flex-start; /* Alineación superior forzada de ambas columnas */
+        margin: 0 auto;
+        /* Centrado horizontal del grupo */
+        align-items: flex-start;
+        /* Alineación superior forzada de ambas columnas */
         text-align: left;
-        width: max-content !important; /* Permite que el margin 0 auto funcione sobre el total disponible */
+        width: max-content !important;
+        /* Permite que el margin 0 auto funcione sobre el total disponible */
         max-width: 100%;
     }
 
     .footer-mid-group h4 {
-        margin-top: 0 !important; /* Elimina desfases generados por encabezados */
+        margin-top: 0 !important;
+        /* Elimina desfases generados por encabezados */
     }
 
     /* 4. Grupo Inferior: Menú horizontal, título oculto */
     .footer-bottom-group {
-        display: flex; /* Desactiva el display: contents global */
+        display: flex;
+        /* Desactiva el display: contents global */
         width: 100%;
         justify-content: center;
     }
 
-    .footer-section-title-enlaces { display: none !important; }
-    
+    .footer-section-title-enlaces {
+        display: none !important;
+    }
+
     .footer-col-links .footer-nav .wp-block-navigation__container,
     .footer-col-links .footer-nav ul.wp-block-navigation__container {
         display: flex !important;
@@ -332,9 +360,11 @@ footer.wp-block-group .footer-logo-switch {
     /* Logo Switch */
     .logo-vertical {
         display: block !important;
-        max-height: 80px !important; /* Mantener valor actual de logo estable */
+        max-height: 80px !important;
+        /* Mantener valor actual de logo estable */
         width: auto;
     }
+
     .logo-horizontal {
         display: none !important;
     }
@@ -358,26 +388,53 @@ footer.wp-block-group .footer-logo-switch {
         display: flex;
         flex-direction: column;
         align-items: flex-start;
-        gap: 16px; /* GAP REDUCIDO: Acerca Logo y Redes Sociales fuertemente */
-        grid-column: 1; /* Ocupan LA PRIMERA COLUMNA de la grid maestra */
+        gap: 16px;
+        /* GAP REDUCIDO: Acerca Logo y Redes Sociales fuertemente */
+        grid-column: 1;
+        /* Ocupan LA PRIMERA COLUMNA de la grid maestra */
         grid-row: 1 / 3;
         width: 100%;
         margin-top: 0 !important;
     }
-    
-    .social-icons-outline { margin-top: 0 !important; }
+
+    .social-icons-outline {
+        margin-top: 0 !important;
+    }
 
     /* Asignar áreas explícitas para hijos remanentes */
-    .footer-col-office { grid-column: 2; grid-row: 1 / 3; }
-    .footer-col-contact { grid-column: 3; grid-row: 1 / 3; }
-    .footer-col-links { grid-column: 4; grid-row: 1 / 3; }
+    .footer-col-office {
+        grid-column: 2;
+        grid-row: 1 / 3;
+    }
+
+    .footer-col-contact {
+        grid-column: 3;
+        grid-row: 1 / 3;
+    }
+
+    .footer-col-links {
+        grid-column: 4;
+        grid-row: 1 / 3;
+    }
 
     /* Logo Switch Desktop */
-    .logo-vertical { display: none !important; }
-    .logo-horizontal { display: block !important; max-width: 200px !important; height: auto; }
-    
-    .footer-section-title-enlaces { display: block !important; }
-    .footer-nav .wp-block-navigation__container { justify-content: flex-start !important; }
+    .logo-vertical {
+        display: none !important;
+    }
+
+    .logo-horizontal {
+        display: block !important;
+        max-width: 200px !important;
+        height: auto;
+    }
+
+    .footer-section-title-enlaces {
+        display: block !important;
+    }
+
+    .footer-nav .wp-block-navigation__container {
+        justify-content: flex-start !important;
+    }
 }
 
 /* 4. Menú del footer - Ocultar hamburguesa y forzar horizontalidad */
@@ -438,12 +495,12 @@ footer.wp-block-group .footer-logo-switch {
    9. CORRECCIÓN FINA DE ALINEACIÓN Y ORIENTACIÓN MENÚ 
    ======================================================== */
 @media (min-width: 768px) {
-    
+
     /* 1. Corrección de Alineación (Oficina & Contacto) */
     /* Fuerza que los hijos se alineen a la parte superior del contenedor Grid/Flex */
     .footer-mid-group,
     .footer-grid-container {
-        align-items: start !important; 
+        align-items: start !important;
     }
 
     /* Resetea los empujes de Gutenberg tanto en los contenedores de columna como en los Títulos */
@@ -465,9 +522,12 @@ footer.wp-block-group .footer-logo-switch {
     .footer-grid-container .footer-col-links .footer-nav .wp-block-navigation__container,
     .footer-grid-container .footer-col-links .footer-nav ul.wp-block-navigation__container {
         display: flex !important;
-        flex-direction: column !important; /* Apila elementos verticalmente */
-        align-items: flex-start !important; /* Alinea a la izquierda */
-        gap: 12px !important; /* Separación vertical */
+        flex-direction: column !important;
+        /* Apila elementos verticalmente */
+        align-items: flex-start !important;
+        /* Alinea a la izquierda */
+        gap: 12px !important;
+        /* Separación vertical */
     }
 }
 
@@ -515,7 +575,8 @@ footer.wp-block-group .footer-logo-switch {
 }
 
 .search-results-bar-main .wp-block-search__button:hover {
-    background: #e6b866; /* Un tono más brillante del gold */
+    background: #e6b866;
+    /* Un tono más brillante del gold */
 }
 
 .search-results-bar-main .wp-block-search__button svg {
@@ -693,7 +754,8 @@ footer.wp-block-group .footer-logo-switch {
 
 .search-pagination .page-numbers.current,
 .search-pagination .page-numbers:not(.dots):hover {
-    background: #E8C170; /* Gold */
+    background: #E8C170;
+    /* Gold */
     color: var(--wp--preset--color--base);
 }
 
@@ -735,8 +797,10 @@ footer.wp-block-group .footer-logo-switch {
     font-size: 0.8rem;
     text-transform: uppercase;
     letter-spacing: 1px;
-    margin: 0 auto 32px auto; /* Centrado en el viewport pero alineado internamente */
-    max-width: 1000px; /* Mismo ancho que .search-results-list */
+    margin: 0 auto 32px auto;
+    /* Centrado en el viewport pero alineado internamente */
+    max-width: 1000px;
+    /* Mismo ancho que .search-results-list */
     width: 100%;
     border-left: 2px solid #E8C170;
     padding-left: 16px;
@@ -790,6 +854,7 @@ footer.wp-block-group .footer-logo-switch {
         padding-bottom: 4rem !important;
     }
 }
+
 /* ========== CTA STRATEGIC CONSULTATION SECTION - END ========== */
 
 /* ========== MODAL STRATEGIC CONSULTATION - START ========== */
@@ -799,14 +864,229 @@ footer.wp-block-group .footer-logo-switch {
     left: 0;
     width: 100vw;
     height: 100vh;
-    background-color: rgba(14, 20, 30, 0.65); /* Base oscura al 65% */
+    background-color: rgba(5, 20, 31, 0.9);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+    backdrop-filter: blur(8px);
+}
+
+.antigravity-modal-overlay.is-open
+
+/* ========== ADVANCED ASYMMETRIC GRID - START ========== */
+/* ========== FLEXBOX EDITORIAL RECONSTRUCTION - START ========== */
+.antigravity-featured-posts-grid {
+    padding: 120px 0;
+    margin-bottom: 80px;
+    background-color: var(--wp--preset--color--base);
+    width: 100%;
+}
+
+.antigravity-featured-posts-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 40px;
+}
+
+.antigravity-featured-posts-grid .featured-posts-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 70px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 40px;
+}
+
+.antigravity-featured-posts-grid .featured-title {
+    font-size: clamp(3rem, 6vw, 4.5rem);
+    margin: 0;
+    color: #ffffff;
+    line-height: 0.95;
+    font-family: var(--wp--preset--font-family--serif);
+    font-weight: 700;
+}
+
+/* 1. El Motor Flexbox (Contenedor Padre) */
+.antigravity-featured-posts-grid .wp-block-post-template {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    justify-content: flex-start;
+    align-items: stretch;
+}
+
+/* 2. Geometría y Control de Anchos (Desktop) */
+.antigravity-featured-posts-grid .wp-block-post {
+    background-color: #051320;
+    position: relative;
+    overflow: hidden;
+    text-decoration: none !important;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    transition: transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+/* Post 1 (Destacado): 2/3 del ancho */
+.antigravity-featured-posts-grid .wp-block-post:nth-child(1) {
+    flex: 0 0 calc(66.66% - 10px);
+    min-height: 550px;
+}
+
+/* Posts 2 al 5 (Secundarios): 1/3 del ancho */
+.antigravity-featured-posts-grid .wp-block-post:nth-child(2) {
+    flex: 0 0 calc(33.33% - 20px);
+    min-height: 350px;
+}
+
+/* CARDS 3, 4 y 5 (La Fila Inferior - Cuadradas) */
+.antigravity-featured-posts-grid .wp-block-post:nth-child(n+3) {
+    flex: 0 0 calc(33.33% - 20px);
+    aspect-ratio: 1 / 1;
+}
+
+/* Estilo Interno (Capas de Fondo) */
+.antigravity-featured-posts-grid .wp-block-post .featured-card-image-wrap {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+.antigravity-featured-posts-grid .wp-block-post .featured-card-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 1.5s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+.antigravity-featured-posts-grid .wp-block-post:hover .featured-card-image {
+    transform: scale(1.1);
+}
+
+.antigravity-featured-posts-grid .wp-block-post .featured-card-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+    background: linear-gradient(to top, rgba(5, 19, 32, 0.98) 0%, rgba(5, 19, 32, 0.4) 50%, rgba(5, 19, 32, 0) 100%);
+}
+
+.antigravity-featured-posts-grid .wp-block-post .featured-card-content {
+    position: relative;
+    z-index: 3;
+    padding: 40px;
+    width: 100%;
+    text-align: left;
+}
+
+.antigravity-featured-posts-grid .wp-block-post .featured-card-category {
+    color: #c19b5a;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    margin-bottom: 12px;
+    letter-spacing: 2px;
+    font-weight: 700;
+}
+
+.antigravity-featured-posts-grid .wp-block-post .featured-card-title {
+    color: #ffffff;
+    font-family: var(--wp--preset--font-family--serif);
+    font-size: clamp(1.4rem, 2.5vw, 2.2rem);
+    margin: 0;
+    line-height: 1.1;
+    font-weight: 700;
+}
+
+.antigravity-featured-posts-grid .wp-block-post:nth-child(1) .featured-card-title {
+    font-size: clamp(2.2rem, 4.5vw, 3.5rem);
+}
+
+/* Metadata del Autor (Avatar Circular) */
+.antigravity-featured-posts-grid .featured-card-author {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-top: 25px;
+}
+
+.antigravity-featured-posts-grid .author-avatar-wrap img {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    border: 2px solid rgba(193, 155, 90, 0.3);
+}
+
+.antigravity-featured-posts-grid .author-name {
+    color: #cbd5e1;
+    font-size: 0.9rem;
+}
+
+.antigravity-featured-posts-grid .featured-card-accent-line {
+    width: 0;
+    height: 2px;
+    background-color: #c19b5a;
+    margin-top: 20px;
+    transition: width 0.6s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+.antigravity-featured-posts-grid .wp-block-post:hover .featured-card-accent-line {
+    width: 60px;
+}
+
+/* 4. Reglas Responsivas (RWD) */
+@media (max-width: 1024px) {
+    .antigravity-featured-posts-grid .wp-block-post:nth-child(1) {
+        flex: 0 0 100%;
+        min-height: 450px;
+    }
+
+    .antigravity-featured-posts-grid .wp-block-post:nth-child(n+2) {
+        flex: 0 0 calc(50% - 15px);
+        min-height: 350px;
+    }
+}
+
+@media (max-width: 768px) {
+    .antigravity-featured-posts-grid {
+        padding: 60px 0;
+    }
+
+    .antigravity-featured-posts-grid .featured-posts-container {
+        padding: 0 20px;
+    }
+
+    .antigravity-featured-posts-grid .wp-block-post {
+        flex: 0 0 100% !important;
+        min-height: 320px !important;
+    }
+}
+
+/* ========== FLEXBOX EDITORIAL RECONSTRUCTION - END ========== */
+
+.antigravity-modal-overlay {
+    height: 100vh;
+    background-color: rgba(14, 20, 30, 0.65);
+    /* Base oscura al 65% */
     z-index: 9999;
     display: none;
     opacity: 0;
     transition: opacity 0.3s ease;
     align-items: center;
     justify-content: center;
-    backdrop-filter: blur(3px); /* Toque de vidrio */
+    backdrop-filter: blur(3px);
+    /* Toque de vidrio */
 }
 
 .antigravity-modal-overlay.is-active {
@@ -820,13 +1100,14 @@ footer.wp-block-group .footer-logo-switch {
 .antigravity-modal-content {
     background-color: #0a2233;
     color: var(--wp--preset--color--text-main, #333333);
-    border-radius: 8px; /* Ligeramente curvo */
+    border-radius: 8px;
+    /* Ligeramente curvo */
     box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
     position: relative;
     max-height: 90vh;
     overflow-y: auto;
     padding: 40px;
-    
+
     /* Dimensiones Responsivas Iniciales (Mobile) */
     width: 94%;
     transform: translateY(20px);
@@ -954,22 +1235,26 @@ footer.wp-block-group .footer-logo-switch {
     letter-spacing: 1px;
     border-radius: 4px;
     transition: background-color 0.3s ease, transform 0.1s ease;
-    width: 100%; /* Default width mobile */
+    width: 100%;
+    /* Default width mobile */
 }
 
 @media (min-width: 768px) {
     .antigravity-btn-submit {
-        width: auto; /* Auto width on tablet/desktop */
+        width: auto;
+        /* Auto width on tablet/desktop */
     }
 }
 
 .antigravity-btn-submit:hover {
-    background-color: #bb8d45; /* Darker tone */
+    background-color: #bb8d45;
+    /* Darker tone */
 }
 
 .antigravity-btn-submit:active {
     transform: translateY(1px);
 }
+
 /* ========== MODAL STRATEGIC CONSULTATION - END ========== */
 
 /* --- ANTIGRAVITY BLOG GRID REFACTOR --- */
@@ -985,7 +1270,8 @@ footer.wp-block-group .footer-logo-switch {
 /* Selector de máxima especificidad para anular inlines de WP */
 html body .blog-listing-wrapper ul.wp-block-post-template.is-layout-grid {
     display: grid !important;
-    grid-template-columns: 1fr !important; /* Mobile (Pilar Base): 1 Col */
+    grid-template-columns: 1fr !important;
+    /* Mobile (Pilar Base): 1 Col */
     gap: 30px !important;
     padding: 0 !important;
     margin: 0 !important;
@@ -1014,8 +1300,10 @@ html body .blog-listing-wrapper ul.wp-block-post-template.is-layout-grid {
     background: transparent !important;
     border: none !important;
     box-shadow: none !important;
-    gap: 0 !important; /* Unión monolítica */
-    transition: all 0.4s ease !important; /* Animación de entrada */
+    gap: 0 !important;
+    /* Unión monolítica */
+    transition: all 0.4s ease !important;
+    /* Animación de entrada */
 }
 
 .blog-listing-wrapper .wp-block-post:hover {
@@ -1026,7 +1314,8 @@ html body .blog-listing-wrapper ul.wp-block-post-template.is-layout-grid {
 .blog-listing-wrapper .wp-block-post-featured-image {
     margin: 0 !important;
     padding: 0 !important;
-    line-height: 0 !important; /* Elimina espacio blanco residual */
+    line-height: 0 !important;
+    /* Elimina espacio blanco residual */
     flex-shrink: 0 !important;
 }
 
@@ -1035,31 +1324,37 @@ html body .blog-listing-wrapper ul.wp-block-post-template.is-layout-grid {
     object-fit: cover !important;
     width: 100% !important;
     display: block !important;
-    filter: grayscale(100%) brightness(0.8) !important; /* Estado inicial como en Team */
+    filter: grayscale(100%) brightness(0.8) !important;
+    /* Estado inicial como en Team */
     transition: all 0.5s ease !important;
 }
 
 .blog-listing-wrapper .wp-block-post:hover .wp-block-post-featured-image img {
-    filter: grayscale(0%) brightness(1) !important; /* Revelar a color */
+    filter: grayscale(0%) brightness(1) !important;
+    /* Revelar a color */
 }
 
 /* 4. Information Container (The Perfect Card) */
 .antigravity-card-content {
-    background-color: #020617 !important; /* Fondo Ultra Navy preferido por el usuario */
-    padding: 32px !important; /* Padding profesional */
+    background-color: #020617 !important;
+    /* Fondo Ultra Navy preferido por el usuario */
+    padding: 32px !important;
+    /* Padding profesional */
     flex-grow: 1 !important;
     display: flex !important;
     flex-direction: column !important;
-    margin-top: -1px !important; /* Previene micro-líneas de renderizado */
+    margin-top: -1px !important;
+    /* Previene micro-líneas de renderizado */
     transition: background-color 0.4s ease !important;
-    
+
     /* Mobile: Centrado */
     text-align: center !important;
     align-items: center !important;
 }
 
 .blog-listing-wrapper .wp-block-post:hover .antigravity-card-content {
-    background-color: #0a2233 !important; /* Cambio sutil de fondo al hover */
+    background-color: #0a2233 !important;
+    /* Cambio sutil de fondo al hover */
 }
 
 /* Tablet/Desktop: Izquierda */
@@ -1072,7 +1367,8 @@ html body .blog-listing-wrapper ul.wp-block-post-template.is-layout-grid {
 
 /* 5. Typography & Spacing Hierarchy */
 .antigravity-card-content .wp-block-post-terms {
-    color: #c19b5a !important; /* Dorado Corporativo */
+    color: #c19b5a !important;
+    /* Dorado Corporativo */
     font-size: 12px !important;
     text-transform: uppercase !important;
     letter-spacing: 1px !important;
@@ -1087,7 +1383,8 @@ html body .blog-listing-wrapper ul.wp-block-post-template.is-layout-grid {
     font-size: 24px !important;
     line-height: 1.3 !important;
     margin: 0 0 24px 0 !important;
-    flex-grow: 1 !important; /* Empuja el autor hacia la base (Equal Height) */
+    flex-grow: 1 !important;
+    /* Empuja el autor hacia la base (Equal Height) */
     width: 100% !important;
     font-weight: 400 !important;
 }
@@ -1101,7 +1398,8 @@ html body .blog-listing-wrapper ul.wp-block-post-template.is-layout-grid {
 .antigravity-author-card {
     display: flex !important;
     align-items: center !important;
-    gap: 15px !important; /* Coincide con single post */
+    gap: 15px !important;
+    /* Coincide con single post */
     padding-top: 20px !important;
     border-top: 1px solid rgba(255, 255, 255, 0.08) !important;
     width: 100% !important;
@@ -1110,9 +1408,11 @@ html body .blog-listing-wrapper ul.wp-block-post-template.is-layout-grid {
 }
 
 .antigravity-author-card .author-avatar-wrapper {
-    width: 50px !important; /* Un poco más pequeño que en single pero más grande que antes */
+    width: 50px !important;
+    /* Un poco más pequeño que en single pero más grande que antes */
     height: 50px !important;
-    border-radius: 4px !important; /* Cuadrado con puntas redondeadas */
+    border-radius: 4px !important;
+    /* Cuadrado con puntas redondeadas */
     overflow: hidden !important;
     flex-shrink: 0 !important;
 }
@@ -1153,8 +1453,10 @@ html body .blog-listing-wrapper ul.wp-block-post-template.is-layout-grid {
 /* ========== NUESTRO CUERPO JURÍDICO (TEAM SECTION) - START ========== */
 
 .antigravity-team-section {
-    padding: 90px 0 !important; /* Espaciado ajustado (mitad del anterior) */
-    background-color: #051320; /* Retornamos al fondo azul profundo anterior */
+    padding: 90px 0 !important;
+    /* Espaciado ajustado (mitad del anterior) */
+    background-color: #051320;
+    /* Retornamos al fondo azul profundo anterior */
 }
 
 /* Cabecera de la sección */
@@ -1184,7 +1486,8 @@ html body .blog-listing-wrapper ul.wp-block-post-template.is-layout-grid {
 }
 
 .team-subtitle {
-    color: #c19b5a; /* Dorado */
+    color: #c19b5a;
+    /* Dorado */
     text-transform: uppercase;
     font-size: 14px;
     font-weight: 700;
@@ -1213,20 +1516,26 @@ html body .blog-listing-wrapper ul.wp-block-post-template.is-layout-grid {
 }
 
 @media screen and (min-width: 768px) {
-    .linea3-team-grid { grid-template-columns: repeat(2, 1fr); }
+    .linea3-team-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
 }
 
 @media screen and (min-width: 1024px) {
-    .linea3-team-grid { grid-template-columns: repeat(3, 1fr); }
+    .linea3-team-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
 }
 
 /* Card del Profesional */
 .linea3-team-card {
-    background-color: #071a2b; /* Fondo base (anterior color de hover) */
+    background-color: #071a2b;
+    /* Fondo base (anterior color de hover) */
     padding: 32px;
     display: flex;
     flex-direction: column;
-    align-items: flex-start; /* Alineado a la izquierda estricto */
+    align-items: flex-start;
+    /* Alineado a la izquierda estricto */
     text-align: left;
     transition: all 0.4s ease;
     border: none;
@@ -1236,13 +1545,15 @@ html body .blog-listing-wrapper ul.wp-block-post-template.is-layout-grid {
 
 .linea3-team-card:hover {
     transform: translateY(-8px);
-    background-color: #0a2233; /* Nuevo color de hover ligeramente más claro */
+    background-color: #0a2233;
+    /* Nuevo color de hover ligeramente más claro */
 }
 
 /* Imagen Rectangular */
 .linea3-team-card-image-wrap {
     width: 100%;
-    aspect-ratio: 1 / 1.15; /* Rectangular fiel a la referencia */
+    aspect-ratio: 1 / 1.15;
+    /* Rectangular fiel a la referencia */
     overflow: hidden;
     margin-bottom: 28px;
     border: none;
@@ -1264,7 +1575,8 @@ html body .blog-listing-wrapper ul.wp-block-post-template.is-layout-grid {
 
 /* Tipografía de la Card */
 .linea3-team-job-title {
-    color: #c19b5a; /* Dorado */
+    color: #c19b5a;
+    /* Dorado */
     text-transform: uppercase;
     font-size: 12px;
     font-weight: 700;
@@ -1328,6 +1640,7 @@ html body .blog-listing-wrapper ul.wp-block-post-template.is-layout-grid {
         align-items: flex-start;
         gap: 30px;
     }
+
     .team-corporate-phrase {
         text-align: left !important;
         margin-left: 0;
@@ -1355,10 +1668,13 @@ main.single-post-layout-pro {
 /* 1. HERO SECTION: Título antes de la imagen */
 .single-post-layout-pro .single-post-hero-section {
     width: 90%;
-    max-width: 960px; /* Aligned with info box and content */
+    max-width: 960px;
+    /* Aligned with info box and content */
     margin: 80px auto 60px;
-    padding: 0 0 0 32px !important; /* Space for the vertical line */
-    border-left: 2px solid rgba(212, 168, 83, 0.4); /* Suble gold line */
+    padding: 0 0 0 32px !important;
+    /* Space for the vertical line */
+    border-left: 2px solid rgba(212, 168, 83, 0.4);
+    /* Suble gold line */
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -1377,7 +1693,8 @@ main.single-post-layout-pro {
 
 .single-post-layout-pro .single-post-title {
     font-family: var(--wp--preset--font-family--serif, serif) !important;
-    font-size: clamp(1.85rem, 4.5vw, 3.25rem) !important; /* Refined RWD scale */
+    font-size: clamp(1.85rem, 4.5vw, 3.25rem) !important;
+    /* Refined RWD scale */
     line-height: 1.15 !important;
     color: var(--wp--preset--color--text-main) !important;
     margin: 0 !important;
@@ -1399,7 +1716,8 @@ main.single-post-layout-pro {
 
 .single-post-layout-pro .single-post-featured-img img {
     width: 100% !important;
-    height: 500px !important; /* Altura Desktop */
+    height: 500px !important;
+    /* Altura Desktop */
     object-fit: cover !important;
     display: block !important;
 }
@@ -1416,12 +1734,13 @@ main.single-post-layout-pro {
 .single-post-layout-pro .single-post-info-box-inner {
     background-color: #051320 !important;
     padding: 35px 50px !important;
-    box-shadow: 0 40px 100px rgba(0,0,0,0.6);
-    border: 1px solid rgba(255,255,255,0.05);
+    box-shadow: 0 40px 100px rgba(0, 0, 0, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .single-post-layout-pro .single-post-excerpt {
-    font-size: clamp(1.05rem, 2vw, 1.25rem); /* RWD Excerpt */
+    font-size: clamp(1.05rem, 2vw, 1.25rem);
+    /* RWD Excerpt */
     line-height: 1.6;
     color: var(--wp--preset--color--text-main);
     margin-bottom: 0;
@@ -1433,9 +1752,11 @@ main.single-post-layout-pro {
     display: flex;
     align-items: center;
     gap: 25px;
-    margin-top: 25px; /* Reducido de 35px */
-    padding-top: 25px; /* Reducido de 35px */
-    border-top: 1px solid rgba(255,255,255,0.1);
+    margin-top: 25px;
+    /* Reducido de 35px */
+    padding-top: 25px;
+    /* Reducido de 35px */
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .single-post-layout-pro .single-author-avatar {
@@ -1476,7 +1797,8 @@ main.single-post-layout-pro {
 }
 
 .single-post-layout-pro .single-post-content-container p {
-    font-size: clamp(1.05rem, 1.2vw, 1.15rem); /* RWD Body Text */
+    font-size: clamp(1.05rem, 1.2vw, 1.15rem);
+    /* RWD Body Text */
     line-height: 1.8;
     margin-bottom: 1.5em;
     color: var(--wp--preset--color--text-main);
@@ -1485,33 +1807,39 @@ main.single-post-layout-pro {
 /* 5. PILARES DE RESPONSIVIDAD */
 @media screen and (max-width: 1023px) {
     .single-post-layout-pro .single-post-featured-img img {
-        height: 300px !important; /* Altura Tablet */
+        height: 300px !important;
+        /* Altura Tablet */
     }
 
     .single-post-layout-pro .single-post-info-box-container,
     .single-post-layout-pro .single-post-content-container {
-        max-width: 800px !important; /* Mantener ancho original en dispositivos no-desktop */
+        max-width: 800px !important;
+        /* Mantener ancho original en dispositivos no-desktop */
     }
 
     .single-post-layout-pro .single-post-info-box-inner {
-        padding: 30px 35px !important; /* Padding ajustado para Tablet */
+        padding: 30px 35px !important;
+        /* Padding ajustado para Tablet */
     }
 }
 
 @media screen and (max-width: 767px) {
     .single-post-layout-pro .single-post-featured-img img {
-        height: 220px !important; /* Altura Mobile */
+        height: 220px !important;
+        /* Altura Mobile */
     }
 
     .single-post-layout-pro .single-post-info-box-container {
-        margin-top: -40px !important; /* Reducción de margen para no tapar el motivo principal */
+        margin-top: -40px !important;
+        /* Reducción de margen para no tapar el motivo principal */
         width: 94% !important;
     }
 
     .single-post-layout-pro .single-post-info-box-inner {
-        padding: 25px 20px !important; /* Padding compacto para Mobile */
+        padding: 25px 20px !important;
+        /* Padding compacto para Mobile */
     }
-    
+
     .single-post-layout-pro .single-post-title {
         font-size: 1.85rem !important;
     }
@@ -1521,7 +1849,7 @@ main.single-post-layout-pro {
         flex-direction: column;
         align-items: flex-start;
     }
-    
+
     .single-post-layout-pro .single-author-avatar {
         width: 50px;
         height: 50px;
@@ -1589,11 +1917,10 @@ main.single-post-layout-pro {
         flex-direction: column;
         align-items: flex-start;
     }
-    
+
     .related-title {
         font-size: 2rem;
     }
 }
 
 /* ========== FIN ARQUITECTURA FRONTEND V10 ========== */
-

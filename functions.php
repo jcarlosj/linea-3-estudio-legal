@@ -750,3 +750,101 @@ function antigravity_render_posts_columns($column, $post_id) {
 	}
 }
 add_action('manage_posts_custom_column', 'antigravity_render_posts_columns', 10, 2);
+
+/**
+ * Renderizado de la cuadrícula de publicaciones destacadas premium.
+ */
+function antigravity_render_featured_posts_grid(): string
+{
+	$args = array(
+		'post_type'      => 'post',
+		'posts_per_page' => 5,
+		'orderby'        => 'date',
+		'order'          => 'DESC',
+	);
+
+	$query = new WP_Query($args);
+
+	if (!$query->have_posts()) {
+		return '';
+	}
+
+	ob_start();
+	?>
+	<section class="antigravity-featured-posts-grid">
+		<div class="featured-posts-container">
+			<div class="featured-posts-header">
+				<div class="featured-header-left">
+					<h2 class="featured-title">Publicaciones Destacadas</h2>
+					<p class="featured-subtitle">Especialización de alto nivel para blindar cada aspecto de tu organización.</p>
+				</div>
+				<div class="featured-header-right">
+					<div class="featured-accent-line"></div>
+				</div>
+			</div>
+
+			<div class="wp-block-post-template">
+				<?php 
+				$counter = 0;
+				while ($query->have_posts()) : $query->the_post(); 
+					$counter++;
+					
+					$category = get_the_category();
+					$cat_name = !empty($category) ? $category[0]->name : 'Estrategia';
+					$thumb_url = get_the_post_thumbnail_url(get_the_ID(), 'large');
+					$is_fallback = false;
+
+					if (!$thumb_url) {
+						$thumb_url = get_stylesheet_directory_uri() . '/assets/images/placeholder-legal.png';
+						$is_fallback = true;
+					}
+					
+					$fallback_class = $is_fallback ? 'has-fallback-image' : '';
+					$author_name = get_the_author();
+				?>
+					<a href="<?php the_permalink(); ?>" class="wp-block-post <?php echo $fallback_class; ?>">
+						<div class="featured-card-image-wrap">
+							<img src="<?php echo esc_url($thumb_url); ?>" alt="<?php the_title_attribute(); ?>" class="featured-card-image">
+						</div>
+						<div class="featured-card-overlay"></div>
+						<div class="featured-card-content">
+							<div class="featured-card-meta">
+								<span class="featured-card-category"><?php echo esc_html($cat_name); ?></span>
+								<h3 class="featured-card-title"><?php the_title(); ?></h3>
+							</div>
+							<div class="featured-card-author">
+								<div class="author-avatar-wrap">
+									<?php echo get_avatar(get_the_author_meta('ID'), 32); ?>
+								</div>
+								<span class="author-name"><?php echo esc_html($author_name); ?></span>
+							</div>
+							<div class="featured-card-accent-line"></div>
+						</div>
+					</a>
+				<?php endwhile; wp_reset_postdata(); ?>
+			</div>
+		</div>
+	</section>
+	<?php
+	return ob_get_clean();
+}
+add_shortcode('antigravity_featured_posts', 'antigravity_render_featured_posts_grid');
+
+/**
+ * Registro del patrón de bloques de Publicaciones Destacadas.
+ */
+function antigravity_register_featured_pattern(): void
+{
+	register_block_pattern(
+		'antigravity/featured-posts-premium',
+		array(
+			'title'       => __('Todas las Publicaciones Destacadas', 'linea3-legal-child'),
+			'description' => __('Cuadrícula de 5 publicaciones con diseño de alta fidelidad y overlays.', 'linea3-legal-child'),
+			'categories'  => array('featured', 'antigravity-patterns'),
+			'keywords'    => array('Destacadas', 'Posts', 'Premium', 'Grid'),
+			'postTypes'   => array('page'),
+			'content'     => '<!-- wp:group {"align":"full","layout":{"type":"constrained"}} --><div class="wp-block-group alignfull"><!-- wp:shortcode -->[antigravity_featured_posts]<!-- /wp:shortcode --></div><!-- /wp:group -->',
+		)
+	);
+}
+add_action('init', 'antigravity_register_featured_pattern');

@@ -220,6 +220,42 @@ function antigravity_add_user_meta_fields($methods): array
 add_filter('user_contactmethods', 'antigravity_add_user_meta_fields');
 
 /**
+ * Añade campos adicionales al perfil (Extracto Profesional)
+ */
+function antigravity_show_extra_profile_fields($user)
+{
+	?>
+	<h3><?php _e('Información Adicional (Linea 3)', 'linea3-legal-child'); ?></h3>
+	<table class="form-table">
+		<tr>
+			<th><label for="antigravity_user_excerpt"><?php _e('Extracto Profesional', 'linea3-legal-child'); ?></label></th>
+			<td>
+				<textarea name="antigravity_user_excerpt" id="antigravity_user_excerpt" rows="5" cols="30"><?php echo esc_textarea(get_the_author_meta('antigravity_user_excerpt', $user->ID)); ?></textarea>
+				<p class="description"><?php _e('Breve descripción que aparece en la tarjeta del profesional.', 'linea3-legal-child'); ?></p>
+			</td>
+		</tr>
+	</table>
+	<?php
+}
+add_action('show_user_profile', 'antigravity_show_extra_profile_fields');
+add_action('edit_user_profile', 'antigravity_show_extra_profile_fields');
+
+/**
+ * Guarda los campos adicionales del perfil
+ */
+function antigravity_save_extra_profile_fields($user_id)
+{
+	if (!current_user_can('edit_user', $user_id)) {
+		return false;
+	}
+	if (isset($_POST['antigravity_user_excerpt'])) {
+		update_user_meta($user_id, 'antigravity_user_excerpt', sanitize_textarea_field($_POST['antigravity_user_excerpt']));
+	}
+}
+add_action('personal_options_update', 'antigravity_save_extra_profile_fields');
+add_action('edit_user_profile_update', 'antigravity_save_extra_profile_fields');
+
+/**
  * Helper para obtener el HTML de la tarjeta de autor.
  */
 function antigravity_get_author_card_html(int $author_id, int $post_id = 0): string
@@ -279,6 +315,106 @@ function antigravity_related_posts_shortcode() {
 	return $output . '</div></div></section><!-- ANTIGRAVITY_END -->';
 }
 add_shortcode('antigravity_related_posts', 'antigravity_related_posts_shortcode');
+
+/**
+ * Renderizado de la cuadrícula de equipo (Nuestro Cuerpo Jurídico).
+ */
+function antigravity_render_team_grid($attributes): string
+{
+	// Filtrar usuarios activos con rol 'author'.
+	$args = array(
+		'role__in' => array('author'),
+		'orderby'  => 'display_name',
+		'order'    => 'ASC',
+	);
+
+	$users = get_users($args);
+
+	// Inyectamos el Header directamente en el renderizado dinámico para asegurar su presencia
+	$output = '<div class="antigravity-team-section">';
+	
+	$output .= '<div class="team-section-header">';
+	$output .= '<div class="team-header-left">';
+	$output .= '<h2 class="team-title">' . esc_html__('Nuestro Cuerpo Jurídico', 'linea3-legal-child') . '</h2>';
+	$output .= '<p class="team-subtitle">' . esc_html__('LIDERAZGO Y ESTRATEGIA', 'linea3-legal-child') . '</p>';
+	$output .= '</div>';
+	$output .= '<div class="team-header-right">';
+	$output .= '<p class="team-corporate-phrase">' . esc_html__('“La justicia no es solo una norma, es la arquitectura de una sociedad estable.”', 'linea3-legal-child') . '</p>';
+	$output .= '</div>';
+	$output .= '</div>'; // .team-section-header
+
+	if (empty($users)) {
+		$output .= '<p class="linea3-team-empty">' . esc_html__('No hay profesionales disponibles para mostrar.', 'linea3-legal-child') . '</p>';
+		$output .= '</div>';
+		return $output;
+	}
+
+	$output .= '<div class="linea3-team-grid">';
+
+	foreach ($users as $user) {
+		$user_id    = $user->ID;
+		$avatar_url = get_avatar_url($user_id, array('size' => 400));
+		$name       = $user->display_name;
+		$specialty  = get_the_author_meta('antigravity_user_specialty', $user_id);
+		$job_title  = get_the_author_meta('antigravity_user_job_title', $user_id);
+		$linkedin   = get_the_author_meta('antigravity_user_linkedin', $user_id);
+		$twitter    = get_the_author_meta('antigravity_user_twitter', $user_id);
+
+		$output .= '<div class="linea3-team-card">';
+
+		// Imagen (Cuadrada/Rectangular con padding CSS)
+		$output .= '<div class="linea3-team-card-image-wrap">';
+		$output .= sprintf(
+			'<img src="%s" alt="%s" class="linea3-team-card-image" />',
+			esc_url($avatar_url),
+			esc_attr($name)
+		);
+		$output .= '</div>';
+
+		// Contenido interno alineado a la izquierda
+		$output .= '<div class="linea3-team-card-content">';
+
+		if (!empty($job_title)) {
+			$output .= sprintf('<p class="linea3-team-job-title">%s</p>', esc_html($job_title));
+		}
+
+		$output .= sprintf('<h3 class="linea3-team-name">%s</h3>', esc_html($name));
+
+		if (!empty($specialty)) {
+			$output .= sprintf('<p class="linea3-team-specialty">%s</p>', esc_html($specialty));
+		}
+
+		// Redes sociales alineadas a la izquierda
+		$output .= '<div class="linea3-team-socials">';
+		$output .= '<div class="linea3-team-social-icons">';
+
+		$output .= '<span class="linea3-team-icon-share"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg></span>';
+
+		if (!empty($user->user_email)) {
+			$output .= sprintf('<a href="mailto:%s" class="linea3-team-icon-email" aria-label="Email"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg></a>', esc_attr($user->user_email));
+		}
+
+		if (!empty($linkedin)) {
+			$output .= sprintf('<a href="%s" target="_blank" rel="noopener noreferrer" class="linea3-team-icon-linkedin" aria-label="LinkedIn"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg></a>', esc_url($linkedin));
+		}
+
+		if (!empty($twitter)) {
+			$output .= sprintf('<a href="%s" target="_blank" rel="noopener noreferrer" class="linea3-team-icon-twitter" aria-label="Twitter"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"></path></svg></a>', esc_url($twitter));
+		}
+
+		$output .= '</div>';
+		$output .= '</div>';
+
+		$output .= '</div>';
+		$output .= '</div>';
+	}
+
+	$output .= '</div>'; // .linea3-team-grid
+	$output .= '</div>'; // .antigravity-team-section
+
+	return $output;
+}
+add_shortcode('antigravity_team_grid', 'antigravity_render_team_grid');
 
 /**
  * Columnas personalizadas en el Admin.

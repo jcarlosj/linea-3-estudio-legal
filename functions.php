@@ -124,17 +124,22 @@ function antigravity_render_strategic_modal()
 		<div class="antigravity-modal-content">
 			<button class="antigravity-modal-close" aria-label="Cerrar modal">&times;</button>
 			<div class="antigravity-modal-header">
-				<h3>Agendar Consulta Estratégica</h3>
+				<h3>Agendar Consulta</h3>
 				<p>Complete el siguiente formulario y un especialista de Linea 3 se pondrá en contacto pronto.</p>
 			</div>
 			<div class="antigravity-modal-body">
 				<form action="<?php echo esc_url(admin_url('admin-post.php')); ?>" method="POST" class="antigravity-modal-form">
 					<?php wp_nonce_field('antigravity_consultation_action', 'antigravity_consultation_nonce'); ?>
 					<input type="hidden" name="action" value="antigravity_submit_consultation">
-					<div class="antigravity-form-group"><label for="consultation-name">Nombre Completo *</label><input type="text" id="consultation-name" name="consultation_name" required></div>
-					<div class="antigravity-form-group"><label for="consultation-email">Correo Electrónico *</label><input type="email" id="consultation-email" name="consultation_email" required></div>
-					<div class="antigravity-form-group"><label for="consultation-company">Empresa / Organización</label><input type="text" id="consultation-company" name="consultation_company"></div>
-					<div class="antigravity-form-group"><label for="consultation-message">Detalles de la Consulta *</label><textarea id="consultation-message" name="consultation_message" rows="4" required></textarea></div>
+					
+					<div class="antigravity-form-grid">
+						<div class="antigravity-form-group"><label for="consultation-name">Nombre Completo *</label><input type="text" id="consultation-name" name="consultation_name" placeholder="Ej: Juan Pérez" required></div>
+						<div class="antigravity-form-group"><label for="consultation-email">Correo Electrónico *</label><input type="email" id="consultation-email" name="consultation_email" placeholder="ejemplo@correo.com" required></div>
+						<div class="antigravity-form-group"><label for="consultation-phone">Número de Teléfono *</label><input type="tel" id="consultation-phone" name="consultation_phone" placeholder="+57 300 000 0000" required></div>
+						<div class="antigravity-form-group"><label for="consultation-company">Empresa / Organización</label><input type="text" id="consultation-company" name="consultation_company" placeholder="Nombre de su empresa"></div>
+						<div class="antigravity-form-group full-width"><label for="consultation-message">Detalles de la Consulta *</label><textarea id="consultation-message" name="consultation_message" rows="4" placeholder="¿En qué podemos ayudarle?" required></textarea></div>
+					</div>
+
 					<div class="antigravity-form-group submit-group" style="text-align: right;"><button type="submit" class="antigravity-btn-submit">Agendar</button></div>
 				</form>
 			</div>
@@ -154,15 +159,42 @@ function antigravity_handle_consultation_form()
 	}
 	$name = sanitize_text_field($_POST['consultation_name'] ?? '');
 	$email = sanitize_email($_POST['consultation_email'] ?? '');
+	$phone = sanitize_text_field($_POST['consultation_phone'] ?? '');
 	$company = sanitize_text_field($_POST['consultation_company'] ?? '');
 	$message = sanitize_textarea_field($_POST['consultation_message'] ?? '');
-	if (empty($name) || empty($email) || empty($message) || !is_email($email)) {
-		wp_send_json_error('Datos inválidos.');
+	if (empty($name) || empty($email) || empty($phone) || empty($message) || !is_email($email)) {
+		wp_send_json_error('Datos inválidos o incompletos.');
 	}
 	$to = 'jcarlosj.dev@gmail.com';
 	$subject = 'Consulta Agendada: ' . $company . ' - ' . $name;
-	$body = "Nombre: $name\nEmail: $email\nEmpresa: $company\n\nMensaje:\n$message";
-	$headers = array('Content-Type: text/plain; charset=UTF-8', 'From: Linea 3 Web <no-reply@linea3legal.com>');
+	$body = "
+	<div style='background-color: #0f172a; padding: 40px; font-family: -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, Helvetica, Arial, sans-serif;'>
+		<div style='max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);'>
+			<div style='background-color: #0a2233; padding: 30px; text-align: center; border-bottom: 4px solid #ce9e50;'>
+				<img src='" . esc_url(home_url('/wp-content/uploads/logo-horizontal-oscuro.png')) . "' alt='Línea 3 Estudio Legal' style='max-width: 200px; height: auto;'>
+			</div>
+			<div style='padding: 40px; color: #334155; line-height: 1.6;'>
+				<h2 style='color: #0a2233; margin-top: 0; font-size: 20px; border-bottom: 1px solid #e2e8f0; padding-bottom: 15px;'>Nueva Consulta Estratégica</h2>
+				
+				<div style='margin-bottom: 25px;'>
+					<p style='margin: 5px 0;'><strong style='color: #0a2233;'>Nombre:</strong> " . esc_html($name) . "</p>
+					<p style='margin: 5px 0;'><strong style='color: #0a2233;'>Email:</strong> <a href='mailto:" . esc_attr($email) . "' style='color: #ce9e50; text-decoration: none;'>" . esc_html($email) . "</a></p>
+					<p style='margin: 5px 0;'><strong style='color: #0a2233;'>Teléfono:</strong> " . esc_html($phone) . "</p>
+					<p style='margin: 5px 0;'><strong style='color: #0a2233;'>Empresa:</strong> " . esc_html($company) . "</p>
+				</div>
+
+				<div style='background-color: #f8fafc; padding: 25px; border-left: 4px solid #ce9e50; border-radius: 4px;'>
+					<h3 style='margin-top: 0; margin-bottom: 10px; font-size: 16px; color: #0a2233; text-transform: uppercase; letter-spacing: 0.5px;'>Detalles de la Consulta</h3>
+					<p style='margin: 0; white-space: pre-wrap; color: #475569;'>" . nl2br(esc_html($message)) . "</p>
+				</div>
+				
+				<div style='margin-top: 40px; padding-top: 20px; border-top: 1px solid #e2e8f0; text-align: center;'>
+					<p style='font-size: 12px; color: #94a3b8; margin: 0;'>Este es un mensaje automático generado desde el portal web de Linea 3 Estudio Legal.</p>
+				</div>
+			</div>
+		</div>
+	</div>";
+	$headers = array('Content-Type: text/html; charset=UTF-8', 'From: Linea 3 Web <no-reply@linea3legal.com>');
 	if (wp_mail($to, $subject, $body, $headers)) {
 		wp_send_json_success('Mensaje enviado exitosamente');
 	} else {

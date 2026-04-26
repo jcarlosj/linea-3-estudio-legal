@@ -104,7 +104,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         setTimeout(() => {
                             form.reset();
                             submitBtn.disabled = false;
-                            submitBtn.innerText = 'Agendar Consulta Estratégica';
+                            submitBtn.innerText = 'Agendar';
                             submitBtn.style.backgroundColor = '';
                             modalContent.style.transform = '';
                             modalContent.style.opacity = '';

@@ -1017,22 +1017,30 @@ footer.wp-block-group .footer-logo-switch {
 
 /* Metadata del Autor (Avatar Circular) */
 .antigravity-featured-posts-grid .featured-card-author {
-    display: flex;
-    align-items: center;
-    gap: 15px;
     margin-top: 25px;
 }
 
-.antigravity-featured-posts-grid .author-avatar-wrap img {
-    width: 38px;
-    height: 38px;
-    border-radius: 50%;
-    border: 2px solid rgba(193, 155, 90, 0.3);
+.antigravity-featured-posts-grid .featured-card-author .antigravity-author-card {
+    border-top: none !important;
+    padding-top: 0 !important;
+    margin-top: 0 !important;
+    background: transparent !important;
 }
 
-.antigravity-featured-posts-grid .author-name {
-    color: #cbd5e1;
-    font-size: 0.9rem;
+.antigravity-featured-posts-grid .featured-card-author .antigravity-author-card .author-avatar-wrapper {
+    width: 32px !important;
+    height: 32px !important;
+    border-radius: 4px !important;
+}
+
+.antigravity-featured-posts-grid .featured-card-author .antigravity-author-card .author-name {
+    color: #cbd5e1 !important;
+    font-size: 0.85rem !important;
+    font-weight: 400 !important;
+}
+
+.antigravity-featured-posts-grid .featured-card-author .antigravity-author-card .author-specialty {
+    font-size: 0.65rem !important;
 }
 
 .antigravity-featured-posts-grid .featured-card-accent-line {
@@ -1280,7 +1288,8 @@ footer.wp-block-group .footer-logo-switch {
 
 /* 2. Responsive Grid System (Mobile-First 1-2-3) */
 /* Selector de máxima especificidad para anular inlines de WP */
-html body .blog-listing-wrapper ul.antigravity-grid.is-layout-grid {
+html body .blog-listing-wrapper .antigravity-grid.is-layout-grid,
+html body .blog-listing-wrapper .wp-block-post-template.is-layout-grid {
     display: grid !important;
     grid-template-columns: 1fr !important;
     /* Mobile (Pilar Base): 1 Col */
@@ -1292,26 +1301,23 @@ html body .blog-listing-wrapper ul.antigravity-grid.is-layout-grid {
 
 /* Tablet (Breakpoint: 768px) */
 @media screen and (min-width: 768px) {
-    html body .blog-listing-wrapper ul.antigravity-grid.is-layout-grid {
+    html body .blog-listing-wrapper .antigravity-grid.is-layout-grid,
+    html body .blog-listing-wrapper .wp-block-post-template.is-layout-grid {
         grid-template-columns: repeat(2, 1fr) !important;
     }
 }
 
 /* Desktop (Breakpoint: 1024px) */
 @media screen and (min-width: 1024px) {
-    html body .blog-listing-wrapper ul.antigravity-grid.is-layout-grid {
+    html body .blog-listing-wrapper .antigravity-grid.is-layout-grid,
+    html body .blog-listing-wrapper .wp-block-post-template.is-layout-grid {
         grid-template-columns: repeat(3, 1fr) !important;
     }
 }
 
 /* 3. Post Card Container (Equal Height Logic) */
-.blog-listing-wrapper .antigravity-card {
-        cursor: pointer;
-        flex: 0 0 100% !important;
-        height: 320px !important;
-        min-height: 320px !important;
-        aspect-ratio: auto !important;
-        margin-bottom: 0 !important;
+.blog-listing-wrapper .antigravity-card,
+.blog-listing-wrapper .wp-block-post {
     display: flex !important;
     flex-direction: column !important;
     height: 100% !important;
@@ -1324,12 +1330,14 @@ html body .blog-listing-wrapper ul.antigravity-grid.is-layout-grid {
     /* Animación de entrada */
 }
 
-.blog-listing-wrapper .antigravity-card:hover {
+.blog-listing-wrapper .antigravity-card:hover,
+.blog-listing-wrapper .wp-block-post:hover {
     transform: translateY(-8px) !important;
 }
 
 /* Destacada: eliminar margen para unión monolítica */
-.blog-listing-wrapper .antigravity-card-featured-image {
+.blog-listing-wrapper .antigravity-card-featured-image,
+.blog-listing-wrapper .wp-block-post-featured-image {
     margin: 0 !important;
     padding: 0 !important;
     line-height: 0 !important;
@@ -1337,7 +1345,8 @@ html body .blog-listing-wrapper ul.antigravity-grid.is-layout-grid {
     flex-shrink: 0 !important;
 }
 
-.blog-listing-wrapper .antigravity-card-featured-image img {
+.blog-listing-wrapper .antigravity-card-featured-image img,
+.blog-listing-wrapper .wp-block-post-featured-image img {
     aspect-ratio: 16/9 !important;
     object-fit: cover !important;
     width: 100% !important;
@@ -1347,7 +1356,8 @@ html body .blog-listing-wrapper ul.antigravity-grid.is-layout-grid {
     transition: all 0.5s ease !important;
 }
 
-.blog-listing-wrapper .antigravity-card:hover .antigravity-card-featured-image img {
+.blog-listing-wrapper .antigravity-card:hover .antigravity-card-featured-image img,
+.blog-listing-wrapper .wp-block-post:hover .wp-block-post-featured-image img {
     filter: grayscale(0%) brightness(1) !important;
     /* Revelar a color */
 }
@@ -1370,7 +1380,8 @@ html body .blog-listing-wrapper ul.antigravity-grid.is-layout-grid {
     align-items: center !important;
 }
 
-.blog-listing-wrapper .antigravity-card:hover .antigravity-card-content {
+.blog-listing-wrapper .antigravity-card:hover .antigravity-card-content,
+.blog-listing-wrapper .wp-block-post:hover .antigravity-card-content {
     background-color: #0a2233 !important;
     /* Cambio sutil de fondo al hover */
 }
@@ -1384,7 +1395,8 @@ html body .blog-listing-wrapper ul.antigravity-grid.is-layout-grid {
 }
 
 /* 5. Typography & Spacing Hierarchy */
-.antigravity-card-content .antigravity-card-terms {
+.antigravity-card-content .antigravity-card-terms,
+.antigravity-card-content .wp-block-post-terms {
     color: #c19b5a !important;
     /* Dorado Corporativo */
     font-size: 12px !important;
@@ -1395,7 +1407,8 @@ html body .blog-listing-wrapper ul.antigravity-grid.is-layout-grid {
     width: 100% !important;
 }
 
-.antigravity-card-content .antigravity-card-title {
+.antigravity-card-content .antigravity-card-title,
+.antigravity-card-content .wp-block-post-title {
     color: #FFFFFF !important;
     font-family: var(--wp--preset--font-family--serif) !important;
     font-size: 24px !important;
@@ -1407,8 +1420,9 @@ html body .blog-listing-wrapper ul.antigravity-grid.is-layout-grid {
     font-weight: 400 !important;
 }
 
-.antigravity-card-content .antigravity-card-title a {
-    color: inherit !important;
+.antigravity-card-content .antigravity-card-title a,
+.antigravity-card-content .wp-block-post-title a {
+    color: #FFFFFF !important;
     text-decoration: none !important;
 }
 
@@ -1765,7 +1779,8 @@ main.single-post-layout-pro {
 }
 
 /* Estilos para el Shortcode de Autor (Dinámico) */
-.single-post-layout-pro .single-post-author-box {
+.single-post-layout-pro .single-post-author-box,
+.single-post-layout-pro .antigravity-author-card {
     display: flex;
     align-items: center;
     gap: 25px;
@@ -1776,7 +1791,8 @@ main.single-post-layout-pro {
     border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.single-post-layout-pro .single-author-avatar {
+.single-post-layout-pro .single-author-avatar,
+.single-post-layout-pro .author-avatar {
     border-radius: 4px;
     width: 64px;
     height: 64px;
@@ -1790,7 +1806,8 @@ main.single-post-layout-pro {
     color: #ffffff;
 }
 
-.single-post-layout-pro .author-specialty {
+.single-post-layout-pro .author-specialty,
+.single-post-layout-pro .author-job-title {
     color: var(--wp--preset--color--primary);
     font-size: clamp(0.75rem, 1vw, 0.85rem);
     text-transform: uppercase;

@@ -248,6 +248,23 @@ function antigravity_render_author_card($attributes, $content, $block): string
 }
 
 /**
+ * Shortcode para el Cuadro de Autor en Entradas Individuales (Retrocompatibilidad).
+ */
+function antigravity_post_author_box_shortcode() {
+	global $post;
+	$author_id = (int) get_the_author_meta('ID');
+	if (!$author_id && $post) {
+		$author_id = (int) $post->post_author;
+	}
+	if (!$author_id) return '';
+	
+	$html = antigravity_get_author_card_html($author_id, $post ? $post->ID : 0);
+	// Añadimos la clase legacy para asegurar compatibilidad con estilos específicos de single post
+	return str_replace('antigravity-author-card', 'antigravity-author-card single-post-author-box', $html);
+}
+add_shortcode('antigravity_post_author_box', 'antigravity_post_author_box_shortcode');
+
+/**
  * Renderizado de Publicaciones Relacionadas.
  */
 function antigravity_related_posts_shortcode() {
@@ -291,7 +308,7 @@ function antigravity_render_featured_posts_grid(): string
 		$cat_name = !empty($cat) ? $cat[0]->name : 'Estrategia';
 		$thumb = get_the_post_thumbnail_url($p->ID, 'large') ?: get_stylesheet_directory_uri() . '/assets/images/placeholder-legal.png';
 		$author_id = (int) $p->post_author;
-		$output .= sprintf('<div class="antigravity-card" onclick="window.location=\'%s\'"><div class="featured-card-image-wrap"><img src="%s" alt="%s" class="featured-card-image"></div><div class="featured-card-overlay"></div><div class="featured-card-content"><div class="featured-card-meta"><span class="featured-card-category">%s</span><h3 class="featured-card-title">%s</h3></div><div class="featured-card-author"><div class="author-avatar-wrap">%s</div><span class="author-name">%s</span></div><div class="featured-card-accent-line"></div></div></div>', get_permalink($p->ID), esc_url($thumb), esc_attr($p->post_title), esc_html($cat_name), esc_html($p->post_title), get_avatar($author_id, 32), get_the_author_meta('display_name', $author_id));
+		$output .= sprintf('<div class="antigravity-card" onclick="window.location=\'%s\'"><div class="featured-card-image-wrap"><img src="%s" alt="%s" class="featured-card-image"></div><div class="featured-card-overlay"></div><div class="featured-card-content"><div class="featured-card-meta"><span class="featured-card-category">%s</span><h3 class="featured-card-title">%s</h3></div><div class="featured-card-author">%s</div><div class="featured-card-accent-line"></div></div></div>', get_permalink($p->ID), esc_url($thumb), esc_attr($p->post_title), esc_html($cat_name), esc_html($p->post_title), antigravity_get_author_card_html($author_id));
 	}
 	return $output . '</div></div></section><!-- ANTIGRAVITY_END -->';
 }

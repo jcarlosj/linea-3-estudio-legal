@@ -876,22 +876,70 @@ footer.wp-block-group .footer-logo-switch {
     box-sizing: border-box;
 }
 
-.antigravity-featured-posts-grid .featured-posts-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-    margin-bottom: 70px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    padding-bottom: 40px;
+.section-vertical-line {
+    width: 2px !important;
+    height: auto !important;
+    min-height: 80px !important;
+    background-color: #ce9e50 !important;
+    margin-right: 30px !important;
+    flex-shrink: 0 !important;
+    display: block !important;
+    align-self: stretch !important;
 }
 
-.antigravity-featured-posts-grid .featured-title {
-    font-size: clamp(3rem, 6vw, 4.5rem);
-    margin: 0;
-    color: #ffffff;
-    line-height: 0.95;
-    font-family: var(--wp--preset--font-family--serif);
-    font-weight: 700;
+.antigravity-featured-posts-grid .featured-posts-header,
+.related-posts-header {
+    display: flex !important;
+    align-items: stretch !important;
+    margin-bottom: 40px !important; /* Espacio reducido para que las cards suban */
+    border-bottom: none !important; /* Línea eliminada */
+    padding-bottom: 0 !important; /* Relleno eliminado */
+    position: relative !important;
+}
+
+.featured-header-left, .related-header-content {
+    flex: 1 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+}
+
+.antigravity-featured-posts-grid .featured-title,
+.related-title,
+.team-title {
+    font-size: clamp(2rem, 4vw, 3rem) !important;
+    margin: 0 0 15px 0 !important;
+    color: #ffffff !important;
+    line-height: 1.1 !important;
+    font-family: var(--wp--preset--font-family--serif) !important;
+    font-weight: 700 !important;
+}
+
+.featured-eyebrow {
+    color: #ce9e50 !important;
+    text-transform: uppercase !important;
+    font-size: 0.8rem !important;
+    font-weight: 700 !important;
+    letter-spacing: 2px !important;
+    margin-bottom: 10px !important;
+    display: block !important;
+}
+
+.featured-description {
+    color: #ffffff !important;
+    font-size: 0.95rem !important;
+    margin-top: 10px !important;
+    opacity: 0.8 !important;
+    line-height: 1.5 !important;
+}
+
+.team-subtitle {
+    display: block !important;
+    margin-top: 10px !important;
+    color: #ce9e50 !important;
+    font-size: 0.9rem !important;
+    font-weight: 600 !important;
+    opacity: 0.9 !important;
 }
 
 /* 1. El Motor Flexbox (Contenedor Padre) */
@@ -919,22 +967,23 @@ footer.wp-block-group .footer-logo-switch {
     transition: transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
 }
 
-/* Post 1 (Destacado): 2/3 del ancho */
+/* Post 1 (Destacado): 65% del ancho */
 .antigravity-featured-posts-grid .antigravity-card:nth-child(1) {
-    flex: 0 0 calc(66.66% - 10px);
-    min-height: 550px;
+    flex: 0 0 calc(65% - 5px) !important;
+    height: 600px !important;
 }
 
-/* Posts 2 al 5 (Secundarios): 1/3 del ancho */
+/* Post 2: 35% del ancho */
 .antigravity-featured-posts-grid .antigravity-card:nth-child(2) {
-    flex: 0 0 calc(33.33% - 20px);
-    min-height: 350px;
+    flex: 0 0 calc(35% - 5px) !important;
+    height: 600px !important;
 }
 
 /* CARDS 3, 4 y 5 (La Fila Inferior - Cuadradas) */
 .antigravity-featured-posts-grid .antigravity-card:nth-child(n+3) {
-    flex: 0 0 calc(33.33% - 20px);
-    aspect-ratio: 1 / 1;
+    flex: 0 0 calc(33.333% - 6.66px) !important;
+    aspect-ratio: 1 / 1 !important;
+    height: auto !important;
 }
 
 /* Estilo Interno (Capas de Fondo) */
@@ -1075,7 +1124,13 @@ footer.wp-block-group .footer-logo-switch {
     }
 
     .antigravity-featured-posts-grid .antigravity-card:nth-child(1) .featured-card-title {
-        font-size: clamp(1.25rem, 2vw, 1.5rem) !important;
+        font-size: 2rem;
+    }
+    
+    /* Asegurar que el contenedor grid no tenga padding extra que mueva las cards */
+    .antigravity-featured-posts-grid .antigravity-grid {
+        width: 100% !important;
+        padding: 0 !important;
     }
 }
 
@@ -1606,9 +1661,16 @@ html body .blog-listing-wrapper .wp-block-post-template.is-layout-grid {
 /* Cabecera de la sección */
 .team-section-header {
     margin-bottom: 80px;
+    display: flex !important;
+    align-items: stretch !important;
+    gap: 0;
+}
+
+.team-header-content {
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
+    flex: 1;
     gap: 40px;
 }
 
@@ -1616,9 +1678,10 @@ html body .blog-listing-wrapper .wp-block-post-template.is-layout-grid {
     flex: 1;
 }
 
-.team-header-right {
-    flex: 1;
-    text-align: right;
+.featured-header-right {
+    flex: 0 1 auto !important;
+    text-align: right !important;
+    padding-top: 10px !important;
 }
 
 .team-title {
@@ -1629,15 +1692,7 @@ html body .blog-listing-wrapper .wp-block-post-template.is-layout-grid {
     line-height: 1;
 }
 
-.team-subtitle {
-    color: #c19b5a;
-    /* Dorado */
-    text-transform: uppercase;
-    font-size: 14px;
-    font-weight: 700;
-    letter-spacing: 2px;
-    margin: 12px 0 0 0 !important;
-}
+/* Team subtitle ya heredado de la regla unificada arriba */
 
 .team-corporate-phrase {
     color: #ffffff;
@@ -2032,13 +2087,7 @@ main.single-post-layout-pro {
     margin: 0;
 }
 
-.related-title {
-    font-family: var(--wp--preset--font-family--serif, serif);
-    font-size: clamp(2rem, 4vw, 3rem);
-    color: #ffffff;
-    margin: 0;
-    line-height: 1.1;
-}
+/* Related title ya heredado de la regla unificada arriba */
 
 .view-all-link {
     color: var(--wp--preset--color--primary);

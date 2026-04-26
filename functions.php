@@ -371,7 +371,7 @@ function antigravity_related_posts_shortcode() {
 	$posts = get_posts(array('post_type' => 'post', 'posts_per_page' => 3, 'post__not_in' => array(get_the_ID()), 'author' => get_post_field('post_author', get_the_ID()), 'orderby' => 'date', 'order' => 'DESC'));
 	if (empty($posts)) return '';
 	$author_id = (int)get_post_field('post_author', get_the_ID());
-	$output = '<!-- ANTIGRAVITY_START --><section class="related-posts-section"><div class="related-posts-header"><div class="related-header-top"><span class="related-subtitle">MÁS DEL MISMO AUTOR</span><a href="'.esc_url(get_author_posts_url($author_id)).'" class="view-all-link">Ver todas sus publicaciones</a></div><div class="related-header-main"><h2 class="related-title">Publicaciones Relacionadas</h2></div></div><div class="blog-listing-wrapper"><div class="antigravity-grid is-layout-grid columns-3">';
+	$output = '<!-- ANTIGRAVITY_START --><section class="related-posts-section"><div class="related-posts-header"><div class="section-vertical-line"></div><div class="related-header-content"><div class="related-header-top"><span class="related-subtitle">MÁS DEL MISMO AUTOR</span><a href="'.esc_url(get_author_posts_url($author_id)).'" class="view-all-link">Ver todas sus publicaciones</a></div><div class="related-header-main"><h2 class="related-title">Publicaciones Relacionadas</h2></div></div></div><div class="blog-listing-wrapper"><div class="antigravity-grid is-layout-grid columns-3">';
 	foreach ($posts as $p) {
 		$output .= sprintf('<div class="antigravity-card" onclick="window.location=\'%s\'"><article class="wp-block-group"><div class="wp-block-post-featured-image">%s</div><div class="antigravity-card-content"><div class="wp-block-post-terms">%s</div><h3 class="wp-block-post-title">%s</h3>%s</div></article></div>', get_permalink($p->ID), antigravity_get_post_thumbnail_html($p->ID, 'medium_large', array('class' => 'related-post-img')), get_the_term_list($p->ID, 'category', '', ' ', ''), get_the_title($p->ID), antigravity_get_author_card_html($author_id, $p->ID));
 	}
@@ -397,6 +397,8 @@ function antigravity_render_team_grid($attributes): string
 	$output = '<div class="antigravity-team-section">';
 	
 	$output .= '<div class="team-section-header">';
+	$output .= '<div class="section-vertical-line"></div>';
+	$output .= '<div class="team-header-content">';
 	$output .= '<div class="team-header-left">';
 	$output .= '<h2 class="team-title">' . esc_html__('Nuestro Cuerpo Jurídico', 'linea3-legal-child') . '</h2>';
 	$output .= '<p class="team-subtitle">' . esc_html__('LIDERAZGO Y ESTRATEGIA', 'linea3-legal-child') . '</p>';
@@ -404,6 +406,7 @@ function antigravity_render_team_grid($attributes): string
 	$output .= '<div class="team-header-right">';
 	$output .= '<p class="team-corporate-phrase">' . esc_html__('“La justicia no es solo una norma, es la arquitectura de una sociedad estable.”', 'linea3-legal-child') . '</p>';
 	$output .= '</div>';
+	$output .= '</div>'; // .team-header-content
 	$output .= '</div>'; // .team-section-header
 
 	if (empty($users)) {
@@ -501,7 +504,7 @@ function antigravity_render_featured_posts_grid(): string
 {
 	$posts = get_posts(array('post_type' => 'post', 'posts_per_page' => 5, 'orderby' => 'date', 'order' => 'DESC'));
 	if (empty($posts)) return '';
-	$output = '<!-- ANTIGRAVITY_START --><section class="antigravity-featured-posts-grid"><div class="featured-posts-container"><div class="featured-posts-header"><div class="featured-header-left"><h2 class="featured-title">Publicaciones Destacadas</h2><span class="featured-subtitle">Especialización de alto nivel para blindar cada aspecto de tu organización.</span></div><div class="featured-header-right"><div class="featured-accent-line"></div></div></div><div class="antigravity-grid">';
+	$output = '<!-- ANTIGRAVITY_START --><section class="antigravity-featured-posts-grid"><div class="featured-posts-container"><div class="featured-posts-header"><div class="section-vertical-line"></div><div class="featured-header-left"><span class="featured-eyebrow">Publicaciones de los expertos de nuestro equipo</span><h2 class="featured-title">Publicaciones Destacadas</h2><p class="featured-description">Especialización de alto nivel para blindar cada aspecto de tu organización.</p></div><div class="featured-header-right"><a href="'.esc_url(get_permalink(get_option('page_for_posts'))).'" class="view-all-link">Ver todas</a></div></div><div class="antigravity-grid">';
 	foreach ($posts as $p) {
 		$cat = get_the_category($p->ID);
 		$cat_name = !empty($cat) ? $cat[0]->name : 'Estrategia';

@@ -868,10 +868,12 @@ footer.wp-block-group .footer-logo-switch {
     width: 100%;
 }
 
-.antigravity-featured-posts-container {
-    max-width: 1400px;
-    margin: 0 auto;
-    padding: 0 40px;
+.featured-posts-container {
+    max-width: 1400px !important;
+    margin: 0 auto !important;
+    padding: 0 40px !important;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .antigravity-featured-posts-grid .featured-posts-header {
@@ -1277,6 +1279,115 @@ footer.wp-block-group .footer-logo-switch {
 }
 
 /* ========== MODAL STRATEGIC CONSULTATION - END ========== */
+
+/* ========== HERO EDITORIAL PREMIUM - START ========== */
+.antigravity-hero-editorial {
+    display: flex;
+    align-items: center;
+    padding-top: 0 !important;
+    margin-top: 0 !important;
+}
+
+.antigravity-hero-editorial .wp-block-cover__inner-container {
+    width: 100%;
+    padding-top: 0 !important;
+}
+
+.antigravity-hero-editorial .hero-content-wrapper {
+    max-width: 1400px !important;
+    margin: 0 auto !important;
+    padding: 0 40px !important;
+    text-align: left;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Forzar unión con el header eliminando el block-gap de WP */
+.wp-site-blocks > .antigravity-hero-editorial,
+.wp-block-post-content > .antigravity-hero-editorial {
+    margin-top: 0 !important;
+}
+
+.antigravity-hero-editorial .hero-vertical-line {
+    border: none !important;
+    border-left: 2px solid #ce9e50 !important;
+    height: clamp(50px, 10vh, 100px) !important;
+    width: 2px !important;
+    margin: 0 0 clamp(20px, 5vh, 40px) 0 !important;
+    opacity: 1 !important;
+    background-color: transparent !important;
+}
+
+.antigravity-hero-editorial .hero-title {
+    font-size: clamp(2.5rem, 8vw, 5.5rem) !important;
+    font-weight: 700 !important;
+    color: #ffffff !important;
+    margin-bottom: 30px !important;
+}
+
+.antigravity-hero-editorial .hero-title .accent {
+    color: #ce9e50;
+    font-style: italic;
+}
+
+.antigravity-hero-editorial .hero-description {
+    font-size: clamp(1rem, 2vw, 1.25rem) !important;
+    color: rgba(255, 255, 255, 0.85) !important;
+    max-width: 550px !important;
+    line-height: 1.6 !important;
+    margin-bottom: 50px !important;
+}
+
+.antigravity-hero-editorial .hero-buttons {
+    display: flex;
+    gap: clamp(10px, 2vw, 20px);
+    flex-wrap: wrap;
+}
+
+.antigravity-hero-editorial .btn-primary-gold .wp-block-button__link {
+    background-color: #ce9e50 !important;
+    color: #0a2233 !important;
+    font-weight: 700 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 1.5px !important;
+    padding: clamp(14px, 2vh, 18px) clamp(25px, 3vw, 40px) !important;
+    border: none !important;
+    border-radius: 4px !important;
+    font-size: clamp(12px, 1.2vw, 14px) !important;
+    display: inline-block !important;
+}
+
+.antigravity-hero-editorial .btn-outline-white .wp-block-button__link {
+    background-color: transparent !important;
+    color: #ffffff !important;
+    border: 1px solid rgba(255, 255, 255, 0.3) !important;
+    font-weight: 700 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 1.5px !important;
+    padding: clamp(14px, 2vh, 18px) clamp(25px, 3vw, 40px) !important;
+    border-radius: 4px !important;
+    font-size: clamp(12px, 1.2vw, 14px) !important;
+    transition: all 0.3s ease !important;
+    display: inline-block !important;
+}
+
+@media screen and (max-width: 767px) {
+    .antigravity-hero-editorial .hero-buttons {
+        flex-direction: column;
+        width: 100%;
+    }
+    .antigravity-hero-editorial .hero-buttons .wp-block-button,
+    .antigravity-hero-editorial .hero-buttons .wp-block-button__link {
+        width: 100% !important;
+        text-align: center !important;
+    }
+}
+
+.antigravity-hero-editorial .btn-outline-white .wp-block-button__link:hover {
+    border-color: #ffffff !important;
+    background-color: rgba(255, 255, 255, 0.05) !important;
+}
+/* ========== HERO EDITORIAL PREMIUM - END ========== */
 
 /* --- ANTIGRAVITY BLOG GRID REFACTOR --- */
 

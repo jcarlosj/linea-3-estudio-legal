@@ -226,6 +226,37 @@ function antigravity_register_block_patterns(): void
 	register_block_pattern_category('antigravity-patterns', array('label' => 'Linea 3 Patterns'));
 	register_block_pattern('antigravity/cta-strategic-consultation', array('title' => 'Agendar Consulta', 'categories' => array('antigravity-patterns'), 'content' => '<!-- wp:group {"layout":{"type":"constrained"}} --><div class="wp-block-group"><!-- wp:template-part {"slug":"cta-strategic-consultation","theme":"' . get_stylesheet() . '"} /--></div><!-- /wp:group -->'));
 	register_block_pattern('antigravity/nuestro-equipo', array('title' => 'Nuestro Cuerpo Jurídico', 'categories' => array('antigravity-patterns'), 'content' => '<!-- wp:group {"className":"antigravity-team-section","layout":{"type":"constrained"}} --><div class="wp-block-group antigravity-team-section"><!-- wp:shortcode -->[antigravity_featured_posts]<!-- /wp:shortcode --></div><!-- /wp:group -->'));
+	register_block_pattern('antigravity/hero-editorial', array(
+		'title' => 'Hero Editorial',
+		'categories' => array('antigravity-patterns'),
+		'content' => '<!-- wp:cover {"dimRatio":80,"overlayColor":"base","minHeight":85,"minHeightUnit":"vh","align":"full","className":"antigravity-hero-editorial","layout":{"type":"constrained"}} -->
+<div class="wp-block-cover alignfull antigravity-hero-editorial" style="min-height:85vh"><span aria-hidden="true" class="wp-block-cover__background has-base-background-color has-background-dim-80 has-background-dim"></span><div class="wp-block-cover__inner-container">
+    <!-- wp:group {"className":"hero-content-wrapper","layout":{"type":"constrained","justifyContent":"left"}} -->
+    <div class="wp-block-group hero-content-wrapper">
+        <!-- wp:separator {"className":"hero-vertical-line"} -->
+        <hr class="wp-block-separator has-alpha-channel-opacity hero-vertical-line"/>
+        <!-- /wp:separator -->
+        <!-- wp:heading {"level":1,"className":"hero-title","style":{"typography":{"lineHeight":"1.1"}},"fontFamily":"serif"} -->
+        <h1 class="wp-block-heading hero-title has-serif-font-family" style="line-height:1.1">Nuestra Misión<br>y <span class="accent">Excelencia</span></h1>
+        <!-- /wp:heading -->
+        <!-- wp:paragraph {"className":"hero-description"} -->
+        <p class="hero-description">En Línea 3, concebimos el ejercicio del derecho como un Soberano Archivo de conocimiento. Somos los guardianes de la estructura legal de nuestros representados.</p>
+        <!-- /wp:paragraph -->
+        <!-- wp:buttons {"className":"hero-buttons"} -->
+        <div class="wp-block-buttons hero-buttons">
+            <!-- wp:button {"className":"btn-primary-gold"} -->
+            <div class="wp-block-button btn-primary-gold"><a class="wp-block-button__link wp-element-button">INICIAR ALIANZA</a></div>
+            <!-- /wp:button -->
+            <!-- wp:button {"className":"btn-outline-white"} -->
+            <div class="wp-block-button btn-outline-white"><a class="wp-block-button__link wp-element-button">NUESTRA FIRMA</a></div>
+            <!-- /wp:button -->
+        </div>
+        <!-- /wp:buttons -->
+    </div>
+    <!-- /wp:group -->
+</div></div>
+<!-- /wp:cover -->'
+	));
 }
 add_action('init', 'antigravity_register_block_patterns');
 

@@ -869,11 +869,7 @@ footer.wp-block-group .footer-logo-switch {
 }
 
 .featured-posts-container {
-    max-width: 1400px !important;
-    margin: 0 auto !important;
-    padding: 0 40px !important;
     width: 100%;
-    box-sizing: border-box;
 }
 
 .section-vertical-line {
@@ -946,7 +942,7 @@ footer.wp-block-group .footer-logo-switch {
 .antigravity-featured-posts-grid .antigravity-grid {
     display: flex;
     flex-wrap: wrap;
-    gap: 10px;
+    gap: 30px;
     margin: 0;
     padding: 0;
     list-style: none;
@@ -969,19 +965,19 @@ footer.wp-block-group .footer-logo-switch {
 
 /* Post 1 (Destacado): 65% del ancho */
 .antigravity-featured-posts-grid .antigravity-card:nth-child(1) {
-    flex: 0 0 calc(65% - 5px) !important;
+    flex: 0 0 calc(65% - 15px) !important;
     height: 600px !important;
 }
 
 /* Post 2: 35% del ancho */
 .antigravity-featured-posts-grid .antigravity-card:nth-child(2) {
-    flex: 0 0 calc(35% - 5px) !important;
+    flex: 0 0 calc(35% - 15px) !important;
     height: 600px !important;
 }
 
 /* CARDS 3, 4 y 5 (La Fila Inferior - Cuadradas) */
 .antigravity-featured-posts-grid .antigravity-card:nth-child(n+3) {
-    flex: 0 0 calc(33.333% - 6.66px) !important;
+    flex: 0 0 calc(33.333% - 20px) !important;
     aspect-ratio: 1 / 1 !important;
     height: auto !important;
 }
@@ -1088,49 +1084,47 @@ footer.wp-block-group .footer-logo-switch {
     width: 60px;
 }
 
-/* 4. Reglas Responsivas (RWD) */
-@media (max-width: 1024px) {
+/* 4. Reglas Responsivas (RWD) - Blog Cards */
+
+/* Desktop ya está definido arriba como el estado base (1024px+) */
+
+/* TABLET: Card 1 (100%), Cards 2-5 (2 Columnas) */
+@media screen and (min-width: 768px) and (max-width: 1023px) {
     .antigravity-featured-posts-grid .antigravity-card:nth-child(1) {
-        flex: 0 0 100%;
-        min-height: 450px;
+        flex: 0 0 100% !important;
+        height: 500px !important;
     }
 
     .antigravity-featured-posts-grid .antigravity-card:nth-child(n+2) {
-        flex: 0 0 calc(50% - 15px);
-        min-height: 350px;
+        flex: 0 0 calc(50% - 15px) !important; /* 30px gap / 2 */
+        height: 380px !important;
+        aspect-ratio: auto !important;
     }
 }
 
-@media (max-width: 768px) {
+/* MOBILE: 1 Columna */
+@media screen and (max-width: 767px) {
     .antigravity-featured-posts-grid {
-        padding: 60px 0;
+        padding: 40px 0 !important;
     }
 
     .antigravity-featured-posts-grid .featured-posts-container {
-        padding: 0 20px;
+        padding: 0 !important;
     }
 
     .antigravity-featured-posts-grid .antigravity-grid {
-        gap: 10px !important;
+        gap: 20px !important;
     }
 
     .antigravity-featured-posts-grid .antigravity-card {
-        cursor: pointer;
         flex: 0 0 100% !important;
-        height: 320px !important;
+        height: auto !important;
         min-height: 320px !important;
         aspect-ratio: auto !important;
-        margin-bottom: 0 !important;
     }
 
     .antigravity-featured-posts-grid .antigravity-card:nth-child(1) .featured-card-title {
-        font-size: 2rem;
-    }
-    
-    /* Asegurar que el contenedor grid no tenga padding extra que mueva las cards */
-    .antigravity-featured-posts-grid .antigravity-grid {
-        width: 100% !important;
-        padding: 0 !important;
+        font-size: 1.8rem !important;
     }
 }
 
@@ -1349,12 +1343,8 @@ footer.wp-block-group .footer-logo-switch {
 }
 
 .antigravity-hero-editorial .hero-content-wrapper {
-    max-width: 1400px !important;
-    margin: 0 auto !important;
-    padding: 0 40px !important;
     text-align: left;
     width: 100%;
-    box-sizing: border-box;
 }
 
 /* Forzar unión con el header eliminando el block-gap de WP */
@@ -2191,10 +2181,31 @@ main.single-post-layout-pro {
     color: #c19b5a !important;
 }
 
-.antigravity-location-section .location-grid {
-    display: flex;
-    gap: 40px;
-    margin-bottom: 40px;
+.location-header {
+    display: flex !important;
+    align-items: stretch !important;
+    margin-bottom: 40px !important;
+}
+
+.location-header-content {
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+}
+
+.location-eyebrow {
+    margin: 0 !important;
+    color: #ce9e50 !important;
+    font-size: 0.85rem !important;
+    font-weight: 600 !important;
+    letter-spacing: 2px !important;
+    text-transform: uppercase !important;
+}
+
+.location-title {
+    margin: 10px 0 0 0 !important;
+    font-size: clamp(2.2rem, 5vw, 3rem) !important;
+    line-height: 1.1 !important;
 }
 
 .antigravity-location-section .btn-agendar-visita .wp-block-button__link {
@@ -2278,6 +2289,38 @@ main.single-post-layout-pro {
     }
 }
 
+/* Tablet Layout for Location Info (768px - 1023px) */
+@media (min-width: 768px) {
+    .location-info-row {
+        display: flex !important;
+        gap: 40px !important;
+        align-items: flex-start !important;
+        margin-bottom: 50px !important;
+    }
+
+    .location-info-row .info-main {
+        flex: 2 !important;
+    }
+
+    .location-info-row .info-contact,
+    .location-info-row .info-hours {
+        flex: 1 !important;
+    }
+
+    /* Centrar botón en Tablet y Mobile */
+    .antigravity-location-section .wp-block-buttons {
+        justify-content: center !important;
+        margin-bottom: 40px !important;
+    }
+}
+
+/* Resetear centrado del botón solo en Desktop */
+@media (min-width: 1024px) {
+    .antigravity-location-section .wp-block-buttons {
+        justify-content: flex-start !important;
+    }
+}
+
 /* ========================================================
    PATTERN: MAPA HYBRID (Photo + Interactive Map)
    ======================================================== */
@@ -2318,3 +2361,35 @@ main.single-post-layout-pro {
         min-height: 400px;
     }
 }
+
+/* ========================================================
+   GLOBAL: ALIGNMENT & SYMMETRY (Standard Container)
+   ======================================================== */
+:root {
+    /* Forzar los anchos maestros de WordPress */
+    --wp--style--global--content-size: 1400px !important;
+    --wp--style--global--wide-size: 1400px !important;
+}
+
+.l3-container-standard {
+    max-width: var(--wp--style--global--content-size) !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+}
+
+@media (max-width: 767px) {
+    .l3-container-standard {
+        padding-left: 20px !important;
+        padding-right: 20px !important;
+    }
+}
+
+/* Specific Section Alignment Fixes */
+.antigravity-hero-editorial .wp-block-cover__inner-container {
+    width: 100% !important;
+    max-width: 100% !important;
+}
+
+

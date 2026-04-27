@@ -263,8 +263,9 @@ function antigravity_register_block_patterns(): void
 		'categories' => array('antigravity-patterns'),
 		'content' => '<!-- wp:cover {"dimRatio":80,"overlayColor":"base","minHeight":85,"minHeightUnit":"vh","align":"full","className":"antigravity-hero-editorial","layout":{"type":"constrained"}} -->
 <div class="wp-block-cover alignfull antigravity-hero-editorial" style="min-height:85vh"><span aria-hidden="true" class="wp-block-cover__background has-base-background-color has-background-dim-80 has-background-dim"></span><div class="wp-block-cover__inner-container">
-    <!-- wp:group {"className":"hero-content-wrapper","layout":{"type":"constrained","justifyContent":"left"}} -->
-    <div class="wp-block-group hero-content-wrapper">
+    <div class="wp-block-group l3-container-standard">
+        <!-- wp:group {"className":"hero-content-wrapper","layout":{"type":"constrained","justifyContent":"left"}} -->
+        <div class="wp-block-group hero-content-wrapper">
         <!-- wp:separator {"className":"hero-vertical-line"} -->
         <hr class="wp-block-separator has-alpha-channel-opacity hero-vertical-line"/>
         <!-- /wp:separator -->
@@ -286,6 +287,7 @@ function antigravity_register_block_patterns(): void
         <!-- /wp:buttons -->
     </div>
     <!-- /wp:group -->
+    </div>
 </div></div>
 <!-- /wp:cover -->'
 	));
@@ -295,38 +297,49 @@ function antigravity_register_block_patterns(): void
 		'keywords' => array('mapa', 'sede', 'bogota', 'ubicacion', 'contacto', 'foto'),
 		'content' => '<!-- wp:group {"align":"full","className":"antigravity-location-section","layout":{"type":"constrained"}} -->
 <div class="wp-block-group alignfull antigravity-location-section">
-    <!-- wp:columns {"align":"wide","style":{"spacing":{"blockGap":{"left":"var:preset|spacing|50"}}}} -->
-    <div class="wp-block-columns alignwide">
+    <!-- wp:columns {"align":"wide","className":"l3-container-standard","style":{"spacing":{"blockGap":{"left":"var:preset|spacing|50"}}}} -->
+    <div class="wp-block-columns alignwide l3-container-standard">
         <!-- wp:column {"width":"40%","className":"location-content-col"} -->
         <div class="wp-block-column location-content-col" style="flex-basis:40%">
-            <!-- wp:paragraph {"className":"location-eyebrow"} -->
-            <p class="location-eyebrow">UBICACIÓN</p>
-            <!-- /wp:paragraph -->
-            <!-- wp:heading {"level":2,"className":"location-title"} -->
-            <h2 class="wp-block-heading location-title">Nuestra Sede en Bogotá</h2>
-            <!-- /wp:heading -->
-            <!-- wp:separator {"className":"location-separator"} -->
-            <hr class="wp-block-separator has-alpha-channel-opacity location-separator"/>
-            <!-- /wp:separator -->
+            <!-- wp:group {"className":"location-header","layout":{"type":"flex","flexWrap":"nowrap","justifyContent":"left"}} -->
+            <div class="wp-block-group location-header">
+                <!-- wp:group {"className":"section-vertical-line"} -->
+                <div class="wp-block-group section-vertical-line"></div>
+                <!-- /wp:group -->
+
+                <!-- wp:group {"className":"location-header-content"} -->
+                <div class="wp-block-group location-header-content">
+                    <!-- wp:paragraph {"className":"location-eyebrow"} -->
+                    <p class="location-eyebrow">UBICACIÓN</p>
+                    <!-- /wp:paragraph -->
+
+                    <!-- wp:heading {"level":2,"className":"location-title"} -->
+                    <h2 class="wp-block-heading location-title">Nuestra Sede en Bogotá</h2>
+                    <!-- /wp:heading -->
+                </div>
+                <!-- /wp:group -->
+            </div>
+            <!-- /wp:group -->
             
             <!-- wp:image {"sizeSlug":"large","linkDestination":"none","className":"location-photo-wrap"} -->
             <figure class="wp-block-image size-large location-photo-wrap"><img src="' . get_stylesheet_directory_uri() . '/assets/images/oficina-bogota.png" alt="Sede Linea 3 Bogotá"/></figure>
             <!-- /wp:image -->
 
-            <!-- wp:group {"className":"info-block"} -->
-            <div class="wp-block-group info-block">
-                <!-- wp:heading {"level":3,"className":"info-label"} -->
-                <h3 class="wp-block-heading info-label">Dirección Principal</h3>
-                <!-- /wp:heading -->
-                <!-- wp:paragraph {"className":"info-text"} -->
-                <p class="info-text">Calle 93 #11-13, Edificio Nou<br>Piso 5, Oficina 502<br>Bogotá D.C., Colombia</p>
-                <!-- /wp:paragraph -->
-            </div>
-            <!-- /wp:group -->
-            <!-- wp:group {"className":"location-grid"} -->
-            <div class="wp-block-group location-grid">
-                <!-- wp:group {"className":"info-sub-block"} -->
-                <div class="wp-block-group info-sub-block">
+            <!-- wp:group {"className":"location-info-row","layout":{"type":"constrained"}} -->
+            <div class="wp-block-group location-info-row">
+                <!-- wp:group {"className":"info-block info-main"} -->
+                <div class="wp-block-group info-block info-main">
+                    <!-- wp:heading {"level":3,"className":"info-label"} -->
+                    <h3 class="wp-block-heading info-label">Dirección Principal</h3>
+                    <!-- /wp:heading -->
+                    <!-- wp:paragraph {"className":"info-text"} -->
+                    <p class="info-text">Calle 93 #11-13, Edificio Nou<br>Piso 5, Oficina 502<br>Bogotá D.C., Colombia</p>
+                    <!-- /wp:paragraph -->
+                </div>
+                <!-- /wp:group -->
+
+                <!-- wp:group {"className":"info-block info-contact"} -->
+                <div class="wp-block-group info-block info-contact">
                     <!-- wp:heading {"level":3,"className":"info-label"} -->
                     <h3 class="wp-block-heading info-label">Contacto</h3>
                     <!-- /wp:heading -->
@@ -335,8 +348,9 @@ function antigravity_register_block_patterns(): void
                     <!-- /wp:paragraph -->
                 </div>
                 <!-- /wp:group -->
-                <!-- wp:group {"className":"info-sub-block"} -->
-                <div class="wp-block-group info-sub-block">
+
+                <!-- wp:group {"className":"info-block info-hours"} -->
+                <div class="wp-block-group info-block info-hours">
                     <!-- wp:heading {"level":3,"className":"info-label"} -->
                     <h3 class="wp-block-heading info-label">Horario</h3>
                     <!-- /wp:heading -->
@@ -630,7 +644,7 @@ function antigravity_render_featured_posts_grid(): string
 	$posts = get_posts(array('post_type' => 'post', 'posts_per_page' => 5, 'orderby' => 'date', 'order' => 'DESC'));
 	if (empty($posts))
 		return '';
-	$output = '<!-- ANTIGRAVITY_START --><section class="antigravity-featured-posts-grid"><div class="featured-posts-container"><div class="featured-posts-header"><div class="section-vertical-line"></div><div class="featured-header-left"><span class="featured-eyebrow">Publicaciones de los expertos de nuestro equipo</span><h2 class="featured-title">Publicaciones Destacadas</h2><p class="featured-description">Especialización de alto nivel para blindar cada aspecto de tu organización.</p></div><div class="featured-header-right"><a href="' . esc_url(get_permalink(get_option('page_for_posts'))) . '" class="view-all-link">Ver todas</a></div></div><div class="antigravity-grid">';
+	$output = '<!-- ANTIGRAVITY_START --><section class="antigravity-featured-posts-grid"><div class="featured-posts-container l3-container-standard"><div class="featured-posts-header"><div class="section-vertical-line"></div><div class="featured-header-left"><span class="featured-eyebrow">Publicaciones de los expertos de nuestro equipo</span><h2 class="featured-title">Publicaciones Destacadas</h2><p class="featured-description">Especialización de alto nivel para blindar cada aspecto de tu organización.</p></div><div class="featured-header-right"><a href="' . esc_url(get_permalink(get_option('page_for_posts'))) . '" class="view-all-link">Ver todas</a></div></div><div class="antigravity-grid">';
 	foreach ($posts as $p) {
 		$cat = get_the_category($p->ID);
 		$cat_name = !empty($cat) ? $cat[0]->name : 'Estrategia';

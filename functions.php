@@ -350,7 +350,7 @@ function antigravity_register_block_patterns(): void
             <!-- wp:buttons -->
             <div class="wp-block-buttons">
                 <!-- wp:button {"className":"btn-agendar-visita"} -->
-                <div class="wp-block-button btn-agendar-visita"><a class="wp-block-button__link wp-element-button">AGENDAR VISITA</a></div>
+                <div class="wp-block-button btn-agendar-visita"><a class="wp-block-button__link wp-element-button antigravity-modal-trigger">AGENDAR VISITA</a></div>
                 <!-- /wp:button -->
             </div>
             <!-- /wp:buttons -->

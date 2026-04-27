@@ -68,7 +68,8 @@ add_action('pre_get_posts', 'linea3_legal_child_limit_search_results');
 /**
  * Helper para obtener el HTML de la imagen destacada con fallback.
  */
-function antigravity_get_post_thumbnail_html($post_id, $size = 'medium_large', $attr = array()) {
+function antigravity_get_post_thumbnail_html($post_id, $size = 'medium_large', $attr = array())
+{
 	$html = get_the_post_thumbnail($post_id, $size, $attr);
 	if (empty($html)) {
 		$placeholder_url = get_stylesheet_directory_uri() . '/assets/images/placeholder-legal.png';
@@ -105,10 +106,12 @@ add_filter('post_thumbnail_html', 'linea3_legal_child_fallback_featured_image', 
  */
 function linea3_legal_child_search_result_count()
 {
-	if (!is_search()) return '';
+	if (!is_search())
+		return '';
 	global $wp_query;
 	$count = (int) $wp_query->found_posts;
-	if ($count === 0) return '';
+	if ($count === 0)
+		return '';
 	$label = ($count === 1) ? 'registro encontrado' : 'registros encontrados';
 	return sprintf('<p class="search-result-count">Se han visualizado <span class="count-number">%d</span> %s</p>', $count, $label);
 }
@@ -128,19 +131,31 @@ function antigravity_render_strategic_modal()
 				<p>Complete el siguiente formulario y un especialista de Linea 3 se pondrá en contacto pronto.</p>
 			</div>
 			<div class="antigravity-modal-body">
-				<form action="<?php echo esc_url(admin_url('admin-post.php')); ?>" method="POST" class="antigravity-modal-form">
+				<form action="<?php echo esc_url(admin_url('admin-post.php')); ?>" method="POST"
+					class="antigravity-modal-form">
 					<?php wp_nonce_field('antigravity_consultation_action', 'antigravity_consultation_nonce'); ?>
 					<input type="hidden" name="action" value="antigravity_submit_consultation">
-					
+
 					<div class="antigravity-form-grid">
-						<div class="antigravity-form-group"><label for="consultation-name">Nombre Completo *</label><input type="text" id="consultation-name" name="consultation_name" placeholder="Ej: Juan Pérez" required></div>
-						<div class="antigravity-form-group"><label for="consultation-email">Correo Electrónico *</label><input type="email" id="consultation-email" name="consultation_email" placeholder="ejemplo@correo.com" required></div>
-						<div class="antigravity-form-group"><label for="consultation-phone">Número de Teléfono *</label><input type="tel" id="consultation-phone" name="consultation_phone" placeholder="+57 300 000 0000" required></div>
-						<div class="antigravity-form-group"><label for="consultation-company">Empresa / Organización</label><input type="text" id="consultation-company" name="consultation_company" placeholder="Nombre de su empresa"></div>
-						<div class="antigravity-form-group full-width"><label for="consultation-message">Detalles de la Consulta *</label><textarea id="consultation-message" name="consultation_message" rows="4" placeholder="¿En qué podemos ayudarle?" required></textarea></div>
+						<div class="antigravity-form-group"><label for="consultation-name">Nombre Completo *</label><input
+								type="text" id="consultation-name" name="consultation_name" placeholder="Ej: Juan Pérez"
+								required></div>
+						<div class="antigravity-form-group"><label for="consultation-email">Correo Electrónico
+								*</label><input type="email" id="consultation-email" name="consultation_email"
+								placeholder="ejemplo@correo.com" required></div>
+						<div class="antigravity-form-group"><label for="consultation-phone">Número de Teléfono
+								*</label><input type="tel" id="consultation-phone" name="consultation_phone"
+								placeholder="+57 300 000 0000" required></div>
+						<div class="antigravity-form-group"><label for="consultation-company">Empresa /
+								Organización</label><input type="text" id="consultation-company" name="consultation_company"
+								placeholder="Nombre de su empresa"></div>
+						<div class="antigravity-form-group full-width"><label for="consultation-message">Detalles de la
+								Consulta *</label><textarea id="consultation-message" name="consultation_message" rows="4"
+								placeholder="¿En qué podemos ayudarle?" required></textarea></div>
 					</div>
 
-					<div class="antigravity-form-group submit-group" style="text-align: right;"><button type="submit" class="antigravity-btn-submit">Agendar</button></div>
+					<div class="antigravity-form-group submit-group" style="text-align: right;"><button type="submit"
+							class="antigravity-btn-submit">Agendar</button></div>
 				</form>
 			</div>
 		</div>
@@ -174,7 +189,7 @@ function antigravity_handle_consultation_form()
 				<img src='" . esc_url(home_url('/wp-content/uploads/logo-horizontal-oscuro.png')) . "' alt='Línea 3 Estudio Legal' style='max-width: 200px; height: auto;'>
 			</div>
 			<div style='padding: 40px; color: #334155; line-height: 1.6;'>
-				<h2 style='color: #0a2233; margin-top: 0; font-size: 20px; border-bottom: 1px solid #e2e8f0; padding-bottom: 15px;'>Nueva Consulta Estratégica</h2>
+				<h2 style='color: #0a2233; margin-top: 0; font-size: 20px; border-bottom: 1px solid #e2e8f0; padding-bottom: 15px;'>Nueva Consulta</h2>
 				
 				<div style='margin-bottom: 25px;'>
 					<p style='margin: 5px 0;'><strong style='color: #0a2233;'>Nombre:</strong> " . esc_html($name) . "</p>
@@ -219,6 +234,23 @@ if (isset($_SERVER['HTTP_HOST']) && strpos($_SERVER['HTTP_HOST'], 'localhost') !
 }
 
 /**
+ * Shortcode para mapa dinámico y fácil de editar.
+ * Uso: [antigravity_map address="Calle 93 #11-13, Bogota"]
+ */
+function antigravity_map_shortcode($atts) {
+	$atts = shortcode_atts(array(
+		'address' => 'Calle 93 #11-13, Bogota',
+		'zoom' => '15'
+	), $atts);
+	$address = urlencode($atts['address']);
+	return '<div class="antigravity-location-map-container">
+		<iframe width="100%" height="100%" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" 
+		src="https://maps.google.com/maps?q=' . $address . '&t=&z=' . $atts['zoom'] . '&ie=UTF8&iwloc=&output=embed"></iframe>
+	</div>';
+}
+add_shortcode('antigravity_map', 'antigravity_map_shortcode');
+
+/**
  * Registra categorías y patrones de bloques.
  */
 function antigravity_register_block_patterns(): void
@@ -257,6 +289,85 @@ function antigravity_register_block_patterns(): void
 </div></div>
 <!-- /wp:cover -->'
 	));
+	register_block_pattern('antigravity/mapa-sede', array(
+		'title' => 'Mapa - Nuestra Sede (Fácil de Editar)',
+		'categories' => array('antigravity-patterns'),
+		'keywords' => array('mapa', 'sede', 'bogota', 'ubicacion', 'contacto', 'foto'),
+		'content' => '<!-- wp:group {"align":"full","className":"antigravity-location-section","layout":{"type":"constrained"}} -->
+<div class="wp-block-group alignfull antigravity-location-section">
+    <!-- wp:columns {"align":"wide","style":{"spacing":{"blockGap":{"left":"var:preset|spacing|50"}}}} -->
+    <div class="wp-block-columns alignwide">
+        <!-- wp:column {"width":"40%","className":"location-content-col"} -->
+        <div class="wp-block-column location-content-col" style="flex-basis:40%">
+            <!-- wp:paragraph {"className":"location-eyebrow"} -->
+            <p class="location-eyebrow">UBICACIÓN</p>
+            <!-- /wp:paragraph -->
+            <!-- wp:heading {"level":2,"className":"location-title"} -->
+            <h2 class="wp-block-heading location-title">Nuestra Sede en Bogotá</h2>
+            <!-- /wp:heading -->
+            <!-- wp:separator {"className":"location-separator"} -->
+            <hr class="wp-block-separator has-alpha-channel-opacity location-separator"/>
+            <!-- /wp:separator -->
+            
+            <!-- wp:image {"sizeSlug":"large","linkDestination":"none","className":"location-photo-wrap"} -->
+            <figure class="wp-block-image size-large location-photo-wrap"><img src="' . get_stylesheet_directory_uri() . '/assets/images/oficina-bogota.png" alt="Sede Linea 3 Bogotá"/></figure>
+            <!-- /wp:image -->
+
+            <!-- wp:group {"className":"info-block"} -->
+            <div class="wp-block-group info-block">
+                <!-- wp:heading {"level":3,"className":"info-label"} -->
+                <h3 class="wp-block-heading info-label">Dirección Principal</h3>
+                <!-- /wp:heading -->
+                <!-- wp:paragraph {"className":"info-text"} -->
+                <p class="info-text">Calle 93 #11-13, Edificio Nou<br>Piso 5, Oficina 502<br>Bogotá D.C., Colombia</p>
+                <!-- /wp:paragraph -->
+            </div>
+            <!-- /wp:group -->
+            <!-- wp:group {"className":"location-grid"} -->
+            <div class="wp-block-group location-grid">
+                <!-- wp:group {"className":"info-sub-block"} -->
+                <div class="wp-block-group info-sub-block">
+                    <!-- wp:heading {"level":3,"className":"info-label"} -->
+                    <h3 class="wp-block-heading info-label">Contacto</h3>
+                    <!-- /wp:heading -->
+                    <!-- wp:paragraph {"className":"info-text"} -->
+                    <p class="info-text">bogota@linea3legal.com<br>+57 601 745 8900</p>
+                    <!-- /wp:paragraph -->
+                </div>
+                <!-- /wp:group -->
+                <!-- wp:group {"className":"info-sub-block"} -->
+                <div class="wp-block-group info-sub-block">
+                    <!-- wp:heading {"level":3,"className":"info-label"} -->
+                    <h3 class="wp-block-heading info-label">Horario</h3>
+                    <!-- /wp:heading -->
+                    <!-- wp:paragraph {"className":"info-text"} -->
+                    <p class="info-text">Lunes a Viernes<br>8:00 AM — 6:00 PM</p>
+                    <!-- /wp:paragraph -->
+                </div>
+                <!-- /wp:group -->
+            </div>
+            <!-- /wp:group -->
+            <!-- wp:buttons -->
+            <div class="wp-block-buttons">
+                <!-- wp:button {"className":"btn-agendar-visita"} -->
+                <div class="wp-block-button btn-agendar-visita"><a class="wp-block-button__link wp-element-button">AGENDAR VISITA</a></div>
+                <!-- /wp:button -->
+            </div>
+            <!-- /wp:buttons -->
+        </div>
+        <!-- /wp:column -->
+        <!-- wp:column {"width":"60%"} -->
+        <div class="wp-block-column" style="flex-basis:60%">
+            <!-- wp:shortcode -->
+            [antigravity_map address="Calle 93 #11-13, Bogota"]
+            <!-- /wp:shortcode -->
+        </div>
+        <!-- /wp:column -->
+    </div>
+    <!-- /wp:columns -->
+</div>
+<!-- /wp:group -->'
+	));
 }
 add_action('init', 'antigravity_register_block_patterns');
 
@@ -275,9 +386,9 @@ add_action('init', 'antigravity_register_dynamic_blocks');
 function antigravity_add_user_meta_fields($methods): array
 {
 	$methods['antigravity_user_specialty'] = 'Especialidad';
-	$methods['antigravity_user_job_title']  = 'Cargo';
-	$methods['antigravity_user_linkedin']  = 'LinkedIn URL';
-	$methods['antigravity_user_twitter']   = 'Twitter/X URL';
+	$methods['antigravity_user_job_title'] = 'Cargo';
+	$methods['antigravity_user_linkedin'] = 'LinkedIn URL';
+	$methods['antigravity_user_twitter'] = 'Twitter/X URL';
 	return $methods;
 }
 add_filter('user_contactmethods', 'antigravity_add_user_meta_fields');
@@ -291,10 +402,13 @@ function antigravity_show_extra_profile_fields($user)
 	<h3><?php _e('Información Adicional (Linea 3)', 'linea3-legal-child'); ?></h3>
 	<table class="form-table">
 		<tr>
-			<th><label for="antigravity_user_excerpt"><?php _e('Extracto Profesional', 'linea3-legal-child'); ?></label></th>
+			<th><label for="antigravity_user_excerpt"><?php _e('Extracto Profesional', 'linea3-legal-child'); ?></label>
+			</th>
 			<td>
-				<textarea name="antigravity_user_excerpt" id="antigravity_user_excerpt" rows="5" cols="30"><?php echo esc_textarea(get_the_author_meta('antigravity_user_excerpt', $user->ID)); ?></textarea>
-				<p class="description"><?php _e('Breve descripción que aparece en la tarjeta del profesional.', 'linea3-legal-child'); ?></p>
+				<textarea name="antigravity_user_excerpt" id="antigravity_user_excerpt" rows="5"
+					cols="30"><?php echo esc_textarea(get_the_author_meta('antigravity_user_excerpt', $user->ID)); ?></textarea>
+				<p class="description">
+					<?php _e('Breve descripción que aparece en la tarjeta del profesional.', 'linea3-legal-child'); ?></p>
 			</td>
 		</tr>
 	</table>
@@ -323,7 +437,8 @@ add_action('edit_user_profile_update', 'antigravity_save_extra_profile_fields');
  */
 function antigravity_get_author_card_html(int $author_id, int $post_id = 0): string
 {
-	if (!$author_id) return '';
+	if (!$author_id)
+		return '';
 	$avatar_url = get_avatar_url($author_id, array('size' => 120));
 	$name = get_the_author_meta('display_name', $author_id);
 	$specialty = get_the_author_meta('antigravity_user_specialty', $author_id);
@@ -342,21 +457,24 @@ function antigravity_get_author_card_html(int $author_id, int $post_id = 0): str
  */
 function antigravity_render_author_card($attributes, $content, $block): string
 {
-	if (!isset($block->context['postId'])) return '';
-	return antigravity_get_author_card_html((int)get_post_field('post_author', $block->context['postId']), $block->context['postId']);
+	if (!isset($block->context['postId']))
+		return '';
+	return antigravity_get_author_card_html((int) get_post_field('post_author', $block->context['postId']), $block->context['postId']);
 }
 
 /**
  * Shortcode para el Cuadro de Autor en Entradas Individuales (Retrocompatibilidad).
  */
-function antigravity_post_author_box_shortcode() {
+function antigravity_post_author_box_shortcode()
+{
 	global $post;
 	$author_id = (int) get_the_author_meta('ID');
 	if (!$author_id && $post) {
 		$author_id = (int) $post->post_author;
 	}
-	if (!$author_id) return '';
-	
+	if (!$author_id)
+		return '';
+
 	$html = antigravity_get_author_card_html($author_id, $post ? $post->ID : 0);
 	// Añadimos la clase legacy para asegurar compatibilidad con estilos específicos de single post
 	return str_replace('antigravity-author-card', 'antigravity-author-card single-post-author-box', $html);
@@ -366,12 +484,15 @@ add_shortcode('antigravity_post_author_box', 'antigravity_post_author_box_shortc
 /**
  * Renderizado de Publicaciones Relacionadas.
  */
-function antigravity_related_posts_shortcode() {
-	if (!is_singular('post')) return '';
+function antigravity_related_posts_shortcode()
+{
+	if (!is_singular('post'))
+		return '';
 	$posts = get_posts(array('post_type' => 'post', 'posts_per_page' => 3, 'post__not_in' => array(get_the_ID()), 'author' => get_post_field('post_author', get_the_ID()), 'orderby' => 'date', 'order' => 'DESC'));
-	if (empty($posts)) return '';
-	$author_id = (int)get_post_field('post_author', get_the_ID());
-	$output = '<!-- ANTIGRAVITY_START --><section class="related-posts-section"><div class="related-posts-header"><div class="section-vertical-line"></div><div class="related-header-content"><div class="related-header-top"><span class="related-subtitle">MÁS DEL MISMO AUTOR</span><a href="'.esc_url(get_author_posts_url($author_id)).'" class="view-all-link">Ver todas sus publicaciones</a></div><div class="related-header-main"><h2 class="related-title">Publicaciones Relacionadas</h2></div></div></div><div class="blog-listing-wrapper"><div class="antigravity-grid is-layout-grid columns-3">';
+	if (empty($posts))
+		return '';
+	$author_id = (int) get_post_field('post_author', get_the_ID());
+	$output = '<!-- ANTIGRAVITY_START --><section class="related-posts-section"><div class="related-posts-header"><div class="section-vertical-line"></div><div class="related-header-content"><div class="related-header-top"><span class="related-subtitle">MÁS DEL MISMO AUTOR</span><a href="' . esc_url(get_author_posts_url($author_id)) . '" class="view-all-link">Ver todas sus publicaciones</a></div><div class="related-header-main"><h2 class="related-title">Publicaciones Relacionadas</h2></div></div></div><div class="blog-listing-wrapper"><div class="antigravity-grid is-layout-grid columns-3">';
 	foreach ($posts as $p) {
 		$output .= sprintf('<div class="antigravity-card" onclick="window.location=\'%s\'"><article class="wp-block-group"><div class="wp-block-post-featured-image">%s</div><div class="antigravity-card-content"><div class="wp-block-post-terms">%s</div><h3 class="wp-block-post-title">%s</h3>%s</div></article></div>', get_permalink($p->ID), antigravity_get_post_thumbnail_html($p->ID, 'medium_large', array('class' => 'related-post-img')), get_the_term_list($p->ID, 'category', '', ' ', ''), get_the_title($p->ID), antigravity_get_author_card_html($author_id, $p->ID));
 	}
@@ -387,15 +508,15 @@ function antigravity_render_team_grid($attributes): string
 	// Filtrar usuarios activos con rol 'author'.
 	$args = array(
 		'role__in' => array('author'),
-		'orderby'  => 'display_name',
-		'order'    => 'ASC',
+		'orderby' => 'display_name',
+		'order' => 'ASC',
 	);
 
 	$users = get_users($args);
 
 	// Inyectamos el Header directamente en el renderizado dinámico para asegurar su presencia
 	$output = '<div class="antigravity-team-section">';
-	
+
 	$output .= '<div class="team-section-header">';
 	$output .= '<div class="section-vertical-line"></div>';
 	$output .= '<div class="team-header-content">';
@@ -418,13 +539,13 @@ function antigravity_render_team_grid($attributes): string
 	$output .= '<div class="linea3-team-grid">';
 
 	foreach ($users as $user) {
-		$user_id    = $user->ID;
+		$user_id = $user->ID;
 		$avatar_url = get_avatar_url($user_id, array('size' => 400));
-		$name       = $user->display_name;
-		$specialty  = get_the_author_meta('antigravity_user_specialty', $user_id);
-		$job_title  = get_the_author_meta('antigravity_user_job_title', $user_id);
-		$linkedin   = get_the_author_meta('antigravity_user_linkedin', $user_id);
-		$twitter    = get_the_author_meta('antigravity_user_twitter', $user_id);
+		$name = $user->display_name;
+		$specialty = get_the_author_meta('antigravity_user_specialty', $user_id);
+		$job_title = get_the_author_meta('antigravity_user_job_title', $user_id);
+		$linkedin = get_the_author_meta('antigravity_user_linkedin', $user_id);
+		$twitter = get_the_author_meta('antigravity_user_twitter', $user_id);
 
 		$output .= '<div class="linea3-team-card">';
 
@@ -485,15 +606,19 @@ add_shortcode('antigravity_team_grid', 'antigravity_render_team_grid');
 /**
  * Columnas personalizadas en el Admin.
  */
-function antigravity_add_posts_columns($columns) {
+function antigravity_add_posts_columns($columns)
+{
 	$columns['featured_image'] = 'Imagen';
 	$columns['has_excerpt'] = 'Extracto';
 	return $columns;
 }
 add_filter('manage_posts_columns', 'antigravity_add_posts_columns');
-function antigravity_render_posts_columns($column, $post_id) {
-	if ($column === 'featured_image') echo get_the_post_thumbnail($post_id, array(50, 50));
-	if ($column === 'has_excerpt') echo has_excerpt($post_id) ? '✔' : '✖';
+function antigravity_render_posts_columns($column, $post_id)
+{
+	if ($column === 'featured_image')
+		echo get_the_post_thumbnail($post_id, array(50, 50));
+	if ($column === 'has_excerpt')
+		echo has_excerpt($post_id) ? '✔' : '✖';
 }
 add_action('manage_posts_custom_column', 'antigravity_render_posts_columns', 10, 2);
 
@@ -503,8 +628,9 @@ add_action('manage_posts_custom_column', 'antigravity_render_posts_columns', 10,
 function antigravity_render_featured_posts_grid(): string
 {
 	$posts = get_posts(array('post_type' => 'post', 'posts_per_page' => 5, 'orderby' => 'date', 'order' => 'DESC'));
-	if (empty($posts)) return '';
-	$output = '<!-- ANTIGRAVITY_START --><section class="antigravity-featured-posts-grid"><div class="featured-posts-container"><div class="featured-posts-header"><div class="section-vertical-line"></div><div class="featured-header-left"><span class="featured-eyebrow">Publicaciones de los expertos de nuestro equipo</span><h2 class="featured-title">Publicaciones Destacadas</h2><p class="featured-description">Especialización de alto nivel para blindar cada aspecto de tu organización.</p></div><div class="featured-header-right"><a href="'.esc_url(get_permalink(get_option('page_for_posts'))).'" class="view-all-link">Ver todas</a></div></div><div class="antigravity-grid">';
+	if (empty($posts))
+		return '';
+	$output = '<!-- ANTIGRAVITY_START --><section class="antigravity-featured-posts-grid"><div class="featured-posts-container"><div class="featured-posts-header"><div class="section-vertical-line"></div><div class="featured-header-left"><span class="featured-eyebrow">Publicaciones de los expertos de nuestro equipo</span><h2 class="featured-title">Publicaciones Destacadas</h2><p class="featured-description">Especialización de alto nivel para blindar cada aspecto de tu organización.</p></div><div class="featured-header-right"><a href="' . esc_url(get_permalink(get_option('page_for_posts'))) . '" class="view-all-link">Ver todas</a></div></div><div class="antigravity-grid">';
 	foreach ($posts as $p) {
 		$cat = get_the_category($p->ID);
 		$cat_name = !empty($cat) ? $cat[0]->name : 'Estrategia';
@@ -519,8 +645,8 @@ add_shortcode('antigravity_featured_posts', 'antigravity_render_featured_posts_g
 /**
  * MASTER CLEANER: Elimina párrafos y saltos de línea inyectados.
  */
-add_filter('the_content', function($content) {
-	$content = preg_replace_callback('/<!-- ANTIGRAVITY_START -->(.*?)<!-- ANTIGRAVITY_END -->/is', function($m) {
+add_filter('the_content', function ($content) {
+	$content = preg_replace_callback('/<!-- ANTIGRAVITY_START -->(.*?)<!-- ANTIGRAVITY_END -->/is', function ($m) {
 		return preg_replace('/<\/?p[^>]*>|<br\s*\/?>/i', '', $m[1]);
 	}, $content);
 	$content = preg_replace('/<p[^>]*>\s*<!-- ANTIGRAVITY_START -->/i', '<!-- ANTIGRAVITY_START -->', $content);
@@ -531,6 +657,7 @@ add_filter('the_content', function($content) {
 /**
  * Desactivar wpautop en la página frontal.
  */
-add_action('wp', function() {
-	if (is_front_page()) remove_filter('the_content', 'wpautop');
+add_action('wp', function () {
+	if (is_front_page())
+		remove_filter('the_content', 'wpautop');
 });

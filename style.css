@@ -2119,3 +2119,202 @@ main.single-post-layout-pro {
 }
 
 /* ========== FIN ARQUITECTURA FRONTEND V10 ========== */
+/* ========================================================
+   PATTERN: MAPA - NUESTRA SEDE (High Fidelity)
+   ======================================================== */
+.antigravity-location-section {
+    background-color: #051320 !important;
+    padding-top: 80px !important;
+    padding-bottom: 80px !important;
+    color: #ffffff;
+}
+
+.antigravity-location-section .location-content-col {
+    padding-right: 5%;
+}
+
+.antigravity-location-section .location-eyebrow {
+    color: #c19b5a !important;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    font-weight: 700;
+    font-size: 0.75rem;
+    margin-bottom: 20px !important;
+    display: block;
+}
+
+.antigravity-location-section .location-title {
+    font-family: var(--wp--preset--font-family--serif) !important;
+    font-size: 42px !important;
+    line-height: 1.1 !important;
+    margin-bottom: 35px !important;
+    color: #ffffff !important;
+    font-weight: 700;
+}
+
+.antigravity-location-section .location-separator {
+    width: 1px;
+    height: 50px;
+    background-color: #c19b5a;
+    margin: 0 0 40px 0;
+    border: none;
+    opacity: 1;
+}
+
+.antigravity-location-section .info-block {
+    margin-bottom: 35px;
+}
+
+.antigravity-location-section .info-label {
+    color: #c19b5a !important;
+    font-family: var(--wp--preset--font-family--serif) !important;
+    font-size: 1.4rem !important;
+    font-weight: 600;
+    margin-bottom: 12px !important;
+    display: block;
+}
+
+.antigravity-location-section .info-text {
+    font-size: 1rem !important;
+    line-height: 1.6 !important;
+    color: #94A3B8 !important; /* Text muted but readable */
+    margin-bottom: 0 !important;
+}
+
+.antigravity-location-section .info-text a {
+    color: inherit !important;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.antigravity-location-section .info-text a:hover {
+    color: #c19b5a !important;
+}
+
+.antigravity-location-section .location-grid {
+    display: flex;
+    gap: 40px;
+    margin-bottom: 40px;
+}
+
+.antigravity-location-section .btn-agendar-visita .wp-block-button__link {
+    background-color: transparent !important;
+    border: 1px solid #c19b5a !important;
+    color: #c19b5a !important;
+    border-radius: 0 !important;
+    padding: 18px 35px !important;
+    font-weight: 700;
+    font-size: 0.85rem !important;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1) !important;
+}
+
+.antigravity-location-section .btn-agendar-visita .wp-block-button__link:hover {
+    background-color: #c19b5a !important;
+    color: #051320 !important;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(193, 155, 90, 0.2);
+}
+
+/* Cover Logic for "Vínculo Manual" & Photo */
+.antigravity-location-cover {
+    border-radius: 4px;
+    overflow: hidden;
+    transition: transform 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.antigravity-location-cover:hover {
+    transform: scale(1.01);
+}
+
+.antigravity-location-cover .btn-view-map .wp-block-button__link {
+    background-color: #c19b5a !important;
+    color: #051320 !important;
+    border-radius: 0 !important;
+    font-weight: 700;
+    letter-spacing: 2px;
+    padding: 15px 30px !important;
+    box-shadow: 0 15px 30px rgba(0,0,0,0.3);
+    transition: all 0.3s ease !important;
+}
+
+.antigravity-location-cover .btn-view-map .wp-block-button__link:hover {
+    background-color: #ffffff !important;
+    color: #051320 !important;
+    transform: translateY(-3px);
+}
+
+/* Responsive Overrides */
+@media (max-width: 1023px) {
+    .antigravity-location-section .location-grid {
+        gap: 20px;
+    }
+}
+
+@media (max-width: 767px) {
+    .antigravity-location-section {
+        padding-top: 60px !important;
+        padding-bottom: 60px !important;
+    }
+    
+    .antigravity-location-section .location-content-col {
+        padding-right: 0;
+        margin-bottom: 50px;
+    }
+
+    .antigravity-location-section .location-title {
+        font-size: 32px !important;
+    }
+    
+    .antigravity-location-map-wrapper {
+        height: 350px;
+        min-height: 350px;
+    }
+
+    .antigravity-location-section .location-grid {
+        flex-direction: column;
+        gap: 30px;
+    }
+}
+
+/* ========================================================
+   PATTERN: MAPA HYBRID (Photo + Interactive Map)
+   ======================================================== */
+.antigravity-location-section .location-photo-wrap {
+    margin-bottom: 30px;
+    border-radius: 4px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+.antigravity-location-section .location-photo-wrap img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    display: block;
+}
+
+.antigravity-location-map-container {
+    width: 100%;
+    height: 100%;
+    min-height: 550px;
+    background: #0a1622;
+    border-radius: 4px;
+    overflow: hidden;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+}
+
+.antigravity-location-map-container iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+    filter: grayscale(1) invert(0.92) contrast(1.1) brightness(0.9) hue-rotate(185deg);
+}
+
+@media (max-width: 767px) {
+    .antigravity-location-map-container {
+        height: 400px;
+        min-height: 400px;
+    }
+}

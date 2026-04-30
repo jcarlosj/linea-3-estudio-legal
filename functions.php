@@ -322,7 +322,7 @@ function antigravity_register_block_patterns(): void
             <!-- /wp:group -->
             
             <!-- wp:image {"sizeSlug":"large","linkDestination":"none","className":"location-photo-wrap"} -->
-            <figure class="wp-block-image size-large location-photo-wrap"><img src="' . get_stylesheet_directory_uri() . '/assets/images/oficina-bogota.png" alt="Sede Linea 3 Bogotá"/></figure>
+            <figure class="wp-block-image size-large location-photo-wrap"><img src="' . get_stylesheet_directory_uri() . '/assets/images/oficina-bogota.jpg" alt="Sede Linea 3 Bogotá"/></figure>
             <!-- /wp:image -->
 
             <!-- wp:group {"className":"location-info-row","layout":{"type":"constrained"}} -->

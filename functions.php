@@ -237,7 +237,8 @@ if (isset($_SERVER['HTTP_HOST']) && strpos($_SERVER['HTTP_HOST'], 'localhost') !
  * Shortcode para mapa dinámico y fácil de editar.
  * Uso: [antigravity_map address="Calle 93 #11-13, Bogota"]
  */
-function antigravity_map_shortcode($atts) {
+function antigravity_map_shortcode($atts)
+{
 	$atts = shortcode_atts(array(
 		'address' => 'Calle 93 #11-13, Bogota',
 		'zoom' => '15'
@@ -257,7 +258,7 @@ function antigravity_register_block_patterns(): void
 {
 	register_block_pattern_category('antigravity-patterns', array('label' => 'Linea 3 Patterns'));
 	register_block_pattern('antigravity/cta-strategic-consultation', array('title' => 'Agendar Consulta', 'categories' => array('antigravity-patterns'), 'content' => '<!-- wp:group {"layout":{"type":"constrained"}} --><div class="wp-block-group"><!-- wp:template-part {"slug":"cta-strategic-consultation","theme":"' . get_stylesheet() . '"} /--></div><!-- /wp:group -->'));
-	register_block_pattern('antigravity/nuestro-equipo', array('title' => 'Nuestro Cuerpo Jurídico', 'categories' => array('antigravity-patterns'), 'content' => '<!-- wp:group {"className":"antigravity-team-section","layout":{"type":"constrained"}} --><div class="wp-block-group antigravity-team-section"><!-- wp:shortcode -->[antigravity_featured_posts]<!-- /wp:shortcode --></div><!-- /wp:group -->'));
+	register_block_pattern('antigravity/nuestro-equipo', array('title' => 'Nuestro Cuerpo Jurídico', 'categories' => array('antigravity-patterns'), 'content' => '<!-- wp:group {"className":"antigravity-team-section","layout":{"type":"constrained"}} --><div class="wp-block-group antigravity-team-section"><!-- wp:shortcode -->[antigravity_team_grid]<!-- /wp:shortcode --></div><!-- /wp:group -->'));
 	register_block_pattern('antigravity/hero-editorial', array(
 		'title' => 'Hero Editorial',
 		'categories' => array('antigravity-patterns'),
@@ -364,7 +365,7 @@ function antigravity_register_block_patterns(): void
             <!-- wp:buttons -->
             <div class="wp-block-buttons">
                 <!-- wp:button {"className":"btn-agendar-visita"} -->
-                <div class="wp-block-button btn-agendar-visita"><a class="wp-block-button__link wp-element-button antigravity-modal-trigger">AGENDAR VISITA</a></div>
+                <div class="wp-block-button btn-agendar-visita"><a class="wp-block-button__link wp-element-button antigravity-modal-trigger">Agendar Consulta</a></div>
                 <!-- /wp:button -->
             </div>
             <!-- /wp:buttons -->
@@ -422,7 +423,8 @@ function antigravity_show_extra_profile_fields($user)
 				<textarea name="antigravity_user_excerpt" id="antigravity_user_excerpt" rows="5"
 					cols="30"><?php echo esc_textarea(get_the_author_meta('antigravity_user_excerpt', $user->ID)); ?></textarea>
 				<p class="description">
-					<?php _e('Breve descripción que aparece en la tarjeta del profesional.', 'linea3-legal-child'); ?></p>
+					<?php _e('Breve descripción que aparece en la tarjeta del profesional.', 'linea3-legal-child'); ?>
+				</p>
 			</td>
 		</tr>
 	</table>

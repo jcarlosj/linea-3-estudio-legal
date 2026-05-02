@@ -1343,6 +1343,12 @@ footer.wp-block-group .footer-logo-switch {
     margin-top: 0 !important;
 }
 
+/* Corregir transparencia "lechosa" - Forzar fondo oscuro */
+.antigravity-hero-editorial .wp-block-cover__background {
+    background-color: var(--wp--preset--color--base) !important;
+}
+
+
 .antigravity-hero-editorial .wp-block-cover__inner-container {
     width: 100%;
     padding-top: 0 !important;
@@ -1370,10 +1376,10 @@ footer.wp-block-group .footer-logo-switch {
 }
 
 .antigravity-hero-editorial .hero-title {
-    font-size: clamp(2.5rem, 8vw, 5.5rem) !important;
-    font-weight: 700 !important;
-    color: #ffffff !important;
-    margin-bottom: 30px !important;
+    font-size: clamp(2.5rem, 8vw, 5.5rem);
+    font-weight: 700;
+    color: #ffffff;
+    margin-bottom: 30px;
 }
 
 .antigravity-hero-editorial .hero-title .accent {
@@ -1382,11 +1388,10 @@ footer.wp-block-group .footer-logo-switch {
 }
 
 .antigravity-hero-editorial .hero-description {
-    font-size: clamp(1rem, 2vw, 1.25rem) !important;
-    color: rgba(255, 255, 255, 0.85) !important;
-    max-width: 550px !important;
-    line-height: 1.6 !important;
-    margin-bottom: 50px !important;
+    font-size: clamp(1rem, 2vw, 1.25rem);
+    color: rgba(255, 255, 255, 0.85);
+    line-height: 1.6;
+    margin-bottom: 50px;
 }
 
 .antigravity-hero-editorial .hero-buttons {
@@ -1396,30 +1401,30 @@ footer.wp-block-group .footer-logo-switch {
 }
 
 .antigravity-hero-editorial .btn-primary-gold .wp-block-button__link {
-    background-color: #ce9e50 !important;
-    color: #0a2233 !important;
-    font-weight: 700 !important;
-    text-transform: uppercase !important;
-    letter-spacing: 1.5px !important;
-    padding: clamp(14px, 2vh, 18px) clamp(25px, 3vw, 40px) !important;
-    border: none !important;
-    border-radius: 4px !important;
-    font-size: clamp(12px, 1.2vw, 14px) !important;
-    display: inline-block !important;
+    background-color: #ce9e50;
+    color: #0a2233;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    padding: clamp(14px, 2vh, 18px) clamp(25px, 3vw, 40px);
+    border: none;
+    border-radius: 4px;
+    font-size: clamp(12px, 1.2vw, 14px);
+    display: inline-block;
 }
 
 .antigravity-hero-editorial .btn-outline-white .wp-block-button__link {
-    background-color: transparent !important;
-    color: #ffffff !important;
-    border: 1px solid rgba(255, 255, 255, 0.3) !important;
-    font-weight: 700 !important;
-    text-transform: uppercase !important;
-    letter-spacing: 1.5px !important;
-    padding: clamp(14px, 2vh, 18px) clamp(25px, 3vw, 40px) !important;
-    border-radius: 4px !important;
-    font-size: clamp(12px, 1.2vw, 14px) !important;
-    transition: all 0.3s ease !important;
-    display: inline-block !important;
+    background-color: transparent;
+    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    padding: clamp(14px, 2vh, 18px) clamp(25px, 3vw, 40px);
+    border-radius: 4px;
+    font-size: clamp(12px, 1.2vw, 14px);
+    transition: all 0.3s ease;
+    display: inline-block;
 }
 
 @media screen and (max-width: 767px) {

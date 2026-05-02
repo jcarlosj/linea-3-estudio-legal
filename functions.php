@@ -678,3 +678,14 @@ add_action('wp', function () {
 	if (is_front_page())
 		remove_filter('the_content', 'wpautop');
 });
+
+/**
+ * Agrega el favicon del sitio desde los assets del tema.
+ */
+function linea3_legal_child_favicon() {
+	$favicon_url = get_stylesheet_directory_uri() . '/assets/images/logo-favicon.png';
+	echo '<link rel="icon" href="' . esc_url($favicon_url) . '" type="image/png" />' . "\n";
+	echo '<link rel="apple-touch-icon" href="' . esc_url($favicon_url) . '" />' . "\n";
+}
+add_action('wp_head', 'linea3_legal_child_favicon');
+add_action('admin_head', 'linea3_legal_child_favicon');

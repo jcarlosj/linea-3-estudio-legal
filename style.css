@@ -2407,3 +2407,186 @@ main.single-post-layout-pro {
     width: 100% !important;
     max-width: 100% !important;
 }
+
+/* ========================================================
+   SERVICES GRID PATTERN
+   ======================================================== */
+.l3-services-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 30px;
+    width: 100%;
+}
+
+@media (min-width: 768px) {
+    .l3-services-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (min-width: 1024px) {
+    .l3-services-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+/* Service Card Effects & Structure */
+.l3-service-card {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    border-radius: 8px;
+    overflow: hidden;
+    margin: 0 !important;
+}
+
+/* Borde superpuesto (por encima de la imagen y el overlay) */
+.l3-service-card::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border: 1px solid #ce9e50;
+    border-radius: 8px;
+    z-index: 5;
+    pointer-events: none;
+}
+
+.l3-service-card .wp-block-cover__background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1;
+    background-color: #0a2233;
+    opacity: 0.7;
+    transition: opacity 1.5s ease !important;
+}
+
+.l3-service-card:hover .wp-block-cover__background {
+    opacity: 0.1 !important;
+}
+
+.l3-service-card .wp-block-cover__image-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 0;
+    transition: transform 1.8s cubic-bezier(0.25, 1, 0.5, 1) !important;
+}
+
+.l3-service-card:hover .wp-block-cover__image-background {
+    transform: scale(1.08) !important;
+}
+
+.l3-service-card .wp-block-cover__inner-container {
+    position: relative;
+    z-index: 2;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 40px !important;
+    width: 100% !important;
+    max-width: 100% !important;
+}
+
+/* Contenedor extra para que la animación fluya mejor */
+.l3-service-card .wp-block-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.l3-service-card .service-icon {
+    width: 90px;
+    height: 90px;
+    object-fit: contain;
+    margin-bottom: 10px;
+    filter: brightness(0) invert(1);
+    transition: margin 0.6s ease;
+}
+
+.l3-service-card h3 {
+    font-size: clamp(1.4rem, 2.5vw, 1.9rem) !important;
+    line-height: 1.1 !important;
+    margin-bottom: 0 !important;
+    font-weight: 700 !important;
+    color: #ce9e50 !important;
+    transition: margin 0.6s ease !important;
+}
+
+.l3-service-card .service-excerpt {
+    opacity: 0 !important;
+    max-height: 0 !important;
+    overflow: hidden !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    visibility: hidden !important;
+    transition: all 0.6s cubic-bezier(0.25, 1, 0.5, 1) !important;
+    font-size: .95rem !important;
+    line-height: 1.5 !important;
+    color: rgba(255, 255, 255, 0.95) !important;
+}
+
+.l3-service-card:hover h3 {
+    margin-bottom: 15px !important;
+}
+
+.l3-service-card:hover .service-excerpt {
+    opacity: 1 !important;
+    max-height: 300px !important;
+    visibility: visible !important;
+}
+
+/* Button with Arrow in Circle */
+.l3-btn-arrow .wp-block-button__link {
+    background: transparent !important;
+    border: none !important;
+    padding: 0 !important;
+    color: #ffffff !important;
+    font-size: 1.2rem !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 15px !important;
+    transition: opacity 0.3s ease !important;
+}
+
+.l3-btn-arrow .wp-block-button__link:hover {
+    opacity: 0.9 !important;
+    background: transparent !important;
+}
+
+.l3-btn-arrow .wp-block-button__link::after {
+    content: "→";
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    background-color: #ffffff;
+    color: #0a2233;
+    font-size: 1.4rem;
+    font-family: Arial, sans-serif;
+    transition: all 0.3s ease;
+}
+
+.l3-btn-arrow .wp-block-button__link:hover::after {
+    background-color: #ce9e50;
+    color: #ffffff;
+}

@@ -74,10 +74,21 @@ function antigravity_get_post_thumbnail_html($post_id, $size = 'medium_large', $
 	if (empty($html)) {
 		$placeholder_url = get_stylesheet_directory_uri() . '/assets/images/placeholder-legal.png';
 		$class = isset($attr['class']) ? $attr['class'] . ' fallback-image' : 'wp-post-image fallback-image';
+
+		// Handle dimensions for fallback
+		$width_attr = '';
+		$height_attr = '';
+		if (is_array($size)) {
+			$width_attr = sprintf(' width="%d"', $size[0]);
+			$height_attr = sprintf(' height="%d"', $size[1]);
+		}
+
 		$html = sprintf(
-			'<img src="%s" class="%s" alt="" loading="lazy" />',
+			'<img src="%s" class="%s" alt="" loading="lazy"%s%s />',
 			esc_url($placeholder_url),
-			esc_attr($class)
+			esc_attr($class),
+			$width_attr,
+			$height_attr
 		);
 	}
 	return $html;
@@ -90,11 +101,28 @@ function linea3_legal_child_fallback_featured_image($html, $post_id, $post_thumb
 {
 	if (empty($html)) {
 		$placeholder_url = get_stylesheet_directory_uri() . '/assets/images/placeholder-legal.png';
+
+		$width_attr = '';
+		$height_attr = '';
+		$size_class = '';
+
+		if (is_array($size)) {
+			$width_attr = sprintf(' width="%d"', $size[0]);
+			$height_attr = sprintf(' height="%d"', $size[1]);
+			$size_class = sprintf('size-%dx%d', $size[0], $size[1]);
+			$attachment_class = 'custom';
+		} else {
+			$size_class = 'size-' . (string) $size;
+			$attachment_class = (string) $size;
+		}
+
 		$html = sprintf(
-			'<img src="%s" class="attachment-%s size-%s wp-post-image fallback-image" alt="" loading="lazy" />',
+			'<img src="%s" class="attachment-%s %s wp-post-image fallback-image" alt="" loading="lazy"%s%s />',
 			esc_url($placeholder_url),
-			esc_attr((string) $size),
-			esc_attr((string) $size)
+			esc_attr($attachment_class),
+			esc_attr($size_class),
+			$width_attr,
+			$height_attr
 		);
 	}
 	return $html;
@@ -384,6 +412,22 @@ function antigravity_register_block_patterns(): void
 </div>
 <!-- /wp:group -->'
 	));
+	
+	register_block_pattern('antigravity/servicios', array(
+		'title' => 'Servicios Legales (Grid Dinámico)',
+		'categories' => array('antigravity-patterns'),
+		'content' => '<!-- wp:group {"className":"l3-container-standard","layout":{"type":"constrained"}} -->
+<div class="wp-block-group l3-container-standard">
+    <!-- wp:heading {"textAlign":"center","style":{"spacing":{"margin":{"bottom":"var:preset|spacing|50"}}}} -->
+    <h2 class="wp-block-heading has-text-align-center" style="margin-bottom:var(--wp--preset--spacing--50)">Nuestras Áreas de Práctica</h2>
+    <!-- /wp:heading -->
+
+    <!-- wp:shortcode -->
+    [antigravity_services_grid orderby="date" order="ASC"]
+    <!-- /wp:shortcode -->
+</div>
+<!-- /wp:group -->'
+	));
 }
 add_action('init', 'antigravity_register_block_patterns');
 
@@ -629,7 +673,8 @@ function antigravity_add_posts_columns($columns)
 	$columns['has_excerpt'] = 'Extracto';
 	return $columns;
 }
-add_filter('manage_posts_columns', 'antigravity_add_posts_columns');
+add_filter('manage_post_posts_columns', 'antigravity_add_posts_columns');
+add_filter('manage_servicio_posts_columns', 'antigravity_add_posts_columns');
 function antigravity_render_posts_columns($column, $post_id)
 {
 	if ($column === 'featured_image')
@@ -637,7 +682,30 @@ function antigravity_render_posts_columns($column, $post_id)
 	if ($column === 'has_excerpt')
 		echo has_excerpt($post_id) ? '✔' : '✖';
 }
-add_action('manage_posts_custom_column', 'antigravity_render_posts_columns', 10, 2);
+add_action('manage_post_posts_custom_column', 'antigravity_render_posts_columns', 10, 2);
+add_action('manage_servicio_posts_custom_column', 'antigravity_render_posts_columns', 10, 2);
+
+/**
+ * Agrega CSS al panel de administración para corregir el tamaño de las imágenes en las columnas.
+ */
+function antigravity_admin_columns_css() {
+    $screen = get_current_screen();
+    if ($screen && $screen->base === 'edit' && ($screen->post_type === 'post' || $screen->post_type === 'servicio')) {
+        echo '<style>
+            .column-featured_image { width: 70px !important; }
+            .column-featured_image img {
+                width: 50px !important;
+                height: 50px !important;
+                object-fit: cover;
+                border-radius: 4px;
+                display: block;
+                margin: 0 auto;
+                background-color: #f0f0f0;
+            }
+        </style>';
+    }
+}
+add_action('admin_head', 'antigravity_admin_columns_css');
 
 /**
  * Renderizado de Publicaciones Destacadas.
@@ -689,3 +757,254 @@ function linea3_legal_child_favicon() {
 }
 add_action('wp_head', 'linea3_legal_child_favicon');
 add_action('admin_head', 'linea3_legal_child_favicon');
+
+/**
+ * Registrar Custom Post Type: Servicios
+ */
+function antigravity_register_servicios_cpt() {
+    $labels = array(
+        'name'                  => _x('Servicios', 'Post Type General Name', 'linea3-legal-child'),
+        'singular_name'         => _x('Servicio', 'Post Type Singular Name', 'linea3-legal-child'),
+        'menu_name'             => __('Servicios', 'linea3-legal-child'),
+        'name_admin_bar'        => __('Servicio', 'linea3-legal-child'),
+        'archives'              => __('Archivo de Servicios', 'linea3-legal-child'),
+        'attributes'            => __('Atributos del Servicio', 'linea3-legal-child'),
+        'parent_item_colon'     => __('Servicio Padre:', 'linea3-legal-child'),
+        'all_items'             => __('Todos los servicios', 'linea3-legal-child'),
+        'add_new_item'          => __('Añadir nuevo servicio', 'linea3-legal-child'),
+        'add_new'               => __('Añadir nuevo', 'linea3-legal-child'),
+        'new_item'              => __('Nuevo servicio', 'linea3-legal-child'),
+        'edit_item'             => __('Editar servicio', 'linea3-legal-child'),
+        'update_item'           => __('Actualizar servicio', 'linea3-legal-child'),
+        'view_item'             => __('Ver servicio', 'linea3-legal-child'),
+        'view_items'            => __('Ver servicios', 'linea3-legal-child'),
+        'search_items'          => __('Buscar servicio', 'linea3-legal-child'),
+        'not_found'             => __('No encontrado', 'linea3-legal-child'),
+        'not_found_in_trash'    => __('No encontrado en la papelera', 'linea3-legal-child'),
+        'featured_image'        => __('Imagen de fondo (Cover)', 'linea3-legal-child'),
+        'set_featured_image'    => __('Asignar imagen de fondo', 'linea3-legal-child'),
+        'remove_featured_image' => __('Quitar imagen de fondo', 'linea3-legal-child'),
+        'use_featured_image'    => __('Usar como imagen de fondo', 'linea3-legal-child'),
+        'insert_into_item'      => __('Insertar en servicio', 'linea3-legal-child'),
+        'uploaded_to_this_item' => __('Subido a este servicio', 'linea3-legal-child'),
+        'items_list'            => __('Lista de servicios', 'linea3-legal-child'),
+        'items_list_navigation' => __('Navegación de lista de servicios', 'linea3-legal-child'),
+        'filter_items_list'     => __('Filtrar lista de servicios', 'linea3-legal-child'),
+    );
+    $args = array(
+        'label'                 => __('Servicio', 'linea3-legal-child'),
+        'description'           => __('Servicios legales ofrecidos', 'linea3-legal-child'),
+        'labels'                => $labels,
+        'supports'              => array('title', 'editor', 'thumbnail', 'excerpt'),
+        'taxonomies'            => array(),
+        'hierarchical'          => false,
+        'public'                => true,
+        'show_ui'               => true,
+        'show_in_menu'          => true,
+        'menu_position'         => 21,
+        'menu_icon'             => 'dashicons-portfolio',
+        'show_in_admin_bar'     => true,
+        'show_in_nav_menus'     => true,
+        'can_export'            => true,
+        'has_archive'           => true,
+        'exclude_from_search'   => false,
+        'publicly_queryable'    => true,
+        'capability_type'       => 'page',
+        'show_in_rest'          => true, // Habilita Gutenberg
+    );
+    register_post_type('servicio', $args);
+}
+add_action('init', 'antigravity_register_servicios_cpt', 0);
+
+/**
+ * Añadir Metabox para el Ícono del Servicio
+ */
+function antigravity_add_servicio_icon_metabox() {
+    add_meta_box(
+        'antigravity_servicio_icon',
+        __('Ícono del Servicio', 'linea3-legal-child'),
+        'antigravity_render_servicio_icon_metabox',
+        'servicio',
+        'side',
+        'default'
+    );
+}
+add_action('add_meta_boxes', 'antigravity_add_servicio_icon_metabox');
+
+function antigravity_render_servicio_icon_metabox($post) {
+    wp_nonce_field('antigravity_save_servicio_icon', 'antigravity_servicio_icon_nonce');
+    $icon_id = get_post_meta($post->ID, '_servicio_icon_id', true);
+    $icon_url = $icon_id ? wp_get_attachment_image_url($icon_id, 'thumbnail') : '';
+    
+    echo '<div class="antigravity-icon-wrapper" style="text-align:center;">';
+    if ($icon_url) {
+        echo '<img id="antigravity-icon-preview" src="' . esc_url($icon_url) . '" style="max-width:100%; height:auto; margin-bottom:15px;" />';
+    } else {
+        echo '<img id="antigravity-icon-preview" src="" style="max-width:100%; height:auto; margin-bottom:15px; display:none;" />';
+    }
+    echo '<input type="hidden" id="antigravity_servicio_icon_id" name="antigravity_servicio_icon_id" value="' . esc_attr($icon_id) . '" />';
+    echo '<button type="button" class="button" id="antigravity-upload-icon-btn">' . __('Seleccionar / Subir Ícono', 'linea3-legal-child') . '</button>';
+    echo '<button type="button" class="button" id="antigravity-remove-icon-btn" style="color:red; margin-top:5px; ' . ($icon_id ? '' : 'display:none;') . '">' . __('Quitar Ícono', 'linea3-legal-child') . '</button>';
+    echo '</div>';
+    
+    // Script nativo de WordPress Media Uploader
+    ?>
+    <script>
+    jQuery(document).ready(function($){
+        var frame;
+        $('#antigravity-upload-icon-btn').on('click', function(e) {
+            e.preventDefault();
+            if (frame) {
+                frame.open();
+                return;
+            }
+            frame = wp.media({
+                title: 'Seleccionar o subir ícono',
+                button: { text: 'Usar este ícono' },
+                multiple: false
+            });
+            frame.on('select', function() {
+                var attachment = frame.state().get('selection').first().toJSON();
+                $('#antigravity-icon-preview').attr('src', attachment.url).show();
+                $('#antigravity_servicio_icon_id').val(attachment.id);
+                $('#antigravity-remove-icon-btn').show();
+            });
+            frame.open();
+        });
+        
+        $('#antigravity-remove-icon-btn').on('click', function(e) {
+            e.preventDefault();
+            $('#antigravity-icon-preview').attr('src', '').hide();
+            $('#antigravity_servicio_icon_id').val('');
+            $(this).hide();
+        });
+    });
+    </script>
+    <?php
+}
+
+function antigravity_save_servicio_icon($post_id) {
+    if (!isset($_POST['antigravity_servicio_icon_nonce']) || !wp_verify_nonce($_POST['antigravity_servicio_icon_nonce'], 'antigravity_save_servicio_icon')) {
+        return;
+    }
+    if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
+        return;
+    }
+    if (!current_user_can('edit_post', $post_id)) {
+        return;
+    }
+    if (isset($_POST['antigravity_servicio_icon_id'])) {
+        update_post_meta($post_id, '_servicio_icon_id', sanitize_text_field($_POST['antigravity_servicio_icon_id']));
+    }
+}
+add_action('save_post', 'antigravity_save_servicio_icon');
+
+// Script para encolar medios en admin si no están encolados (para CPT servicio)
+function antigravity_enqueue_media_uploader($hook) {
+    global $typenow;
+    if ($typenow == 'servicio') {
+        wp_enqueue_media();
+    }
+}
+add_action('admin_enqueue_scripts', 'antigravity_enqueue_media_uploader');
+
+/**
+ * Shortcode Dinámico para Cuadrícula de Servicios
+ */
+function antigravity_services_grid_shortcode($atts) {
+    $atts = shortcode_atts(array(
+        'orderby' => 'date', // Puede ser 'date' o 'title'
+        'order'   => 'ASC',  // Si es date es ASC (los primeros creados primero), si title es A-Z
+    ), $atts);
+
+    $args = array(
+        'post_type'      => 'servicio',
+        'posts_per_page' => -1, // Mostrar todos
+        'orderby'        => $atts['orderby'],
+    );
+    
+    if ($atts['orderby'] === 'title') {
+        $args['order'] = isset($atts['order']) ? $atts['order'] : 'ASC';
+    } else {
+        $args['order'] = isset($atts['order']) ? $atts['order'] : 'ASC'; // Mostrar en el orden en que se van añadiendo
+    }
+
+    $query = new WP_Query($args);
+
+    // Contenedor principal de la cuadrícula
+    $output = '<!-- ANTIGRAVITY_START --><div class="wp-block-group l3-services-grid">';
+
+    if ($query->have_posts()) {
+        while ($query->have_posts()) {
+            $query->the_post();
+            
+            // Recoger datos
+            $title = get_the_title();
+            $permalink = get_permalink();
+            // Para el contenido, usamos the_excerpt si existe, sino el content cortado.
+            $excerpt = has_excerpt() ? get_the_excerpt() : wp_trim_words(get_the_content(), 25);
+            $bg_image_url = get_the_post_thumbnail_url(get_the_ID(), 'large');
+            // Imagen por defecto si no hay destacada
+            if (!$bg_image_url) {
+                $bg_image_url = get_stylesheet_directory_uri() . '/assets/images/placeholder-legal.png'; 
+            }
+            
+            // Si hay un icono guardado
+            $icon_id = get_post_meta(get_the_ID(), '_servicio_icon_id', true);
+            $icon_html = '';
+            if ($icon_id) {
+                $icon_url = wp_get_attachment_image_url($icon_id, 'thumbnail');
+                if ($icon_url) {
+                    $icon_html = '<img src="' . esc_url($icon_url) . '" alt="" class="service-icon" />';
+                }
+            }
+
+            // HTML de la tarjeta basado en el patrón creado
+            $output .= '<div class="wp-block-cover l3-service-card" onclick="window.location=\'' . esc_url($permalink) . '\'" style="cursor:pointer;">';
+            $output .= '<span aria-hidden="true" class="wp-block-cover__background has-base-background-color has-background-dim-80 has-background-dim"></span>';
+            $output .= '<img class="wp-block-cover__image-background" alt="" src="' . esc_url($bg_image_url) . '" data-object-fit="cover"/>';
+            
+            $output .= '<div class="wp-block-cover__inner-container">';
+            $output .= '<div class="wp-block-group">';
+            if ($icon_html) {
+                $output .= $icon_html;
+            }
+            $output .= '<h3 class="wp-block-heading">' . esc_html($title) . '</h3>';
+            $output .= '<div class="service-excerpt">' . esc_html($excerpt) . '</div>';
+            $output .= '</div>'; // /wp-block-group
+            
+            $output .= '</div>'; // /wp-block-cover__inner-container
+            $output .= '</div>'; // /wp-block-cover
+        }
+        wp_reset_postdata();
+    } else {
+        $output .= '<p>No se han registrado servicios todavía. <a href="' . esc_url(admin_url('post-new.php?post_type=servicio')) . '">Añadir el primero.</a></p>';
+    }
+
+    $output .= '</div><!-- ANTIGRAVITY_END -->';
+    return $output;
+}
+add_shortcode('antigravity_services_grid', 'antigravity_services_grid_shortcode');
+
+/**
+ * Habilitar soporte para subir archivos SVG de forma segura
+ */
+function l3_allow_svg_upload($mimes) {
+    $mimes['svg'] = 'image/svg+xml';
+    return $mimes;
+}
+add_filter('upload_mimes', 'l3_allow_svg_upload');
+
+function l3_fix_svg_mime_type($data, $file, $filename, $mimes) {
+    $ext = isset($data['ext']) ? $data['ext'] : '';
+    if (strlen($ext) < 1) {
+        $exploded = explode('.', $filename);
+        $ext = strtolower(end($exploded));
+    }
+    if ($ext === 'svg') {
+        $data['type'] = 'image/svg+xml';
+        $data['ext'] = 'svg';
+    }
+    return $data;
+}
+add_filter('wp_check_filetype_and_ext', 'l3_fix_svg_mime_type', 10, 4);

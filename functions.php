@@ -418,9 +418,25 @@ function antigravity_register_block_patterns(): void
 		'categories' => array('antigravity-patterns'),
 		'content' => '<!-- wp:group {"className":"l3-container-standard","layout":{"type":"constrained"}} -->
 <div class="wp-block-group l3-container-standard">
-    <!-- wp:heading {"textAlign":"center","style":{"spacing":{"margin":{"bottom":"var:preset|spacing|50"}}}} -->
-    <h2 class="wp-block-heading has-text-align-center" style="margin-bottom:var(--wp--preset--spacing--50)">Nuestras Áreas de Práctica</h2>
-    <!-- /wp:heading -->
+    <!-- wp:group {"className":"services-section-header","layout":{"type":"constrained"}} -->
+    <div class="wp-block-group services-section-header">
+        <!-- wp:group {"className":"section-vertical-line","layout":{"type":"constrained"}} -->
+        <div class="wp-block-group section-vertical-line"></div>
+        <!-- /wp:group -->
+
+        <!-- wp:group {"className":"services-header-left","layout":{"type":"constrained"}} -->
+        <div class="wp-block-group services-header-left">
+            <!-- wp:paragraph {"className":"services-eyebrow"} -->
+            <p class="services-eyebrow">ESPECIALIZACIÓN Y ESTRATEGIA JURÍDICA</p>
+            <!-- /wp:paragraph -->
+
+            <!-- wp:heading {"level":2,"className":"services-title"} -->
+            <h2 class="wp-block-heading services-title">Nuestras Áreas de Práctica</h2>
+            <!-- /wp:heading -->
+        </div>
+        <!-- /wp:group -->
+    </div>
+    <!-- /wp:group -->
 
     <!-- wp:shortcode -->
     [antigravity_services_grid orderby="date" order="ASC"]
@@ -1008,3 +1024,63 @@ function l3_fix_svg_mime_type($data, $file, $filename, $mimes) {
     return $data;
 }
 add_filter('wp_check_filetype_and_ext', 'l3_fix_svg_mime_type', 10, 4);
+
+/**
+ * Opciones de Página: Ocultar Título
+ */
+add_action('init', 'linea3_legal_register_page_meta');
+function linea3_legal_register_page_meta() {
+    register_post_meta('page', '_linea3_hide_title', array(
+        'show_in_rest' => true,
+        'single' => true,
+        'type' => 'boolean',
+    ));
+}
+
+add_action('add_meta_boxes', 'linea3_legal_add_page_options_meta_box');
+function linea3_legal_add_page_options_meta_box() {
+    add_meta_box(
+        'linea3_page_options',
+        'Opciones de Visualización',
+        'linea3_legal_page_options_html',
+        'page',
+        'side',
+        'low'
+    );
+}
+
+function linea3_legal_page_options_html($post) {
+    $hide_title = get_post_meta($post->ID, '_linea3_hide_title', true);
+    wp_nonce_field('linea3_page_options_nonce', 'linea3_page_options_nonce_field');
+    ?>
+    <p>
+        <label>
+            <input type="checkbox" name="linea3_hide_title" value="1" <?php checked($hide_title, 1); ?>>
+            Ocultar el título de esta página
+        </label>
+    </p>
+    <?php
+}
+
+add_action('save_post', 'linea3_legal_save_page_options');
+function linea3_legal_save_page_options($post_id) {
+    if (!isset($_POST['linea3_page_options_nonce_field']) || !wp_verify_nonce($_POST['linea3_page_options_nonce_field'], 'linea3_page_options_nonce')) {
+        return;
+    }
+    if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) return;
+    if (!current_user_can('edit_page', $post_id)) return;
+
+    if (isset($_POST['linea3_hide_title'])) {
+        update_post_meta($post_id, '_linea3_hide_title', 1);
+    } else {
+        delete_post_meta($post_id, '_linea3_hide_title');
+    }
+}
+
+// Inyectar CSS para ocultar el título si la opción está activa
+add_action('wp_head', 'linea3_legal_hide_title_css');
+function linea3_legal_hide_title_css() {
+    if (is_page() && get_post_meta(get_the_ID(), '_linea3_hide_title', true)) {
+        echo '<style>.wp-block-post-title { display: none !important; }</style>';
+    }
+}

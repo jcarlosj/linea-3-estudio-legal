@@ -942,6 +942,68 @@ footer.wp-block-group .footer-logo-switch {
     opacity: 0.9 !important;
 }
 
+/* Services Section Header (Refactored Editorial) */
+.services-section-header {
+    display: flex !important;
+    align-items: stretch !important;
+    margin-top: 40px !important;
+    margin-bottom: 40px !important;
+    position: relative !important;
+}
+
+.services-header-left {
+    flex: 1 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    align-items: flex-start !important;
+}
+
+.services-eyebrow {
+    color: #ce9e50 !important;
+    text-transform: uppercase !important;
+    font-size: 0.8rem !important;
+    font-weight: 700 !important;
+    letter-spacing: 2px !important;
+    margin-bottom: 10px !important;
+    margin-left: 0 !important;
+    padding-left: 0 !important;
+    display: block !important;
+    text-align: left !important;
+    width: 100% !important;
+}
+
+.services-title {
+    font-size: clamp(2rem, 4vw, 3rem) !important;
+    margin: 0 !important;
+    color: #ffffff !important;
+    line-height: 1.1 !important;
+    font-family: var(--wp--preset--font-family--serif) !important;
+    font-weight: 700 !important;
+}
+
+.services-header-right {
+    display: flex !important;
+    align-items: flex-end !important;
+    justify-content: flex-end !important;
+}
+
+.services-header-right .view-all-link {
+    color: #ce9e50 !important;
+    text-decoration: none !important;
+    text-transform: uppercase !important;
+    font-size: 0.75rem !important;
+    font-weight: 700 !important;
+    letter-spacing: 1.5px !important;
+    border-bottom: 1px solid rgba(206, 158, 80, 0.3) !important;
+    padding-bottom: 5px !important;
+    transition: all 0.3s ease !important;
+}
+
+.services-header-right .view-all-link:hover {
+    border-bottom-color: #ce9e50 !important;
+}
+
 /* 1. El Motor Flexbox (Contenedor Padre) */
 .antigravity-featured-posts-grid .antigravity-grid {
     display: flex;
@@ -2416,6 +2478,7 @@ main.single-post-layout-pro {
     grid-template-columns: 1fr;
     gap: 30px;
     width: 100%;
+    margin-bottom: 30px !important;
 }
 
 @media (min-width: 768px) {
@@ -2441,9 +2504,16 @@ main.single-post-layout-pro {
     border-radius: 8px;
     overflow: hidden;
     margin: 0 !important;
+    transition: all 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
-/* Borde superpuesto (por encima de la imagen y el overlay) */
+.l3-service-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+}
+
+/* Borde superpuesto (Efecto Oro Metálico Reactivo) */
 .l3-service-card::after {
     content: '';
     position: absolute;
@@ -2451,10 +2521,23 @@ main.single-post-layout-pro {
     left: 0;
     right: 0;
     bottom: 0;
-    border: 1px solid #ce9e50;
     border-radius: 8px;
     z-index: 5;
     pointer-events: none;
+    
+    /* Técnica de borde gradiente con soporte para border-radius */
+    padding: 1px; /* El grosor del borde */
+    background: linear-gradient(135deg, #8e6d31 0%, #ce9e50 25%, #f7e0a3 50%, #ce9e50 75%, #8e6d31 100%) border-box;
+    -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: destination-out;
+    mask-composite: exclude;
+    
+    opacity: 0.35; /* Estado sobrio por defecto */
+    transition: opacity 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.l3-service-card:hover::after {
+    opacity: 1; /* Se ilumina al interactuar */
 }
 
 .l3-service-card .wp-block-cover__background {
@@ -2465,12 +2548,14 @@ main.single-post-layout-pro {
     bottom: 0;
     z-index: 1;
     background-color: #0a2233;
-    opacity: 0.7;
-    transition: opacity 1.5s ease !important;
+    opacity: 0.35;
+    transition: all 1.2s cubic-bezier(0.25, 1, 0.5, 1) !important;
 }
 
 .l3-service-card:hover .wp-block-cover__background {
-    opacity: 0.1 !important;
+    opacity: 0.85 !important;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
 }
 
 .l3-service-card .wp-block-cover__image-background {
@@ -2487,7 +2572,7 @@ main.single-post-layout-pro {
 }
 
 .l3-service-card:hover .wp-block-cover__image-background {
-    transform: scale(1.08) !important;
+    transform: scale(1.18) !important;
 }
 
 .l3-service-card .wp-block-cover__inner-container {
@@ -2517,8 +2602,8 @@ main.single-post-layout-pro {
     height: 90px;
     object-fit: contain;
     margin-bottom: 10px;
-    filter: brightness(0) invert(1);
-    transition: margin 0.6s ease;
+    filter: brightness(0) invert(1) drop-shadow(0 4px 10px rgba(0,0,0,0.6));
+    transition: all 0.6s cubic-bezier(0.25, 1, 0.5, 1);
 }
 
 .l3-service-card h3 {
@@ -2527,7 +2612,8 @@ main.single-post-layout-pro {
     margin-bottom: 0 !important;
     font-weight: 700 !important;
     color: #ce9e50 !important;
-    transition: margin 0.6s ease !important;
+    text-shadow: 0 2px 12px rgba(0, 0, 0, 0.7);
+    transition: all 0.6s cubic-bezier(0.25, 1, 0.5, 1) !important;
 }
 
 .l3-service-card .service-excerpt {
@@ -2541,6 +2627,7 @@ main.single-post-layout-pro {
     font-size: .95rem !important;
     line-height: 1.5 !important;
     color: rgba(255, 255, 255, 0.95) !important;
+    text-shadow: 0 1px 6px rgba(0, 0, 0, 0.9);
 }
 
 .l3-service-card:hover h3 {

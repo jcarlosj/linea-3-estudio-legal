@@ -976,7 +976,7 @@ function antigravity_services_grid_shortcode($atts) {
             }
 
             // HTML de la tarjeta basado en el patrón creado
-            $output .= '<div class="wp-block-cover l3-service-card" onclick="window.location=\'' . esc_url($permalink) . '\'" style="cursor:pointer;">';
+            $output .= '<div class="wp-block-cover l3-service-card">';
             $output .= '<span aria-hidden="true" class="wp-block-cover__background has-base-background-color has-background-dim-80 has-background-dim"></span>';
             $output .= '<img class="wp-block-cover__image-background" alt="" src="' . esc_url($bg_image_url) . '" data-object-fit="cover"/>';
             

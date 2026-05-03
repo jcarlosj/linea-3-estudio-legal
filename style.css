@@ -2513,31 +2513,99 @@ main.single-post-layout-pro {
     box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
 }
 
-/* Borde superpuesto (Efecto Oro Metálico Reactivo) */
-.l3-service-card::after {
-    content: '';
+/* Animación de barrido para toda la tarjeta (Hacia Cuadrante 1) */
+@keyframes full-card-shimmer {
+    0% { left: -100%; top: 100%; }
+    100% { left: 100%; top: -100%; }
+}
+
+/* Efecto de reflejo cristalino sobre toda la tarjeta */
+.l3-service-card::before {
+    content: "";
     position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    border-radius: 8px;
-    z-index: 5;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(
+        45deg, 
+        rgba(255, 255, 255, 0) 0%, 
+        rgba(255, 255, 255, 0) 45%, 
+        rgba(255, 255, 255, 0.12) 50%, 
+        rgba(255, 255, 255, 0) 55%, 
+        rgba(255, 255, 255, 0) 100%
+    );
+    z-index: 3;
     pointer-events: none;
+    animation: full-card-shimmer 5s infinite linear;
+}
+
+/* Animación de reflejo metálico constante */
+@keyframes metallic-shine {
+    0% { background-position: 0% 50%; }
+    100% { background-position: 200% 50%; }
+}
+
+/* Borde superpuesto (Efecto Oro Metálico Animado) */
+.l3-service-card::after {
+    content: "" !important;
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    border-radius: 8px !important;
+    z-index: 10 !important;
+    pointer-events: none !important;
+    display: block !important;
     
-    /* Técnica de borde gradiente con soporte para border-radius */
-    padding: 1px; /* El grosor del borde */
-    background: linear-gradient(135deg, #8e6d31 0%, #ce9e50 25%, #f7e0a3 50%, #ce9e50 75%, #8e6d31 100%) border-box;
+    padding: 2px !important;
+    
+    /* Gradiente dorado con puntos de luz blanca integrados */
+    background: linear-gradient(
+        110deg, 
+        #8e6d31 0%, 
+        #ce9e50 20%, 
+        #f7e0a3 40%, 
+        #ffffff 50%, 
+        #f7e0a3 60%, 
+        #ce9e50 80%, 
+        #8e6d31 100%
+    ) border-box !important;
+    
+    background-size: 300% 100% !important;
+    animation: metallic-shine 4s infinite linear !important;
+    
     -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
-    -webkit-mask-composite: destination-out;
-    mask-composite: exclude;
+    -webkit-mask-composite: destination-out !important;
+    mask-composite: exclude !important;
     
-    opacity: 0.35; /* Estado sobrio por defecto */
-    transition: opacity 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+    opacity: 0.6 !important;
+    transition: opacity 0.4s ease !important;
 }
 
 .l3-service-card:hover::after {
-    opacity: 1; /* Se ilumina al interactuar */
+    opacity: 1 !important;
+    animation-duration: 2s !important; /* El reflejo se acelera al hacer hover */
+}
+
+/* Desincronización de animaciones para un efecto más natural */
+.l3-services-grid .l3-service-card:nth-child(2n)::before,
+.l3-services-grid .l3-service-card:nth-child(2n)::after {
+    animation-delay: -1.2s !important;
+}
+
+.l3-services-grid .l3-service-card:nth-child(3n)::before,
+.l3-services-grid .l3-service-card:nth-child(3n)::after {
+    animation-delay: -2.4s !important;
+}
+
+.l3-services-grid .l3-service-card:nth-child(4n)::before,
+.l3-services-grid .l3-service-card:nth-child(4n)::after {
+    animation-delay: -3.6s !important;
+}
+
+.l3-services-grid .l3-service-card:nth-child(5n)::before,
+.l3-services-grid .l3-service-card:nth-child(5n)::after {
+    animation-delay: -0.8s !important;
 }
 
 .l3-service-card .wp-block-cover__background {

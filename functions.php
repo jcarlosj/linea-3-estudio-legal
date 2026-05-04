@@ -452,9 +452,17 @@ function antigravity_register_block_patterns(): void
 <div class="wp-block-group alignfull l3-allies-section">
     <!-- wp:group {"className":"l3-container-standard","layout":{"type":"constrained"}} -->
     <div class="wp-block-group l3-container-standard">
-        <!-- wp:heading {"textAlign":"center","level":3} -->
-        <h3 class="wp-block-heading has-text-align-center">Nuestros aliados</h3>
-        <!-- /wp:heading -->
+        <!-- wp:group {"className":"l3-allies-header-centered","layout":{"type":"constrained"}} -->
+        <div class="wp-block-group l3-allies-header-centered">
+            <!-- wp:paragraph {"className":"services-eyebrow"} -->
+            <p class="services-eyebrow">RESPALDO Y COOPERACIÓN</p>
+            <!-- /wp:paragraph -->
+
+            <!-- wp:heading {"level":2,"className":"services-title"} -->
+            <h2 class="wp-block-heading services-title">Nuestros aliados</h2>
+            <!-- /wp:heading -->
+        </div>
+        <!-- /wp:group -->
 
         <!-- wp:shortcode -->
         [antigravity_allies_grid]
@@ -1194,7 +1202,7 @@ function l3_aliado_save_meta($post_id): void
 add_action('save_post', 'l3_aliado_save_meta');
 
 /**
- * Shortcode para mostrar el Grid de Aliados.
+ * Shortcode para mostrar el Slider de Aliados.
  */
 function l3_allies_grid_shortcode($atts): string
 {
@@ -1210,7 +1218,14 @@ function l3_allies_grid_shortcode($atts): string
 		return '';
 	}
 
-	$output = '<div class="l3-allies-grid">';
+	$slider_id = 'l3-slider-' . uniqid();
+
+	$output = '<div class="l3-allies-slider-container" id="' . $slider_id . '">';
+	$output .= '<button class="l3-slider-btn prev" aria-label="Anterior"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg></button>';
+	
+	$output .= '<div class="l3-allies-slider-viewport">';
+	$output .= '<div class="l3-allies-slider-track">';
+	
 	while ($query->have_posts()) {
 		$query->the_post();
 		$logo_url = get_the_post_thumbnail_url(get_the_ID(), 'full');
@@ -1229,7 +1244,93 @@ function l3_allies_grid_shortcode($atts): string
 		}
 	}
 	wp_reset_postdata();
-	$output .= '</div>';
+
+	$output .= '</div>'; // End track
+	$output .= '</div>'; // End viewport
+	
+	$output .= '<button class="l3-slider-btn next" aria-label="Siguiente"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg></button>';
+	$output .= '</div>'; // End container
+
+	// JavaScript for the slider
+	$output .= "
+	<script>
+	document.addEventListener('DOMContentLoaded', function() {
+		const container = document.getElementById('" . $slider_id . "');
+		if (!container) return;
+
+		const track = container.querySelector('.l3-allies-slider-track');
+		const viewport = container.querySelector('.l3-allies-slider-viewport');
+		const btnPrev = container.querySelector('.l3-slider-btn.prev');
+		const btnNext = container.querySelector('.l3-slider-btn.next');
+		
+		let index = 0;
+		let autoplayInterval;
+
+		function getVisibleCards() {
+			const cardWidth = container.querySelector('.ally-card').offsetWidth + 20; // 20 is gap
+			return Math.floor(viewport.offsetWidth / cardWidth);
+		}
+
+		function updateSlider() {
+			const cardWidth = container.querySelector('.ally-card').offsetWidth + 20;
+			const maxIndex = track.children.length - getVisibleCards();
+			
+			if (index > maxIndex) index = 0;
+			if (index < 0) index = maxIndex > 0 ? maxIndex : 0;
+
+			const offset = index * cardWidth;
+			track.style.transform = 'translateX(-' + offset + 'px)';
+		}
+
+		function nextSlide() {
+			index++;
+			updateSlider();
+		}
+
+		function prevSlide() {
+			index--;
+			updateSlider();
+		}
+
+		function startAutoplay() {
+			stopAutoplay();
+			autoplayInterval = setInterval(nextSlide, 5000);
+		}
+
+		function stopAutoplay() {
+			if (autoplayInterval) clearInterval(autoplayInterval);
+		}
+
+		btnNext.addEventListener('click', () => {
+			nextSlide();
+			startAutoplay();
+		});
+
+		btnPrev.addEventListener('click', () => {
+			prevSlide();
+			startAutoplay();
+		});
+
+		// Touch events for mobile
+		let touchStartX = 0;
+		viewport.addEventListener('touchstart', (e) => {
+			touchStartX = e.touches[0].clientX;
+			stopAutoplay();
+		});
+
+		viewport.addEventListener('touchend', (e) => {
+			const touchEndX = e.changedTouches[0].clientX;
+			if (touchStartX - touchEndX > 50) nextSlide();
+			if (touchStartX - touchEndX < -50) prevSlide();
+			startAutoplay();
+		});
+
+		window.addEventListener('resize', updateSlider);
+		
+		// Initial start
+		startAutoplay();
+	});
+	</script>";
 
 	return $output;
 }

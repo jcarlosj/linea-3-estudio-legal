@@ -2457,7 +2457,7 @@ main.single-post-layout-pro {
     box-sizing: border-box !important;
 }
 
-@media (max-width: 767px) {
+@media (max-width: 1024px) {
     .l3-container-standard {
         padding-left: 20px !important;
         padding-right: 20px !important;
@@ -2746,17 +2746,18 @@ main.single-post-layout-pro {
     color: #ffffff;
 }
 /* ========================================================
-   ALLIES SECTION PATTERN
+   ALLIES SLIDER PATTERN
    ======================================================== */
 .l3-allies-section {
-    background-color: #f8f9fb !important;
-    padding: 80px 0 !important;
+    background-color: #0a2233 !important; /* Mismo color que el header */
+    padding: 100px 0 !important;
     width: 100vw !important;
     position: relative !important;
     left: 50% !important;
     right: 50% !important;
     margin-left: -50vw !important;
     margin-right: -50vw !important;
+    overflow: hidden !important;
 }
 
 .l3-allies-section h3 {
@@ -2766,20 +2767,60 @@ main.single-post-layout-pro {
     font-family: var(--wp--preset--font-family--serif) !important;
 }
 
-.l3-allies-grid {
-    display: flex !important;
-    flex-wrap: wrap !important;
-    justify-content: center !important;
-    gap: 20px !important;
-    margin: 0 auto !important;
+.l3-allies-slider-container {
+    position: relative !important;
     width: 100% !important;
+    max-width: 1440px !important; /* Ajustado a 1440px según tus pruebas */
+    margin: 0 auto !important;
+    padding-left: 20px !important; /* Margen de seguridad perpetuo */
+    padding-right: 20px !important; /* Margen de seguridad perpetuo */
+    display: flex !important;
+    align-items: center !important;
+    box-sizing: border-box !important;
+}
+
+.l3-allies-slider-viewport {
+    overflow: hidden !important;
+    width: 100% !important;
+    padding: 10px 45px !important;
+    position: relative !important;
+}
+
+/* Máscaras de degradado lateral */
+.l3-allies-slider-viewport::before,
+.l3-allies-slider-viewport::after {
+    content: "" !important;
+    position: absolute !important;
+    top: 0 !important;
+    bottom: 0 !important;
+    width: 100px !important;
+    z-index: 5 !important;
+    pointer-events: none !important; /* Permite hacer clic a través del degradado */
+}
+
+.l3-allies-slider-viewport::before {
+    left: 0 !important;
+    background: linear-gradient(to right, #0a2233 0%, rgba(10, 34, 51, 0) 100%) !important;
+}
+
+.l3-allies-slider-viewport::after {
+    right: 0 !important;
+    background: linear-gradient(to left, #0a2233 0%, rgba(10, 34, 51, 0) 100%) !important;
+}
+
+.l3-allies-slider-track {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    gap: 20px !important;
+    transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    will-change: transform !important;
 }
 
 .ally-card {
     background: #ffffff !important;
     border-radius: 4px !important;
-    padding: 25px !important;
-    width: 200px !important;
+    padding: 20px !important;
+    flex: 0 0 220px !important; /* Ancho fijo para mantener la fila */
     height: 100px !important;
     display: flex !important;
     align-items: center !important;
@@ -2787,6 +2828,14 @@ main.single-post-layout-pro {
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.03) !important;
     transition: all 0.4s ease !important;
     border: 1px solid rgba(0, 0, 0, 0.05) !important;
+}
+
+@media (max-width: 767px) {
+    .ally-card {
+        flex: 0 0 160px !important;
+        height: 80px !important;
+        padding: 15px !important;
+    }
 }
 
 .ally-card:hover {
@@ -2805,4 +2854,77 @@ main.single-post-layout-pro {
 
 .ally-card:hover img {
     filter: grayscale(0) opacity(1) !important;
+}
+
+/* Navigation Buttons */
+.l3-slider-btn {
+    position: absolute !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    width: 40px !important;
+    height: 40px !important;
+    background: #ce9e50 !important;
+    border: none !important;
+    border-radius: 4px !important; /* Estilo cuadradito */
+    box-shadow: 0 4px 10px rgba(206, 158, 80, 0.2) !important;
+    cursor: pointer !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    z-index: 10 !important;
+    transition: all 0.3s ease !important;
+    color: #0a2233 !important;
+}
+
+.l3-slider-btn:hover {
+    background: #b88b42 !important; /* Un dorado un poco más oscuro al hover */
+    transform: translateY(-50%) scale(1.05) !important;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15) !important;
+}
+
+.l3-slider-btn.prev {
+    left: 20px !important;
+}
+
+.l3-slider-btn.next {
+    right: 20px !important;
+}
+
+/* Refuerzo de margen para móviles y tablets */
+@media (max-width: 1024px) {
+    body .l3-container-standard {
+        padding-left: 20px !important;
+        padding-right: 20px !important;
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+}
+
+.l3-slider-btn svg {
+    width: 22px !important;
+    height: 22px !important;
+    stroke-width: 2.5 !important;
+}
+
+/* Centered Header for Allies */
+.l3-allies-header-centered {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    text-align: center !important;
+    margin-bottom: 60px !important;
+    width: 100% !important;
+}
+
+.l3-allies-header-centered .services-eyebrow {
+    margin-left: auto !important;
+    margin-right: auto !important;
+    text-align: center !important;
+    width: 100% !important;
+}
+
+.l3-allies-header-centered .services-title {
+    text-align: center !important;
+    width: 100% !important;
+    color: #ffffff !important;
 }

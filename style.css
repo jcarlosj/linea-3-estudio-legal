@@ -2745,3 +2745,64 @@ main.single-post-layout-pro {
     background-color: #ce9e50;
     color: #ffffff;
 }
+/* ========================================================
+   ALLIES SECTION PATTERN
+   ======================================================== */
+.l3-allies-section {
+    background-color: #f8f9fb !important;
+    padding: 80px 0 !important;
+    width: 100vw !important;
+    position: relative !important;
+    left: 50% !important;
+    right: 50% !important;
+    margin-left: -50vw !important;
+    margin-right: -50vw !important;
+}
+
+.l3-allies-section h3 {
+    color: #0a2233 !important;
+    font-weight: 700 !important;
+    margin-bottom: 50px !important;
+    font-family: var(--wp--preset--font-family--serif) !important;
+}
+
+.l3-allies-grid {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+    gap: 20px !important;
+    margin: 0 auto !important;
+    width: 100% !important;
+}
+
+.ally-card {
+    background: #ffffff !important;
+    border-radius: 4px !important;
+    padding: 25px !important;
+    width: 200px !important;
+    height: 100px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.03) !important;
+    transition: all 0.4s ease !important;
+    border: 1px solid rgba(0, 0, 0, 0.05) !important;
+}
+
+.ally-card:hover {
+    transform: translateY(-5px) !important;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08) !important;
+    border-color: #ce9e50 !important;
+}
+
+.ally-card img {
+    max-width: 100% !important;
+    max-height: 100% !important;
+    object-fit: contain !important;
+    filter: grayscale(1) opacity(0.5) !important;
+    transition: all 0.5s ease !important;
+}
+
+.ally-card:hover img {
+    filter: grayscale(0) opacity(1) !important;
+}

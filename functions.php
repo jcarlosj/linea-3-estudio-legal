@@ -444,6 +444,26 @@ function antigravity_register_block_patterns(): void
 </div>
 <!-- /wp:group -->'
 	));
+
+	register_block_pattern('antigravity/aliados', array(
+		'title' => 'Nuestros Aliados (Logos)',
+		'categories' => array('antigravity-patterns'),
+		'content' => '<!-- wp:group {"align":"full","className":"l3-allies-section","layout":{"type":"constrained"}} -->
+<div class="wp-block-group alignfull l3-allies-section">
+    <!-- wp:group {"className":"l3-container-standard","layout":{"type":"constrained"}} -->
+    <div class="wp-block-group l3-container-standard">
+        <!-- wp:heading {"textAlign":"center","level":3} -->
+        <h3 class="wp-block-heading has-text-align-center">Nuestros aliados</h3>
+        <!-- /wp:heading -->
+
+        <!-- wp:shortcode -->
+        [antigravity_allies_grid]
+        <!-- /wp:shortcode -->
+    </div>
+    <!-- /wp:group -->
+</div>
+<!-- /wp:group -->'
+	));
 }
 add_action('init', 'antigravity_register_block_patterns');
 
@@ -1084,3 +1104,133 @@ function linea3_legal_hide_title_css() {
         echo '<style>.wp-block-post-title { display: none !important; }</style>';
     }
 }
+
+/**
+ * Registro de Custom Post Type: Aliados.
+ */
+function l3_register_aliados_cpt(): void
+{
+	$labels = array(
+		'name'                  => 'Aliados',
+		'singular_name'         => 'Aliado',
+		'menu_name'             => 'Aliados',
+		'name_admin_bar'        => 'Aliado',
+		'add_new'               => 'Añadir Nuevo',
+		'add_new_item'          => 'Añadir Nuevo Aliado',
+		'new_item'              => 'Nuevo Aliado',
+		'edit_item'             => 'Editar Aliado',
+		'view_item'             => 'Ver Aliado',
+		'all_items'             => 'Todos los Aliados',
+		'search_items'          => 'Buscar Aliados',
+		'not_found'             => 'No se encontraron aliados.',
+		'not_found_in_trash'    => 'No hay aliados en la papelera.',
+	);
+
+	$args = array(
+		'labels'             => $labels,
+		'public'             => true,
+		'publicly_queryable' => true,
+		'show_ui'            => true,
+		'show_in_menu'       => true,
+		'query_var'          => true,
+		'rewrite'            => array('slug' => 'aliado'),
+		'capability_type'    => 'post',
+		'has_archive'        => false,
+		'hierarchical'       => false,
+		'menu_position'      => 20,
+		'menu_icon'          => 'dashicons-groups',
+		'supports'           => array('title', 'thumbnail'),
+		'show_in_rest'       => true,
+	);
+
+	register_post_type('l3_aliado', $args);
+}
+add_action('init', 'l3_register_aliados_cpt');
+
+/**
+ * Meta Box para la URL del Aliado.
+ */
+function l3_aliados_add_meta_box(): void
+{
+	add_meta_box(
+		'l3_aliado_details',
+		'Información del Aliado',
+		'l3_aliado_details_callback',
+		'l3_aliado',
+		'normal',
+		'high'
+	);
+}
+add_action('add_meta_boxes', 'l3_aliados_add_meta_box');
+
+function l3_aliado_details_callback($post): void
+{
+	wp_nonce_field('l3_aliado_save_meta', 'l3_aliado_nonce');
+	$url = get_post_meta($post->ID, '_l3_aliado_url', true);
+	?>
+	<p>
+		<label for="l3_aliado_url"><strong>URL del Sitio Web:</strong></label><br>
+		<input type="url" id="l3_aliado_url" name="l3_aliado_url" value="<?php echo esc_attr($url); ?>" class="widefat" placeholder="https://ejemplo.com">
+	</p>
+	<?php
+}
+
+function l3_aliado_save_meta($post_id): void
+{
+	if (!isset($_POST['l3_aliado_nonce']) || !wp_verify_nonce($_POST['l3_aliado_nonce'], 'l3_aliado_save_meta')) {
+		return;
+	}
+	if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
+		return;
+	}
+	if (!current_user_can('edit_post', $post_id)) {
+		return;
+	}
+
+	if (isset($_POST['l3_aliado_url'])) {
+		update_post_meta($post_id, '_l3_aliado_url', esc_url_raw($_POST['l3_aliado_url']));
+	}
+}
+add_action('save_post', 'l3_aliado_save_meta');
+
+/**
+ * Shortcode para mostrar el Grid de Aliados.
+ */
+function l3_allies_grid_shortcode($atts): string
+{
+	$args = array(
+		'post_type'      => 'l3_aliado',
+		'posts_per_page' => -1,
+		'orderby'        => 'menu_order',
+		'order'          => 'ASC',
+	);
+
+	$query = new WP_Query($args);
+	if (!$query->have_posts()) {
+		return '';
+	}
+
+	$output = '<div class="l3-allies-grid">';
+	while ($query->have_posts()) {
+		$query->the_post();
+		$logo_url = get_the_post_thumbnail_url(get_the_ID(), 'full');
+		$site_url = get_post_meta(get_the_ID(), '_l3_aliado_url', true);
+
+		if ($logo_url) {
+			$output .= '<div class="ally-card">';
+			if ($site_url) {
+				$output .= '<a href="' . esc_url($site_url) . '" target="_blank" rel="noopener noreferrer">';
+			}
+			$output .= '<img src="' . esc_url($logo_url) . '" alt="' . esc_attr(get_the_title()) . '">';
+			if ($site_url) {
+				$output .= '</a>';
+			}
+			$output .= '</div>';
+		}
+	}
+	wp_reset_postdata();
+	$output .= '</div>';
+
+	return $output;
+}
+add_shortcode('antigravity_allies_grid', 'l3_allies_grid_shortcode');

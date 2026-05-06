@@ -2928,3 +2928,102 @@ main.single-post-layout-pro {
     width: 100% !important;
     color: #ffffff !important;
 }
+
+/* ========================================================
+   MODAL TEAM CONTACT (Split Layout)
+   ======================================================== */
+.team-contact-split-content {
+    max-width: 850px !important;
+}
+
+.team-contact-sidebar {
+    margin-bottom: 20px;
+    position: relative;
+    overflow: hidden;
+    border-radius: 8px;
+    min-height: 250px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+}
+
+.team-contact-sidebar-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 1;
+}
+
+.team-contact-sidebar-overlay {
+    position: relative;
+    z-index: 2;
+    padding: 20px;
+    background: rgba(10, 34, 51, 0.5);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    text-align: center;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.team-contact-sidebar-overlay h3 {
+    margin-top: 0;
+    color: #ffffff !important;
+    font-size: 1.5rem;
+    margin-bottom: 8px;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+}
+
+.team-contact-sidebar-overlay p {
+    font-size: 0.95rem;
+    color: #e2e8f0 !important;
+    margin-bottom: 0;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+}
+
+@media (min-width: 768px) {
+    .team-contact-split-layout {
+        display: flex;
+        flex-direction: row;
+        gap: 30px;
+    }
+    
+    .team-contact-sidebar {
+        flex: 1;
+        margin-bottom: 0;
+        min-height: 100%;
+    }
+    
+    .team-contact-form-area {
+        flex: 2;
+        padding: 10px 0;
+    }
+}
+
+/* Custom File Input Styling ("Browse...") */
+.antigravity-team-contact-form input[type="file"] {
+    color: #64748b;
+    font-size: 0.9rem;
+    padding: 10px 0;
+    width: 100%;
+}
+
+.antigravity-team-contact-form input[type="file"]::file-selector-button {
+    background-color: #f8fafc;
+    border: 1px solid #cbd5e1;
+    border-radius: 4px;
+    padding: 8px 16px;
+    color: #0a2233;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-right: 15px;
+}
+
+.antigravity-team-contact-form input[type="file"]::file-selector-button:hover {
+    background-color: #e2e8f0;
+    border-color: #94a3b8;
+    color: #ce9e50;
+}

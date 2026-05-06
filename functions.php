@@ -214,7 +214,9 @@ function antigravity_handle_consultation_form()
 	<div style='background-color: #0f172a; padding: 40px; font-family: -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, Helvetica, Arial, sans-serif;'>
 		<div style='max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);'>
 			<div style='background-color: #0a2233; padding: 30px; text-align: center; border-bottom: 4px solid #ce9e50;'>
-				<img src='" . esc_url(home_url('/wp-content/uploads/logo-horizontal-oscuro.png')) . "' alt='Línea 3 Estudio Legal' style='max-width: 200px; height: auto;'>
+				<a href='" . esc_url(home_url('/')) . "' target='_blank' style='display: inline-block; text-decoration: none;'>
+					<img src='" . esc_url(get_stylesheet_directory_uri() . '/assets/images/logo-horizontal-oscuro.png') . "' alt='Línea 3 Estudio Legal' style='max-width: 200px; height: auto; border: none;'>
+				</a>
 			</div>
 			<div style='padding: 40px; color: #334155; line-height: 1.6;'>
 				<h2 style='color: #0a2233; margin-top: 0; font-size: 20px; border-bottom: 1px solid #e2e8f0; padding-bottom: 15px;'>Nueva Consulta</h2>
@@ -246,6 +248,207 @@ function antigravity_handle_consultation_form()
 }
 add_action('wp_ajax_nopriv_antigravity_submit_consultation', 'antigravity_handle_consultation_form');
 add_action('wp_ajax_antigravity_submit_consultation', 'antigravity_handle_consultation_form');
+
+/**
+ * Inyecta el contenedor HTML del Modal de Contacto del Equipo en el footer.
+ */
+function antigravity_render_team_contact_modal()
+{
+	?>
+	<div class="antigravity-modal-overlay antigravity-team-contact-modal-overlay">
+		<div class="antigravity-modal-content team-contact-split-content">
+			<button class="antigravity-modal-close" aria-label="Cerrar modal">&times;</button>
+			<div class="antigravity-modal-body team-contact-split-layout">
+				<div class="team-contact-sidebar">
+					<img id="team-contact-modal-image" src="" alt="Profesional" class="team-contact-sidebar-bg">
+					<div class="team-contact-sidebar-overlay">
+						<h3 id="team-contact-modal-title">Contactar Profesional</h3>
+						<p>Envíe un mensaje directo y confidencial. Le responderemos a la brevedad.</p>
+					</div>
+				</div>
+				<div class="team-contact-form-area">
+					<form action="<?php echo esc_url(admin_url('admin-post.php')); ?>" method="POST"
+						class="antigravity-modal-form antigravity-team-contact-form" enctype="multipart/form-data">
+						<?php wp_nonce_field('antigravity_team_contact_action', 'antigravity_team_contact_nonce'); ?>
+						<input type="hidden" name="action" value="antigravity_submit_team_contact">
+						<input type="hidden" name="target_author_id" id="target_author_id" value="">
+
+						<div class="antigravity-form-grid">
+							<div class="antigravity-form-group"><label for="team-contact-email">De: (Su Correo) *</label><input 
+									type="email" id="team-contact-email" name="contact_email"
+									placeholder="ejemplo@correo.com" required></div>
+							<div class="antigravity-form-group"><label for="team-contact-phone">Teléfono</label><input 
+									type="tel" id="team-contact-phone" name="contact_phone"
+									placeholder="Su número de teléfono"></div>
+							<div class="antigravity-form-group"><label for="team-contact-subject">Asunto: *</label><input 
+									type="text" id="team-contact-subject" name="contact_subject"
+									placeholder="Motivo de la consulta" required></div>
+							<div class="antigravity-form-group"><label for="team-contact-name">Tu Nombre: *</label><input 
+									type="text" id="team-contact-name" name="contact_name"
+									placeholder="Ej. Juan Pérez" required></div>
+							<div class="antigravity-form-group full-width"><label for="team-contact-message">Mensaje: *</label><textarea 
+									id="team-contact-message" name="contact_message" rows="5"
+									placeholder="Escriba su mensaje aquí..." required></textarea></div>
+							<div class="antigravity-form-group full-width">
+								<label for="team-contact-attachment" style="display: flex; justify-content: space-between;">
+									<span>Archivos Adjuntos (Opcional)</span>
+									<span style="font-size: 0.8em; color: #94a3b8; font-weight: normal;">Máx. Total 15MB (PDF, DOC, DOCX, JPG, PNG)</span>
+								</label>
+								<input type="file" id="team-contact-attachment" name="contact_attachment[]" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png" multiple>
+							</div>
+						</div>
+
+						<div class="antigravity-form-group submit-group" style="text-align: right;"><button type="submit"
+								class="antigravity-btn-submit">Enviar Mensaje</button></div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+	<?php
+}
+add_action('wp_footer', 'antigravity_render_team_contact_modal');
+
+/**
+ * Procesa el envío del formulario de Contacto al Equipo
+ */
+function antigravity_handle_team_contact_form()
+{
+	if (!isset($_POST['antigravity_team_contact_nonce']) || !wp_verify_nonce($_POST['antigravity_team_contact_nonce'], 'antigravity_team_contact_action')) {
+		wp_send_json_error('Fallo de seguridad.');
+	}
+
+	$author_id = isset($_POST['target_author_id']) ? intval($_POST['target_author_id']) : 0;
+	if ($author_id <= 0) {
+		wp_send_json_error('Destinatario no válido.');
+	}
+
+	$target_user = get_userdata($author_id);
+	if (!$target_user || empty($target_user->user_email)) {
+		wp_send_json_error('El profesional seleccionado no está disponible.');
+	}
+
+	$email = sanitize_email($_POST['contact_email'] ?? '');
+	$phone = sanitize_text_field($_POST['contact_phone'] ?? '');
+	$subject_input = sanitize_text_field($_POST['contact_subject'] ?? '');
+	$name = sanitize_text_field($_POST['contact_name'] ?? '');
+	$message = sanitize_textarea_field($_POST['contact_message'] ?? '');
+
+	if (empty($email) || empty($subject_input) || empty($message) || empty($name) || !is_email($email)) {
+		wp_send_json_error('Datos inválidos o incompletos.');
+	}
+
+	$to = $target_user->user_email;
+	$professional_name = $target_user->display_name;
+
+	$subject = 'Mensaje Directo: ' . $subject_input;
+	$body = "
+	<div style='background-color: #0f172a; padding: 40px; font-family: -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, Helvetica, Arial, sans-serif;'>
+		<div style='max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);'>
+			<div style='background-color: #0a2233; padding: 30px; text-align: center; border-bottom: 4px solid #ce9e50;'>
+				<a href='" . esc_url(home_url('/')) . "' target='_blank' style='display: inline-block; text-decoration: none;'>
+					<img src='" . esc_url(get_stylesheet_directory_uri() . '/assets/images/logo-horizontal-oscuro.png') . "' alt='Línea 3 Estudio Legal' style='max-width: 200px; height: auto; border: none;'>
+				</a>
+			</div>
+			<div style='padding: 40px; color: #334155; line-height: 1.6;'>
+				<h2 style='color: #0a2233; margin-top: 0; font-size: 20px; border-bottom: 1px solid #e2e8f0; padding-bottom: 15px;'>Nuevo Mensaje Directo</h2>
+				<p style='color: #475569;'>Hola <strong>" . esc_html($professional_name) . "</strong>, has recibido un mensaje a través de tu perfil en Linea 3.</p>
+				
+				<div style='margin-bottom: 25px;'>
+					<p style='margin: 5px 0;'><strong style='color: #0a2233;'>De:</strong> " . esc_html($name) . " &lt;<a href='mailto:" . esc_attr($email) . "' style='color: #ce9e50; text-decoration: none;'>" . esc_html($email) . "</a>&gt;</p>
+					" . (!empty($phone) ? "<p style='margin: 5px 0;'><strong style='color: #0a2233;'>Teléfono:</strong> " . esc_html($phone) . "</p>" : "") . "
+					<p style='margin: 5px 0;'><strong style='color: #0a2233;'>Asunto:</strong> " . esc_html($subject_input) . "</p>
+				</div>
+
+				<div style='background-color: #f8fafc; padding: 25px; border-left: 4px solid #ce9e50; border-radius: 4px;'>
+					<h3 style='margin-top: 0; margin-bottom: 10px; font-size: 16px; color: #0a2233; text-transform: uppercase; letter-spacing: 0.5px;'>Mensaje</h3>
+					<p style='margin: 0; white-space: pre-wrap; color: #475569;'>" . nl2br(esc_html($message)) . "</p>
+				</div>
+				
+				<div style='margin-top: 40px; padding-top: 20px; border-top: 1px solid #e2e8f0; text-align: center;'>
+					<p style='font-size: 12px; color: #94a3b8; margin: 0;'>Este es un mensaje automático generado desde el portal web de Linea 3 Estudio Legal.</p>
+				</div>
+			</div>
+		</div>
+	</div>";
+	
+	$attachments = array();
+	$uploaded_files = array(); // Para limpiar archivos temporales luego del envío
+
+	// Manejo de archivos adjuntos (Múltiples)
+	if (isset($_FILES['contact_attachment']) && is_array($_FILES['contact_attachment']['name'])) {
+		$files = $_FILES['contact_attachment'];
+		$total_size = 0;
+		$num_files = count($files['name']);
+
+		// Calcular el tamaño total de todos los archivos
+		for ($i = 0; $i < $num_files; $i++) {
+			if ($files['error'][$i] === UPLOAD_ERR_OK) {
+				$total_size += $files['size'][$i];
+			}
+		}
+
+		// Validar tamaño global: 15MB (15 * 1024 * 1024)
+		if ($total_size > 15728640) {
+			wp_send_json_error('El peso total de los archivos adjuntos excede el límite máximo de 15MB.');
+		}
+
+		if (!function_exists('wp_handle_upload')) {
+			require_once(ABSPATH . 'wp-admin/includes/file.php');
+		}
+
+		// Definir mimes permitidos por seguridad
+		$mimes = array(
+			'pdf' => 'application/pdf',
+			'doc' => 'application/msword',
+			'docx' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+			'jpg|jpeg|jpe' => 'image/jpeg',
+			'png' => 'image/png'
+		);
+
+		$upload_overrides = array('test_form' => false, 'mimes' => $mimes);
+
+		// Subir cada archivo temporalmente
+		for ($i = 0; $i < $num_files; $i++) {
+			if ($files['error'][$i] === UPLOAD_ERR_OK) {
+				$single_file = array(
+					'name'     => $files['name'][$i],
+					'type'     => $files['type'][$i],
+					'tmp_name' => $files['tmp_name'][$i],
+					'error'    => $files['error'][$i],
+					'size'     => $files['size'][$i]
+				);
+
+				$movefile = wp_handle_upload($single_file, $upload_overrides);
+
+				if ($movefile && !isset($movefile['error'])) {
+					$attachments[] = $movefile['file'];
+					$uploaded_files[] = $movefile['file']; // Guardar ruta absoluta para borrar luego
+				} else {
+					wp_send_json_error('Error procesando el archivo ' . esc_html($single_file['name']) . ': ' . $movefile['error']);
+				}
+			}
+		}
+	}
+
+	$headers = array('Content-Type: text/html; charset=UTF-8', 'From: Linea 3 Web <no-reply@linea3legal.com>');
+	$mail_sent = wp_mail($to, $subject, $body, $headers, $attachments);
+
+	// Eliminar archivos temporales para no ocupar espacio en el servidor
+	if (!empty($uploaded_files)) {
+		foreach ($uploaded_files as $file_path) {
+			@unlink($file_path);
+		}
+	}
+
+	if ($mail_sent) {
+		wp_send_json_success('Mensaje enviado exitosamente');
+	} else {
+		wp_send_json_error('Error enviando el correo al profesional.');
+	}
+}
+add_action('wp_ajax_nopriv_antigravity_submit_team_contact', 'antigravity_handle_team_contact_form');
+add_action('wp_ajax_antigravity_submit_team_contact', 'antigravity_handle_team_contact_form');
 
 /**
  * Intercepta los correos salientes en desarrollo local.
@@ -484,27 +687,189 @@ function antigravity_register_dynamic_blocks(): void
 }
 add_action('init', 'antigravity_register_dynamic_blocks');
 
-/**
- * Métodos de contacto del usuario.
- */
-function antigravity_add_user_meta_fields($methods): array
-{
-	$methods['antigravity_user_specialty'] = 'Especialidad';
-	$methods['antigravity_user_job_title'] = 'Cargo';
-	$methods['antigravity_user_linkedin'] = 'LinkedIn URL';
-	$methods['antigravity_user_twitter'] = 'Twitter/X URL';
-	return $methods;
-}
-add_filter('user_contactmethods', 'antigravity_add_user_meta_fields');
+	// La función user_contactmethods fue removida para migrar los campos a Información Adicional con mejor control HTML.
 
 /**
  * Añade campos adicionales al perfil (Extracto Profesional)
  */
 function antigravity_show_extra_profile_fields($user)
 {
+	$prefix = get_the_author_meta('antigravity_user_prefix', $user->ID);
+	$specialty = get_the_author_meta('antigravity_user_specialty', $user->ID);
+	$job_title = get_the_author_meta('antigravity_user_job_title', $user->ID);
+	$website = get_the_author_meta('antigravity_user_website', $user->ID);
+	$website_visible = get_the_author_meta('antigravity_user_website_visible', $user->ID);
+	$linkedin = get_the_author_meta('antigravity_user_linkedin', $user->ID);
+	$linkedin_visible = get_the_author_meta('antigravity_user_linkedin_visible', $user->ID);
+	$twitter = get_the_author_meta('antigravity_user_twitter', $user->ID);
+	$twitter_visible = get_the_author_meta('antigravity_user_twitter_visible', $user->ID);
+	$email_visible = get_the_author_meta('antigravity_user_email_visible', $user->ID);
+	$share_visible = get_the_author_meta('antigravity_user_share_visible', $user->ID);
+
+	// Por defecto, si está vacío y hay URL, lo consideramos visible por compatibilidad con versiones anteriores
+	if ($website_visible === '' && !empty($website)) $website_visible = 'yes';
+	if ($linkedin_visible === '' && !empty($linkedin)) $linkedin_visible = 'yes';
+	if ($twitter_visible === '' && !empty($twitter)) $twitter_visible = 'yes';
+	if ($email_visible === '') $email_visible = 'yes';
+	if ($share_visible === '') $share_visible = 'yes';
+
 	?>
+	<style>
+		.l3-switch {
+			position: relative;
+			display: inline-block;
+			width: 40px;
+			height: 24px;
+			vertical-align: middle;
+			margin-left: 10px;
+		}
+		.l3-switch input {
+			opacity: 0;
+			width: 0;
+			height: 0;
+		}
+		.l3-slider {
+			position: absolute;
+			cursor: pointer;
+			top: 0;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			background-color: #ccc;
+			transition: .4s;
+			border-radius: 24px;
+		}
+		.l3-slider:before {
+			position: absolute;
+			content: "";
+			height: 16px;
+			width: 16px;
+			left: 4px;
+			bottom: 4px;
+			background-color: white;
+			transition: .4s;
+			border-radius: 50%;
+		}
+		input:checked + .l3-slider {
+			background-color: #2271b1;
+		}
+		input:checked + .l3-slider:before {
+			transform: translateX(16px);
+		}
+		.l3-toggle-wrap {
+			display: inline-flex;
+			align-items: center;
+			margin-left: 15px;
+			font-size: 13px;
+			color: #646970;
+		}
+	</style>
 	<h3><?php _e('Información Adicional (Linea 3)', 'linea3-legal-child'); ?></h3>
 	<table class="form-table">
+		<tr>
+			<th><label for="antigravity_user_prefix"><?php _e('Prefijo Profesional', 'linea3-legal-child'); ?></label></th>
+			<td>
+				<?php 
+				$prefixes = array(
+					'' => 'Ninguno',
+					'Dr.' => 'Dr.',
+					'Dra.' => 'Dra.',
+					'Sr.' => 'Sr.',
+					'Sra.' => 'Sra.',
+					'Abg.' => 'Abg.',
+					'Abogado' => 'Abogado',
+					'Abogada' => 'Abogada',
+					'Mgtr.' => 'Mgtr.',
+					'Magíster' => 'Magíster',
+					'Esp.' => 'Esp.',
+					'Ph.D.' => 'Ph.D.'
+				);
+				?>
+				<select name="antigravity_user_prefix" id="antigravity_user_prefix">
+					<?php foreach ($prefixes as $val => $label) : ?>
+						<option value="<?php echo esc_attr($val); ?>" <?php selected($prefix, $val); ?>><?php echo esc_html($label); ?></option>
+					<?php endforeach; ?>
+				</select>
+				<p class="description"><?php _e('Aparecerá antes del nombre del profesional.', 'linea3-legal-child'); ?></p>
+			</td>
+		</tr>
+		<tr>
+			<th><label for="antigravity_user_job_title"><?php _e('Cargo', 'linea3-legal-child'); ?></label></th>
+			<td>
+				<input type="text" name="antigravity_user_job_title" id="antigravity_user_job_title" value="<?php echo esc_attr($job_title); ?>" class="regular-text" />
+			</td>
+		</tr>
+		<tr>
+			<th><label for="antigravity_user_specialty"><?php _e('Especialidad', 'linea3-legal-child'); ?></label></th>
+			<td>
+				<input type="text" name="antigravity_user_specialty" id="antigravity_user_specialty" value="<?php echo esc_attr($specialty); ?>" class="regular-text" />
+			</td>
+		</tr>
+		<tr>
+			<th><label for="antigravity_user_website"><?php _e('Sitio Web URL', 'linea3-legal-child'); ?></label></th>
+			<td>
+				<input type="url" name="antigravity_user_website" id="antigravity_user_website" value="<?php echo esc_attr($website); ?>" class="regular-text" />
+				<div class="l3-toggle-wrap">
+					<span>Mostrar Icono:</span>
+					<label class="l3-switch">
+						<input type="checkbox" name="antigravity_user_website_visible" value="yes" <?php checked($website_visible, 'yes'); ?>>
+						<span class="l3-slider"></span>
+					</label>
+				</div>
+			</td>
+		</tr>
+		<tr>
+			<th><label for="antigravity_user_linkedin"><?php _e('LinkedIn URL', 'linea3-legal-child'); ?></label></th>
+			<td>
+				<input type="url" name="antigravity_user_linkedin" id="antigravity_user_linkedin" value="<?php echo esc_attr($linkedin); ?>" class="regular-text" />
+				<div class="l3-toggle-wrap">
+					<span>Mostrar Icono:</span>
+					<label class="l3-switch">
+						<input type="checkbox" name="antigravity_user_linkedin_visible" value="yes" <?php checked($linkedin_visible, 'yes'); ?>>
+						<span class="l3-slider"></span>
+					</label>
+				</div>
+			</td>
+		</tr>
+		<tr>
+			<th><label for="antigravity_user_twitter"><?php _e('Twitter/X URL', 'linea3-legal-child'); ?></label></th>
+			<td>
+				<input type="url" name="antigravity_user_twitter" id="antigravity_user_twitter" value="<?php echo esc_attr($twitter); ?>" class="regular-text" />
+				<div class="l3-toggle-wrap">
+					<span>Mostrar Icono:</span>
+					<label class="l3-switch">
+						<input type="checkbox" name="antigravity_user_twitter_visible" value="yes" <?php checked($twitter_visible, 'yes'); ?>>
+						<span class="l3-slider"></span>
+					</label>
+				</div>
+			</td>
+		</tr>
+		<tr>
+			<th><label><?php _e('Iconos Base', 'linea3-legal-child'); ?></label></th>
+			<td>
+				<div style="margin-bottom: 10px;">
+					<div class="l3-toggle-wrap" style="margin-left: 0;">
+						<span style="display:inline-block; width: 120px;">Icono Correo:</span>
+						<label class="l3-switch">
+							<input type="checkbox" name="antigravity_user_email_visible" value="yes" <?php checked($email_visible, 'yes'); ?>>
+							<span class="l3-slider"></span>
+						</label>
+					</div>
+				</div>
+				<div>
+					<div class="l3-toggle-wrap" style="margin-left: 0;">
+						<span style="display:inline-block; width: 120px;">Icono Compartir:</span>
+						<label class="l3-switch">
+							<input type="checkbox" name="antigravity_user_share_visible" value="yes" <?php checked($share_visible, 'yes'); ?>>
+							<span class="l3-slider"></span>
+						</label>
+					</div>
+				</div>
+				<p class="description">
+					<?php _e('Permite ocultar el botón del formulario de contacto o el botón de compartir enlace.', 'linea3-legal-child'); ?>
+				</p>
+			</td>
+		</tr>
 		<tr>
 			<th><label for="antigravity_user_excerpt"><?php _e('Extracto Profesional', 'linea3-legal-child'); ?></label>
 			</th>
@@ -530,9 +895,38 @@ function antigravity_save_extra_profile_fields($user_id)
 	if (!current_user_can('edit_user', $user_id)) {
 		return false;
 	}
-	if (isset($_POST['antigravity_user_excerpt'])) {
-		update_user_meta($user_id, 'antigravity_user_excerpt', sanitize_textarea_field($_POST['antigravity_user_excerpt']));
+	
+	$fields = array(
+		'antigravity_user_prefix',
+		'antigravity_user_excerpt',
+		'antigravity_user_job_title',
+		'antigravity_user_specialty',
+		'antigravity_user_website',
+		'antigravity_user_linkedin',
+		'antigravity_user_twitter'
+	);
+	
+	foreach ($fields as $field) {
+		if (isset($_POST[$field])) {
+			update_user_meta($user_id, $field, sanitize_text_field($_POST[$field]));
+		}
 	}
+
+	// Toggles (checkboxes: si no están en $_POST, significa que fueron desmarcados)
+	$website_visible = isset($_POST['antigravity_user_website_visible']) ? 'yes' : 'no';
+	update_user_meta($user_id, 'antigravity_user_website_visible', $website_visible);
+
+	$linkedin_visible = isset($_POST['antigravity_user_linkedin_visible']) ? 'yes' : 'no';
+	update_user_meta($user_id, 'antigravity_user_linkedin_visible', $linkedin_visible);
+
+	$twitter_visible = isset($_POST['antigravity_user_twitter_visible']) ? 'yes' : 'no';
+	update_user_meta($user_id, 'antigravity_user_twitter_visible', $twitter_visible);
+
+	$email_visible = isset($_POST['antigravity_user_email_visible']) ? 'yes' : 'no';
+	update_user_meta($user_id, 'antigravity_user_email_visible', $email_visible);
+
+	$share_visible = isset($_POST['antigravity_user_share_visible']) ? 'yes' : 'no';
+	update_user_meta($user_id, 'antigravity_user_share_visible', $share_visible);
 }
 add_action('personal_options_update', 'antigravity_save_extra_profile_fields');
 add_action('edit_user_profile_update', 'antigravity_save_extra_profile_fields');
@@ -670,27 +1064,52 @@ function antigravity_render_team_grid($attributes): string
 			$output .= sprintf('<p class="linea3-team-job-title">%s</p>', esc_html($job_title));
 		}
 
-		$output .= sprintf('<h3 class="linea3-team-name">%s</h3>', esc_html($name));
+		$prefix = get_the_author_meta('antigravity_user_prefix', $user_id);
+		$display_name = !empty($prefix) ? $prefix . ' ' . $name : $name;
+		$output .= sprintf('<h3 class="linea3-team-name">%s</h3>', esc_html($display_name));
 
 		if (!empty($specialty)) {
 			$output .= sprintf('<p class="linea3-team-specialty">%s</p>', esc_html($specialty));
 		}
 
-		// Redes sociales alineadas a la izquierda
+		$website = get_the_author_meta('antigravity_user_website', $user_id);
+		$linkedin = get_the_author_meta('antigravity_user_linkedin', $user_id);
+		$twitter = get_the_author_meta('antigravity_user_twitter', $user_id);
+
+		$website_visible = get_the_author_meta('antigravity_user_website_visible', $user_id);
+		$linkedin_visible = get_the_author_meta('antigravity_user_linkedin_visible', $user_id);
+		$twitter_visible = get_the_author_meta('antigravity_user_twitter_visible', $user_id);
+		$email_visible = get_the_author_meta('antigravity_user_email_visible', $user_id);
+		$share_visible = get_the_author_meta('antigravity_user_share_visible', $user_id);
+
+		// Retrocompatibilidad: Si el valor de visibilidad nunca se guardó, se muestra
+		if ($website_visible === '' && !empty($website)) $website_visible = 'yes';
+		if ($linkedin_visible === '' && !empty($linkedin)) $linkedin_visible = 'yes';
+		if ($twitter_visible === '' && !empty($twitter)) $twitter_visible = 'yes';
+		if ($email_visible === '') $email_visible = 'yes';
+		if ($share_visible === '') $share_visible = 'yes';
+
 		$output .= '<div class="linea3-team-socials">';
 		$output .= '<div class="linea3-team-social-icons">';
 
-		$output .= '<span class="linea3-team-icon-share"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg></span>';
-
-		if (!empty($user->user_email)) {
-			$output .= sprintf('<a href="mailto:%s" class="linea3-team-icon-email" aria-label="Email"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg></a>', esc_attr($user->user_email));
+		if ($share_visible === 'yes') {
+			$output .= '<span class="linea3-team-icon-share"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg></span>';
 		}
 
-		if (!empty($linkedin)) {
+		if (!empty($user->user_email) && $email_visible === 'yes') {
+			// Se reemplaza el enlace mailto para evitar exponer el correo electrónico
+			$output .= sprintf('<a href="#" class="linea3-team-icon-email linea3-team-contact-btn" data-author-id="%d" data-author-name="%s" data-author-image="%s" aria-label="Contactar a %s"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg></a>', $user_id, esc_attr($name), esc_url($avatar_url), esc_attr($name));
+		}
+
+		if (!empty($website) && $website_visible === 'yes') {
+			$output .= sprintf('<a href="%s" target="_blank" rel="noopener noreferrer" class="linea3-team-icon-website" aria-label="Sitio Web"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg></a>', esc_url($website));
+		}
+
+		if (!empty($linkedin) && $linkedin_visible === 'yes') {
 			$output .= sprintf('<a href="%s" target="_blank" rel="noopener noreferrer" class="linea3-team-icon-linkedin" aria-label="LinkedIn"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg></a>', esc_url($linkedin));
 		}
 
-		if (!empty($twitter)) {
+		if (!empty($twitter) && $twitter_visible === 'yes') {
 			$output .= sprintf('<a href="%s" target="_blank" rel="noopener noreferrer" class="linea3-team-icon-twitter" aria-label="Twitter"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"></path></svg></a>', esc_url($twitter));
 		}
 

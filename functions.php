@@ -697,6 +697,11 @@ function antigravity_show_extra_profile_fields($user)
 	$prefix = get_the_author_meta('antigravity_user_prefix', $user->ID);
 	$specialty = get_the_author_meta('antigravity_user_specialty', $user->ID);
 	$job_title = get_the_author_meta('antigravity_user_job_title', $user->ID);
+	$quote = get_the_author_meta('antigravity_user_quote', $user->ID);
+	$quote_visible = get_the_author_meta('antigravity_user_quote_visible', $user->ID);
+	$focus = get_the_author_meta('antigravity_user_focus', $user->ID);
+	$focus_visible = get_the_author_meta('antigravity_user_focus_visible', $user->ID);
+	$languages = get_the_author_meta('antigravity_user_languages', $user->ID);
 	$website = get_the_author_meta('antigravity_user_website', $user->ID);
 	$website_visible = get_the_author_meta('antigravity_user_website_visible', $user->ID);
 	$linkedin = get_the_author_meta('antigravity_user_linkedin', $user->ID);
@@ -707,6 +712,8 @@ function antigravity_show_extra_profile_fields($user)
 	$share_visible = get_the_author_meta('antigravity_user_share_visible', $user->ID);
 
 	// Por defecto, si está vacío y hay URL, lo consideramos visible por compatibilidad con versiones anteriores
+	if ($quote_visible === '' && !empty($quote)) $quote_visible = 'yes';
+	if ($focus_visible === '' && !empty($focus)) $focus_visible = 'yes';
 	if ($website_visible === '' && !empty($website)) $website_visible = 'yes';
 	if ($linkedin_visible === '' && !empty($linkedin)) $linkedin_visible = 'yes';
 	if ($twitter_visible === '' && !empty($twitter)) $twitter_visible = 'yes';
@@ -881,6 +888,41 @@ function antigravity_show_extra_profile_fields($user)
 				</p>
 			</td>
 		</tr>
+		<tr>
+			<th><label for="antigravity_user_quote"><?php _e('Cita Destacada', 'linea3-legal-child'); ?></label></th>
+			<td>
+				<input type="text" name="antigravity_user_quote" id="antigravity_user_quote" value="<?php echo esc_attr($quote); ?>" class="regular-text" style="width: 100%;" />
+				<div class="l3-toggle-wrap">
+					<span>Mostrar Cita:</span>
+					<label class="l3-switch">
+						<input type="checkbox" name="antigravity_user_quote_visible" value="yes" <?php checked($quote_visible, 'yes'); ?>>
+						<span class="l3-slider"></span>
+					</label>
+				</div>
+				<p class="description"><?php _e('Ej: "La excelencia jurídica no es un acto..."', 'linea3-legal-child'); ?></p>
+			</td>
+		</tr>
+		<tr>
+			<th><label for="antigravity_user_focus"><?php _e('Enfoque Principal', 'linea3-legal-child'); ?></label></th>
+			<td>
+				<textarea name="antigravity_user_focus" id="antigravity_user_focus" rows="3" cols="30" style="width: 100%;"><?php echo esc_textarea($focus); ?></textarea>
+				<div class="l3-toggle-wrap" style="margin-top: 10px;">
+					<span>Mostrar Enfoque:</span>
+					<label class="l3-switch">
+						<input type="checkbox" name="antigravity_user_focus_visible" value="yes" <?php checked($focus_visible, 'yes'); ?>>
+						<span class="l3-slider"></span>
+					</label>
+				</div>
+				<p class="description"><?php _e('Ej: Litigios de Alta Complejidad', 'linea3-legal-child'); ?></p>
+			</td>
+		</tr>
+		<tr>
+			<th><label for="antigravity_user_languages"><?php _e('Idiomas', 'linea3-legal-child'); ?></label></th>
+			<td>
+				<textarea name="antigravity_user_languages" id="antigravity_user_languages" rows="3" cols="30" style="width: 100%;"><?php echo esc_textarea($languages); ?></textarea>
+				<p class="description"><?php _e('Uno por línea. Ej: Español (Nativo)\nInglés (Avanzado)', 'linea3-legal-child'); ?></p>
+			</td>
+		</tr>
 	</table>
 	<?php
 }
@@ -901,6 +943,9 @@ function antigravity_save_extra_profile_fields($user_id)
 		'antigravity_user_excerpt',
 		'antigravity_user_job_title',
 		'antigravity_user_specialty',
+		'antigravity_user_quote',
+		'antigravity_user_focus',
+		'antigravity_user_languages',
 		'antigravity_user_website',
 		'antigravity_user_linkedin',
 		'antigravity_user_twitter'
@@ -908,11 +953,17 @@ function antigravity_save_extra_profile_fields($user_id)
 	
 	foreach ($fields as $field) {
 		if (isset($_POST[$field])) {
-			update_user_meta($user_id, $field, sanitize_text_field($_POST[$field]));
+			update_user_meta($user_id, $field, sanitize_textarea_field($_POST[$field]));
 		}
 	}
 
 	// Toggles (checkboxes: si no están en $_POST, significa que fueron desmarcados)
+	$quote_visible = isset($_POST['antigravity_user_quote_visible']) ? 'yes' : 'no';
+	update_user_meta($user_id, 'antigravity_user_quote_visible', $quote_visible);
+
+	$focus_visible = isset($_POST['antigravity_user_focus_visible']) ? 'yes' : 'no';
+	update_user_meta($user_id, 'antigravity_user_focus_visible', $focus_visible);
+
 	$website_visible = isset($_POST['antigravity_user_website_visible']) ? 'yes' : 'no';
 	update_user_meta($user_id, 'antigravity_user_website_visible', $website_visible);
 
@@ -983,19 +1034,42 @@ add_shortcode('antigravity_post_author_box', 'antigravity_post_author_box_shortc
 /**
  * Renderizado de Publicaciones Relacionadas.
  */
+/**
+ * Helper function to render the related posts section.
+ */
+function antigravity_get_related_posts_html($author_id, $current_post_id = 0) {
+    $args = array(
+        'post_type' => 'post',
+        'posts_per_page' => 3,
+        'author' => $author_id,
+        'orderby' => 'date',
+        'order' => 'DESC'
+    );
+    if ($current_post_id) {
+        $args['post__not_in'] = array($current_post_id);
+    }
+    
+    $posts = get_posts($args);
+    if (empty($posts)) return '';
+
+    $author_posts_url = get_author_posts_url($author_id);
+    $output = '<!-- ANTIGRAVITY_START --><section class="related-posts-section"><div class="related-posts-header"><div class="section-vertical-line"></div><div class="related-header-content"><div class="related-header-top"><span class="related-subtitle">MÁS DEL MISMO AUTOR</span><a href="' . esc_url($author_posts_url) . '" class="view-all-link">Ver todas sus publicaciones</a></div><div class="related-header-main"><h2 class="related-title">Publicaciones Relacionadas</h2></div></div></div><div class="blog-listing-wrapper"><div class="antigravity-grid is-layout-grid columns-3">';
+    foreach ($posts as $p) {
+        $output .= sprintf('<div class="antigravity-card" onclick="window.location=\'%s\'"><article class="wp-block-group"><div class="wp-block-post-featured-image">%s</div><div class="antigravity-card-content"><div class="wp-block-post-terms">%s</div><h3 class="wp-block-post-title">%s</h3>%s</div></article></div>', get_permalink($p->ID), antigravity_get_post_thumbnail_html($p->ID, 'medium_large', array('class' => 'related-post-img')), get_the_term_list($p->ID, 'category', '', ' ', ''), get_the_title($p->ID), antigravity_get_author_card_html($author_id, $p->ID));
+    }
+    $output .= '</div></div></section><!-- ANTIGRAVITY_END -->';
+    return preg_replace('/>\s+</', '><', $output);
+}
+
+/**
+ * Renderizado de Publicaciones Relacionadas.
+ */
 function antigravity_related_posts_shortcode()
 {
 	if (!is_singular('post'))
 		return '';
-	$posts = get_posts(array('post_type' => 'post', 'posts_per_page' => 3, 'post__not_in' => array(get_the_ID()), 'author' => get_post_field('post_author', get_the_ID()), 'orderby' => 'date', 'order' => 'DESC'));
-	if (empty($posts))
-		return '';
 	$author_id = (int) get_post_field('post_author', get_the_ID());
-	$output = '<!-- ANTIGRAVITY_START --><section class="related-posts-section"><div class="related-posts-header"><div class="section-vertical-line"></div><div class="related-header-content"><div class="related-header-top"><span class="related-subtitle">MÁS DEL MISMO AUTOR</span><a href="' . esc_url(get_author_posts_url($author_id)) . '" class="view-all-link">Ver todas sus publicaciones</a></div><div class="related-header-main"><h2 class="related-title">Publicaciones Relacionadas</h2></div></div></div><div class="blog-listing-wrapper"><div class="antigravity-grid is-layout-grid columns-3">';
-	foreach ($posts as $p) {
-		$output .= sprintf('<div class="antigravity-card" onclick="window.location=\'%s\'"><article class="wp-block-group"><div class="wp-block-post-featured-image">%s</div><div class="antigravity-card-content"><div class="wp-block-post-terms">%s</div><h3 class="wp-block-post-title">%s</h3>%s</div></article></div>', get_permalink($p->ID), antigravity_get_post_thumbnail_html($p->ID, 'medium_large', array('class' => 'related-post-img')), get_the_term_list($p->ID, 'category', '', ' ', ''), get_the_title($p->ID), antigravity_get_author_card_html($author_id, $p->ID));
-	}
-	return $output . '</div></div></section><!-- ANTIGRAVITY_END -->';
+	return antigravity_get_related_posts_html($author_id, get_the_ID());
 }
 add_shortcode('antigravity_related_posts', 'antigravity_related_posts_shortcode');
 
@@ -1048,13 +1122,17 @@ function antigravity_render_team_grid($attributes): string
 
 		$output .= '<div class="linea3-team-card">';
 
+		$author_url = get_author_posts_url($user_id);
+		
 		// Imagen (Cuadrada/Rectangular con padding CSS)
 		$output .= '<div class="linea3-team-card-image-wrap">';
+		$output .= '<a href="' . esc_url($author_url) . '">';
 		$output .= sprintf(
 			'<img src="%s" alt="%s" class="linea3-team-card-image" />',
 			esc_url($avatar_url),
 			esc_attr($name)
 		);
+		$output .= '</a>';
 		$output .= '</div>';
 
 		// Contenido interno alineado a la izquierda
@@ -1066,7 +1144,7 @@ function antigravity_render_team_grid($attributes): string
 
 		$prefix = get_the_author_meta('antigravity_user_prefix', $user_id);
 		$display_name = !empty($prefix) ? $prefix . ' ' . $name : $name;
-		$output .= sprintf('<h3 class="linea3-team-name">%s</h3>', esc_html($display_name));
+		$output .= sprintf('<h3 class="linea3-team-name"><a href="%s" style="color:inherit; text-decoration:none;">%s</a></h3>', esc_url($author_url), esc_html($display_name));
 
 		if (!empty($specialty)) {
 			$output .= sprintf('<p class="linea3-team-specialty">%s</p>', esc_html($specialty));
@@ -1754,3 +1832,155 @@ function l3_allies_grid_shortcode($atts): string
 	return $output;
 }
 add_shortcode('antigravity_allies_grid', 'l3_allies_grid_shortcode');
+
+/**
+ * Shortcode [antigravity_author_profile] para renderizar el perfil detallado del usuario.
+ */
+function antigravity_author_profile_shortcode($atts) {
+    if (!is_author()) {
+        return '';
+    }
+    
+    $author_id = get_queried_object_id();
+    $user = get_userdata($author_id);
+    
+    if (!$user) {
+        return '';
+    }
+
+    $prefix = get_the_author_meta('antigravity_user_prefix', $author_id);
+    $name = $user->display_name;
+    $display_name = !empty($prefix) ? $prefix . ' ' . $name : $name;
+    
+    $job_title = get_the_author_meta('antigravity_user_job_title', $author_id);
+    if (empty($job_title)) {
+        // Fallback al rol o algo por defecto si está vacío, pero mejor vacío.
+        $job_title = 'Especialista Legal';
+    }
+    
+    $quote = get_the_author_meta('antigravity_user_quote', $author_id);
+    $quote_visible = get_the_author_meta('antigravity_user_quote_visible', $author_id);
+    if ($quote_visible === '' && !empty($quote)) {
+        $quote_visible = 'yes';
+    }
+    
+    // Trayectoria construida desde Información Biográfica (description) y Extracto Profesional
+    $bio = $user->description;
+    $excerpt = get_the_author_meta('antigravity_user_excerpt', $author_id);
+    
+    $focus = get_the_author_meta('antigravity_user_focus', $author_id);
+    $focus_visible = get_the_author_meta('antigravity_user_focus_visible', $author_id);
+    if ($focus_visible === '' && !empty($focus)) {
+        $focus_visible = 'yes';
+    }
+    
+    $languages = get_the_author_meta('antigravity_user_languages', $author_id);
+    
+    $avatar_url = get_avatar_url($author_id, array('size' => 800));
+    
+    ob_start();
+    ?>
+    <!-- ANTIGRAVITY_START -->
+    <div class="l3-author-profile-wrapper l3-container-standard">
+        
+        <!-- Header del Perfil -->
+        <div class="l3-author-profile-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 60px; gap: 60px;">
+            <div class="l3-author-profile-title-col">
+                <p class="l3-author-role-eyebrow"><?php echo esc_html($job_title); ?></p>
+                <h1 class="l3-author-name-huge"><?php echo esc_html($display_name); ?></h1>
+                
+                <?php if (!empty($quote) && $quote_visible === 'yes'): ?>
+                <div class="l3-author-quote-wrapper" style="display: flex; align-items: stretch; gap: 15px; margin-top: 25px;">
+                    <div class="section-vertical-line" style="width: 2px; background: var(--wp--preset--color--primary); flex-shrink: 0;"></div>
+                    <p class="l3-author-quote-text" style="margin: 0; font-style: italic; color: rgba(255, 255, 255, 0.7); line-height: 1.6; font-size: 1.1rem;"><?php echo esc_html($quote); ?></p>
+                </div>
+                <?php endif; ?>
+            </div>
+
+            <div class="l3-author-profile-separator" style="width: 1px; align-self: stretch; background: rgba(255, 255, 255, 0.1); margin: 20px 0;"></div>
+            <div class="l3-author-profile-image-col">
+                <div class="l3-author-image-frame">
+                    <img src="<?php echo esc_url($avatar_url); ?>" alt="<?php echo esc_attr($display_name); ?>" class="l3-author-image" />
+                    <div class="l3-author-image-accent">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M4 4h16v16H4V4z" stroke="currentColor" stroke-width="2"/>
+                            <path d="M4 12h16M12 4v16" stroke="currentColor" stroke-width="2" opacity="0.3"/>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contenido del Perfil -->
+        <div class="l3-author-profile-content">
+            <?php 
+            $has_sidebar_content = (!empty($focus) && $focus_visible === 'yes') || !empty($languages);
+            if ($has_sidebar_content): 
+            ?>
+            <div class="l3-author-sidebar">
+                <div class="l3-sidebar-title-wrapper" style="margin-bottom: 30px;">
+                    <h2 class="l3-sidebar-title" style="margin: 0; font-size: 1.5rem; color: var(--wp--preset--color--primary); text-transform: uppercase; letter-spacing: 1px;">Trayectoria y Visión</h2>
+                </div>
+                
+                <?php if (!empty($focus) && $focus_visible === 'yes'): ?>
+                <div class="l3-sidebar-block l3-focus-block">
+                    <h3 class="l3-sidebar-subtitle">ENFOQUE PRINCIPAL</h3>
+                    <div class="l3-sidebar-text"><?php echo wpautop(esc_html($focus)); ?></div>
+                </div>
+                <?php endif; ?>
+                
+                <?php if (!empty($languages)): ?>
+                <div class="l3-sidebar-block l3-languages-block">
+                    <h3 class="l3-sidebar-subtitle">IDIOMAS</h3>
+                    <ul class="l3-languages-list">
+                        <?php 
+                        $langs = explode("\n", $languages);
+                        foreach($langs as $lang) {
+                            if (trim($lang) !== '') {
+                                echo '<li><span class="l3-lang-bullet"></span>' . esc_html(trim($lang)) . '</li>';
+                            }
+                        }
+                        ?>
+                    </ul>
+                </div>
+                <?php endif; ?>
+            </div>
+            <?php endif; ?>
+            
+            <div class="l3-author-main-text">
+                <div class="l3-trajectory-text">
+                    <?php if (!empty($bio)): ?>
+                        <p><?php echo nl2br(esc_html($bio)); ?></p>
+                    <?php endif; ?>
+                    
+                    <?php if (!empty($excerpt)): ?>
+                        <p class="l3-trajectory-excerpt" style="margin-top: 30px; color: rgba(255, 255, 255, 0.6); font-size: 0.95em;"><?php echo nl2br(esc_html($excerpt)); ?></p>
+                    <?php endif; ?>
+                </div>
+            </div>
+        </div>
+        </div>
+        
+    </div>
+    <!-- ANTIGRAVITY_END -->
+    <?php
+    $output = ob_get_clean();
+    return preg_replace('/>\s+</', '><', $output);
+}
+add_shortcode('antigravity_author_profile', 'antigravity_author_profile_shortcode');
+
+/**
+ * Shortcode to render the publication section header in author profile.
+ */
+/**
+ * Shortcode to render the entire publication section in author profile.
+ * Identical to the single post related posts section.
+ */
+function antigravity_author_publications_section_shortcode() {
+    $author = get_queried_object();
+    if (!$author || !isset($author->ID)) {
+        return '';
+    }
+    return antigravity_get_related_posts_html($author->ID);
+}
+add_shortcode('antigravity_author_publications_section', 'antigravity_author_publications_section_shortcode');

@@ -1529,6 +1529,7 @@ html body .blog-listing-wrapper .wp-block-post-template.is-layout-grid {
     padding: 0 !important;
     margin: 0 !important;
     list-style: none !important;
+    align-items: start !important;
 }
 
 /* Tablet (Breakpoint: 768px) */
@@ -1554,7 +1555,7 @@ html body .blog-listing-wrapper .wp-block-post-template.is-layout-grid {
 .blog-listing-wrapper .wp-block-post {
     display: flex !important;
     flex-direction: column !important;
-    height: 100% !important;
+    height: auto !important;
     background: transparent !important;
     border: none !important;
     box-shadow: none !important;
@@ -1584,6 +1585,7 @@ html body .blog-listing-wrapper .wp-block-post-template.is-layout-grid {
     aspect-ratio: 16/9 !important;
     object-fit: cover !important;
     width: 100% !important;
+    height: auto !important;
     display: block !important;
     filter: grayscale(100%) brightness(0.8) !important;
     /* Estado inicial como en Team */
@@ -2129,9 +2131,8 @@ main.single-post-layout-pro {
 .related-posts-section {
     width: 90%;
     max-width: 1200px;
-    margin: 80px auto;
-    padding-top: 80px;
-    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    margin: 40px auto;
+    padding-top: 60px;
 }
 
 .related-posts-header {
@@ -3026,4 +3027,306 @@ main.single-post-layout-pro {
     background-color: #e2e8f0;
     border-color: #94a3b8;
     color: #ce9e50;
+}
+
+/* ==========================================================================
+   PERFIL DETALLADO DE AUTOR (AUTHOR PROFILE)
+   ========================================================================== */
+
+.l3-author-profile-wrapper {
+    margin: 60px auto;
+    color: #ffffff;
+}
+
+/* Header */
+.l3-author-profile-header {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 40px;
+    align-items: center;
+    margin-bottom: 60px;
+    padding-bottom: 40px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.l3-author-profile-title-col {
+    flex: 1 1 500px;
+    border-left: 2px solid #ce9e50;
+    padding-left: 25px;
+}
+
+.l3-author-role-eyebrow {
+    color: #ce9e50;
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 15px;
+    font-style: italic;
+}
+
+.l3-author-name-huge {
+    font-family: var(--wp--preset--font-family--serif);
+    font-size: clamp(3rem, 5vw, 4.5rem);
+    line-height: 1.1;
+    margin: 0 0 30px 0;
+    font-weight: 700;
+}
+
+.l3-author-quote-wrapper {
+    margin-top: 30px;
+}
+
+.l3-author-quote-text {
+    font-size: 1.25rem;
+    font-style: italic;
+    color: rgba(255, 255, 255, 0.9);
+    line-height: 1.6;
+    margin: 0;
+}
+
+.l3-author-profile-image-col {
+    flex: 0 1 450px;
+    display: flex;
+    justify-content: center;
+}
+
+.l3-author-image-frame {
+    position: relative;
+    padding: 15px;
+    border: 1px solid rgba(206, 158, 80, 0.5); /* Gold border */
+    border-radius: 8px;
+    background-color: var(--wp--preset--color--base);
+}
+
+.l3-author-image {
+    display: block;
+    width: 100%;
+    max-width: 400px;
+    height: auto;
+    aspect-ratio: 1/1;
+    object-fit: cover;
+    border-radius: 4px;
+}
+
+.l3-author-image-accent {
+    position: absolute;
+    bottom: -15px;
+    right: -15px;
+    width: 50px;
+    height: 50px;
+    background-color: #ce9e50;
+    color: var(--wp--preset--color--base);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+}
+
+/* Content Columns */
+.l3-author-profile-content {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 60px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.l3-author-sidebar {
+    flex: 0 1 300px;
+}
+
+.l3-sidebar-title {
+    font-family: var(--wp--preset--font-family--serif);
+    color: #ce9e50;
+    font-size: 2rem;
+    margin-bottom: 40px;
+    font-weight: 600;
+}
+
+.l3-sidebar-block {
+    margin-bottom: 40px;
+    border-left: 3px solid #ce9e50;
+    padding: 25px 20px;
+    background-color: #0d1b2a; /* Slightly lighter than the main dark background */
+    border-radius: 0 4px 4px 0;
+}
+
+.l3-sidebar-subtitle {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: rgba(255, 255, 255, 0.4);
+    margin-bottom: 15px;
+}
+
+.l3-sidebar-text {
+    font-size: 1.05rem;
+    line-height: 1.6;
+    color: #ffffff;
+    font-family: var(--wp--preset--font-family--serif);
+}
+
+.l3-languages-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.l3-languages-list li {
+    font-size: 0.95rem;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+}
+
+.l3-lang-bullet {
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    background-color: #ce9e50;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.l3-author-main-text {
+    flex: 1 1 500px;
+}
+
+.l3-trajectory-text {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: rgba(255, 255, 255, 0.85);
+}
+
+.l3-trajectory-text > p:first-of-type::first-letter {
+    float: left;
+    font-family: var(--wp--preset--font-family--serif);
+    font-size: 5rem;
+    line-height: 0.8;
+    color: #ce9e50;
+    padding-right: 15px;
+    padding-top: 10px;
+}
+
+
+
+@media (max-width: 768px) {
+    .l3-author-profile-header, .l3-author-profile-content {
+        gap: 30px;
+    }
+    .l3-author-profile-title-col, .l3-author-profile-image-col {
+        flex: 1 1 100%;
+    }
+    .l3-author-image-frame {
+        width: 100%;
+    }
+    .l3-trajectory-text > p:first-of-type::first-letter {
+        font-size: 4rem;
+    }
+}
+
+/* ==========================================================================
+   HORIZONTAL CARDS (AUTHOR PROFILE)
+   ========================================================================== */
+
+.l3-horizontal-card {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: stretch !important;
+    background: #020914 !important;
+    border-radius: 4px !important;
+    overflow: hidden !important;
+    margin-bottom: 30px !important;
+    transition: all 0.4s ease !important;
+    height: 320px !important; /* Altura uniforme para todas las cards */
+}
+
+.l3-horizontal-card:hover {
+    transform: translateY(-8px) !important;
+}
+
+.l3-horizontal-card .wp-block-post-featured-image {
+    flex: 0 0 40% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.l3-horizontal-card .wp-block-post-featured-image a {
+    display: block !important;
+    height: 100% !important;
+    width: 100% !important;
+}
+
+.l3-horizontal-card .wp-block-post-featured-image img {
+    height: 100% !important;
+    width: 100% !important;
+    object-fit: cover !important;
+    aspect-ratio: auto !important;
+    min-height: 250px !important;
+    filter: grayscale(100%) brightness(0.8) !important;
+    transition: all 0.5s ease !important;
+}
+
+.l3-horizontal-card:hover .wp-block-post-featured-image img {
+    filter: grayscale(0%) brightness(1) !important;
+}
+
+.l3-horizontal-card .antigravity-card-content {
+    flex: 1 1 60% !important;
+    margin-top: 0 !important;
+    overflow: hidden !important; /* Previene desbordamiento si el título es muy largo */
+}
+
+/* Ajustes para el contenido de la card */
+.l3-horizontal-card .antigravity-card-content {
+    flex: 1 1 60% !important;
+    margin-top: 0 !important;
+    overflow: hidden !important; 
+}
+
+/* Link "VER TODAS" en el encabezado */
+.l3-view-all-link {
+    color: #c19b5a !important;
+    text-decoration: none !important;
+    font-size: 13px !important;
+    font-weight: 700 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 1px !important;
+    border-bottom: 1px solid rgba(193, 155, 90, 0.4) !important;
+    padding-bottom: 5px !important;
+    transition: all 0.3s ease !important;
+    display: inline-block !important;
+}
+
+.l3-view-all-link:hover {
+    color: #FFFFFF !important;
+    border-bottom-color: #FFFFFF !important;
+}
+
+@media (max-width: 768px) {
+    .team-header-content {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 20px !important;
+    }
+    .team-header-right {
+        width: 100% !important;
+        text-align: left !important;
+    }
+}
+
+@media (max-width: 768px) {
+    .l3-horizontal-card {
+        flex-direction: column !important;
+        height: auto !important; /* Permitir que crezca en móvil */
+    }
+    .l3-horizontal-card .wp-block-post-featured-image {
+        flex: 0 0 auto !important;
+    }
+    .l3-horizontal-card .wp-block-post-featured-image img {
+        aspect-ratio: 16/9 !important;
+        min-height: auto !important;
+        height: auto !important;
+    }
 }

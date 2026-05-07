@@ -815,39 +815,60 @@ function antigravity_show_extra_profile_fields($user)
 		<tr>
 			<th><label for="antigravity_user_website"><?php _e('Sitio Web URL', 'linea3-legal-child'); ?></label></th>
 			<td>
-				<input type="url" name="antigravity_user_website" id="antigravity_user_website" value="<?php echo esc_attr($website); ?>" class="regular-text" />
-				<div class="l3-toggle-wrap">
-					<span>Mostrar Icono:</span>
-					<label class="l3-switch">
-						<input type="checkbox" name="antigravity_user_website_visible" value="yes" <?php checked($website_visible, 'yes'); ?>>
-						<span class="l3-slider"></span>
-					</label>
+				<div style="display: flex; align-items: center; gap: 20px;">
+					<input type="url" name="antigravity_user_website" id="antigravity_user_website" value="<?php echo esc_attr($website); ?>" class="regular-text" />
+					<div class="l3-toggle-wrap" style="margin: 0;">
+						<span style="font-size: 12px; opacity: 0.7;">Mostrar Icono:</span>
+						<label class="l3-switch">
+							<input type="checkbox" name="antigravity_user_website_visible" value="yes" <?php checked($website_visible, 'yes'); ?>>
+							<span class="l3-slider"></span>
+						</label>
+					</div>
 				</div>
 			</td>
 		</tr>
 		<tr>
 			<th><label for="antigravity_user_linkedin"><?php _e('LinkedIn URL', 'linea3-legal-child'); ?></label></th>
 			<td>
-				<input type="url" name="antigravity_user_linkedin" id="antigravity_user_linkedin" value="<?php echo esc_attr($linkedin); ?>" class="regular-text" />
-				<div class="l3-toggle-wrap">
-					<span>Mostrar Icono:</span>
-					<label class="l3-switch">
-						<input type="checkbox" name="antigravity_user_linkedin_visible" value="yes" <?php checked($linkedin_visible, 'yes'); ?>>
-						<span class="l3-slider"></span>
-					</label>
+				<div style="display: flex; align-items: center; gap: 20px;">
+					<input type="url" name="antigravity_user_linkedin" id="antigravity_user_linkedin" value="<?php echo esc_attr($linkedin); ?>" class="regular-text" />
+					<div class="l3-toggle-wrap" style="margin: 0;">
+						<span style="font-size: 12px; opacity: 0.7;">Mostrar Icono:</span>
+						<label class="l3-switch">
+							<input type="checkbox" name="antigravity_user_linkedin_visible" value="yes" <?php checked($linkedin_visible, 'yes'); ?>>
+							<span class="l3-slider"></span>
+						</label>
+					</div>
 				</div>
 			</td>
 		</tr>
 		<tr>
 			<th><label for="antigravity_user_twitter"><?php _e('Twitter/X URL', 'linea3-legal-child'); ?></label></th>
 			<td>
-				<input type="url" name="antigravity_user_twitter" id="antigravity_user_twitter" value="<?php echo esc_attr($twitter); ?>" class="regular-text" />
-				<div class="l3-toggle-wrap">
-					<span>Mostrar Icono:</span>
-					<label class="l3-switch">
-						<input type="checkbox" name="antigravity_user_twitter_visible" value="yes" <?php checked($twitter_visible, 'yes'); ?>>
-						<span class="l3-slider"></span>
-					</label>
+				<div style="display: flex; align-items: center; gap: 20px;">
+					<input type="url" name="antigravity_user_twitter" id="antigravity_user_twitter" value="<?php echo esc_attr($twitter); ?>" class="regular-text" />
+					<div class="l3-toggle-wrap" style="margin: 0;">
+						<span style="font-size: 12px; opacity: 0.7;">Mostrar Icono:</span>
+						<label class="l3-switch">
+							<input type="checkbox" name="antigravity_user_twitter_visible" value="yes" <?php checked($twitter_visible, 'yes'); ?>>
+							<span class="l3-slider"></span>
+						</label>
+					</div>
+				</div>
+			</td>
+		</tr>
+		<tr>
+			<th><label for="antigravity_user_whatsapp"><?php _e('WhatsApp Number', 'linea3-legal-child'); ?></label></th>
+			<td>
+				<div style="display: flex; align-items: center; gap: 20px;">
+					<input type="text" name="antigravity_user_whatsapp" id="antigravity_user_whatsapp" value="<?php echo esc_attr(get_the_author_meta('antigravity_user_whatsapp', $user->ID)); ?>" class="regular-text" placeholder="Ej: +573001234567" />
+					<div class="l3-toggle-wrap" style="margin: 0;">
+						<span style="font-size: 12px; opacity: 0.7;">Mostrar Icono:</span>
+						<label class="l3-switch">
+							<input type="checkbox" name="antigravity_user_whatsapp_visible" value="yes" <?php checked(get_the_author_meta('antigravity_user_whatsapp_visible', $user->ID), 'yes'); ?>>
+							<span class="l3-slider"></span>
+						</label>
+					</div>
 				</div>
 			</td>
 		</tr>
@@ -881,8 +902,7 @@ function antigravity_show_extra_profile_fields($user)
 			<th><label for="antigravity_user_excerpt"><?php _e('Extracto Profesional', 'linea3-legal-child'); ?></label>
 			</th>
 			<td>
-				<textarea name="antigravity_user_excerpt" id="antigravity_user_excerpt" rows="5"
-					cols="30"><?php echo esc_textarea(get_the_author_meta('antigravity_user_excerpt', $user->ID)); ?></textarea>
+				<textarea name="antigravity_user_excerpt" id="antigravity_user_excerpt" rows="5" cols="30" class="large-text" style="width: 25em; max-width: 100%;"><?php echo esc_textarea(get_the_author_meta('antigravity_user_excerpt', $user->ID)); ?></textarea>
 				<p class="description">
 					<?php _e('Breve descripción que aparece en la tarjeta del profesional.', 'linea3-legal-child'); ?>
 				</p>
@@ -891,13 +911,15 @@ function antigravity_show_extra_profile_fields($user)
 		<tr>
 			<th><label for="antigravity_user_quote"><?php _e('Cita Destacada', 'linea3-legal-child'); ?></label></th>
 			<td>
-				<input type="text" name="antigravity_user_quote" id="antigravity_user_quote" value="<?php echo esc_attr($quote); ?>" class="regular-text" style="width: 100%;" />
-				<div class="l3-toggle-wrap">
-					<span>Mostrar Cita:</span>
-					<label class="l3-switch">
-						<input type="checkbox" name="antigravity_user_quote_visible" value="yes" <?php checked($quote_visible, 'yes'); ?>>
-						<span class="l3-slider"></span>
-					</label>
+				<div style="display: flex; align-items: center; gap: 20px;">
+					<input type="text" name="antigravity_user_quote" id="antigravity_user_quote" value="<?php echo esc_attr($quote); ?>" class="regular-text" />
+					<div class="l3-toggle-wrap" style="margin: 0;">
+						<span style="font-size: 12px; opacity: 0.7;">Mostrar Cita:</span>
+						<label class="l3-switch">
+							<input type="checkbox" name="antigravity_user_quote_visible" value="yes" <?php checked($quote_visible, 'yes'); ?>>
+							<span class="l3-slider"></span>
+						</label>
+					</div>
 				</div>
 				<p class="description"><?php _e('Ej: "La excelencia jurídica no es un acto..."', 'linea3-legal-child'); ?></p>
 			</td>
@@ -905,9 +927,9 @@ function antigravity_show_extra_profile_fields($user)
 		<tr>
 			<th><label for="antigravity_user_focus"><?php _e('Enfoque Principal', 'linea3-legal-child'); ?></label></th>
 			<td>
-				<textarea name="antigravity_user_focus" id="antigravity_user_focus" rows="3" cols="30" style="width: 100%;"><?php echo esc_textarea($focus); ?></textarea>
+				<textarea name="antigravity_user_focus" id="antigravity_user_focus" rows="3" cols="30" class="large-text" style="width: 25em; max-width: 100%;"><?php echo esc_textarea($focus); ?></textarea>
 				<div class="l3-toggle-wrap" style="margin-top: 10px;">
-					<span>Mostrar Enfoque:</span>
+					<span style="font-size: 12px; opacity: 0.7;">Mostrar Enfoque:</span>
 					<label class="l3-switch">
 						<input type="checkbox" name="antigravity_user_focus_visible" value="yes" <?php checked($focus_visible, 'yes'); ?>>
 						<span class="l3-slider"></span>
@@ -919,8 +941,15 @@ function antigravity_show_extra_profile_fields($user)
 		<tr>
 			<th><label for="antigravity_user_languages"><?php _e('Idiomas', 'linea3-legal-child'); ?></label></th>
 			<td>
-				<textarea name="antigravity_user_languages" id="antigravity_user_languages" rows="3" cols="30" style="width: 100%;"><?php echo esc_textarea($languages); ?></textarea>
-				<p class="description"><?php _e('Uno por línea. Ej: Español (Nativo)\nInglés (Avanzado)', 'linea3-legal-child'); ?></p>
+				<textarea name="antigravity_user_languages" id="antigravity_user_languages" rows="3" cols="30" class="large-text" style="width: 25em; max-width: 100%;"><?php echo esc_textarea($languages); ?></textarea>
+				<div class="l3-toggle-wrap" style="margin-top: 10px;">
+					<span style="font-size: 12px; opacity: 0.7;">Mostrar Idiomas:</span>
+					<label class="l3-switch">
+						<input type="checkbox" name="antigravity_user_languages_visible" value="yes" <?php checked(get_the_author_meta('antigravity_user_languages_visible', $user->ID), 'yes'); ?>>
+						<span class="l3-slider"></span>
+					</label>
+				</div>
+				<p class="description"><?php _e('Uno por línea. Ej: Español (Nativo)', 'linea3-legal-child'); ?> \n <?php _e('Inglés (Avanzado)', 'linea3-legal-child'); ?></p>
 			</td>
 		</tr>
 	</table>
@@ -948,7 +977,8 @@ function antigravity_save_extra_profile_fields($user_id)
 		'antigravity_user_languages',
 		'antigravity_user_website',
 		'antigravity_user_linkedin',
-		'antigravity_user_twitter'
+		'antigravity_user_twitter',
+		'antigravity_user_whatsapp'
 	);
 	
 	foreach ($fields as $field) {
@@ -967,6 +997,9 @@ function antigravity_save_extra_profile_fields($user_id)
 	$website_visible = isset($_POST['antigravity_user_website_visible']) ? 'yes' : 'no';
 	update_user_meta($user_id, 'antigravity_user_website_visible', $website_visible);
 
+	$languages_visible = isset($_POST['antigravity_user_languages_visible']) ? 'yes' : 'no';
+	update_user_meta($user_id, 'antigravity_user_languages_visible', $languages_visible);
+
 	$linkedin_visible = isset($_POST['antigravity_user_linkedin_visible']) ? 'yes' : 'no';
 	update_user_meta($user_id, 'antigravity_user_linkedin_visible', $linkedin_visible);
 
@@ -978,6 +1011,9 @@ function antigravity_save_extra_profile_fields($user_id)
 
 	$share_visible = isset($_POST['antigravity_user_share_visible']) ? 'yes' : 'no';
 	update_user_meta($user_id, 'antigravity_user_share_visible', $share_visible);
+
+	$whatsapp_visible = isset($_POST['antigravity_user_whatsapp_visible']) ? 'yes' : 'no';
+	update_user_meta($user_id, 'antigravity_user_whatsapp_visible', $whatsapp_visible);
 }
 add_action('personal_options_update', 'antigravity_save_extra_profile_fields');
 add_action('edit_user_profile_update', 'antigravity_save_extra_profile_fields');
@@ -1852,6 +1888,23 @@ function antigravity_author_profile_shortcode($atts) {
     $name = $user->display_name;
     $display_name = !empty($prefix) ? $prefix . ' ' . $name : $name;
     
+    $website = get_the_author_meta('antigravity_user_website', $author_id);
+    $linkedin = get_the_author_meta('antigravity_user_linkedin', $author_id);
+    $twitter = get_the_author_meta('antigravity_user_twitter', $author_id);
+    $whatsapp = get_the_author_meta('antigravity_user_whatsapp', $author_id);
+    
+    $website_visible = get_the_author_meta('antigravity_user_website_visible', $author_id);
+    $linkedin_visible = get_the_author_meta('antigravity_user_linkedin_visible', $author_id);
+    $twitter_visible = get_the_author_meta('antigravity_user_twitter_visible', $author_id);
+    $email_visible = get_the_author_meta('antigravity_user_email_visible', $author_id);
+    $whatsapp_visible = get_the_author_meta('antigravity_user_whatsapp_visible', $author_id);
+    
+    if ($website_visible === '' && !empty($website)) $website_visible = 'yes';
+    if ($linkedin_visible === '' && !empty($linkedin)) $linkedin_visible = 'yes';
+    if ($twitter_visible === '' && !empty($twitter)) $twitter_visible = 'yes';
+    if ($whatsapp_visible === '' && !empty($whatsapp)) $whatsapp_visible = 'yes';
+    if ($email_visible === '') $email_visible = 'yes';
+    
     $job_title = get_the_author_meta('antigravity_user_job_title', $author_id);
     if (empty($job_title)) {
         // Fallback al rol o algo por defecto si está vacío, pero mejor vacío.
@@ -1878,6 +1931,11 @@ function antigravity_author_profile_shortcode($atts) {
     
     $avatar_url = get_avatar_url($author_id, array('size' => 800));
     
+    $languages_visible = get_the_author_meta('antigravity_user_languages_visible', $author_id);
+    if ($languages_visible === '' && !empty($languages)) {
+        $languages_visible = 'yes';
+    }
+    
     ob_start();
     ?>
     <!-- ANTIGRAVITY_START -->
@@ -1885,27 +1943,72 @@ function antigravity_author_profile_shortcode($atts) {
         
         <!-- Header del Perfil -->
         <div class="l3-author-profile-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 60px; gap: 60px;">
-            <div class="l3-author-profile-title-col">
-                <p class="l3-author-role-eyebrow"><?php echo esc_html($job_title); ?></p>
-                <h1 class="l3-author-name-huge"><?php echo esc_html($display_name); ?></h1>
+            <div class="l3-author-profile-title-col" style="display: flex; gap: 30px; align-items: stretch;">
+                <div class="section-vertical-line" style="width: 2px; background: var(--wp--preset--color--primary); flex-shrink: 0;"></div>
+                <div class="l3-author-title-content">
+                    <p class="l3-author-role-eyebrow" style="margin-bottom: 5px;"><?php echo esc_html($job_title); ?></p>
+                    <h1 class="l3-author-name-huge" style="margin-bottom: 15px;"><?php echo esc_html($display_name); ?></h1>
+                
+                <!-- Iconos de Redes y Contacto -->
+                <div class="l3-author-social-header" style="display: flex; gap: 18px; margin-bottom: 25px; align-items: center;">
+                    <?php if (!empty($user->user_email) && $email_visible === 'yes'): ?>
+                        <a href="#" class="linea3-team-icon-email linea3-team-contact-btn" 
+                           data-author-id="<?php echo $author_id; ?>" 
+                           data-author-name="<?php echo esc_attr($name); ?>" 
+                           data-author-image="<?php echo esc_url($avatar_url); ?>" 
+                           title="Contactar"
+                           style="color: var(--wp--preset--color--primary); transition: opacity 0.3s;">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+                        </a>
+                    <?php endif; ?>
+
+                    <?php if (!empty($whatsapp) && $whatsapp_visible === 'yes'): ?>
+                        <?php 
+                        $wa_link = 'https://wa.me/' . preg_replace('/[^0-9]/', '', $whatsapp);
+                        ?>
+                        <a href="<?php echo esc_url($wa_link); ?>" target="_blank" rel="noopener noreferrer" title="WhatsApp"
+                           style="color: var(--wp--preset--color--primary); transition: opacity 0.3s;">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 1 1-7.6-11.7 8.38 8.38 0 0 1 3.8.9L21 3l-1.4 5.4L21 11.5z"></path></svg>
+                        </a>
+                    <?php endif; ?>
+
+                    <?php if (!empty($linkedin) && $linkedin_visible === 'yes'): ?>
+                        <a href="<?php echo esc_url($linkedin); ?>" target="_blank" rel="noopener noreferrer" title="LinkedIn"
+                           style="color: var(--wp--preset--color--primary); transition: opacity 0.3s;">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
+                        </a>
+                    <?php endif; ?>
+
+                    <?php if (!empty($website) && $website_visible === 'yes'): ?>
+                        <a href="<?php echo esc_url($website); ?>" target="_blank" rel="noopener noreferrer" title="Sitio Web"
+                           style="color: var(--wp--preset--color--primary); transition: opacity 0.3s;">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+                        </a>
+                    <?php endif; ?>
+
+                    <?php if (!empty($twitter) && $twitter_visible === 'yes'): ?>
+                        <a href="<?php echo esc_url($twitter); ?>" target="_blank" rel="noopener noreferrer" title="Twitter/X"
+                           style="color: var(--wp--preset--color--primary); transition: opacity 0.3s;">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"></path></svg>
+                        </a>
+                    <?php endif; ?>
+                </div>
                 
                 <?php if (!empty($quote) && $quote_visible === 'yes'): ?>
-                <div class="l3-author-quote-wrapper" style="display: flex; align-items: stretch; gap: 15px; margin-top: 25px;">
-                    <div class="section-vertical-line" style="width: 2px; background: var(--wp--preset--color--primary); flex-shrink: 0;"></div>
-                    <p class="l3-author-quote-text" style="margin: 0; font-style: italic; color: rgba(255, 255, 255, 0.7); line-height: 1.6; font-size: 1.1rem;"><?php echo esc_html($quote); ?></p>
+                <div class="l3-author-quote-wrapper" style="margin-top: 25px; display: flex; align-items: flex-start; gap: 20px;">
+                    <p class="l3-author-quote-text" style="margin: 0; font-style: italic; color: rgba(255, 255, 255, 0.7); line-height: 1.6; font-size: 1.1rem; flex: 1;"><?php echo esc_html($quote); ?></p>
+                    <div class="l3-quote-decoration" style="flex-shrink: 0; opacity: 0.15; color: #fff;">
+                        <svg width="40" height="40" viewBox="0 0 24 24" fill="currentColor"><path d="M14.017 21L14.017 18C14.017 16.8954 14.9124 16 16.017 16H19.017C19.5693 16 20.017 15.5523 20.017 15V9C20.017 8.44772 19.5693 8 19.017 8H15.017C14.4647 8 14.017 8.44772 14.017 9V12C14.017 12.5523 13.5693 13 13.017 13H11.017C10.4647 13 10.017 12.5523 10.017 12V9C10.017 6.79086 11.8079 5 14.017 5H19.017C21.2261 5 23.017 6.79086 23.017 9V15C23.017 18.3137 20.3307 21 17.017 21H14.017ZM3.017 21L3.017 18C3.017 16.8954 3.91243 16 5.017 16H8.017C8.56928 16 9.017 15.5523 9.017 15V9C9.017 8.44772 8.56928 8 8.017 8H4.017C3.46472 8 3.017 8.44772 3.017 9V12C3.017 12.5523 2.56928 13 2.017 13H0.017C-0.535282 13 -1.017 12.5523 -1.017 12V9C-1.017 6.79086 0.773858 5 3.017 5H8.017C10.2261 5 12.017 6.79086 12.017 9V15C12.017 18.3137 9.33072 21 6.017 21H3.017Z"/></svg>
+                    </div>
                 </div>
                 <?php endif; ?>
+                </div>
             </div>
 
-            <div class="l3-author-profile-separator" style="width: 1px; align-self: stretch; background: rgba(255, 255, 255, 0.1); margin: 20px 0;"></div>
             <div class="l3-author-profile-image-col">
-                <div class="l3-author-image-frame">
-                    <img src="<?php echo esc_url($avatar_url); ?>" alt="<?php echo esc_attr($display_name); ?>" class="l3-author-image" />
-                    <div class="l3-author-image-accent">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M4 4h16v16H4V4z" stroke="currentColor" stroke-width="2"/>
-                            <path d="M4 12h16M12 4v16" stroke="currentColor" stroke-width="2" opacity="0.3"/>
-                        </svg>
+                <div class="linea3-team-card" style="padding: 25px; height: auto; cursor: default; transition: all 0.4s ease;">
+                    <div class="linea3-team-card-image-wrap" style="margin-bottom: 0; aspect-ratio: 1/1.2;">
+                        <img src="<?php echo esc_url($avatar_url); ?>" alt="<?php echo esc_attr($display_name); ?>" class="linea3-team-card-image" />
                     </div>
                 </div>
             </div>
@@ -1914,7 +2017,7 @@ function antigravity_author_profile_shortcode($atts) {
         <!-- Contenido del Perfil -->
         <div class="l3-author-profile-content">
             <?php 
-            $has_sidebar_content = (!empty($focus) && $focus_visible === 'yes') || !empty($languages);
+            $has_sidebar_content = (!empty($focus) && $focus_visible === 'yes') || (!empty($languages) && $languages_visible === 'yes');
             if ($has_sidebar_content): 
             ?>
             <div class="l3-author-sidebar">
@@ -1929,7 +2032,7 @@ function antigravity_author_profile_shortcode($atts) {
                 </div>
                 <?php endif; ?>
                 
-                <?php if (!empty($languages)): ?>
+                <?php if (!empty($languages) && $languages_visible === 'yes'): ?>
                 <div class="l3-sidebar-block l3-languages-block">
                     <h3 class="l3-sidebar-subtitle">IDIOMAS</h3>
                     <ul class="l3-languages-list">

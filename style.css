@@ -3034,7 +3034,9 @@ main.single-post-layout-pro {
    ========================================================================== */
 
 .l3-author-profile-wrapper {
-    margin: 60px auto;
+    width: 90% !important;
+    max-width: 1200px !important;
+    margin: 60px auto !important;
     color: #ffffff;
 }
 
@@ -3051,7 +3053,6 @@ main.single-post-layout-pro {
 
 .l3-author-profile-title-col {
     flex: 1 1 500px;
-    border-left: 2px solid #ce9e50;
     padding-left: 25px;
 }
 

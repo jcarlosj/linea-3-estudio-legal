@@ -3331,3 +3331,312 @@ main.single-post-layout-pro {
         height: auto !important;
     }
 }
+
+/* ==========================================================================
+   PATRÓN: MODALIDADES DE SERVICIO LEGAL  (v2 — diseño editorial centrado)
+   Blindaje Continuo | Intervención Estratégica
+   ========================================================================== */
+
+/* --- Sección contenedora ------------------------------------------------- */
+.l3-modalidades-section {
+    position: relative;
+}
+
+/* --- Encabezado de sección: centrado, sin línea vertical ----------------- */
+.l3-modalidades-header {
+    flex-direction: column !important;
+    align-items: center !important;
+    text-align: center !important;
+    width: 100% !important;
+    margin-bottom: 56px !important;
+}
+
+.l3-modalidades-section .section-vertical-line {
+    display: none !important;
+}
+
+.l3-modalidades-section .services-eyebrow {
+    text-align: center !important;
+    width: 100% !important;
+}
+
+.l3-modalidades-section .services-title {
+    font-size: clamp(1.6rem, 3vw, 2.4rem) !important;
+    text-align: center !important;
+    color: #F8FAFC !important;
+    margin-bottom: 0 !important;
+    width: 100% !important;
+}
+
+/* --- Columna (stretch para igual altura) --------------------------------- */
+.l3-modalidad-card {
+    display: flex !important;
+    flex-direction: column !important;
+}
+
+/* --- Contenedor interior: centrado, sombra, hover lift ------------------- */
+.l3-modalidad-inner {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    text-align: center !important;
+    height: 100% !important;
+    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.55), 0 2px 8px rgba(0, 0, 0, 0.3) !important;
+    transition: transform 0.35s cubic-bezier(0.25, 1, 0.5, 1),
+                box-shadow 0.35s cubic-bezier(0.25, 1, 0.5, 1) !important;
+}
+
+.l3-modalidad-inner:hover {
+    transform: translateY(-6px) !important;
+    box-shadow: 0 24px 56px rgba(0, 0, 0, 0.65), 0 4px 16px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* --- Ícono SVG: oculto (reemplazado visualmente por el badge) ------------ */
+.l3-modalidad-icon {
+    display: none !important;
+}
+
+/* --- Badge / Pill de modalidad ------------------------------------------- */
+.l3-modalidad-badge {
+    display: inline-block !important;
+    padding: 5px 18px !important;
+    border-radius: 2px !important;
+    font-size: 0.65rem !important;
+    font-weight: 700 !important;
+    letter-spacing: 1.5px !important;
+    text-transform: uppercase !important;
+    margin-bottom: 28px !important;
+    line-height: 1.5 !important;
+}
+
+.l3-modalidad-blindaje .l3-modalidad-badge {
+    background-color: #D4A853 !important;
+    color: #0B1120 !important;
+}
+
+.l3-modalidad-intervencion .l3-modalidad-badge {
+    background-color: #C8782A !important;
+    color: #F8FAFC !important;
+}
+
+/* --- Encabezado de tarjeta: grande, serif, centrado ---------------------- */
+.l3-modalidad-inner h3.wp-block-heading {
+    font-size: clamp(2rem, 3.5vw, 2.8rem) !important;
+    line-height: 1.15 !important;
+    text-align: center !important;
+    margin-bottom: 20px !important;
+}
+
+/* --- Separador: 60px centrado -------------------------------------------- */
+.l3-modalidad-inner hr.wp-block-separator {
+    width: 60px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+}
+
+/* --- Descripción centrada ------------------------------------------------- */
+.l3-modalidad-inner p:not(.l3-modalidad-badge) {
+    text-align: center !important;
+}
+
+/* --- Lista de beneficios: centrada visualmente, texto left --------------- */
+.l3-modalidad-list {
+    list-style: none !important;
+    padding-left: 0 !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    display: inline-block !important;
+    text-align: left !important;
+    width: fit-content !important;
+    max-width: 100% !important;
+}
+
+/* Bullet dorado — tarjeta Blindaje */
+.l3-modalidad-blindaje .l3-modalidad-list li {
+    padding-left: 22px !important;
+    position: relative !important;
+    margin-bottom: 10px !important;
+}
+
+.l3-modalidad-blindaje .l3-modalidad-list li::before {
+    content: "" !important;
+    position: absolute !important;
+    left: 0 !important;
+    top: 8px !important;
+    width: 7px !important;
+    height: 7px !important;
+    border-radius: 50% !important;
+    background-color: #D4A853 !important;
+}
+
+/* Bullet ámbar — tarjeta Intervención */
+.l3-modalidad-intervencion .l3-modalidad-list li {
+    padding-left: 22px !important;
+    position: relative !important;
+    margin-bottom: 10px !important;
+}
+
+.l3-modalidad-intervencion .l3-modalidad-list li::before {
+    content: "" !important;
+    position: absolute !important;
+    left: 0 !important;
+    top: 8px !important;
+    width: 7px !important;
+    height: 7px !important;
+    border-radius: 50% !important;
+    background-color: #C8782A !important;
+}
+
+/* --- Botón ámbar (Intervención) ------------------------------------------ */
+.l3-btn-amber .wp-block-button__link {
+    background-color: #C8782A !important;
+    color: #F8FAFC !important;
+    border-radius: 2px !important;
+    transition: background-color 0.3s ease, transform 0.2s ease !important;
+}
+
+.l3-btn-amber .wp-block-button__link:hover {
+    background-color: #a85e20 !important;
+    transform: translateY(-2px) !important;
+}
+
+.l3-modalidad-blindaje .btn-primary-gold .wp-block-button__link:hover {
+    transform: translateY(-2px) !important;
+}
+
+/* --- Responsive: apilamiento en móvil ------------------------------------ */
+@media (max-width: 599px) {
+    .l3-modalidades-section .wp-block-columns {
+        flex-direction: column !important;
+    }
+
+    .l3-modalidades-section .wp-block-column {
+        width: 100% !important;
+        flex-basis: 100% !important;
+    }
+
+    .l3-modalidad-inner {
+        border-radius: 4px !important;
+    }
+}
+
+
+/* Sección contenedora */
+.l3-modalidades-section {
+    position: relative;
+}
+
+/* Encabezado de la sección */
+.l3-modalidades-header {
+    align-items: flex-start !important;
+}
+
+/* Columna de la tarjeta (alto 100% para tarjetas iguales) */
+.l3-modalidad-card {
+    display: flex !important;
+    flex-direction: column !important;
+}
+
+/* Contenedor interior de la tarjeta */
+.l3-modalidad-inner {
+    display: flex !important;
+    flex-direction: column !important;
+    height: 100% !important;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35), 0 2px 8px rgba(0, 0, 0, 0.2) !important;
+    transition: transform 0.35s cubic-bezier(0.25, 1, 0.5, 1),
+                box-shadow 0.35s cubic-bezier(0.25, 1, 0.5, 1) !important;
+}
+
+.l3-modalidad-inner:hover {
+    transform: translateY(-6px) !important;
+    box-shadow: 0 18px 48px rgba(0, 0, 0, 0.45), 0 4px 16px rgba(0, 0, 0, 0.25) !important;
+}
+
+/* Ícono circular */
+.l3-modalidad-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    margin-bottom: 24px;
+    flex-shrink: 0;
+}
+
+/* Lista de beneficios con bullet personalizado */
+.l3-modalidad-list {
+    list-style: none !important;
+    padding-left: 0 !important;
+    margin-left: 0 !important;
+}
+
+/* Bullet dorado — tarjeta Blindaje */
+.l3-modalidad-blindaje .l3-modalidad-list li {
+    padding-left: 22px !important;
+    position: relative !important;
+    margin-bottom: 10px !important;
+}
+
+.l3-modalidad-blindaje .l3-modalidad-list li::before {
+    content: "" !important;
+    position: absolute !important;
+    left: 0 !important;
+    top: 8px !important;
+    width: 7px !important;
+    height: 7px !important;
+    border-radius: 50% !important;
+    background-color: #D4A853 !important;
+}
+
+/* Bullet ámbar — tarjeta Intervención */
+.l3-modalidad-intervencion .l3-modalidad-list li {
+    padding-left: 22px !important;
+    position: relative !important;
+    margin-bottom: 10px !important;
+}
+
+.l3-modalidad-intervencion .l3-modalidad-list li::before {
+    content: "" !important;
+    position: absolute !important;
+    left: 0 !important;
+    top: 8px !important;
+    width: 7px !important;
+    height: 7px !important;
+    border-radius: 50% !important;
+    background-color: #C8782A !important;
+}
+
+/* Botón ámbar (Intervención) — hereda el radius del tema */
+.l3-btn-amber .wp-block-button__link {
+    background-color: #C8782A !important;
+    color: #F8FAFC !important;
+    border-radius: 2px !important;
+    transition: background-color 0.3s ease, transform 0.2s ease !important;
+}
+
+.l3-btn-amber .wp-block-button__link:hover {
+    background-color: #a85e20 !important;
+    transform: translateY(-2px) !important;
+}
+
+/* Hover en botón primario gold dentro de modalidades */
+.l3-modalidad-blindaje .btn-primary-gold .wp-block-button__link:hover {
+    transform: translateY(-2px) !important;
+}
+
+/* Responsive: asegurar apilamiento en móvil */
+@media (max-width: 599px) {
+    .l3-modalidades-section .wp-block-columns {
+        flex-direction: column !important;
+    }
+
+    .l3-modalidades-section .wp-block-column {
+        width: 100% !important;
+        flex-basis: 100% !important;
+    }
+
+    .l3-modalidad-inner {
+        border-radius: 4px !important;
+    }
+}

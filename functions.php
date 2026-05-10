@@ -758,6 +758,62 @@ PATTERN_HTML;
 add_action( 'init', 'antigravity_register_enfoque_pattern' );
 
 /**
+ * Registra el patrón Síntoma de la Desorganización Jurídica.
+ */
+function antigravity_register_sintoma_pattern(): void {
+    $content = <<<'PATTERN_HTML'
+<!-- wp:html -->
+<section class="l3-sintoma-section">
+    <div class="l3-sintoma-container">
+        <div class="l3-sintoma-header">
+            <span class="l3-sintoma-label">DIAGNÓSTICO LEGAL</span>
+            <h2 class="l3-sintoma-title">El síntoma de la<br>desorganización jurídica</h2>
+        </div>
+        <div class="l3-sintoma-diagram">
+            <div class="l3-sintoma-card l3-card-tl">
+                <h3 class="l3-sintoma-card-title">Empresas</h3>
+                <p class="l3-sintoma-card-text">Estructuras jurídicas incompletas que limitan el crecimiento.</p>
+            </div>
+            <div class="l3-sintoma-con l3-con-tl" aria-hidden="true"></div>
+            <div class="l3-sintoma-hub">
+                <div class="l3-sintoma-circle">
+                    <span>Desorganización<br>Jurídica</span>
+                </div>
+            </div>
+            <div class="l3-sintoma-con l3-con-tr" aria-hidden="true"></div>
+            <div class="l3-sintoma-card l3-card-tr">
+                <h3 class="l3-sintoma-card-title">Emprendedores</h3>
+                <p class="l3-sintoma-card-text">Falta de guía y protección desde el inicio del proyecto.</p>
+            </div>
+            <div class="l3-sintoma-card l3-card-bl">
+                <h3 class="l3-sintoma-card-title">Personas</h3>
+                <p class="l3-sintoma-card-text">Desconocimiento de sus derechos fundamentales en el día a día.</p>
+            </div>
+            <div class="l3-sintoma-con l3-con-bl" aria-hidden="true"></div>
+            <div class="l3-sintoma-con l3-con-br" aria-hidden="true"></div>
+            <div class="l3-sintoma-card l3-card-br">
+                <h3 class="l3-sintoma-card-title">Capital</h3>
+                <p class="l3-sintoma-card-text">Negocios perdiendo dinero por falta de planeación preventiva.</p>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- /wp:html -->
+PATTERN_HTML;
+
+    register_block_pattern(
+        'antigravity/sintoma-juridico',
+        array(
+            'title'       => __( 'Síntoma Jurídico (Diagrama)', 'linea3-legal-child' ),
+            'description' => _x( 'Diagrama hub-spoke de la desorganización jurídica.', 'Block pattern description', 'linea3-legal-child' ),
+            'content'     => $content,
+            'categories'  => array( 'antigravity-patterns' ),
+        )
+    );
+}
+add_action( 'init', 'antigravity_register_sintoma_pattern' );
+
+/**
  * Registra el patrón de Modalidades de Servicio (Blindaje Continuo e Intervención).
  * Se registra por separado para mantener el código limpio y evitar conflictos de sintaxis.
  */

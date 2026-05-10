@@ -648,10 +648,10 @@ function antigravity_register_block_patterns(): void
 <!-- /wp:group -->'
 	));
 
-	register_block_pattern('antigravity/aliados', array(
-		'title' => 'Nuestros Aliados (Logos)',
-		'categories' => array('antigravity-patterns'),
-		'content' => '<!-- wp:group {"align":"full","className":"l3-allies-section","layout":{"type":"constrained"}} -->
+    register_block_pattern('antigravity/aliados', array(
+        'title' => 'Nuestros Aliados (Logos)',
+        'categories' => array('antigravity-patterns'),
+        'content' => '<!-- wp:group {"align":"full","className":"l3-allies-section","layout":{"type":"constrained"}} -->
 <div class="wp-block-group alignfull l3-allies-section">
     <!-- wp:group {"className":"l3-container-standard","layout":{"type":"constrained"}} -->
     <div class="wp-block-group l3-container-standard">
@@ -674,9 +674,88 @@ function antigravity_register_block_patterns(): void
     <!-- /wp:group -->
 </div>
 <!-- /wp:group -->'
-	));
+    ));
 }
 add_action('init', 'antigravity_register_block_patterns');
+
+function antigravity_register_enfoque_pattern(): void {
+    $content = <<<'PATTERN_HTML'
+<!-- wp:group {"align":"full","style":{"spacing":{"padding":{"top":"0","bottom":"0","left":"0","right":"0"},"margin":{"top":"0","bottom":"0"}}},"backgroundColor":"base","layout":{"type":"constrained"}} -->
+<div class="wp-block-group alignfull has-base-background-color has-background l3-enfoque-wrapper">
+    <!-- wp:html -->
+    <section class="l3-enfoque-section">
+        <div class="l3-enfoque-container">
+            
+        <div class="l3-enfoque-header">
+            <span class="l3-enfoque-label">COMPARATIVA DE ENFOQUE</span>
+            <h2 class="l3-enfoque-title">Cambiando el enfoque del derecho</h2>
+        </div>
+
+            <div class="l3-enfoque-table-wrapper">
+                <div class="l3-enfoque-table">
+                    <div class="l3-enfoque-row header-row">
+                        <div class="l3-enfoque-cell empty-cell"></div>
+                        <div class="l3-enfoque-cell label-cell highlight">Tradicional</div>
+                        <div class="l3-enfoque-cell label-cell">
+                        <img src="/wp-content/themes/linea3-legal-child/assets/images/logo-horizontal-oscuro.png" alt="Línea Tres" class="l3-enfoque-logo">
+                    </div>
+                    </div>
+
+                    <div class="l3-enfoque-row">
+                        <div class="l3-enfoque-cell feature-cell">Visión</div>
+                        <div class="l3-enfoque-cell content-cell">Trámite y obstáculo postergable</div>
+                        <div class="l3-enfoque-cell content-cell highlight">
+                            <span class="l3-check-icon l3-check-delay-1"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
+                            Herramienta estratégica y accesible
+                        </div>
+                    </div>
+
+                    <div class="l3-enfoque-row">
+                        <div class="l3-enfoque-cell feature-cell">Enfoque</div>
+                        <div class="l3-enfoque-cell content-cell">Reactivo y enfocado en apagar incendios</div>
+                        <div class="l3-enfoque-cell content-cell highlight">
+                            <span class="l3-check-icon l3-check-delay-2"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
+                            Preventivo, organizativo y protector
+                        </div>
+                    </div>
+
+                    <div class="l3-enfoque-row">
+                        <div class="l3-enfoque-cell feature-cell">Lenguaje</div>
+                        <div class="l3-enfoque-cell content-cell">Complejo, teórico y distante</div>
+                        <div class="l3-enfoque-cell content-cell highlight">
+                            <span class="l3-check-icon l3-check-delay-3"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
+                            Simple, claro y basado en la experiencia
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="l3-enfoque-footer">
+                <div class="l3-enfoque-footer-divider"></div>
+                <p class="l3-enfoque-footer-text">
+                    En <strong>Línea Tres</strong> convertimos lo jurídico en tu mayor ventaja:<br>
+                    prevenimos errores, organizamos tu negocio y protegemos tu crecimiento.
+                </p>
+            </div>
+
+        </div>
+    </section>
+    <!-- /wp:html -->
+</div>
+<!-- /wp:group -->
+PATTERN_HTML;
+
+    register_block_pattern(
+        'antigravity/enfoque-derecho',
+        array(
+            'title'       => __( 'Enfoque del Derecho (Comparativa)', 'linea3-legal-child' ),
+            'description' => _x( 'Tabla comparativa entre el enfoque tradicional y Línea Tres.', 'Block pattern description', 'linea3-legal-child' ),
+            'content'     => $content,
+            'categories'  => array( 'antigravity-patterns' ),
+        )
+    );
+}
+add_action( 'init', 'antigravity_register_enfoque_pattern' );
 
 /**
  * Registra el patrón de Modalidades de Servicio (Blindaje Continuo e Intervención).

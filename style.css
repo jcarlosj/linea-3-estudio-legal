@@ -4044,3 +4044,533 @@ main.single-post-layout-pro {
         transform: translateX(-50%) !important;
     }
 }
+
+/* ==========================================================================
+   PATRÓN: ENFOQUE DEL DERECHO (COMPARATIVA)
+   ========================================================================== */
+
+.l3-enfoque-wrapper {
+    background-color: #030912 !important;
+}
+
+.l3-enfoque-section {
+    padding: 100px 0 !important;
+    position: relative !important;
+    width: 100% !important;
+}
+
+.l3-enfoque-container {
+    max-width: 1200px !important;
+    margin: 0 auto !important;
+    padding: 0 20px !important;
+    position: relative !important;
+    z-index: 2 !important;
+}
+
+.l3-enfoque-header {
+    margin-bottom: 70px !important;
+    text-align: center !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    width: 100% !important;
+}
+
+.l3-enfoque-label {
+    display: block !important;
+    color: #b89664 !important;
+    font-size: 0.75rem !important;
+    font-weight: 700 !important;
+    letter-spacing: 2px !important;
+    text-transform: uppercase !important;
+    margin-bottom: 12px !important;
+    font-family: var(--wp--preset--font-family--sans) !important;
+    text-align: center !important;
+}
+
+.l3-enfoque-title {
+    font-family: "Playfair Display", var(--wp--preset--font-family--serif), Georgia, serif !important;
+    font-size: clamp(2rem, 4vw, 2.8rem) !important;
+    line-height: 1.1 !important;
+    color: #ffffff !important;
+    margin: 0 auto !important;
+    font-weight: 700 !important;
+    text-align: center !important;
+    letter-spacing: -0.02em !important;
+    position: relative !important;
+}
+
+/* Fallback: Muestra el texto oro incluso si no has borrado/re-insertado el bloque */
+.l3-enfoque-title::before {
+    content: "COMPARATIVA DE ENFOQUE" !important;
+    display: block !important;
+    color: #b89664 !important;
+    font-size: 0.75rem !important;
+    font-weight: 700 !important;
+    letter-spacing: 2px !important;
+    text-transform: uppercase !important;
+    margin-bottom: 12px !important;
+    font-family: var(--wp--preset--font-family--sans) !important;
+    text-align: center !important;
+}
+
+/* Si ya existe el HTML real de la etiqueta (porque re-insertaste el bloque), ocultamos el fallback para no duplicar */
+.l3-enfoque-label + .l3-enfoque-title::before {
+    display: none !important;
+}
+
+/* Table Design */
+.l3-enfoque-table {
+    display: flex !important;
+    flex-direction: column !important;
+    border: 1px solid rgba(184, 150, 100, 0.2) !important;
+    border-radius: 4px !important;
+    background: rgba(255, 255, 255, 0.02) !important;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.3) !important;
+    width: 100% !important;
+    position: relative !important;
+}
+
+/* =====================================================
+   Efecto Card Columna Línea 3 — Sistema de 2 fases
+   =====================================================
+   REPOSO:   card z-index:-1 → col 1/2 sólidas lo tapan, col 3 transparente lo muestra
+   HOVER:    card sube a z-index:20 → cubre col 1/2 visualmente
+             col 3 sube a z-index:30 → su contenido flota sobre el card
+   Los rows tienen z-index:auto → no crean stacking context propio,
+   sus hijos (celdas) compiten directamente en el contexto de la tabla.
+   ===================================================== */
+
+.l3-enfoque-table::after {
+    content: "" !important;
+    position: absolute !important;
+    top: 0 !important;
+    bottom: 0 !important;
+    left: calc(220px + (100% - 220px) / 2) !important;
+    right: 0 !important;
+    background: #0a2233 !important;
+    border-radius: 4px !important;
+    border: 1px solid transparent !important;
+    pointer-events: none !important;
+    transition: top 0.45s cubic-bezier(0.165, 0.84, 0.44, 1),
+                bottom 0.45s cubic-bezier(0.165, 0.84, 0.44, 1),
+                right 0.45s cubic-bezier(0.165, 0.84, 0.44, 1),
+                left 0.45s cubic-bezier(0.165, 0.84, 0.44, 1),
+                box-shadow 0.45s ease,
+                border-color 0.45s ease,
+                z-index 0s !important;
+    z-index: -1 !important;
+}
+
+/* HOVER — Fase 1: card sube y crece */
+.l3-enfoque-table:has(.l3-enfoque-cell:nth-child(3):hover)::after {
+    border-color: rgba(184, 150, 100, 0.55) !important;
+    box-shadow: 0 30px 70px rgba(0, 0, 0, 0.85) !important;
+    top: -16px !important;
+    bottom: -16px !important;
+    right: -12px !important;
+    left: calc(220px + (100% - 220px) / 2 - 6px) !important;
+    z-index: 20 !important; /* Por encima de todo el contenido de fila */
+}
+
+/* HOVER — Fase 2: col 3 sube aún más para que su contenido sea visible */
+.l3-enfoque-table:has(.l3-enfoque-cell:nth-child(3):hover) .l3-enfoque-cell:nth-child(3) {
+    z-index: 30 !important;
+    position: relative !important;
+    color: #ffffff !important; /* texto más brillante al destacar */
+}
+
+.l3-enfoque-row {
+    display: flex !important;
+    border-bottom: 1px solid rgba(184, 150, 100, 0.15) !important;
+    position: relative !important;
+    z-index: auto !important; /* Sin stacking context — hijos compiten a nivel tabla */
+}
+
+/* Celdas: posicionadas pero sin z-index propio en reposo */
+.l3-enfoque-cell {
+    position: relative !important;
+}
+
+/* Col 1 y 2: fondos SÓLIDOS que tapan el card en reposo */
+.l3-enfoque-cell:nth-child(1) {
+    background: #030912 !important;
+    z-index: 2 !important;
+}
+
+.l3-enfoque-cell:nth-child(2) {
+    background: #030912 !important;
+    z-index: 2 !important;
+}
+
+/* Col 3: transparente — deja ver el card detrás */
+.l3-enfoque-cell:nth-child(3) {
+    background: transparent !important;
+    border-left: none !important;
+    z-index: 2 !important;
+    transition: z-index 0s, color 0.3s ease !important;
+}
+
+.l3-enfoque-row:last-child {
+    border-bottom: none !important;
+}
+
+/* Sin hover horizontal en filas */
+.l3-enfoque-row:not(.header-row):hover {
+    background-color: transparent !important;
+}
+
+.l3-enfoque-cell {
+    padding: 30px 40px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+    font-size: 1.15rem !important;
+    line-height: 1.5 !important;
+}
+
+.l3-enfoque-cell.feature-cell {
+    flex: 0 0 220px !important;
+    background-color: rgba(255, 255, 255, 0.03) !important;
+    color: rgb(184, 150, 100) !important;  /* Gold */
+    font-weight: 600 !important;
+    justify-content: flex-start !important;
+    text-align: left !important;
+    border-right: 1px solid rgba(184, 150, 100, 0.15) !important;
+    font-family: var(--wp--preset--font-family--serif) !important;
+    font-size: 1.3rem !important;
+    transition: background-color 0.3s ease !important;
+}
+
+/* Hover en feature-cell — resalta toda la fila */
+.l3-enfoque-row:has(.feature-cell:hover) {
+    outline: 1px solid rgba(184, 150, 100, 0.65) !important;
+    outline-offset: -1px !important;
+    border-radius: 3px !important;
+    z-index: 15 !important; /* La fila destaca sobre el card */
+}
+
+/* La feature-cell en hover: overlay dorado sutil */
+.l3-enfoque-cell.feature-cell:hover {
+    background-color: rgba(184, 150, 100, 0.12) !important;
+}
+
+/* Las otras celdas de esa fila: ligeramente más brillantes */
+.l3-enfoque-row:has(.feature-cell:hover) .l3-enfoque-cell:not(.feature-cell) {
+    opacity: 0.8 !important;
+    transition: opacity 0.3s ease !important;
+}
+
+.l3-enfoque-cell.content-cell {
+    flex: 1 !important;
+    color: rgba(255, 255, 255, 0.7) !important;
+}
+
+.l3-enfoque-cell.label-cell {
+    flex: 1 !important;
+    font-family: var(--wp--preset--font-family--serif) !important;
+    font-size: 1.8rem !important;
+    padding: 30px !important;
+    color: rgba(255, 255, 255, 0.4) !important;
+}
+
+.l3-enfoque-cell.empty-cell {
+    flex: 0 0 220px !important;
+    background: transparent !important;
+    border: none !important;
+}
+
+/* Highlight Column (Línea Tres) */
+.l3-enfoque-cell.highlight {
+    background-color: rgba(184, 150, 100, 0.06) !important;
+    color: #ffffff !important;
+    font-weight: 400 !important;
+}
+
+/* Col 3 siempre transparente — el fondo viene del card (::after), no de la celda */
+.l3-enfoque-cell:nth-child(3).highlight,
+.l3-enfoque-cell:nth-child(3).content-cell,
+.l3-enfoque-cell:nth-child(3) {
+    background-color: transparent !important;
+}
+
+/* ── Check Icons Animados — CSS puro (::before), funciona sin re-insertar el bloque ── */
+
+/* Ocultar el span HTML si existe (evita duplicado cuando se re-inserte el patrón) */
+.l3-check-icon { display: none !important; }
+
+/* Las celdas de col 3 son flex para que el icono quede alineado al texto */
+.l3-enfoque-cell:nth-child(3).content-cell {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    /* Texto comienza ligeramente más pequeño */
+    transform: scale(0.92) !important;
+    transition: transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+}
+
+/* HOVER — el texto crece a su tamaño real */
+.l3-enfoque-table:has(.l3-enfoque-cell:nth-child(3):hover) .l3-enfoque-cell:nth-child(3).content-cell {
+    transform: scale(1) !important;
+}
+
+/* El ícono se inyecta como ::before en cada celda */
+.l3-enfoque-cell:nth-child(3).content-cell::before {
+    content: "" !important;
+    display: inline-block !important;
+    min-width: 20px !important;
+    width: 20px !important;
+    height: 20px !important;
+    margin-right: 10px !important;
+    flex-shrink: 0 !important;
+    /* Feather-style checkmark — mismo estilo que los demás íconos del sitio */
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23b89664' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'%3E%3C/polyline%3E%3C/svg%3E") !important;
+    background-repeat: no-repeat !important;
+    background-size: contain !important;
+    background-position: center !important;
+    /* Estado inicial: invisible, pequeño y rotado */
+    opacity: 0 !important;
+    transform: scale(0.3) rotate(-20deg) !important;
+    transition: opacity 0.35s ease,
+                transform 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+}
+
+/* HOVER — los checks aparecen */
+.l3-enfoque-table:has(.l3-enfoque-cell:nth-child(3):hover) .l3-enfoque-cell:nth-child(3).content-cell::before {
+    opacity: 1 !important;
+    transform: scale(1) rotate(0deg) !important;
+}
+
+/* ── Escalonado ampliado: 250ms entre cada fila ── */
+
+/* Fila 2 — Visión: check a 0ms, texto a 60ms */
+.l3-enfoque-table:has(.l3-enfoque-cell:nth-child(3):hover) .l3-enfoque-row:nth-child(2) .l3-enfoque-cell:nth-child(3)::before {
+    transition-delay: 0ms !important;
+}
+.l3-enfoque-table:has(.l3-enfoque-cell:nth-child(3):hover) .l3-enfoque-row:nth-child(2) .l3-enfoque-cell:nth-child(3) {
+    transition-delay: 60ms !important;
+}
+
+/* Fila 3 — Enfoque: check a 250ms, texto a 310ms */
+.l3-enfoque-table:has(.l3-enfoque-cell:nth-child(3):hover) .l3-enfoque-row:nth-child(3) .l3-enfoque-cell:nth-child(3)::before {
+    transition-delay: 250ms !important;
+}
+.l3-enfoque-table:has(.l3-enfoque-cell:nth-child(3):hover) .l3-enfoque-row:nth-child(3) .l3-enfoque-cell:nth-child(3) {
+    transition-delay: 310ms !important;
+}
+
+/* Fila 4 — Lenguaje: check a 500ms, texto a 560ms */
+.l3-enfoque-table:has(.l3-enfoque-cell:nth-child(3):hover) .l3-enfoque-row:nth-child(4) .l3-enfoque-cell:nth-child(3)::before {
+    transition-delay: 500ms !important;
+}
+.l3-enfoque-table:has(.l3-enfoque-cell:nth-child(3):hover) .l3-enfoque-row:nth-child(4) .l3-enfoque-cell:nth-child(3) {
+    transition-delay: 560ms !important;
+}
+
+
+/* Inversión de fondos en la cabecera */
+.header-row .l3-enfoque-cell:nth-child(2) {
+    background-color: #020d16 !important;
+    color: #ffffff !important;
+}
+
+.header-row .l3-enfoque-cell.highlight {
+    background-color: #0a2233 !important;
+    color: #b89664 !important;
+    font-weight: 600 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    position: relative !important;
+}
+
+/* Hack para forzar el logo en bloques viejos que aún tienen texto */
+.header-row .l3-enfoque-cell.highlight:not(:has(img)) {
+    font-size: 0 !important;
+    color: transparent !important;
+}
+
+.header-row .l3-enfoque-cell.highlight:not(:has(img))::after {
+    content: "" !important;
+    display: block !important;
+    width: 160px !important;
+    height: 45px !important;
+    background-image: url('/wp-content/themes/linea3-legal-child/assets/images/logo-horizontal-oscuro.png') !important;
+    background-size: contain !important;
+    background-repeat: no-repeat !important;
+    background-position: center !important;
+}
+
+.l3-enfoque-logo {
+    max-width: 140px !important;
+    height: auto !important;
+    display: block !important;
+}
+
+/* Footer Section */
+.l3-enfoque-footer {
+    margin-top: 60px !important;
+}
+
+.l3-enfoque-footer-divider {
+    height: 1px !important;
+    border-top: 1px solid rgba(184, 150, 100, 0.4) !important;
+    margin-bottom: 40px !important;
+    width: 100% !important;
+}
+
+.l3-enfoque-footer-text {
+    font-family: var(--wp--preset--font-family--serif) !important;
+    font-size: clamp(1.4rem, 4vw, 1.8rem) !important;
+    color: #ffffff !important;
+    line-height: 1.4 !important;
+    width: 100% !important;
+    margin: 0 !important;
+    text-align: center !important;
+}
+
+.l3-enfoque-footer-text strong {
+    color: #b89664 !important;
+    font-weight: 400 !important;
+}
+
+/* ── Responsive: Tablet ── */
+@media (max-width: 991px) {
+    .l3-enfoque-cell {
+        padding: 20px !important;
+    }
+
+    /* feature-cell y empty-cell DEBEN tener el mismo flex-basis para alinear columnas */
+    .l3-enfoque-cell.feature-cell {
+        flex: 0 0 160px !important;
+    }
+
+    .l3-enfoque-cell.empty-cell {
+        flex: 0 0 160px !important;   /* ← igual que feature-cell → alineación perfecta */
+        min-width: 160px !important;
+    }
+
+    /* Reducir tamaño de las etiquetas del header para que quepan */
+    .l3-enfoque-cell.label-cell {
+        font-size: 1.3rem !important;
+        padding: 20px !important;
+    }
+
+    .l3-enfoque-logo {
+        max-width: 110px !important;
+    }
+
+    /* Recalcular card hover */
+    .l3-enfoque-table::after {
+        left: calc(160px + (100% - 160px) / 2) !important;
+    }
+    .l3-enfoque-table:has(.l3-enfoque-cell:nth-child(3):hover)::after {
+        left: calc(160px + (100% - 160px) / 2 - 6px) !important;
+    }
+    .l3-enfoque-cell:nth-child(1) { background: #030912 !important; }
+    .l3-enfoque-cell:nth-child(2) { background: #030912 !important; }
+}
+
+/* ── Responsive: Mobile — Tabla horizontal con etiquetas verticales ── */
+@media (max-width: 767px) {
+    .l3-enfoque-section {
+        padding: 60px 0 !important;
+    }
+
+    .l3-enfoque-title {
+        font-size: 2rem !important;
+    }
+
+    .l3-enfoque-footer-text {
+        font-size: 1.1rem !important;
+    }
+
+    /* La tabla mantiene su orientación horizontal */
+    .l3-enfoque-row {
+        flex-direction: row !important;
+    }
+
+    /* Celda vacía del header: muy estrecha */
+    .l3-enfoque-cell.empty-cell {
+        flex: 0 0 44px !important;
+        min-width: 44px !important;
+        padding: 0 !important;
+    }
+
+    /* Header row: siempre visible pero compacto */
+    .header-row {
+        display: flex !important;
+    }
+
+    /* Logo del header más pequeño */
+    .l3-enfoque-logo {
+        max-width: 90px !important;
+    }
+
+    /* Etiquetas del header (Tradicional + logo) más compactas */
+    .l3-enfoque-cell.label-cell {
+        padding: 14px 8px !important;
+        font-size: 0.85rem !important;
+        letter-spacing: 0 !important;
+    }
+
+    /* ─── FEATURE CELL: texto vertical rotado ─── */
+    .l3-enfoque-cell.feature-cell {
+        flex: 0 0 44px !important;        /* Columna estrecha */
+        min-width: 44px !important;
+        padding: 8px 4px !important;
+        justify-content: center !important;
+        align-items: center !important;
+        text-align: center !important;
+        border-right: 1px solid rgba(184, 150, 100, 0.2) !important;
+        border-bottom: none !important;
+
+        /* Texto vertical */
+        writing-mode: vertical-rl !important;
+        text-orientation: mixed !important;
+        transform: rotate(180deg) !important; /* Leer de abajo hacia arriba */
+        font-size: 0.8rem !important;
+        letter-spacing: 0.08em !important;
+    }
+
+    /* Celdas de contenido: más pequeñas y compactas */
+    .l3-enfoque-cell.content-cell {
+        padding: 12px 8px !important;
+        font-size: 0.78rem !important;
+        line-height: 1.4 !important;
+    }
+
+    /* Celdas generales más compactas */
+    .l3-enfoque-cell {
+        padding: 10px 8px !important;
+        font-size: 0.78rem !important;
+    }
+
+    /* Recalcular la card para columna estrecha */
+    .l3-enfoque-table::after {
+        left: calc(44px + (100% - 44px) / 2) !important;
+    }
+    .l3-enfoque-table:has(.l3-enfoque-cell:nth-child(3):hover)::after {
+        left: calc(44px + (100% - 44px) / 2 - 4px) !important;
+    }
+
+    /* Recalcular fondos sólidos de col 1 y 2 */
+    .l3-enfoque-cell:nth-child(1) { background: #030912 !important; }
+    .l3-enfoque-cell:nth-child(2) { background: #030912 !important; }
+
+    /* Ocultar check icons en mobile (muy poco espacio) */
+    .l3-enfoque-cell:nth-child(3).content-cell::before {
+        display: none !important;
+    }
+    .l3-enfoque-cell:nth-child(3).content-cell {
+        transform: scale(1) !important;
+    }
+
+    /* Scroll horizontal de seguridad */
+    .l3-enfoque-table-wrapper {
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+    }
+}
+

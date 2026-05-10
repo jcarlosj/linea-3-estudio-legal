@@ -3655,17 +3655,29 @@ main.single-post-layout-pro {
 
 .l3-cobertura-watermark {
     position: absolute !important;
-    top: 50% !important;
-    left: 50% !important;
-    transform: translate(-50%, -50%) !important;
-    width: auto !important;
-    max-width: 80% !important;
-    height: auto !important;
-    opacity: 0.04 !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    margin: 0 !important;
+    padding: 0 !important;
     pointer-events: none !important;
     z-index: 1 !important;
+    overflow: hidden !important;
+}
+
+.l3-cobertura-watermark img {
+    width: auto !important;
+    height: auto !important;
+    max-width: 60% !important;
+    max-height: 85% !important;
+    opacity: 0.04 !important;
+    flex-shrink: 0 !important;
     display: block !important;
-    margin: 0 auto !important;
+    object-fit: contain !important;
 }
 
 .l3-cobertura-container {
@@ -3799,7 +3811,236 @@ main.single-post-layout-pro {
         flex-direction: column !important;
     }
     
-    .l3-cobertura-watermark {
+    .l3-cobertura-watermark img {
+        max-width: 85% !important;
+        max-height: 70% !important;
+    }
+}
+
+.l3-cobertura-section .l3-cobertura-watermark {
+    display: none !important;
+}
+
+/* --- Experiencia Legal Section ------------------------------------------- */
+.l3-experiencia-section {
+    position: relative !important;
+    background-color: #020d16 !important;
+    padding: 120px 20px !important;
+    overflow: hidden !important;
+}
+
+/* Reusar watermark logic */
+.l3-experiencia-section .l3-cobertura-watermark img {
+    opacity: 0.04 !important;
+}
+
+.l3-experiencia-container {
+    position: relative !important;
+    z-index: 2 !important;
+    max-width: 1200px !important;
+    margin: 0 auto !important;
+}
+
+.l3-experiencia-grid {
+    display: flex !important;
+    gap: 60px !important;
+    align-items: stretch !important;
+}
+
+.l3-experiencia-col-left {
+    flex: 1.2 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: flex-start !important;
+}
+
+.l3-experiencia-header {
+    position: relative !important;
+    padding-left: 30px !important;
+    margin-bottom: 40px !important;
+}
+
+/* Ocultamos el eyebrow de reserva si ya existe el HTML real para evitar duplicados */
+.l3-experiencia-header .l3-experiencia-eyebrow + h2::before,
+.l3-experiencia-header .l3-experiencia-eyebrow + h2::after {
+    display: none !important;
+}
+
+.l3-experiencia-eyebrow {
+    font-size: 0.75rem !important;
+    font-weight: 700 !important;
+    letter-spacing: 2px !important;
+    text-transform: uppercase !important;
+    color: #b89664 !important;
+    margin-bottom: 15px !important;
+    display: block !important;
+}
+
+.l3-experiencia-col-left h2 {
+    font-size: clamp(2rem, 4vw, 2.8rem) !important;
+    color: #ffffff !important;
+    line-height: 1.1 !important;
+    margin-bottom: 25px !important;
+    font-family: var(--wp--preset--font-family--serif) !important;
+    max-width: 90% !important;
+    position: relative !important;
+}
+
+/* Fallback para el eyebrow */
+.l3-experiencia-col-left h2::before {
+    content: "NUESTRA FILOSOFÍA" !important;
+    position: absolute !important;
+    top: -25px !important;
+    left: 0 !important;
+    font-size: 0.75rem !important;
+    font-weight: 700 !important;
+    letter-spacing: 2px !important;
+    text-transform: uppercase !important;
+    color: #b89664 !important;
+    font-family: var(--wp--preset--font-family--sans-serif) !important;
+}
+
+/* Línea lateral vinculada al título - Ajustamos posición */
+.l3-experiencia-col-left h2::after {
+    content: "" !important;
+    position: absolute !important;
+    top: -25px !important;
+    bottom: 5px !important;
+    left: -30px !important;
+    width: 2px !important;
+    background-color: #b89664 !important;
+    opacity: 0.8 !important;
+}
+
+/* Alineamos los párrafos con la línea lateral del título */
+.l3-experiencia-col-left p {
+    font-size: 1.1rem !important;
+    color: #94a3b8 !important;
+    line-height: 1.6 !important;
+    margin-bottom: 20px !important;
+    max-width: 85% !important;
+    padding-left: 0 !important; /* Reseteamos para que hereden del contenedor */
+}
+
+/* El contenedor principal de la izquierda debe tener el padding para todos */
+.l3-experiencia-col-left {
+    flex: 1.2 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    padding-left: 30px !important;
+}
+
+.l3-experiencia-separator {
+    width: 2px !important;
+    background: linear-gradient(to bottom, transparent, #b89664 20%, #b89664 80%, transparent) !important;
+    opacity: 0.4 !important;
+    flex-shrink: 0 !important;
+    margin: 0 40px !important;
+}
+
+.l3-experiencia-col-right {
+    flex: 1 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 45px !important;
+    justify-content: center !important;
+    padding: 0 !important;
+}
+
+.l3-experiencia-feature {
+    position: relative !important;
+    padding: 0 0 15px 0 !important;
+    margin: 0 !important;
+    text-align: left !important;
+}
+
+/* Accent line animada vinculada al Título h3 */
+.l3-experiencia-feature h3 {
+    font-size: 1.5rem !important;
+    color: #b89664 !important; /* Mismo color que la barra */
+    margin-bottom: 15px !important;
+    font-family: var(--wp--preset--font-family--serif) !important;
+    position: relative !important;
+    display: inline-block !important; /* Para que la barra mida lo mismo que el texto */
+    padding-bottom: 8px !important;
+}
+
+.l3-experiencia-feature h3::after {
+    content: "" !important;
+    position: absolute !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    width: 30px !important;
+    height: 2px !important;
+    background-color: #b89664 !important;
+    transition: width 0.5s cubic-bezier(0.165, 0.84, 0.44, 1) !important;
+}
+
+.l3-experiencia-feature:hover h3::after {
+    width: 100% !important;
+}
+
+.l3-experiencia-feature p {
+    font-size: 1rem !important;
+    color: #94a3b8 !important;
+    line-height: 1.5 !important;
+    margin: 0 !important;
+}
+
+.l3-experiencia-feature .feature-icon {
+    width: 40px !important;
+    height: 40px !important;
+    margin-bottom: 15px !important;
+    color: #b89664 !important;
+}
+
+@media (max-width: 991px) {
+    .l3-experiencia-section {
+        padding: 60px 20px !important;
+    }
+
+    .l3-experiencia-grid {
+        flex-direction: column !important;
+        gap: 40px !important;
+    }
+
+    .l3-experiencia-col-left {
+        padding-left: 0 !important;
+        align-items: center !important;
+        text-align: center !important;
+    }
+
+    .l3-experiencia-header {
+        padding-left: 0 !important;
+        text-align: center !important;
+    }
+
+    .l3-experiencia-header::before {
+        display: none !important;
+    }
+
+    .l3-experiencia-col-left h2 {
+        max-width: 100% !important;
+    }
+
+    .l3-experiencia-col-left p {
+        max-width: 100% !important;
+    }
+    
+    .l3-experiencia-separator {
         width: 100% !important;
+        height: 2px !important;
+        background: linear-gradient(to right, transparent, #b89664 20%, #b89664 80%, transparent) !important;
+    }
+
+    .l3-experiencia-feature {
+        align-items: center !important;
+        text-align: center !important;
+    }
+
+    .l3-experiencia-feature h3::after {
+        left: 50% !important;
+        transform: translateX(-50%) !important;
     }
 }

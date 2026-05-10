@@ -827,13 +827,6 @@ function antigravity_register_cobertura_pattern(): void {
 <!-- wp:group {"tagName":"section","align":"full","className":"l3-cobertura-section","layout":{"type":"constrained"}} -->
 <section class="wp-block-group alignfull l3-cobertura-section">
 
-    <!-- Marca de agua (Logo Symbol) -->
-    <!-- wp:image {"sizeSlug":"full","linkDestination":"none","className":"l3-cobertura-watermark"} -->
-    <figure class="wp-block-image size-full l3-cobertura-watermark">
-        <img src="/wp-content/themes/linea3-legal-child/assets/images/logo-favicon.png" alt="" />
-    </figure>
-    <!-- /wp:image -->
-
     <!-- wp:group {"className":"l3-cobertura-container","layout":{"type":"constrained"}} -->
     <div class="wp-block-group l3-cobertura-container">
 
@@ -924,6 +917,125 @@ PATTERN_HTML;
     ) );
 }
 add_action( 'init', 'antigravity_register_cobertura_pattern' );
+
+/**
+ * Registra el patrón "Experiencia Legal (Filosofía)"
+ */
+function antigravity_register_experiencia_pattern(): void {
+    $content = <<<'PATTERN_HTML'
+<!-- wp:group {"tagName":"section","align":"full","className":"l3-experiencia-section","layout":{"type":"constrained"}} -->
+<section class="wp-block-group alignfull l3-experiencia-section">
+
+    <!-- Marca de agua (Logo Symbol) -->
+    <!-- wp:image {"sizeSlug":"full","linkDestination":"none","className":"l3-cobertura-watermark"} -->
+    <figure class="wp-block-image size-full l3-cobertura-watermark">
+        <img src="/wp-content/themes/linea3-legal-child/assets/images/logo-favicon.png" alt="" />
+    </figure>
+    <!-- /wp:image -->
+
+    <!-- wp:group {"className":"l3-experiencia-container","layout":{"type":"constrained"}} -->
+    <div class="wp-block-group l3-experiencia-container">
+
+        <!-- wp:group {"className":"l3-experiencia-grid","layout":{"type":"flex","flexWrap":"nowrap"}} -->
+        <div class="wp-block-group l3-experiencia-grid">
+
+            <!-- Columna Izquierda: Filosofía -->
+            <!-- wp:group {"className":"l3-experiencia-col-left","layout":{"type":"constrained"}} -->
+            <div class="wp-block-group l3-experiencia-col-left">
+
+                <div class="l3-experiencia-header">
+                    <!-- wp:paragraph {"className":"l3-experiencia-eyebrow"} -->
+                    <p class="l3-experiencia-eyebrow">NUESTRA FILOSOFÍA</p>
+                    <!-- /wp:paragraph -->
+                    
+                    <!-- wp:heading {"level":2,"fontFamily":"serif"} -->
+                    <h2 class="wp-block-heading has-serif-font-family">Hablamos desde la experiencia, no solo desde la teoría.</h2>
+                    <!-- /wp:heading -->
+                    
+                    <!-- wp:paragraph -->
+                    <p>Somos una firma creada por mujeres que han vivido de cerca lo que significa construir empresa, trabajar, asumir riesgos y buscar crecimiento todos los días.</p>
+                    <!-- /wp:paragraph -->
+                    <!-- wp:paragraph -->
+                    <p>Entendemos que detrás de cada decisión legal hay un negocio, un esfuerzo y un camino.</p>
+                    <!-- /wp:paragraph -->
+                </div>
+            </div>
+            <!-- /wp:group -->
+
+            <!-- Separador Vertical -->
+            <div class="l3-experiencia-separator"></div>
+
+            <!-- Columna Derecha: Características -->
+            <!-- wp:group {"className":"l3-experiencia-col-right","layout":{"type":"constrained"}} -->
+            <div class="wp-block-group l3-experiencia-col-right">
+
+                <!-- Feature 1: Empatía -->
+                <!-- wp:group {"className":"l3-experiencia-feature","layout":{"type":"constrained"}} -->
+                <div class="wp-block-group l3-experiencia-feature">
+                    <div class="feature-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width:40px; height:40px; margin-bottom:15px; color:#b89664;"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
+                    </div>
+                    <!-- wp:heading {"level":3,"fontFamily":"serif"} -->
+                    <h3 class="wp-block-heading has-serif-font-family">Empatía Empresarial</h3>
+                    <!-- /wp:heading -->
+                    <!-- wp:paragraph -->
+                    <p>Entendemos tu necesidad porque también la hemos vivido.</p>
+                    <!-- /wp:paragraph -->
+                </div>
+                <!-- /wp:group -->
+
+                <!-- Feature 2: Simplificación -->
+                <!-- wp:group {"className":"l3-experiencia-feature","layout":{"type":"constrained"}} -->
+                <div class="wp-block-group l3-experiencia-feature">
+                    <div class="feature-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width:40px; height:40px; margin-bottom:15px; color:#b89664;"><circle cx="12" cy="12" r="10"></circle><path d="M12 8l-4 4 4 4M16 12H8"></path></svg>
+                    </div>
+                    <!-- wp:heading {"level":3,"fontFamily":"serif"} -->
+                    <h3 class="wp-block-heading has-serif-font-family">Simplificación Radical</h3>
+                    <!-- /wp:heading -->
+                    <!-- wp:paragraph -->
+                    <p>Traducimos lo complejo para que tú y tu equipo lo manejen de la mejor manera.</p>
+                    <!-- /wp:paragraph -->
+                </div>
+                <!-- /wp:group -->
+
+                <!-- Feature 3: Acompañamiento -->
+                <!-- wp:group {"className":"l3-experiencia-feature","layout":{"type":"constrained"}} -->
+                <div class="wp-block-group l3-experiencia-feature">
+                    <div class="feature-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width:40px; height:40px; margin-bottom:15px; color:#b89664;"><polyline points="13 17 18 12 13 7"></polyline><polyline points="6 17 11 12 6 7"></polyline></svg>
+                    </div>
+                    <!-- wp:heading {"level":3,"fontFamily":"serif"} -->
+                    <h3 class="wp-block-heading has-serif-font-family">Acompañamiento Integral</h3>
+                    <!-- /wp:heading -->
+                    <!-- wp:paragraph -->
+                    <p>No dejamos que recorras el camino solo; reducimos el riesgo de tu desarrollo.</p>
+                    <!-- /wp:paragraph -->
+                </div>
+                <!-- /wp:group -->
+
+            </div>
+            <!-- /wp:group -->
+
+        </div>
+        <!-- /wp:group -->
+
+    </div>
+    <!-- /wp:group -->
+
+</section>
+<!-- /wp:group -->
+PATTERN_HTML;
+
+    register_block_pattern( 'antigravity/experiencia-legal', array(
+        'title'       => 'Experiencia Legal (Filosofía)',
+        'description' => 'Patrón de dos columnas con separador vertical y diseño editorial premium.',
+        'categories'  => array( 'antigravity-patterns' ),
+        'keywords'    => array( 'experiencia', 'filosofía', 'empresa', 'legal' ),
+        'content'     => $content,
+    ) );
+}
+add_action( 'init', 'antigravity_register_experiencia_pattern' );
 
 
 /**

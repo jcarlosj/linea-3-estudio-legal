@@ -3644,3 +3644,162 @@ main.single-post-layout-pro {
         border-radius: 4px !important;
     }
 }
+
+/* --- Cobertura Legal Estratégica Section --------------------------------- */
+.l3-cobertura-section {
+    position: relative !important;
+    background-color: #020d16 !important; /* Very dark navy from Image 3 */
+    padding: 100px 20px !important;
+    overflow: hidden !important;
+}
+
+.l3-cobertura-watermark {
+    position: absolute !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    width: auto !important;
+    max-width: 80% !important;
+    height: auto !important;
+    opacity: 0.04 !important;
+    pointer-events: none !important;
+    z-index: 1 !important;
+    display: block !important;
+    margin: 0 auto !important;
+}
+
+.l3-cobertura-container {
+    position: relative !important;
+    z-index: 2 !important;
+    max-width: 1200px !important;
+    margin: 0 auto !important;
+}
+
+.l3-cobertura-header {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    text-align: center !important;
+    width: 100% !important;
+    margin-bottom: 50px !important;
+}
+
+.l3-cobertura-eyebrow, 
+.l3-cobertura-section .services-eyebrow {
+    font-size: 0.75rem !important;
+    font-weight: 700 !important;
+    letter-spacing: 2px !important;
+    text-transform: uppercase !important;
+    color: #b89664 !important; /* Gold */
+    margin-bottom: 12px !important;
+    text-align: center !important;
+}
+
+.l3-cobertura-title {
+    font-size: clamp(2rem, 4vw, 2.8rem) !important;
+    color: #ffffff !important;
+    text-align: center !important;
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+    font-family: var(--wp--preset--font-family--serif) !important;
+    line-height: 1.1 !important;
+}
+
+.l3-cobertura-grid {
+    display: flex !important;
+    gap: 30px !important;
+    align-items: flex-start !important; /* Align cards at the top */
+    margin-bottom: 60px !important;
+}
+
+.l3-cobertura-card {
+    flex: 1 !important;
+    background: rgba(255, 255, 255, 0.03) !important;
+    padding: 30px !important;
+    transition: background 0.3s ease !important;
+    position: relative !important;
+    overflow: hidden !important;
+}
+
+/* Línea estática base */
+.l3-cobertura-card::before {
+    content: "" !important;
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 2px !important;
+    background-color: rgba(184, 150, 100, 0.2) !important; /* Gold subtle */
+    z-index: 5 !important;
+}
+
+/* Línea animada (Barrita acentuada) */
+.l3-cobertura-card::after {
+    content: "" !important;
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 40px !important;
+    height: 2px !important;
+    background-color: #b89664 !important; /* Gold solid */
+    transition: width 0.5s cubic-bezier(0.165, 0.84, 0.44, 1) !important;
+    z-index: 10 !important;
+}
+
+.l3-cobertura-card:hover::after {
+    width: 100% !important;
+}
+
+.l3-cobertura-card:hover {
+    background: rgba(255, 255, 255, 0.05) !important;
+}
+
+.l3-cobertura-card h3 {
+    font-size: 1.4rem !important;
+    color: #b89664 !important; /* Gold */
+    margin-bottom: 20px !important;
+    font-family: var(--wp--preset--font-family--serif) !important;
+}
+
+.l3-cobertura-list {
+    list-style: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+.l3-cobertura-list li {
+    color: #94a3b8 !important;
+    font-size: 1rem !important;
+    line-height: 1.6 !important;
+    margin-bottom: 12px !important;
+    padding-left: 20px !important;
+    position: relative !important;
+}
+
+.l3-cobertura-list li::before {
+    content: "•" !important;
+    position: absolute !important;
+    left: 0 !important;
+    color: #b89664 !important;
+}
+
+.l3-cobertura-footer-text {
+    font-size: 1.25rem !important;
+    color: #b89664 !important;
+    text-align: center !important;
+    max-width: 800px !important;
+    margin: 0 auto !important;
+    font-family: var(--wp--preset--font-family--serif) !important;
+    font-style: italic !important;
+    line-height: 1.5 !important;
+}
+
+@media (max-width: 768px) {
+    .l3-cobertura-grid {
+        flex-direction: column !important;
+    }
+    
+    .l3-cobertura-watermark {
+        width: 100% !important;
+    }
+}

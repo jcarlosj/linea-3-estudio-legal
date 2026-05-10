@@ -3376,14 +3376,31 @@ main.single-post-layout-pro {
 
 /* --- Contenedor interior: centrado, sombra, hover lift ------------------- */
 .l3-modalidad-inner {
+    position: relative !important;
     display: flex !important;
     flex-direction: column !important;
     align-items: center !important;
     text-align: center !important;
     height: 100% !important;
-    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.55), 0 2px 8px rgba(0, 0, 0, 0.3) !important;
-    transition: transform 0.35s cubic-bezier(0.25, 1, 0.5, 1),
-                box-shadow 0.35s cubic-bezier(0.25, 1, 0.5, 1) !important;
+    background-color: #05111b !important;
+    border: 1px solid rgba(255, 255, 255, 0.05) !important;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4) !important;
+    padding-top: 0 !important; /* Handled by badge and internal spacing */
+    transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1),
+                box-shadow 0.4s cubic-bezier(0.165, 0.84, 0.44, 1) !important;
+    overflow: visible !important; /* Allow ribbon ears to stick out */
+}
+
+/* Horizontal line behind the badge */
+.l3-modalidad-inner::before {
+    content: "" !important;
+    position: absolute !important;
+    top: 50px !important;
+    left: 10% !important;
+    right: 10% !important;
+    height: 1px !important;
+    background-color: rgba(255, 255, 255, 0.1) !important;
+    z-index: 1 !important;
 }
 
 .l3-modalidad-inner:hover {
@@ -3396,47 +3413,88 @@ main.single-post-layout-pro {
     display: none !important;
 }
 
-/* --- Badge / Pill de modalidad ------------------------------------------- */
 .l3-modalidad-badge {
+    position: relative !important;
     display: inline-block !important;
-    padding: 5px 18px !important;
-    border-radius: 2px !important;
-    font-size: 0.65rem !important;
+    padding: 12px 24px 22px 24px !important;
+    font-size: 0.85rem !important;
     font-weight: 700 !important;
-    letter-spacing: 1.5px !important;
-    text-transform: uppercase !important;
-    margin-bottom: 28px !important;
-    line-height: 1.5 !important;
+    letter-spacing: 0.5px !important;
+    text-transform: none !important;
+    margin-bottom: 40px !important;
+    line-height: 1.2 !important;
+    clip-path: polygon(0% 0%, 100% 0%, 100% 80%, 50% 100%, 0% 80%) !important;
+    z-index: 10 !important;
+    margin-top: 25px !important;
+}
+
+/* Ribbon ears */
+.l3-modalidad-badge::before,
+.l3-modalidad-badge::after {
+    content: "" !important;
+    position: absolute !important;
+    top: 0 !important;
+    width: 0 !important;
+    height: 0 !important;
+    border-style: solid !important;
+    z-index: -1 !important;
+}
+
+.l3-modalidad-badge::before {
+    left: -12px !important;
+    border-width: 0 12px 12px 0 !important;
+}
+
+.l3-modalidad-badge::after {
+    right: -12px !important;
+    border-width: 12px 12px 0 0 !important;
 }
 
 .l3-modalidad-blindaje .l3-modalidad-badge {
-    background-color: #D4A853 !important;
-    color: #0B1120 !important;
+    background-color: #b89664 !important;
+    color: #ffffff !important;
 }
 
+.l3-modalidad-blindaje .l3-modalidad-badge::before { border-color: transparent #8e7045 transparent transparent !important; }
+.l3-modalidad-blindaje .l3-modalidad-badge::after { border-color: #8e7045 transparent transparent transparent !important; }
+
 .l3-modalidad-intervencion .l3-modalidad-badge {
-    background-color: #C8782A !important;
-    color: #F8FAFC !important;
+    background-color: #9b624c !important;
+    color: #ffffff !important;
 }
+
+.l3-modalidad-intervencion .l3-modalidad-badge::before { border-color: transparent #7a4a38 transparent transparent !important; }
+.l3-modalidad-intervencion .l3-modalidad-badge::after { border-color: #7a4a38 transparent transparent transparent !important; }
 
 /* --- Encabezado de tarjeta: grande, serif, centrado ---------------------- */
 .l3-modalidad-inner h3.wp-block-heading {
-    font-size: clamp(2rem, 3.5vw, 2.8rem) !important;
-    line-height: 1.15 !important;
+    font-size: clamp(2.2rem, 4vw, 3.2rem) !important;
+    font-family: var(--wp--preset--font-family--serif) !important;
+    font-weight: 400 !important;
+    line-height: 1.1 !important;
     text-align: center !important;
-    margin-bottom: 20px !important;
+    margin-bottom: 24px !important;
+    color: #ffffff !important;
 }
 
 /* --- Separador: 60px centrado -------------------------------------------- */
 .l3-modalidad-inner hr.wp-block-separator {
-    width: 60px !important;
-    margin-left: auto !important;
-    margin-right: auto !important;
+    width: 80px !important;
+    height: 1px !important;
+    border: none !important;
+    background-color: rgba(255, 255, 255, 0.15) !important;
+    margin: 0 auto 32px auto !important;
 }
 
 /* --- Descripción centrada ------------------------------------------------- */
 .l3-modalidad-inner p:not(.l3-modalidad-badge) {
     text-align: center !important;
+    font-size: 1.05rem !important;
+    line-height: 1.6 !important;
+    color: #94a3b8 !important;
+    max-width: 90% !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
 }
 
 /* --- Lista de beneficios: centrada visualmente, texto left --------------- */
@@ -3521,64 +3579,26 @@ main.single-post-layout-pro {
 }
 
 
-/* Sección contenedora */
-.l3-modalidades-section {
-    position: relative;
+/* --- Tercera tarjeta: Litigio Estratégico (teal/esmeralda) --------------- */
+
+/* Badge teal */
+/* Badge teal refined with ribbon ears */
+.l3-modalidad-litigio .l3-modalidad-badge {
+    background-color: #3b8e7c !important;
+    color: #ffffff !important;
 }
 
-/* Encabezado de la sección */
-.l3-modalidades-header {
-    align-items: flex-start !important;
-}
+.l3-modalidad-litigio .l3-modalidad-badge::before { border-color: transparent #2a6b5d transparent transparent !important; }
+.l3-modalidad-litigio .l3-modalidad-badge::after { border-color: #2a6b5d transparent transparent transparent !important; }
 
-/* Columna de la tarjeta (alto 100% para tarjetas iguales) */
-.l3-modalidad-card {
-    display: flex !important;
-    flex-direction: column !important;
-}
-
-/* Contenedor interior de la tarjeta */
-.l3-modalidad-inner {
-    display: flex !important;
-    flex-direction: column !important;
-    height: 100% !important;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35), 0 2px 8px rgba(0, 0, 0, 0.2) !important;
-    transition: transform 0.35s cubic-bezier(0.25, 1, 0.5, 1),
-                box-shadow 0.35s cubic-bezier(0.25, 1, 0.5, 1) !important;
-}
-
-.l3-modalidad-inner:hover {
-    transform: translateY(-6px) !important;
-    box-shadow: 0 18px 48px rgba(0, 0, 0, 0.45), 0 4px 16px rgba(0, 0, 0, 0.25) !important;
-}
-
-/* Ícono circular */
-.l3-modalidad-icon {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 56px;
-    height: 56px;
-    border-radius: 50%;
-    margin-bottom: 24px;
-    flex-shrink: 0;
-}
-
-/* Lista de beneficios con bullet personalizado */
-.l3-modalidad-list {
-    list-style: none !important;
-    padding-left: 0 !important;
-    margin-left: 0 !important;
-}
-
-/* Bullet dorado — tarjeta Blindaje */
-.l3-modalidad-blindaje .l3-modalidad-list li {
+/* Bullet esmeralda */
+.l3-modalidad-litigio .l3-modalidad-list li {
     padding-left: 22px !important;
     position: relative !important;
     margin-bottom: 10px !important;
 }
 
-.l3-modalidad-blindaje .l3-modalidad-list li::before {
+.l3-modalidad-litigio .l3-modalidad-list li::before {
     content: "" !important;
     position: absolute !important;
     left: 0 !important;
@@ -3586,43 +3606,27 @@ main.single-post-layout-pro {
     width: 7px !important;
     height: 7px !important;
     border-radius: 50% !important;
-    background-color: #D4A853 !important;
+    background-color: #1a8870 !important;
 }
 
-/* Bullet ámbar — tarjeta Intervención */
-.l3-modalidad-intervencion .l3-modalidad-list li {
-    padding-left: 22px !important;
-    position: relative !important;
-    margin-bottom: 10px !important;
-}
-
-.l3-modalidad-intervencion .l3-modalidad-list li::before {
-    content: "" !important;
-    position: absolute !important;
-    left: 0 !important;
-    top: 8px !important;
-    width: 7px !important;
-    height: 7px !important;
-    border-radius: 50% !important;
-    background-color: #C8782A !important;
-}
-
-/* Botón ámbar (Intervención) — hereda el radius del tema */
-.l3-btn-amber .wp-block-button__link {
-    background-color: #C8782A !important;
+/* Botón teal */
+.l3-btn-teal .wp-block-button__link {
+    background-color: #1a8870 !important;
     color: #F8FAFC !important;
     border-radius: 2px !important;
     transition: background-color 0.3s ease, transform 0.2s ease !important;
 }
 
-.l3-btn-amber .wp-block-button__link:hover {
-    background-color: #a85e20 !important;
+.l3-btn-teal .wp-block-button__link:hover {
+    background-color: #126456 !important;
     transform: translateY(-2px) !important;
 }
 
-/* Hover en botón primario gold dentro de modalidades */
-.l3-modalidad-blindaje .btn-primary-gold .wp-block-button__link:hover {
-    transform: translateY(-2px) !important;
+/* En 3 columnas, ajuste de heading para evitar desbordamiento en pantallas medianas */
+@media (min-width: 600px) and (max-width: 1024px) {
+    .l3-modalidades-section .wp-block-columns .l3-modalidad-inner h3.wp-block-heading {
+        font-size: clamp(1.5rem, 2.5vw, 2.2rem) !important;
+    }
 }
 
 /* Responsive: asegurar apilamiento en móvil */

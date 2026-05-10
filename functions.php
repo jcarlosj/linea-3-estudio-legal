@@ -702,40 +702,33 @@ function antigravity_register_modalidades_pattern(): void {
         </div>
         <!-- /wp:group -->
 
-        <!-- Grid de dos tarjetas -->
+        <!-- Grid de tarjetas -->
         <!-- wp:columns {"isStackedOnMobile":true,"style":{"spacing":{"blockGap":{"left":"var:preset|spacing|40","top":"var:preset|spacing|40"}}}} -->
         <div class="wp-block-columns is-layout-flex">
 
             <!-- ===== TARJETA 1: BLINDAJE CONTINUO ===== -->
             <!-- wp:column {"className":"l3-modalidad-card l3-modalidad-blindaje"} -->
             <div class="wp-block-column l3-modalidad-card l3-modalidad-blindaje">
-                <!-- wp:group {"className":"l3-modalidad-inner","style":{"border":{"radius":"4px","width":"1px","color":"rgba(212,168,83,0.25)"},"spacing":{"padding":{"top":"var:preset|spacing|50","bottom":"var:preset|spacing|50","left":"var:preset|spacing|50","right":"var:preset|spacing|50"}},"color":{"background":"#0d1e33"}},"layout":{"type":"constrained","justifyContent":"center"}} -->
-                <div class="wp-block-group l3-modalidad-inner" style="border-radius:4px;border-width:1px;border-style:solid;border-color:rgba(212,168,83,0.25);padding-top:var(--wp--preset--spacing--50);padding-bottom:var(--wp--preset--spacing--50);padding-left:var(--wp--preset--spacing--50);padding-right:var(--wp--preset--spacing--50);background-color:#0d1e33">
+                <!-- wp:group {"className":"l3-modalidad-inner","layout":{"type":"constrained","justifyContent":"center"}} -->
+                <div class="wp-block-group l3-modalidad-inner" style="padding:var(--wp--preset--spacing--50)">
                     <!-- Badge pill -->
                     <!-- wp:paragraph {"align":"center","className":"l3-modalidad-badge"} -->
-                    <p class="has-text-align-center l3-modalidad-badge">RETAINER — Mensual fijo</p>
+                    <p class="has-text-align-center l3-modalidad-badge">Retainer<br>(Mensualidad)</p>
                     <!-- /wp:paragraph -->
-                    <!-- wp:heading {"textAlign":"center","level":3,"style":{"typography":{"fontWeight":"700","lineHeight":"1.15","fontSize":"clamp(2rem,3.5vw,2.8rem)"},"color":{"text":"#F8FAFC"},"spacing":{"margin":{"top":"0px","bottom":"20px"}}},"fontFamily":"serif"} -->
-                    <h3 class="wp-block-heading has-text-align-center has-serif-font-family" style="font-size:clamp(2rem,3.5vw,2.8rem);font-weight:700;line-height:1.15;color:#F8FAFC;margin-top:0;margin-bottom:20px">Blindaje<br>Continuo.</h3>
+                    <!-- wp:heading {"textAlign":"center","level":3,"className":"has-serif-font-family"} -->
+                    <h3 class="wp-block-heading has-text-align-center has-serif-font-family">Blindaje<br>Continuo.</h3>
                     <!-- /wp:heading -->
-                    <!-- wp:separator {"style":{"color":{"background":"rgba(212,168,83,0.35)"},"spacing":{"margin":{"top":"0px","bottom":"28px"}}},"className":"is-style-wide"} -->
-                    <hr class="wp-block-separator is-style-wide has-alpha-channel-opacity" style="background-color:rgba(212,168,83,0.35);margin-top:0;margin-bottom:28px"/>
+                    <!-- wp:separator {"className":"is-style-wide"} -->
+                    <hr class="wp-block-separator is-style-wide has-alpha-channel-opacity" />
                     <!-- /wp:separator -->
-                    <!-- wp:paragraph {"align":"center","style":{"typography":{"fontSize":"0.95rem","lineHeight":"1.75"},"color":{"text":"#94A3B8"},"spacing":{"margin":{"top":"0px","bottom":"24px"}}}} -->
-                    <p class="has-text-align-center" style="font-size:0.95rem;line-height:1.75;color:#94A3B8;margin-top:0;margin-bottom:24px">Para empresas que requieren un aliado jurídico constante. Prevención, revisión de contratos del día a día y soporte estratégico permanente para asegurar el crecimiento sin interrupciones.</p>
+                    <!-- wp:paragraph {"align":"center"} -->
+                    <p class="has-text-align-center">Para empresas que requieren un aliado jurídico constante. Prevención, revisión de contratos del día a día y soporte estratégico permanente para asegurar el crecimiento sin interrupciones.</p>
                     <!-- /wp:paragraph -->
-                    <!-- wp:list {"style":{"typography":{"fontSize":"0.9rem"},"color":{"text":"#CBD5E1"},"spacing":{"margin":{"top":"0px","bottom":"32px"}}},"className":"l3-modalidad-list"} -->
-                    <ul class="wp-block-list l3-modalidad-list" style="font-size:0.9rem;color:#CBD5E1;margin-top:0;margin-bottom:32px">
-                        <!-- wp:list-item --><li>Revisión continua de contratos y documentos</li><!-- /wp:list-item -->
-                        <!-- wp:list-item --><li>Asesoría proactiva ante cambios normativos</li><!-- /wp:list-item -->
-                        <!-- wp:list-item --><li>Atención prioritaria ante cualquier contingencia</li><!-- /wp:list-item -->
-                        <!-- wp:list-item --><li>Informe jurídico mensual de riesgos y oportunidades</li><!-- /wp:list-item -->
-                    </ul>
-                    <!-- /wp:list -->
+                    
                     <!-- wp:buttons {"layout":{"type":"flex","justifyContent":"center"}} -->
                     <div class="wp-block-buttons">
-                        <!-- wp:button {"className":"btn-primary-gold","style":{"typography":{"fontSize":"0.8rem","fontWeight":"600","letterSpacing":"1.5px","textTransform":"uppercase"}}} -->
-                        <div class="wp-block-button btn-primary-gold"><a class="wp-block-button__link wp-element-button antigravity-modal-trigger" style="font-size:0.8rem;font-weight:600;letter-spacing:1.5px;text-transform:uppercase">Iniciar Alianza</a></div>
+                        <!-- wp:button {"className":"btn-primary-gold"} -->
+                        <div class="wp-block-button btn-primary-gold"><a class="wp-block-button__link wp-element-button antigravity-modal-trigger">Iniciar Alianza</a></div>
                         <!-- /wp:button -->
                     </div>
                     <!-- /wp:buttons -->
@@ -747,33 +740,57 @@ function antigravity_register_modalidades_pattern(): void {
             <!-- ===== TARJETA 2: INTERVENCIÓN ===== -->
             <!-- wp:column {"className":"l3-modalidad-card l3-modalidad-intervencion"} -->
             <div class="wp-block-column l3-modalidad-card l3-modalidad-intervencion">
-                <!-- wp:group {"className":"l3-modalidad-inner","style":{"border":{"radius":"4px","width":"1px","color":"rgba(180,100,30,0.3)"},"spacing":{"padding":{"top":"var:preset|spacing|50","bottom":"var:preset|spacing|50","left":"var:preset|spacing|50","right":"var:preset|spacing|50"}},"color":{"background":"#1a1208"}},"layout":{"type":"constrained","justifyContent":"center"}} -->
-                <div class="wp-block-group l3-modalidad-inner" style="border-radius:4px;border-width:1px;border-style:solid;border-color:rgba(180,100,30,0.3);padding-top:var(--wp--preset--spacing--50);padding-bottom:var(--wp--preset--spacing--50);padding-left:var(--wp--preset--spacing--50);padding-right:var(--wp--preset--spacing--50);background-color:#1a1208">
+                <!-- wp:group {"className":"l3-modalidad-inner","layout":{"type":"constrained","justifyContent":"center"}} -->
+                <div class="wp-block-group l3-modalidad-inner" style="padding:var(--wp--preset--spacing--50)">
                     <!-- Badge pill -->
                     <!-- wp:paragraph {"align":"center","className":"l3-modalidad-badge"} -->
-                    <p class="has-text-align-center l3-modalidad-badge">ON-DEMAND — Por caso</p>
+                    <p class="has-text-align-center l3-modalidad-badge">On-Demand<br>(Por Tarea)</p>
                     <!-- /wp:paragraph -->
-                    <!-- wp:heading {"textAlign":"center","level":3,"style":{"typography":{"fontWeight":"700","lineHeight":"1.15","fontSize":"clamp(2rem,3.5vw,2.8rem)"},"color":{"text":"#F8FAFC"},"spacing":{"margin":{"top":"0px","bottom":"20px"}}},"fontFamily":"serif"} -->
-                    <h3 class="wp-block-heading has-text-align-center has-serif-font-family" style="font-size:clamp(2rem,3.5vw,2.8rem);font-weight:700;line-height:1.15;color:#F8FAFC;margin-top:0;margin-bottom:20px">Intervención<br>Estratégica.</h3>
+                    <!-- wp:heading {"textAlign":"center","level":3,"className":"has-serif-font-family"} -->
+                    <h3 class="wp-block-heading has-text-align-center has-serif-font-family">Intervención<br>Estratégica.</h3>
                     <!-- /wp:heading -->
-                    <!-- wp:separator {"style":{"color":{"background":"rgba(200,120,42,0.35)"},"spacing":{"margin":{"top":"0px","bottom":"28px"}}},"className":"is-style-wide"} -->
-                    <hr class="wp-block-separator is-style-wide has-alpha-channel-opacity" style="background-color:rgba(200,120,42,0.35);margin-top:0;margin-bottom:28px"/>
+                    <!-- wp:separator {"className":"is-style-wide"} -->
+                    <hr class="wp-block-separator is-style-wide has-alpha-channel-opacity" />
                     <!-- /wp:separator -->
-                    <!-- wp:paragraph {"align":"center","style":{"typography":{"fontSize":"0.95rem","lineHeight":"1.75"},"color":{"text":"#94A3B8"},"spacing":{"margin":{"top":"0px","bottom":"24px"}}}} -->
-                    <p class="has-text-align-center" style="font-size:0.95rem;line-height:1.75;color:#94A3B8;margin-top:0;margin-bottom:24px">Para proyectos específicos, estructuraciones puntuales o resolución de contingencias. Acompañamiento experto exactamente cuando y donde el negocio lo necesita.</p>
+                    <!-- wp:paragraph {"align":"center"} -->
+                    <p class="has-text-align-center">Para proyectos específicos, estructuraciones puntuales o resolución de contingencias. Acompañamiento experto exactamente cuando y donde el negocio lo necesita.</p>
                     <!-- /wp:paragraph -->
-                    <!-- wp:list {"style":{"typography":{"fontSize":"0.9rem"},"color":{"text":"#CBD5E1"},"spacing":{"margin":{"top":"0px","bottom":"32px"}}},"className":"l3-modalidad-list"} -->
-                    <ul class="wp-block-list l3-modalidad-list" style="font-size:0.9rem;color:#CBD5E1;margin-top:0;margin-bottom:32px">
-                        <!-- wp:list-item --><li>Litigios civiles, comerciales y laborales</li><!-- /wp:list-item -->
-                        <!-- wp:list-item --><li>Procesos de fusiones, adquisiciones y due diligence</li><!-- /wp:list-item -->
-                        <!-- wp:list-item --><li>Resolución de controversias y arbitraje</li><!-- /wp:list-item -->
-                        <!-- wp:list-item --><li>Gestión de crisis y contingencias regulatorias</li><!-- /wp:list-item -->
-                    </ul>
-                    <!-- /wp:list -->
+                    
                     <!-- wp:buttons {"layout":{"type":"flex","justifyContent":"center"}} -->
                     <div class="wp-block-buttons">
-                        <!-- wp:button {"className":"l3-btn-amber","style":{"border":{"radius":"2px"},"typography":{"fontSize":"0.8rem","fontWeight":"600","letterSpacing":"1.5px","textTransform":"uppercase"},"color":{"background":"#C8782A","text":"#F8FAFC"}}} -->
-                        <div class="wp-block-button l3-btn-amber"><a class="wp-block-button__link wp-element-button antigravity-modal-trigger" style="border-radius:2px;font-size:0.8rem;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;background-color:#C8782A;color:#F8FAFC">Consultar Caso</a></div>
+                        <!-- wp:button {"className":"l3-btn-amber"} -->
+                        <div class="wp-block-button l3-btn-amber"><a class="wp-block-button__link wp-element-button antigravity-modal-trigger">Consultar Caso</a></div>
+                        <!-- /wp:button -->
+                    </div>
+                    <!-- /wp:buttons -->
+                </div>
+                <!-- /wp:group -->
+            </div>
+            <!-- /wp:column -->
+
+            <!-- ===== TARJETA 3: LITIGIO ESTRATÉGICO ===== -->
+            <!-- wp:column {"className":"l3-modalidad-card l3-modalidad-litigio"} -->
+            <div class="wp-block-column l3-modalidad-card l3-modalidad-litigio">
+                <!-- wp:group {"className":"l3-modalidad-inner","layout":{"type":"constrained","justifyContent":"center"}} -->
+                <div class="wp-block-group l3-modalidad-inner" style="padding:var(--wp--preset--spacing--50)">
+                    <!-- Badge pill -->
+                    <!-- wp:paragraph {"align":"center","className":"l3-modalidad-badge"} -->
+                    <p class="has-text-align-center l3-modalidad-badge">Litigio<br>(Defensa Activa)</p>
+                    <!-- /wp:paragraph -->
+                    <!-- wp:heading {"textAlign":"center","level":3,"className":"has-serif-font-family"} -->
+                    <h3 class="wp-block-heading has-text-align-center has-serif-font-family">Litigio<br>Estratégico.</h3>
+                    <!-- /wp:heading -->
+                    <!-- wp:separator {"className":"is-style-wide"} -->
+                    <hr class="wp-block-separator is-style-wide has-alpha-channel-opacity" />
+                    <!-- /wp:separator -->
+                    <!-- wp:paragraph {"align":"center"} -->
+                    <p class="has-text-align-center">Defensa activa de sus intereses en cualquier instancia judicial. Presencia firme, estrategia de alto nivel y representación comprometida hasta obtener el resultado que su negocio merece.</p>
+                    <!-- /wp:paragraph -->
+                    
+                    <!-- wp:buttons {"layout":{"type":"flex","justifyContent":"center"}} -->
+                    <div class="wp-block-buttons">
+                        <!-- wp:button {"className":"l3-btn-teal"} -->
+                        <div class="wp-block-button l3-btn-teal"><a class="wp-block-button__link wp-element-button antigravity-modal-trigger">Evaluar Mi Caso</a></div>
                         <!-- /wp:button -->
                     </div>
                     <!-- /wp:buttons -->
@@ -794,7 +811,7 @@ PATTERN_HTML;
 
 	register_block_pattern( 'antigravity/modalidades-servicio', array(
 		'title'       => 'Modalidades de Servicio Legal',
-		'description' => 'Dos tarjetas: Blindaje Continuo e Intervención. Responsive, dark mode.',
+		'description' => 'Tres tarjetas: Blindaje, Intervención y Litigio. Diseño editorial premium.',
 		'categories'  => array( 'antigravity-patterns' ),
 		'keywords'    => array( 'servicio', 'blindaje', 'intervención', 'modalidades', 'legal' ),
 		'content'     => $content,

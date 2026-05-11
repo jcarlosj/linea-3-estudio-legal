@@ -858,7 +858,7 @@ PATTERN_HTML;
     register_block_pattern(
         'antigravity/metodologia-final',
         array(
-            'title'       => __( 'Nuestra Metodología FINAL', 'linea3-legal-child' ),
+            'title'       => __( 'Nuestra Metodología', 'linea3-legal-child' ),
             'description' => _x( 'Diagrama de flujo (infinito) de la metodología.', 'Block pattern description', 'linea3-legal-child' ),
             'content'     => $content,
             'categories'  => array( 'antigravity-patterns' ),

@@ -4700,12 +4700,29 @@ main.single-post-layout-pro {
     transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease, background 0.3s ease !important;
     position: relative !important;
     z-index: 2 !important;
+    animation: l3-card-glow 6s infinite !important;
 }
 .l3-metodo-card:hover {
     border-color: rgba(184, 150, 100, 0.7) !important;
     background: #0a2233 !important;
     box-shadow: 0 15px 40px rgba(0,0,0,0.5) !important;
     transform: translateY(-3px) !important;
+}
+
+/* Auto-Hover Animation */
+@keyframes l3-card-glow {
+    0%, 40%, 100% {
+        border-color: rgba(184, 150, 100, 0.3) !important;
+        background: rgba(255, 255, 255, 0.02) !important;
+        box-shadow: none !important;
+        transform: translateY(0) !important;
+    }
+    10%, 30% {
+        border-color: rgba(184, 150, 100, 0.7) !important;
+        background: #0a2233 !important;
+        box-shadow: 0 15px 40px rgba(0,0,0,0.5) !important;
+        transform: translateY(-3px) !important;
+    }
 }
 .l3-metodo-card-title {
     font-family: var(--wp--preset--font-family--serif, 'Playfair Display', serif) !important;
@@ -4725,11 +4742,11 @@ main.single-post-layout-pro {
     margin: 0 !important;
 }
 
-/* Grid Placement */
-.l3-metodo-tl { grid-column: 1; grid-row: 1; }
-.l3-metodo-tr { grid-column: 2; grid-row: 1; }
-.l3-metodo-bl { grid-column: 1; grid-row: 2; }
-.l3-metodo-br { grid-column: 2; grid-row: 2; }
+/* Grid Placement & Sync Delays */
+.l3-metodo-tl { grid-column: 1; grid-row: 1; animation-delay: 0s !important; }
+.l3-metodo-tr { grid-column: 2; grid-row: 1; animation-delay: 0s !important; }
+.l3-metodo-bl { grid-column: 1; grid-row: 2; animation-delay: 3s !important; }
+.l3-metodo-br { grid-column: 2; grid-row: 2; animation-delay: 3s !important; }
 
 /* Hub — Infinity SVG */
 .l3-metodo-hub {
@@ -4753,6 +4770,17 @@ main.single-post-layout-pro {
     filter: drop-shadow(0 4px 25px rgba(184,150,100,0.2)) !important;
     transition: filter 0.4s ease !important;
     overflow: visible !important;
+}
+
+/* Light Trace Animation */
+.trace-left, .trace-right {
+    animation: l3-light-trace 6s linear infinite !important;
+}
+@keyframes l3-light-trace {
+    0% { stroke-dashoffset: 100; opacity: 0; }
+    5% { opacity: 1; }
+    95% { opacity: 1; }
+    100% { stroke-dashoffset: 0; opacity: 0; }
 }
 
 /* Infinity path — siempre visible con pulso sutil */

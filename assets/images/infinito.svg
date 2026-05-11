@@ -37,10 +37,11 @@
       <stop offset="50%" stop-color="#00aaff" />
       <stop offset="100%" stop-color="#0077ff" />
     </linearGradient>
-    <linearGradient id="right-glow" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" stop-color="#fff" />
-      <stop offset="50%" stop-color="#ffcc00" />
-      <stop offset="100%" stop-color="#ffaa00" />
+    <linearGradient id="half-half" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="800" y2="0">
+      <stop offset="0%" stop-color="var(--left-color)" />
+      <stop offset="50%" stop-color="var(--left-color)" />
+      <stop offset="50%" stop-color="var(--right-color)" />
+      <stop offset="100%" stop-color="var(--right-color)" />
     </linearGradient>
   </defs>
 
@@ -50,58 +51,56 @@
     <path class="guide" d="M 350 200 L 450 200 M 400 150 L 400 250" />
   </g>
 
-  <g id="right-loop">
-    <path class="track-outer" stroke="var(--right-color)" d="M 400 200 C 440 280, 484 320, 550 320 A 120 120 0 0 0 670 200 A 120 120 0 0 0 550 80 C 484 80, 440 120, 400 200" />
-    <path class="track-outer-mask" d="M 400 200 C 440 280, 484 320, 550 320 A 120 120 0 0 0 670 200 A 120 120 0 0 0 550 80 C 484 80, 440 120, 400 200" />
+  <!-- Loop Under: Left Edge -> Bottom Left -> Center -> Top Right -> Right Edge -->
+  <g id="loop-under">
+    <path class="track-outer" stroke="var(--right-color)" d="M 130 200 A 120 120 0 0 0 250 320 C 316 320, 360 280, 400 200 C 440 120, 484 80, 550 80 A 120 120 0 0 1 670 200" />
+    <path class="track-outer-mask" stroke="var(--bg-color)" d="M 130 200 A 120 120 0 0 0 250 320 C 316 320, 360 280, 400 200 C 440 120, 484 80, 550 80 A 120 120 0 0 1 670 200" />
     
-    <path class="track-main" stroke="var(--right-color)" d="M 400 200 C 440 280, 484 320, 550 320 A 120 120 0 0 0 670 200 A 120 120 0 0 0 550 80 C 484 80, 440 120, 400 200" />
+    <path class="track-main" stroke="rgba(255,255,255,0.6)" d="M 130 200 A 120 120 0 0 0 250 320 C 316 320, 360 280, 400 200 C 440 120, 484 80, 550 80 A 120 120 0 0 1 670 200" />
     
-    <path class="track-inner-mask" d="M 400 200 C 440 280, 484 320, 550 320 A 120 120 0 0 0 670 200 A 120 120 0 0 0 550 80 C 484 80, 440 120, 400 200" />
+    <path class="track-inner-mask" stroke="var(--bg-color)" d="M 130 200 A 120 120 0 0 0 250 320 C 316 320, 360 280, 400 200 C 440 120, 484 80, 550 80 A 120 120 0 0 1 670 200" />
     
-    <path class="track-center" stroke="var(--right-color)" d="M 400 200 C 440 280, 484 320, 550 320 A 120 120 0 0 0 670 200 A 120 120 0 0 0 550 80 C 484 80, 440 120, 400 200" />
+    <path class="track-center" stroke="var(--right-color)" d="M 130 200 A 120 120 0 0 0 250 320 C 316 320, 360 280, 400 200 C 440 120, 484 80, 550 80 A 120 120 0 0 1 670 200" />
+    
+    <!-- Light Trace Under (Path 1: TL -> BL -> TR) -->
+    <path class="light-trace trace-under" stroke="url(#half-half)" d="M 250 80 A 120 120 0 0 0 130 200 A 120 120 0 0 0 250 320 C 316 320, 360 280, 400 200 C 440 120, 484 80, 550 80" pathLength="100" />
   </g>
 
-  <g id="left-loop">
-    <path class="track-outer" stroke="var(--left-color)" d="M 400 200 C 360 120, 316 80, 250 80 A 120 120 0 0 0 130 200 A 120 120 0 0 0 250 320 C 316 320, 360 280, 400 200" />
-    <path class="track-outer-mask" d="M 400 200 C 360 120, 316 80, 250 80 A 120 120 0 0 0 130 200 A 120 120 0 0 0 250 320 C 316 320, 360 280, 400 200" />
+  <!-- Loop Over: Right Edge -> Bottom Right -> Center -> Top Left -> Left Edge -->
+  <g id="loop-over">
+    <path class="track-outer" stroke="var(--right-color)" d="M 670 200 A 120 120 0 0 1 550 320 C 484 320, 440 280, 400 200 C 360 120, 316 80, 250 80 A 120 120 0 0 0 130 200" />
+    <path class="track-outer-mask" stroke="var(--bg-color)" d="M 670 200 A 120 120 0 0 1 550 320 C 484 320, 440 280, 400 200 C 360 120, 316 80, 250 80 A 120 120 0 0 0 130 200" />
     
-    <path class="track-main" stroke="var(--left-color)" d="M 400 200 C 360 120, 316 80, 250 80 A 120 120 0 0 0 130 200 A 120 120 0 0 0 250 320 C 316 320, 360 280, 400 200" />
+    <path class="track-main" stroke="rgba(255,255,255,0.6)" d="M 670 200 A 120 120 0 0 1 550 320 C 484 320, 440 280, 400 200 C 360 120, 316 80, 250 80 A 120 120 0 0 0 130 200" />
     
-    <path class="track-inner-mask" d="M 400 200 C 360 120, 316 80, 250 80 A 120 120 0 0 0 130 200 A 120 120 0 0 0 250 320 C 316 320, 360 280, 400 200" />
+    <path class="track-inner-mask" stroke="var(--bg-color)" d="M 670 200 A 120 120 0 0 1 550 320 C 484 320, 440 280, 400 200 C 360 120, 316 80, 250 80 A 120 120 0 0 0 130 200" />
     
-    <path class="track-center" stroke="var(--left-color)" d="M 400 200 C 360 120, 316 80, 250 80 A 120 120 0 0 0 130 200 A 120 120 0 0 0 250 320 C 316 320, 360 280, 400 200" />
+    <path class="track-center" stroke="var(--right-color)" d="M 670 200 A 120 120 0 0 1 550 320 C 484 320, 440 280, 400 200 C 360 120, 316 80, 250 80 A 120 120 0 0 0 130 200" />
+    
+    <!-- Light Trace Over (Path 2: TR -> BR -> TL) -->
+    <path class="light-trace trace-over" stroke="url(#half-half)" d="M 550 80 A 120 120 0 0 1 670 200 A 120 120 0 0 1 550 320 C 484 320, 440 280, 400 200 C 360 120, 316 80, 250 80" pathLength="100" />
   </g>
 
   <g id="nodes">
-    <circle cx="130" cy="200" r="36" class="node-bg" />
-    <circle cx="130" cy="200" r="30" fill="none" stroke="var(--left-color)" stroke-width="2"/>
-    <circle cx="130" cy="200" r="22" fill="none" stroke="var(--left-color)" stroke-width="6"/>
-    <circle cx="130" cy="200" r="12" fill="none" stroke="var(--left-color)" stroke-width="2"/>
+    <!-- Node 1: Top Left -->
+    <circle cx="250" cy="80" r="36" class="node-bg" />
+    <circle cx="250" cy="80" r="30" fill="none" stroke-width="2" class="l3-node-circle l3-node-1"/>
+    <text x="250" y="82" font-family="serif" font-size="28" font-weight="700" text-anchor="middle" dominant-baseline="middle" class="l3-node-text l3-node-1">1</text>
 
-    <circle cx="670" cy="200" r="36" class="node-bg" />
-    <circle cx="670" cy="200" r="30" fill="none" stroke="var(--right-color)" stroke-width="2"/>
-    <circle cx="670" cy="200" r="22" fill="none" stroke="var(--right-color)" stroke-width="6"/>
-    <circle cx="670" cy="200" r="12" fill="none" stroke="var(--right-color)" stroke-width="2"/>
+    <!-- Node 2: Bottom Left -->
+    <circle cx="250" cy="320" r="36" class="node-bg" />
+    <circle cx="250" cy="320" r="30" fill="none" stroke-width="2" class="l3-node-circle l3-node-2"/>
+    <text x="250" y="322" font-family="serif" font-size="28" font-weight="700" text-anchor="middle" dominant-baseline="middle" class="l3-node-text l3-node-2">2</text>
 
-    <circle cx="400" cy="200" r="45" class="node-bg" />
-    <circle cx="400" cy="200" r="40" fill="none" stroke="var(--guide-color)" stroke-width="2"/>
-    <circle cx="400" cy="200" r="32" fill="none" stroke="var(--left-color)" stroke-width="4"/>
-    <circle cx="400" cy="200" r="24" fill="none" stroke="var(--right-color)" stroke-width="4"/>
-    <circle cx="400" cy="200" r="14" class="node-bg" stroke="var(--guide-color)" stroke-width="2"/>
+    <!-- Node 3: Top Right -->
+    <circle cx="550" cy="80" r="36" class="node-bg" />
+    <circle cx="550" cy="80" r="30" fill="none" stroke-width="2" class="l3-node-circle l3-node-3"/>
+    <text x="550" y="82" font-family="serif" font-size="28" font-weight="700" text-anchor="middle" dominant-baseline="middle" class="l3-node-text l3-node-3">3</text>
+
+    <!-- Node 4: Bottom Right -->
+    <circle cx="550" cy="320" r="36" class="node-bg" />
+    <circle cx="550" cy="320" r="30" fill="none" stroke-width="2" class="l3-node-circle l3-node-4"/>
+    <text x="550" y="322" font-family="serif" font-size="28" font-weight="700" text-anchor="middle" dominant-baseline="middle" class="l3-node-text l3-node-4">4</text>
   </g>
 
-  <g id="arrows">
-    <polygon points="255,75 245,80 255,85" fill="var(--left-color)" />
-    <polygon points="245,315 255,320 245,325" fill="var(--left-color)" />
-    
-    <polygon points="545,75 555,80 545,85" fill="var(--right-color)" />
-    <polygon points="555,315 545,320 555,325" fill="var(--right-color)" />
-  </g>
-
-  <!-- LIGHT TRACE PATHS -->
-  <!-- Left Trace: Center -> Top Left -> Bottom Left -> Center -->
-  <path id="light-trace-left" class="light-trace trace-left" d="M 400 200 C 360 120, 316 80, 250 80 A 120 120 0 0 0 130 200 A 120 120 0 0 0 250 320 C 316 320, 360 280, 400 200" pathLength="100" />
-  
-  <!-- Right Trace: Center -> Top Right -> Bottom Right -> Center (Matches arrow directions) -->
-  <path id="light-trace-right" class="light-trace trace-right" d="M 400 200 C 440 120, 484 80, 550 80 A 120 120 0 0 1 670 200 A 120 120 0 0 1 550 320 C 484 320, 440 280, 400 200" pathLength="100" />
 </svg>

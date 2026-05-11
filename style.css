@@ -4700,24 +4700,26 @@ main.single-post-layout-pro {
     transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease, background 0.3s ease !important;
     position: relative !important;
     z-index: 2 !important;
-    animation: l3-card-glow 6s infinite !important;
+    animation: l3-card-glow 12s infinite !important;
 }
 .l3-metodo-card:hover {
+    animation: none !important;
     border-color: rgba(184, 150, 100, 0.7) !important;
     background: #0a2233 !important;
     box-shadow: 0 15px 40px rgba(0,0,0,0.5) !important;
     transform: translateY(-3px) !important;
+    z-index: 10 !important;
 }
 
 /* Auto-Hover Animation */
 @keyframes l3-card-glow {
-    0%, 40%, 100% {
+    0%, 20%, 100% {
         border-color: rgba(184, 150, 100, 0.3) !important;
         background: rgba(255, 255, 255, 0.02) !important;
         box-shadow: none !important;
         transform: translateY(0) !important;
     }
-    10%, 30% {
+    5%, 15% {
         border-color: rgba(184, 150, 100, 0.7) !important;
         background: #0a2233 !important;
         box-shadow: 0 15px 40px rgba(0,0,0,0.5) !important;
@@ -4742,11 +4744,11 @@ main.single-post-layout-pro {
     margin: 0 !important;
 }
 
-/* Grid Placement & Sync Delays */
+/* Grid Placement & Sync Delays (1-2-3-4 Sequential) */
 .l3-metodo-tl { grid-column: 1; grid-row: 1; animation-delay: 0s !important; }
-.l3-metodo-tr { grid-column: 2; grid-row: 1; animation-delay: 0s !important; }
 .l3-metodo-bl { grid-column: 1; grid-row: 2; animation-delay: 3s !important; }
-.l3-metodo-br { grid-column: 2; grid-row: 2; animation-delay: 3s !important; }
+.l3-metodo-tr { grid-column: 2; grid-row: 1; animation-delay: 6s !important; }
+.l3-metodo-br { grid-column: 2; grid-row: 2; animation-delay: 9s !important; }
 
 /* Hub — Infinity SVG */
 .l3-metodo-hub {
@@ -4772,41 +4774,70 @@ main.single-post-layout-pro {
     overflow: visible !important;
 }
 
-/* Light Trace Animation */
-.trace-left, .trace-right {
-    animation: l3-light-trace 6s linear infinite !important;
+/* Light Trace Animation (12s Continuous Loop) */
+.trace-under {
+    animation: l3-light-trace-under 12s linear infinite !important;
+    stroke: #c0eaff !important;
+    filter: drop-shadow(0 0 10px rgba(192, 234, 255, 0.95)) !important;
 }
-@keyframes l3-light-trace {
+.trace-over {
+    animation: l3-light-trace-over 12s linear infinite !important;
+    stroke: #c0eaff !important;
+    filter: drop-shadow(0 0 10px rgba(192, 234, 255, 0.95)) !important;
+}
+
+@keyframes l3-light-trace-under {
     0% { stroke-dashoffset: 100; opacity: 0; }
-    5% { opacity: 1; }
-    95% { opacity: 1; }
+    2.5% { opacity: 1; }
+    47.5% { opacity: 1; }
+    50% { stroke-dashoffset: 0; opacity: 0; }
     100% { stroke-dashoffset: 0; opacity: 0; }
 }
 
-/* Infinity path — siempre visible con pulso sutil */
-.l3-infinity-path {
-    stroke-dasharray: none !important;
-    stroke-dashoffset: 0 !important;
-    opacity: 0.8 !important;
-    animation: l3-infinity-glow 3s ease-in-out infinite !important;
-}
-@keyframes l3-infinity-glow {
-    0%, 100% { opacity: 0.6; }
-    50% { opacity: 1; }
+@keyframes l3-light-trace-over {
+    0% { stroke-dashoffset: 100; opacity: 0; }
+    49.9% { stroke-dashoffset: 100; opacity: 0; }
+    50% { stroke-dashoffset: 100; opacity: 0; }
+    52.5% { opacity: 1; }
+    97.5% { opacity: 1; }
+    100% { stroke-dashoffset: 0; opacity: 0; }
 }
 
-/* Nodos pulso secuencial */
-.l3-infinity-node {
-    animation: l3-node-pulse 2.5s ease-in-out infinite !important;
+/* Node Highlights (Synced with Light) */
+@keyframes l3-node-highlight {
+    0%, 20%, 100% {
+        stroke: #b89664 !important;
+        filter: none !important;
+    }
+    5%, 15% {
+        stroke: #c0eaff !important;
+        filter: drop-shadow(0 0 15px rgba(192, 234, 255, 0.9)) !important;
+    }
 }
+
+@keyframes l3-node-text-highlight {
+    0%, 20%, 100% {
+        fill: #b89664 !important;
+    }
+    5%, 15% {
+        fill: #c0eaff !important;
+    }
+}
+
+.l3-node-circle {
+    stroke: #b89664 !important;
+    animation: l3-node-highlight 12s infinite !important;
+}
+
+.l3-node-text {
+    fill: #b89664 !important;
+    animation: l3-node-text-highlight 12s infinite !important;
+}
+
 .l3-node-1 { animation-delay: 0s !important; }
-.l3-node-2 { animation-delay: 0.6s !important; }
-.l3-node-3 { animation-delay: 1.2s !important; }
-.l3-node-4 { animation-delay: 1.8s !important; }
-@keyframes l3-node-pulse {
-    0%, 100% { opacity: 0.4; }
-    50% { opacity: 1; }
-}
+.l3-node-2 { animation-delay: 3s !important; }
+.l3-node-3 { animation-delay: 6s !important; }
+.l3-node-4 { animation-delay: 9s !important; }
 
 /* ── Responsive Mobile (Metodología) ── */
 @media (max-width: 767px) {

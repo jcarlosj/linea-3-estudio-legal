@@ -834,20 +834,20 @@ function antigravity_register_metodologia_pattern(): void {
                 <h3 class="l3-metodo-card-title"><span class="l3-metodo-number">1.</span> Escuchamos</h3>
                 <p class="l3-metodo-card-text">Antes de proponer una solución legal, escuchamos y diagnosticamos tu realidad.</p>
             </div>
-            <div class="l3-metodo-card l3-metodo-tr">
+            <div class="l3-metodo-card l3-metodo-bl">
                 <h3 class="l3-metodo-card-title"><span class="l3-metodo-number">2.</span> Entendemos</h3>
                 <p class="l3-metodo-card-text">Analizamos el negocio completo, no solo el problema jurídico aislado.</p>
             </div>
             <div class="l3-metodo-hub" style="display: flex; align-items: center; justify-content: center;">
                 {$svg_content}
             </div>
-            <div class="l3-metodo-card l3-metodo-bl">
-                <h3 class="l3-metodo-card-title"><span class="l3-metodo-number">4.</span> Acompañamos</h3>
-                <p class="l3-metodo-card-text">Estamos presentes en la ejecución de cada decisión para garantizar la seguridad del proyecto.</p>
-            </div>
-            <div class="l3-metodo-card l3-metodo-br">
+            <div class="l3-metodo-card l3-metodo-tr">
                 <h3 class="l3-metodo-card-title"><span class="l3-metodo-number">3.</span> Simplificamos</h3>
                 <p class="l3-metodo-card-text">Traducimos la complejidad del ordenamiento jurídico a decisiones claras y accesibles.</p>
+            </div>
+            <div class="l3-metodo-card l3-metodo-br">
+                <h3 class="l3-metodo-card-title"><span class="l3-metodo-number">4.</span> Acompañamos</h3>
+                <p class="l3-metodo-card-text">Estamos presentes en la ejecución de cada decisión para garantizar la seguridad del proyecto.</p>
             </div>
         </div>
     </div>

@@ -4642,7 +4642,173 @@ main.single-post-layout-pro {
     .l3-card-br { order: 8; }   /* Capital */
 }
 
+/* =====================================================
+   PATTERN: Nuestra Metodología
+   ===================================================== */
+.l3-metodologia-section {
+    background-color: #030912 !important;
+    padding: 100px 0 !important;
+    width: 100vw !important;
+    margin-left: calc(-50vw + 50%) !important;
+    position: relative !important;
+}
+.l3-metodologia-container {
+    max-width: 1100px !important;
+    margin: 0 auto !important;
+    padding: 0 40px !important;
+}
+.l3-metodologia-header {
+    text-align: center !important;
+    margin-bottom: 80px !important;
+}
+.l3-metodologia-label {
+    display: block !important;
+    font-size: 0.75rem !important;
+    letter-spacing: 2px !important;
+    text-transform: uppercase !important;
+    color: #b89664 !important;
+    margin-bottom: 16px !important;
+    font-weight: 500 !important;
+}
+.l3-metodologia-title {
+    font-family: var(--wp--preset--font-family--serif, 'Playfair Display', serif) !important;
+    font-size: clamp(2rem, 5vw, 3.2rem) !important;
+    color: #ffffff !important;
+    letter-spacing: -0.02em !important;
+    line-height: 1.15 !important;
+    margin: 0 !important;
+}
+
+/* Diagram Grid — misma estructura que Síntoma */
+.l3-metodologia-diagram {
+    display: grid !important;
+    grid-template-columns: minmax(auto, 300px) minmax(auto, 300px) !important;
+    justify-content: space-between !important;
+    grid-template-rows: auto auto !important;
+    gap: 80px 0 !important;
+    max-width: 960px !important;
+    margin: 0 auto !important;
+    position: relative !important;
+}
+
+/* Cards */
+.l3-metodo-card {
+    border: 1px solid rgba(184, 150, 100, 0.3) !important;
+    border-radius: 6px !important;
+    padding: 28px 24px !important;
+    background: rgba(255, 255, 255, 0.02) !important;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease, background 0.3s ease !important;
+    position: relative !important;
+    z-index: 2 !important;
+}
+.l3-metodo-card:hover {
+    border-color: rgba(184, 150, 100, 0.7) !important;
+    background: #0a2233 !important;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.5) !important;
+    transform: translateY(-3px) !important;
+}
+.l3-metodo-card-title {
+    font-family: var(--wp--preset--font-family--serif, 'Playfair Display', serif) !important;
+    font-size: 1.25rem !important;
+    color: #b89664 !important;
+    margin: 0 0 10px 0 !important;
+    font-weight: 600 !important;
+}
+.l3-metodo-number {
+    color: #b89664 !important;
+    font-weight: 700 !important;
+}
+.l3-metodo-card-text {
+    font-size: 0.9rem !important;
+    color: rgba(255,255,255,0.6) !important;
+    line-height: 1.55 !important;
+    margin: 0 !important;
+}
+
+/* Grid Placement */
+.l3-metodo-tl { grid-column: 1; grid-row: 1; }
+.l3-metodo-tr { grid-column: 2; grid-row: 1; }
+.l3-metodo-bl { grid-column: 1; grid-row: 2; }
+.l3-metodo-br { grid-column: 2; grid-row: 2; }
+
+/* Hub — Infinity SVG */
+.l3-metodo-hub {
+    position: absolute !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    width: clamp(280px, 50vw, 560px) !important;
+    aspect-ratio: 2 / 1 !important;
+    height: auto !important;
+    z-index: 3 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    pointer-events: none !important;
+}
+.l3-metodo-infinity {
+    width: 100% !important;
+    height: 100% !important;
+    color: #b89664 !important;
+    filter: drop-shadow(0 4px 25px rgba(184,150,100,0.2)) !important;
+    transition: filter 0.4s ease !important;
+    overflow: visible !important;
+}
+
+/* Infinity path — siempre visible con pulso sutil */
+.l3-infinity-path {
+    stroke-dasharray: none !important;
+    stroke-dashoffset: 0 !important;
+    opacity: 0.8 !important;
+    animation: l3-infinity-glow 3s ease-in-out infinite !important;
+}
+@keyframes l3-infinity-glow {
+    0%, 100% { opacity: 0.6; }
+    50% { opacity: 1; }
+}
+
+/* Nodos pulso secuencial */
+.l3-infinity-node {
+    animation: l3-node-pulse 2.5s ease-in-out infinite !important;
+}
+.l3-node-1 { animation-delay: 0s !important; }
+.l3-node-2 { animation-delay: 0.6s !important; }
+.l3-node-3 { animation-delay: 1.2s !important; }
+.l3-node-4 { animation-delay: 1.8s !important; }
+@keyframes l3-node-pulse {
+    0%, 100% { opacity: 0.4; }
+    50% { opacity: 1; }
+}
+
+/* ── Responsive Mobile (Metodología) ── */
+@media (max-width: 767px) {
+    .l3-metodologia-section { padding: 60px 0 !important; }
+    .l3-metodologia-header { margin-bottom: 40px !important; }
+    .l3-metodologia-diagram {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        gap: 20px !important;
+    }
+    .l3-metodo-hub {
+        position: relative !important;
+        top: auto !important; left: auto !important;
+        transform: none !important;
+        width: 85vw !important;
+        max-width: 320px !important;
+        aspect-ratio: 2 / 1 !important;
+        height: auto !important;
+        order: -1 !important;
+        margin-bottom: 20px !important;
+    }
+    .l3-metodo-card {
+        max-width: 280px !important;
+        width: 100% !important;
+    }
+}
+
 /* ── Responsive: Tablet ── */
+
 
 @media (max-width: 991px) {
     .l3-enfoque-cell {

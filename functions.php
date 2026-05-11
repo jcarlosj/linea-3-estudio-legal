@@ -762,43 +762,47 @@ add_action( 'init', 'antigravity_register_enfoque_pattern' );
  */
 function antigravity_register_sintoma_pattern(): void {
     $content = <<<'PATTERN_HTML'
-<!-- wp:html -->
-<section class="l3-sintoma-section">
-    <div class="l3-sintoma-container">
-        <div class="l3-sintoma-header">
-            <span class="l3-sintoma-label">DIAGNÓSTICO LEGAL</span>
-            <h2 class="l3-sintoma-title">El síntoma de la<br>desorganización jurídica</h2>
-        </div>
-        <div class="l3-sintoma-diagram">
-            <div class="l3-sintoma-card l3-card-tl">
-                <h3 class="l3-sintoma-card-title">Empresas</h3>
-                <p class="l3-sintoma-card-text">Estructuras jurídicas incompletas que limitan el crecimiento.</p>
+<!-- wp:group {"align":"full","style":{"spacing":{"padding":{"top":"0","bottom":"0","left":"0","right":"0"},"margin":{"top":"0","bottom":"0"}}},"backgroundColor":"base","layout":{"type":"constrained"}} -->
+<div class="wp-block-group alignfull has-base-background-color has-background l3-sintoma-wrapper">
+    <!-- wp:html -->
+    <section class="l3-sintoma-section">
+        <div class="l3-sintoma-container">
+            <div class="l3-sintoma-header">
+                <span class="l3-sintoma-label">DIAGNÓSTICO LEGAL</span>
+                <h2 class="l3-sintoma-title">El síntoma de la<br>desorganización jurídica</h2>
             </div>
-            <div class="l3-sintoma-con l3-con-tl" aria-hidden="true"></div>
-            <div class="l3-sintoma-hub">
-                <div class="l3-sintoma-circle">
-                    <span>Desorganización<br>Jurídica</span>
+            <div class="l3-sintoma-diagram">
+                <div class="l3-sintoma-card l3-card-tl">
+                    <h3 class="l3-sintoma-card-title">Empresas</h3>
+                    <p class="l3-sintoma-card-text">Estructuras jurídicas incompletas que limitan el crecimiento.</p>
+                </div>
+                <div class="l3-sintoma-con l3-con-tl" aria-hidden="true"></div>
+                <div class="l3-sintoma-hub">
+                    <div class="l3-sintoma-circle">
+                        <span>Desorganización<br>Jurídica</span>
+                    </div>
+                </div>
+                <div class="l3-sintoma-con l3-con-tr" aria-hidden="true"></div>
+                <div class="l3-sintoma-card l3-card-tr">
+                    <h3 class="l3-sintoma-card-title">Emprendedores</h3>
+                    <p class="l3-sintoma-card-text">Falta de guía y protección desde el inicio del proyecto.</p>
+                </div>
+                <div class="l3-sintoma-card l3-card-bl">
+                    <h3 class="l3-sintoma-card-title">Personas</h3>
+                    <p class="l3-sintoma-card-text">Desconocimiento de sus derechos fundamentales en el día a día.</p>
+                </div>
+                <div class="l3-sintoma-con l3-con-bl" aria-hidden="true"></div>
+                <div class="l3-sintoma-con l3-con-br" aria-hidden="true"></div>
+                <div class="l3-sintoma-card l3-card-br">
+                    <h3 class="l3-sintoma-card-title">Capital</h3>
+                    <p class="l3-sintoma-card-text">Negocios perdiendo dinero por falta de planeación preventiva.</p>
                 </div>
             </div>
-            <div class="l3-sintoma-con l3-con-tr" aria-hidden="true"></div>
-            <div class="l3-sintoma-card l3-card-tr">
-                <h3 class="l3-sintoma-card-title">Emprendedores</h3>
-                <p class="l3-sintoma-card-text">Falta de guía y protección desde el inicio del proyecto.</p>
-            </div>
-            <div class="l3-sintoma-card l3-card-bl">
-                <h3 class="l3-sintoma-card-title">Personas</h3>
-                <p class="l3-sintoma-card-text">Desconocimiento de sus derechos fundamentales en el día a día.</p>
-            </div>
-            <div class="l3-sintoma-con l3-con-bl" aria-hidden="true"></div>
-            <div class="l3-sintoma-con l3-con-br" aria-hidden="true"></div>
-            <div class="l3-sintoma-card l3-card-br">
-                <h3 class="l3-sintoma-card-title">Capital</h3>
-                <p class="l3-sintoma-card-text">Negocios perdiendo dinero por falta de planeación preventiva.</p>
-            </div>
         </div>
-    </div>
-</section>
-<!-- /wp:html -->
+    </section>
+    <!-- /wp:html -->
+</div>
+<!-- /wp:group -->
 PATTERN_HTML;
 
     register_block_pattern(
@@ -822,37 +826,41 @@ function antigravity_register_metodologia_pattern(): void {
     $svg_content = file_exists( $svg_path ) ? file_get_contents( $svg_path ) : '';
 
     $content = <<<PATTERN_HTML
-<!-- wp:html -->
-<section class="l3-metodologia-section">
-    <div class="l3-metodologia-container">
-        <div class="l3-metodologia-header">
-            <span class="l3-metodologia-label">NUESTRA METODOLOGÍA</span>
-            <h2 class="l3-metodologia-title">No solo asesoramos.</h2>
+<!-- wp:group {"align":"full","style":{"spacing":{"padding":{"top":"0","bottom":"0","left":"0","right":"0"},"margin":{"top":"0","bottom":"0"}}},"backgroundColor":"base","layout":{"type":"constrained"}} -->
+<div class="wp-block-group alignfull has-base-background-color has-background l3-metodologia-wrapper">
+    <!-- wp:html -->
+    <section class="l3-metodologia-section">
+        <div class="l3-metodologia-container">
+            <div class="l3-metodologia-header">
+                <span class="l3-metodologia-label">NUESTRA METODOLOGÍA</span>
+                <h2 class="l3-metodologia-title">No solo asesoramos.</h2>
+            </div>
+            <div class="l3-metodologia-diagram">
+                <div class="l3-metodo-card l3-metodo-tl">
+                    <h3 class="l3-metodo-card-title"><span class="l3-metodo-number">1.</span> Escuchamos</h3>
+                    <p class="l3-metodo-card-text">Antes de proponer una solución legal, escuchamos y diagnosticamos tu realidad.</p>
+                </div>
+                <div class="l3-metodo-card l3-metodo-bl">
+                    <h3 class="l3-metodo-card-title"><span class="l3-metodo-number">2.</span> Entendemos</h3>
+                    <p class="l3-metodo-card-text">Analizamos el negocio completo, no solo el problema jurídico aislado.</p>
+                </div>
+                <div class="l3-metodo-hub" style="display: flex; align-items: center; justify-content: center;">
+                    {$svg_content}
+                </div>
+                <div class="l3-metodo-card l3-metodo-tr">
+                    <h3 class="l3-metodo-card-title"><span class="l3-metodo-number">3.</span> Simplificamos</h3>
+                    <p class="l3-metodo-card-text">Traducimos la complejidad del ordenamiento jurídico a decisiones claras y accesibles.</p>
+                </div>
+                <div class="l3-metodo-card l3-metodo-br">
+                    <h3 class="l3-metodo-card-title"><span class="l3-metodo-number">4.</span> Acompañamos</h3>
+                    <p class="l3-metodo-card-text">Estamos presentes en la ejecución de cada decisión para garantizar la seguridad del proyecto.</p>
+                </div>
+            </div>
         </div>
-        <div class="l3-metodologia-diagram">
-            <div class="l3-metodo-card l3-metodo-tl">
-                <h3 class="l3-metodo-card-title"><span class="l3-metodo-number">1.</span> Escuchamos</h3>
-                <p class="l3-metodo-card-text">Antes de proponer una solución legal, escuchamos y diagnosticamos tu realidad.</p>
-            </div>
-            <div class="l3-metodo-card l3-metodo-bl">
-                <h3 class="l3-metodo-card-title"><span class="l3-metodo-number">2.</span> Entendemos</h3>
-                <p class="l3-metodo-card-text">Analizamos el negocio completo, no solo el problema jurídico aislado.</p>
-            </div>
-            <div class="l3-metodo-hub" style="display: flex; align-items: center; justify-content: center;">
-                {$svg_content}
-            </div>
-            <div class="l3-metodo-card l3-metodo-tr">
-                <h3 class="l3-metodo-card-title"><span class="l3-metodo-number">3.</span> Simplificamos</h3>
-                <p class="l3-metodo-card-text">Traducimos la complejidad del ordenamiento jurídico a decisiones claras y accesibles.</p>
-            </div>
-            <div class="l3-metodo-card l3-metodo-br">
-                <h3 class="l3-metodo-card-title"><span class="l3-metodo-number">4.</span> Acompañamos</h3>
-                <p class="l3-metodo-card-text">Estamos presentes en la ejecución de cada decisión para garantizar la seguridad del proyecto.</p>
-            </div>
-        </div>
-    </div>
-</section>
-<!-- /wp:html -->
+    </section>
+    <!-- /wp:html -->
+</div>
+<!-- /wp:group -->
 PATTERN_HTML;
 
     register_block_pattern(

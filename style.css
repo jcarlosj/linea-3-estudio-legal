@@ -4060,7 +4060,7 @@ main.single-post-layout-pro {
 }
 
 .l3-enfoque-container {
-    max-width: 1200px !important;
+    max-width: var(--wp--style--global--content-size) !important;
     margin: 0 auto !important;
     padding: 0 20px !important;
     position: relative !important;
@@ -4438,17 +4438,19 @@ main.single-post-layout-pro {
 /* =====================================================
    PATTERN: Síntoma de la Desorganización Jurídica
    ===================================================== */
-.l3-sintoma-section {
+.l3-sintoma-wrapper {
     background-color: #030912 !important;
+}
+.l3-sintoma-section {
+    background-color: transparent !important;
     padding: 100px 0 !important;
-    width: 100vw !important;
-    margin-left: calc(-50vw + 50%) !important;
+    width: 100% !important;
     position: relative !important;
 }
 .l3-sintoma-container {
-    max-width: 1100px !important;
+    max-width: var(--wp--style--global--content-size) !important;
     margin: 0 auto !important;
-    padding: 0 40px !important;
+    padding: 0 20px !important;
 }
 .l3-sintoma-header {
     text-align: center !important;
@@ -4645,17 +4647,19 @@ main.single-post-layout-pro {
 /* =====================================================
    PATTERN: Nuestra Metodología
    ===================================================== */
-.l3-metodologia-section {
+.l3-metodologia-wrapper {
     background-color: #030912 !important;
+}
+.l3-metodologia-section {
+    background-color: transparent !important;
     padding: 100px 0 !important;
-    width: 100vw !important;
-    margin-left: calc(-50vw + 50%) !important;
+    width: 100% !important;
     position: relative !important;
 }
 .l3-metodologia-container {
-    max-width: 1100px !important;
+    max-width: var(--wp--style--global--content-size) !important;
     margin: 0 auto !important;
-    padding: 0 40px !important;
+    padding: 0 20px !important;
 }
 .l3-metodologia-header {
     text-align: center !important;

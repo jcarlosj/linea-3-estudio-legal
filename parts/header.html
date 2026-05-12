@@ -1,17 +1,18 @@
 <!-- wp:group {"tagName":"header","align":"full","layout":{"type":"flex","flexWrap":"nowrap","justifyContent":"space-between"},"style":{"position":{"type":"sticky","top":"0px"},"spacing":{"padding":{"top":"var:preset|spacing|40","bottom":"var:preset|spacing|40","left":"var:preset|spacing|50","right":"var:preset|spacing|50"}},"color":{"background":"var:preset|color|base"}}} -->
-<header class="wp-block-group alignfull has-base-background-color has-background"
+<header class="wp-block-group alignfull header-main-container has-base-background-color has-background"
 	style="padding-top:var(--wp--preset--spacing--40);padding-right:var(--wp--preset--spacing--50);padding-bottom:var(--wp--preset--spacing--40);padding-left:var(--wp--preset--spacing--50);position:sticky;top:0px;z-index:999">
 
-	<!-- wp:group {"className":"responsive-logo-wrapper","layout":{"type":"flex","flexWrap":"nowrap"}} -->
 	<div class="wp-block-group responsive-logo-wrapper">
-		<!-- wp:image {"linkDestination":"custom","style":{"layout":{"selfStretch":"fit","flexSize":null}}} -->
-		<figure class="wp-block-image"><a href="/"><img
-					src="/wp-content/themes/linea3-legal-child/assets/images/logo-horizontal-oscuro.png" alt="Línea 3 Estudio Legal" /></a></figure>
-		<!-- /wp:image -->
+		<!-- wp:html -->
+		<a href="/" class="header-link-logo">
+			<img src="/wp-content/themes/linea3-legal-child/assets/images/logo-horizontal-oscuro.png" alt="Línea 3 Estudio Legal" class="logo-horizontal" />
+			<img src="/wp-content/themes/linea3-legal-child/assets/images/logo-vertical-oscuro.png" alt="Línea 3 Estudio Legal" class="logo-vertical" />
+		</a>
+		<!-- /wp:html -->
 	</div>
 	<!-- /wp:group -->
-	<!-- wp:group {"layout":{"type":"flex","flexWrap":"nowrap","justifyContent":"right"},"style":{"spacing":{"blockGap":"2rem"}}} -->
-	<div class="wp-block-group" style="gap:2rem">
+	<!-- wp:group {"className":"header-right-side","layout":{"type":"flex","flexWrap":"nowrap","justifyContent":"right"},"style":{"spacing":{"blockGap":"2rem"}}} -->
+	<div class="wp-block-group header-right-side" style="gap:2rem">
 		<!-- wp:navigation {"ref":19,"overlayMenu":"mobile","overlayBackgroundColor":"base","overlayTextColor":"text-main","style":{"spacing":{"blockGap":"32px"}},"layout":{"type":"flex","justifyContent":"right","orientation":"horizontal","flexWrap":"nowrap"}} /-->
 
 		<!-- wp:buttons -->

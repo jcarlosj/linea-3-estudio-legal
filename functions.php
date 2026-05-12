@@ -215,7 +215,7 @@ function antigravity_handle_consultation_form()
 		<div style='max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);'>
 			<div style='background-color: #0a2233; padding: 30px; text-align: center; border-bottom: 4px solid #ce9e50;'>
 				<a href='" . esc_url(home_url('/')) . "' target='_blank' style='display: inline-block; text-decoration: none;'>
-					<img src='" . esc_url(get_stylesheet_directory_uri() . '/assets/images/logo-horizontal-oscuro.png') . "' alt='Línea 3 Estudio Legal' style='max-width: 200px; height: auto; border: none;'>
+					<img src='" . esc_url(get_stylesheet_directory_uri() . '/assets/images/logo-horizontal-oscuro.png') . "' alt='Linea 3 Estudio Legal' style='max-width: 200px; height: auto; border: none;'>
 				</a>
 			</div>
 			<div style='padding: 40px; color: #334155; line-height: 1.6;'>
@@ -347,7 +347,7 @@ function antigravity_handle_team_contact_form()
 		<div style='max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);'>
 			<div style='background-color: #0a2233; padding: 30px; text-align: center; border-bottom: 4px solid #ce9e50;'>
 				<a href='" . esc_url(home_url('/')) . "' target='_blank' style='display: inline-block; text-decoration: none;'>
-					<img src='" . esc_url(get_stylesheet_directory_uri() . '/assets/images/logo-horizontal-oscuro.png') . "' alt='Línea 3 Estudio Legal' style='max-width: 200px; height: auto; border: none;'>
+					<img src='" . esc_url(get_stylesheet_directory_uri() . '/assets/images/logo-horizontal-oscuro.png') . "' alt='Linea 3 Estudio Legal' style='max-width: 200px; height: auto; border: none;'>
 				</a>
 			</div>
 			<div style='padding: 40px; color: #334155; line-height: 1.6;'>
@@ -466,12 +466,12 @@ if (isset($_SERVER['HTTP_HOST']) && strpos($_SERVER['HTTP_HOST'], 'localhost') !
 
 /**
  * Shortcode para mapa dinámico y fácil de editar.
- * Uso: [antigravity_map address="Calle 93 #11-13, Bogota"]
+ * Uso: [antigravity_map address="Calle 93 #11-13, Bogotá"]
  */
 function antigravity_map_shortcode($atts)
 {
 	$atts = shortcode_atts(array(
-		'address' => 'Calle 93 #11-13, Bogota',
+		'address' => 'Calle 93 #11-13, Bogotá',
 		'zoom' => '15'
 	), $atts);
 	$address = urlencode($atts['address']);
@@ -506,7 +506,7 @@ function antigravity_register_block_patterns(): void
         <h1 class="wp-block-heading hero-title has-serif-font-family" style="line-height:1.1">Nuestra Misión<br>y <span class="accent">Excelencia</span></h1>
         <!-- /wp:heading -->
         <!-- wp:paragraph {"className":"hero-description"} -->
-        <p class="hero-description">En Línea 3, concebimos el ejercicio del derecho como un Soberano Archivo de conocimiento. Somos los guardianes de la estructura legal de nuestros representados.</p>
+        <p class="hero-description">En Linea 3, concebimos el ejercicio del derecho como un Soberano Archivo de conocimiento. Somos los guardianes de la estructura legal de nuestros representados.</p>
         <!-- /wp:paragraph -->
         <!-- wp:buttons {"className":"hero-buttons"} -->
         <div class="wp-block-buttons hero-buttons">
@@ -527,7 +527,7 @@ function antigravity_register_block_patterns(): void
 	register_block_pattern('antigravity/mapa-sede', array(
 		'title' => 'Mapa - Nuestra Sede (Fácil de Editar)',
 		'categories' => array('antigravity-patterns'),
-		'keywords' => array('mapa', 'sede', 'bogota', 'ubicacion', 'contacto', 'foto'),
+		'keywords' => array('mapa', 'sede', 'bogotá', 'ubicación', 'contacto', 'foto'),
 		'content' => '<!-- wp:group {"align":"full","className":"antigravity-location-section","layout":{"type":"constrained"}} -->
 <div class="wp-block-group alignfull antigravity-location-section">
     <!-- wp:columns {"align":"wide","className":"l3-container-standard","style":{"spacing":{"blockGap":{"left":"var:preset|spacing|50"}}}} -->
@@ -606,7 +606,7 @@ function antigravity_register_block_patterns(): void
         <!-- wp:column {"width":"60%"} -->
         <div class="wp-block-column" style="flex-basis:60%">
             <!-- wp:shortcode -->
-            [antigravity_map address="Calle 93 #11-13, Bogota"]
+            [antigravity_map address="Calle 93 #11-13, Bogotá"]
             <!-- /wp:shortcode -->
         </div>
         <!-- /wp:column -->
@@ -697,7 +697,7 @@ function antigravity_register_enfoque_pattern(): void {
                         <div class="l3-enfoque-cell empty-cell"></div>
                         <div class="l3-enfoque-cell label-cell highlight">Tradicional</div>
                         <div class="l3-enfoque-cell label-cell">
-                        <img src="/wp-content/themes/linea3-legal-child/assets/images/logo-horizontal-oscuro.png" alt="Línea Tres" class="l3-enfoque-logo">
+                        <img src="/wp-content/themes/linea3-legal-child/assets/images/logo-horizontal-oscuro.png" alt="Linea 3" class="l3-enfoque-logo">
                     </div>
                     </div>
 
@@ -733,7 +733,7 @@ function antigravity_register_enfoque_pattern(): void {
             <div class="l3-enfoque-footer">
                 <div class="l3-enfoque-footer-divider"></div>
                 <p class="l3-enfoque-footer-text">
-                    En <strong>Línea Tres</strong> convertimos lo jurídico en tu mayor ventaja:<br>
+                    En <strong>Linea 3</strong> convertimos lo jurídico en tu mayor ventaja:<br>
                     prevenimos errores, organizamos tu negocio y protegemos tu crecimiento.
                 </p>
             </div>
@@ -749,7 +749,7 @@ PATTERN_HTML;
         'antigravity/enfoque-derecho',
         array(
             'title'       => __( 'Enfoque del Derecho (Comparativa)', 'linea3-legal-child' ),
-            'description' => _x( 'Tabla comparativa entre el enfoque tradicional y Línea Tres.', 'Block pattern description', 'linea3-legal-child' ),
+            'description' => _x( 'Tabla comparativa entre el enfoque tradicional y Linea 3.', 'Block pattern description', 'linea3-legal-child' ),
             'content'     => $content,
             'categories'  => array( 'antigravity-patterns' ),
         )
@@ -2679,3 +2679,22 @@ function antigravity_author_publications_section_shortcode() {
     return antigravity_get_related_posts_html($author->ID);
 }
 add_shortcode('antigravity_author_publications_section', 'antigravity_author_publications_section_shortcode');
+
+/**
+ * Filtro Maestro de Ortografía de Marca: Fuerza "Linea 3" sin tilde en todo el sitio.
+ * Esto corrige el título de la pestaña del navegador y el título del sitio si están en la DB con tilde.
+ */
+function antigravity_force_brand_spelling($title) {
+    if (is_array($title)) {
+        return array_map('antigravity_force_brand_spelling', $title);
+    }
+    if (is_string($title)) {
+        $title = str_replace('Línea 3', 'Linea 3', $title);
+        $title = str_replace('Línea Tres', 'Linea 3', $title);
+    }
+    return $title;
+}
+add_filter('document_title_parts', 'antigravity_force_brand_spelling', 999);
+add_filter('pre_get_document_title', 'antigravity_force_brand_spelling', 999);
+add_filter('bloginfo', 'antigravity_force_brand_spelling', 999, 2);
+add_filter('option_blogname', 'antigravity_force_brand_spelling', 999);

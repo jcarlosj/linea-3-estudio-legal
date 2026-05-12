@@ -1801,7 +1801,7 @@ html body .blog-listing-wrapper .wp-block-post-template.is-layout-grid {
 
 /* ========== LINEA 3 TEAM GRID PATTERN - START ========== */
 
-/* ========== NUESTRO CUERPO JURÍDICO (TEAM SECTION) - START ========== */
+/* ========== EQUIPO JURÍDICO (TEAM SECTION) - START ========== */
 
 .antigravity-team-section {
     padding: 90px 0 !important;
@@ -1998,7 +1998,7 @@ html body .blog-listing-wrapper .wp-block-post-template.is-layout-grid {
     }
 }
 
-/* ========== NUESTRO CUERPO JURÍDICO - END ========== */
+/* ========== EQUIPO JURÍDICO - END ========== */
 
 /* ========== ARQUITECTURA FRONTEND V10: MAXIMUM SPECIFICITY & FORCE ========== */
 
@@ -4215,7 +4215,7 @@ main.single-post-layout-pro {
 }
 
 /* =====================================================
-   Efecto Card Columna Línea 3 — Sistema de 2 fases
+   Efecto Card Columna Linea 3 — Sistema de 2 fases
    =====================================================
    REPOSO:   card z-index:-1 → col 1/2 sólidas lo tapan, col 3 transparente lo muestra
    HOVER:    card sube a z-index:20 → cubre col 1/2 visualmente
@@ -4364,7 +4364,7 @@ main.single-post-layout-pro {
     border: none !important;
 }
 
-/* Highlight Column (Línea Tres) */
+/* Highlight Column (Linea 3) */
 .l3-enfoque-cell.highlight {
     background-color: rgba(184, 150, 100, 0.06) !important;
     color: #ffffff !important;

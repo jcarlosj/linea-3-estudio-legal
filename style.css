@@ -40,6 +40,33 @@ footer.wp-block-group {
     align-items: center !important;
 }
 
+/* 1.1 ANIMACIÓN DE HOVER EN MENÚ PRINCIPAL (ESTILO EDITORIAL) */
+.header-main-container .wp-block-navigation-item .wp-block-navigation-item__content {
+    position: relative !important;
+    transition: color 0.4s ease !important;
+    display: inline-block !important;
+    text-decoration: none !important;
+}
+
+.header-main-container .wp-block-navigation-item.is-current .wp-block-navigation-item__content, .header-main-container .wp-block-navigation-item.current-menu-item .wp-block-navigation-item__content, .header-main-container .wp-block-navigation-item:hover .wp-block-navigation-item__content {
+    color: #c19b5a !important;
+}
+
+.header-main-container .wp-block-navigation-item .wp-block-navigation-item__content::after {
+    content: "";
+    position: absolute;
+    bottom: -6px;
+    left: 0;
+    width: 0;
+    height: 3px;
+    background-color: #c19b5a;
+    transition: width 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+.header-main-container .wp-block-navigation-item.is-current .wp-block-navigation-item__content::after, .header-main-container .wp-block-navigation-item.current-menu-item .wp-block-navigation-item__content::after, .header-main-container .wp-block-navigation-item:hover .wp-block-navigation-item__content::after {
+    width: 100%;
+}
+
 .header-link-logo {
     display: flex !important;
     align-items: center !important;

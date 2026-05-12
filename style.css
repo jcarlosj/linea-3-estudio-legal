@@ -1667,20 +1667,25 @@ html body .blog-listing-wrapper .wp-block-post-template.is-layout-grid {
     display: flex !important;
     align-items: center !important;
     gap: 15px !important;
-    /* Coincide con single post */
     padding-top: 20px !important;
     border-top: 1px solid rgba(255, 255, 255, 0.08) !important;
     width: 100% !important;
     margin-top: auto !important;
     justify-content: flex-start !important;
+    text-decoration: none !important;
+    transition: all 0.3s ease !important;
+    cursor: pointer !important;
+}
+
+.antigravity-author-card:hover {
+    opacity: 0.9 !important;
+    transform: translateX(4px) !important;
 }
 
 .antigravity-author-card .author-avatar-wrapper {
     width: 50px !important;
-    /* Un poco más pequeño que en single pero más grande que antes */
     height: 50px !important;
     border-radius: 4px !important;
-    /* Cuadrado con puntas redondeadas */
     overflow: hidden !important;
     flex-shrink: 0 !important;
 }
@@ -1689,6 +1694,13 @@ html body .blog-listing-wrapper .wp-block-post-template.is-layout-grid {
     width: 100% !important;
     height: 100% !important;
     object-fit: cover !important;
+    display: block !important;
+}
+
+.antigravity-author-card .author-data-wrapper {
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
 }
 
 .antigravity-author-card .author-name {
@@ -1697,24 +1709,30 @@ html body .blog-listing-wrapper .wp-block-post-template.is-layout-grid {
     margin: 0 !important;
     font-weight: 700 !important;
     line-height: 1.2 !important;
+    transition: color 0.3s ease !important;
+}
+
+.antigravity-author-card:hover .author-name {
+    color: var(--wp--preset--color--primary, #ce9e50) !important;
 }
 
 .antigravity-author-card .author-specialty {
-    color: var(--wp--preset--color--primary) !important;
+    color: var(--wp--preset--color--primary, #ce9e50) !important;
     font-size: 0.75rem !important;
     text-transform: uppercase !important;
     letter-spacing: 1px !important;
     margin: 2px 0 4px 0 !important;
-    font-weight: 600 !important;
+    font-weight: 700 !important;
     display: block !important;
 }
 
 .antigravity-author-card .author-post-meta {
-    font-size: 0.7rem !important;
-    color: var(--wp--preset--color--text-muted) !important;
+    font-size: 0.75rem !important;
+    color: rgba(255, 255, 255, 0.5) !important;
     margin: 0 !important;
     display: block !important;
 }
+
 
 /* ========== LINEA 3 TEAM GRID PATTERN - START ========== */
 

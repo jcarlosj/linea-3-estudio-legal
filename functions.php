@@ -1582,18 +1582,53 @@ function antigravity_get_author_card_html(int $author_id, int $post_id = 0): str
 {
 	if (!$author_id)
 		return '';
+
+	// Si no hay post_id pero estamos en un post individual, intentamos obtenerlo del global
+	if (!$post_id && is_singular('post')) {
+		$post_id = get_the_ID();
+	}
+
 	$avatar_url = get_avatar_url($author_id, array('size' => 120));
 	$name = get_the_author_meta('display_name', $author_id);
+	$prefix = get_the_author_meta('antigravity_user_prefix', $author_id);
+
+	if (!empty($prefix)) {
+		$name = $prefix . ' ' . $name;
+	}
+
 	$specialty = get_the_author_meta('antigravity_user_specialty', $author_id);
 	$meta_html = '';
+
 	if ($post_id > 0) {
 		$date = get_the_date('', $post_id);
-		$word_count = str_word_count(strip_tags(get_post_field('post_content', $post_id)));
+		$content = get_post_field('post_content', $post_id);
+		$word_count = str_word_count(strip_tags($content));
 		$reading_time = max(1, ceil($word_count / 200));
 		$meta_html = sprintf('<span class="author-post-meta">%s — %d min de lectura</span>', esc_html($date), $reading_time);
 	}
-	return sprintf('<div class="antigravity-author-card"><div class="author-avatar-wrapper"><img src="%s" alt="%s" class="author-avatar" /></div><div class="author-data-wrapper"><span class="author-name">%s</span>%s%s</div></div>', esc_url($avatar_url), esc_attr($name), esc_html($name), (!empty($specialty) ? sprintf('<span class="author-specialty">%s</span>', esc_html($specialty)) : ''), $meta_html);
+
+	$author_url = get_author_posts_url($author_id);
+
+	return sprintf(
+		'<a href="%s" class="antigravity-author-card">
+			<div class="author-avatar-wrapper">
+				<img src="%s" alt="%s" class="author-avatar" />
+			</div>
+			<div class="author-data-wrapper">
+				<span class="author-name">%s</span>
+				%s
+				%s
+			</div>
+		</a>',
+		esc_url($author_url),
+		esc_url($avatar_url),
+		esc_attr($name),
+		esc_html($name),
+		(!empty($specialty) ? sprintf('<span class="author-specialty">%s</span>', esc_html($specialty)) : ''),
+		$meta_html
+	);
 }
+
 
 /**
  * Renderizado de tarjeta de autor para bloques.
@@ -1855,7 +1890,7 @@ function antigravity_render_featured_posts_grid(): string
 		$cat_name = !empty($cat) ? $cat[0]->name : 'Estrategia';
 		$thumb = get_the_post_thumbnail_url($p->ID, 'large') ?: get_stylesheet_directory_uri() . '/assets/images/placeholder-legal.png';
 		$author_id = (int) $p->post_author;
-		$output .= sprintf('<div class="antigravity-card" onclick="window.location=\'%s\'"><div class="featured-card-image-wrap"><img src="%s" alt="%s" class="featured-card-image"></div><div class="featured-card-overlay"></div><div class="featured-card-content"><div class="featured-card-meta"><span class="featured-card-category">%s</span><h3 class="featured-card-title">%s</h3></div><div class="featured-card-author">%s</div><div class="featured-card-accent-line"></div></div></div>', get_permalink($p->ID), esc_url($thumb), esc_attr($p->post_title), esc_html($cat_name), esc_html($p->post_title), antigravity_get_author_card_html($author_id));
+		$output .= sprintf('<div class="antigravity-card" onclick="window.location=\'%s\'"><div class="featured-card-image-wrap"><img src="%s" alt="%s" class="featured-card-image"></div><div class="featured-card-overlay"></div><div class="featured-card-content"><div class="featured-card-meta"><span class="featured-card-category">%s</span><h3 class="featured-card-title">%s</h3></div><div class="featured-card-author">%s</div><div class="featured-card-accent-line"></div></div></div>', get_permalink($p->ID), esc_url($thumb), esc_attr($p->post_title), esc_html($cat_name), esc_html($p->post_title), antigravity_get_author_card_html($author_id, $p->ID));
 	}
 	return $output . '</div></div></section><!-- ANTIGRAVITY_END -->';
 }

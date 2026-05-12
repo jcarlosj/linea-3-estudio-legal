@@ -489,7 +489,7 @@ function antigravity_register_block_patterns(): void
 {
 	register_block_pattern_category('antigravity-patterns', array('label' => 'Linea 3 Patterns'));
 	register_block_pattern('antigravity/cta-strategic-consultation', array('title' => 'Agendar Consulta', 'categories' => array('antigravity-patterns'), 'content' => '<!-- wp:group {"layout":{"type":"constrained"}} --><div class="wp-block-group"><!-- wp:template-part {"slug":"cta-strategic-consultation","theme":"' . get_stylesheet() . '"} /--></div><!-- /wp:group -->'));
-	register_block_pattern('antigravity/nuestro-equipo', array('title' => 'Nuestro Cuerpo Jurídico', 'categories' => array('antigravity-patterns'), 'content' => '<!-- wp:group {"className":"antigravity-team-section","layout":{"type":"constrained"}} --><div class="wp-block-group antigravity-team-section"><!-- wp:shortcode -->[antigravity_team_grid]<!-- /wp:shortcode --></div><!-- /wp:group -->'));
+	register_block_pattern('antigravity/nuestro-equipo', array('title' => 'Equipo Jurídico', 'categories' => array('antigravity-patterns'), 'content' => '<!-- wp:group {"className":"antigravity-team-section","layout":{"type":"constrained"}} --><div class="wp-block-group antigravity-team-section"><!-- wp:shortcode -->[antigravity_team_grid]<!-- /wp:shortcode --></div><!-- /wp:group -->'));
 	register_block_pattern('antigravity/publicaciones-destacadas', array('title' => 'Publicaciones Destacadas', 'categories' => array('antigravity-patterns'), 'content' => '<!-- wp:group {"className":"antigravity-featured-posts-section","layout":{"type":"constrained"}} --><div class="wp-block-group antigravity-featured-posts-section"><!-- wp:shortcode -->[antigravity_featured_posts]<!-- /wp:shortcode --></div><!-- /wp:group -->'));
 	register_block_pattern('antigravity/hero-editorial', array(
 		'title' => 'Hero Editorial',
@@ -649,7 +649,7 @@ function antigravity_register_block_patterns(): void
 	));
 
     register_block_pattern('antigravity/aliados', array(
-        'title' => 'Nuestros Aliados (Logos)',
+        'title' => 'Nuestros Clientes (Logos)',
         'categories' => array('antigravity-patterns'),
         'content' => '<!-- wp:group {"align":"full","className":"l3-allies-section","layout":{"type":"constrained"}} -->
 <div class="wp-block-group alignfull l3-allies-section">
@@ -662,7 +662,7 @@ function antigravity_register_block_patterns(): void
             <!-- /wp:paragraph -->
 
             <!-- wp:heading {"level":2,"className":"services-title"} -->
-            <h2 class="wp-block-heading services-title">Nuestros aliados</h2>
+            <h2 class="wp-block-heading services-title">Nuestros clientes</h2>
             <!-- /wp:heading -->
         </div>
         <!-- /wp:group -->
@@ -1722,7 +1722,7 @@ function antigravity_render_team_grid($attributes): string
 	$output .= '<div class="section-vertical-line"></div>';
 	$output .= '<div class="team-header-content">';
 	$output .= '<div class="team-header-left">';
-	$output .= '<h2 class="team-title">' . esc_html__('Nuestro Cuerpo Jurídico', 'linea3-legal-child') . '</h2>';
+	$output .= '<h2 class="team-title">' . esc_html__('Equipo Jurídico', 'linea3-legal-child') . '</h2>';
 	$output .= '<p class="team-subtitle">' . esc_html__('LIDERAZGO Y ESTRATEGIA', 'linea3-legal-child') . '</p>';
 	$output .= '</div>';
 	$output .= '<div class="team-header-right">';

@@ -16,6 +16,46 @@ Text Domain: linea3-legal-dark
 This theme, like WordPress, is licensed under the GPL.
 */
 
+/* --- GLOBAL RESET PARA ELEMENTOS INTERACTIVOS --- */
+/* Elimina bordes de enfoque (outlines) y sombras al hacer click en cualquier elemento del sitio */
+a, 
+button, 
+input, 
+textarea, 
+select, 
+[role="button"], 
+.wp-block-button__link, 
+.wp-block-navigation-item__content, 
+.header-link-logo, 
+.search-btn, 
+.cta-legal-btn, 
+img {
+    outline: none !important;
+    box-shadow: none !important;
+    -webkit-tap-highlight-color: transparent !important;
+}
+
+/* Forzar cursor pointer en todos los elementos interactivos */
+a, 
+button, 
+.wp-block-button__link, 
+.wp-block-navigation-item__content, 
+.header-link-logo, 
+.search-btn, 
+.cta-legal-btn,
+.wp-block-navigation-submenu__toggle {
+    cursor: pointer !important;
+}
+
+/* Limpieza profunda de estados de enfoque para evitar el "recuadro" visual */
+*:focus, 
+*:active, 
+*:focus-visible, 
+*:focus-within {
+    outline: none !important;
+    box-shadow: none !important;
+}
+
 /* --- SISTEMA RESPONSIVO MOBILE FIRST --- */
 
 /* 1. COMPORTAMIENTO DEL LOGO Y HEADER */

@@ -1324,10 +1324,11 @@ footer.wp-block-group .footer-logo-switch {
         gap: 20px !important;
     }
 
-    .antigravity-featured-posts-grid .antigravity-card {
+    .antigravity-featured-posts-grid .antigravity-card,
+    .antigravity-featured-posts-grid .antigravity-card:nth-child(n) {
         flex: 0 0 100% !important;
         height: auto !important;
-        min-height: 320px !important;
+        min-height: 380px !important;
         aspect-ratio: auto !important;
     }
 

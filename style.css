@@ -4088,6 +4088,12 @@ main.single-post-layout-pro {
 @media (max-width: 768px) {
     .l3-cobertura-grid {
         flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 20px !important;
+    }
+
+    .l3-cobertura-card {
+        width: 100% !important;
     }
 
     .l3-cobertura-watermark img {

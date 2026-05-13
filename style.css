@@ -2750,6 +2750,62 @@ main.single-post-layout-pro {
     transition: opacity 0.4s ease !important;
 }
 
+/* ========== ENFOQUE DERECHO - RESPONSIVE OPTIMIZATION ========== */
+@media (max-width: 768px) {
+    .l3-enfoque-container {
+        padding: 40px 15px !important;
+    }
+
+    .l3-enfoque-title {
+        font-size: 2rem !important;
+        line-height: 1.2 !important;
+    }
+
+    .l3-enfoque-cell {
+        padding: 15px 10px !important;
+        font-size: 0.85rem !important;
+        line-height: 1.3 !important;
+    }
+
+    /* Columna de etiquetas fija y estrecha en móvil */
+    .l3-enfoque-cell.feature-cell {
+        flex: 0 0 50px !important;
+        min-width: 50px !important;
+        padding: 10px 5px !important;
+        font-size: 0.7rem !important;
+        text-transform: uppercase;
+        writing-mode: vertical-rl;
+        transform: rotate(180deg);
+        white-space: nowrap;
+        letter-spacing: 0.1em;
+        font-weight: 700 !important;
+    }
+
+    /* Logo más pequeño en la tabla */
+    .l3-enfoque-logo {
+        max-width: 80px !important;
+    }
+
+    .l3-enfoque-cell.label-cell {
+        font-size: 0.9rem !important;
+        font-weight: 700 !important;
+    }
+
+    /* Ajuste para que las celdas de contenido se repartan el resto */
+    .l3-enfoque-cell.content-cell {
+        flex: 1 !important;
+    }
+
+    /* Reducir espacio inferior de la frase final */
+    .l3-enfoque-footer {
+        padding-top: 30px !important;
+    }
+    
+    .l3-enfoque-footer-text {
+        font-size: 1.1rem !important;
+    }
+}
+
 .l3-service-card:hover::after {
     opacity: 1 !important;
     animation-duration: 2s !important;

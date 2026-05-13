@@ -681,8 +681,14 @@ add_action('init', 'antigravity_register_block_patterns');
 function antigravity_register_enfoque_pattern(): void {
     $content = <<<'PATTERN_HTML'
 <!-- wp:group {"align":"full","style":{"spacing":{"padding":{"top":"0","bottom":"0","left":"0","right":"0"},"margin":{"top":"0","bottom":"0"}}},"backgroundColor":"base","layout":{"type":"constrained"}} -->
-<div class="wp-block-group alignfull has-base-background-color has-background l3-enfoque-wrapper">
+<div class="wp-block-group alignfull l3-enfoque-wrapper">
     <!-- wp:html -->
+    <style>
+        .l3-enfoque-section, .l3-enfoque-container, .l3-enfoque-table-wrapper {
+            background-color: transparent !important;
+            background: transparent !important;
+        }
+    </style>
     <section class="l3-enfoque-section">
         <div class="l3-enfoque-container">
             
@@ -695,10 +701,10 @@ function antigravity_register_enfoque_pattern(): void {
                 <div class="l3-enfoque-table">
                     <div class="l3-enfoque-row header-row">
                         <div class="l3-enfoque-cell empty-cell"></div>
-                        <div class="l3-enfoque-cell label-cell highlight">Tradicional</div>
-                        <div class="l3-enfoque-cell label-cell">
-                        <img src="/wp-content/themes/linea3-legal-child/assets/images/logo-horizontal-oscuro.png" alt="Linea 3" class="l3-enfoque-logo">
-                    </div>
+                        <div class="l3-enfoque-cell label-cell">Tradicional</div>
+                        <div class="l3-enfoque-cell label-cell highlight">
+                            <img src="/wp-content/themes/linea3-legal-child/assets/images/logo-horizontal-oscuro.png" alt="Linea 3" class="l3-enfoque-logo">
+                        </div>
                     </div>
 
                     <div class="l3-enfoque-row">
@@ -733,7 +739,7 @@ function antigravity_register_enfoque_pattern(): void {
             <div class="l3-enfoque-footer">
                 <div class="l3-enfoque-footer-divider"></div>
                 <p class="l3-enfoque-footer-text">
-                    En <strong>Linea 3</strong> convertimos lo jurídico en tu mayor ventaja:<br>
+                    En <strong>Línea Tres</strong> convertimos lo jurídico en tu mayor ventaja:<br>
                     prevenimos errores, organizamos tu negocio y protegemos tu crecimiento.
                 </p>
             </div>

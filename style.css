@@ -18,17 +18,17 @@ This theme, like WordPress, is licensed under the GPL.
 
 /* --- GLOBAL RESET PARA ELEMENTOS INTERACTIVOS --- */
 /* Elimina bordes de enfoque (outlines) y sombras al hacer click en cualquier elemento del sitio */
-a, 
-button, 
-input, 
-textarea, 
-select, 
-[role="button"], 
-.wp-block-button__link, 
-.wp-block-navigation-item__content, 
-.header-link-logo, 
-.search-btn, 
-.cta-legal-btn, 
+a,
+button,
+input,
+textarea,
+select,
+[role="button"],
+.wp-block-button__link,
+.wp-block-navigation-item__content,
+.header-link-logo,
+.search-btn,
+.cta-legal-btn,
 img {
     outline: none !important;
     box-shadow: none !important;
@@ -36,21 +36,21 @@ img {
 }
 
 /* Forzar cursor pointer en todos los elementos interactivos */
-a, 
-button, 
-.wp-block-button__link, 
-.wp-block-navigation-item__content, 
-.header-link-logo, 
-.search-btn, 
+a,
+button,
+.wp-block-button__link,
+.wp-block-navigation-item__content,
+.header-link-logo,
+.search-btn,
 .cta-legal-btn,
 .wp-block-navigation-submenu__toggle {
     cursor: pointer !important;
 }
 
 /* Limpieza profunda de estados de enfoque para evitar el "recuadro" visual */
-*:focus, 
-*:active, 
-*:focus-visible, 
+*:focus,
+*:active,
+*:focus-visible,
 *:focus-within {
     outline: none !important;
     box-shadow: none !important;
@@ -88,7 +88,9 @@ footer.wp-block-group {
     text-decoration: none !important;
 }
 
-.header-main-container .wp-block-navigation-item.is-current .wp-block-navigation-item__content, .header-main-container .wp-block-navigation-item.current-menu-item .wp-block-navigation-item__content, .header-main-container .wp-block-navigation-item:hover .wp-block-navigation-item__content {
+.header-main-container .wp-block-navigation-item.is-current .wp-block-navigation-item__content,
+.header-main-container .wp-block-navigation-item.current-menu-item .wp-block-navigation-item__content,
+.header-main-container .wp-block-navigation-item:hover .wp-block-navigation-item__content {
     color: #c19b5a !important;
 }
 
@@ -103,7 +105,9 @@ footer.wp-block-group {
     transition: width 0.5s cubic-bezier(0.19, 1, 0.22, 1);
 }
 
-.header-main-container .wp-block-navigation-item.is-current .wp-block-navigation-item__content::after, .header-main-container .wp-block-navigation-item.current-menu-item .wp-block-navigation-item__content::after, .header-main-container .wp-block-navigation-item:hover .wp-block-navigation-item__content::after {
+.header-main-container .wp-block-navigation-item.is-current .wp-block-navigation-item__content::after,
+.header-main-container .wp-block-navigation-item.current-menu-item .wp-block-navigation-item__content::after,
+.header-main-container .wp-block-navigation-item:hover .wp-block-navigation-item__content::after {
     width: 100%;
 }
 
@@ -204,9 +208,11 @@ footer.wp-block-group {
         justify-content: center !important;
         height: 48px !important;
         width: 48px !important;
-        border: 1px solid #ffffff !important; /* Changed to white */
+        border: 1px solid #ffffff !important;
+        /* Changed to white */
         background-color: transparent !important;
-        color: #ffffff !important; /* Changed lines to white */
+        color: #ffffff !important;
+        /* Changed lines to white */
         padding: 0 !important;
         margin: 0 !important;
     }
@@ -226,11 +232,13 @@ footer.wp-block-group {
     }
 
     .header-right-side .wp-block-navigation {
-        order: 2 !important; /* The whole Nav block goes to the right */
+        order: 2 !important;
+        /* The whole Nav block goes to the right */
     }
 
     .header-right-side .wp-block-buttons {
-        order: 1 !important; /* The whole Buttons block goes to the left */
+        order: 1 !important;
+        /* The whole Buttons block goes to the left */
     }
 }
 
@@ -382,6 +390,7 @@ footer.wp-block-group .footer-logo-switch {
 .logo-vertical {
     display: none !important;
 }
+
 .logo-horizontal {
     display: block !important;
 }
@@ -2666,8 +2675,15 @@ main.single-post-layout-pro {
 
 /* Animación de barrido para toda la tarjeta (Hacia Cuadrante 1) */
 @keyframes full-card-shimmer {
-    0% { left: -100%; top: 100%; }
-    100% { left: 100%; top: -100%; }
+    0% {
+        left: -100%;
+        top: 100%;
+    }
+
+    100% {
+        left: 100%;
+        top: -100%;
+    }
 }
 
 /* Efecto de reflejo cristalino sobre toda la tarjeta */
@@ -2676,14 +2692,12 @@ main.single-post-layout-pro {
     position: absolute;
     width: 200%;
     height: 200%;
-    background: linear-gradient(
-        45deg, 
-        rgba(255, 255, 255, 0) 0%, 
-        rgba(255, 255, 255, 0) 45%, 
-        rgba(255, 255, 255, 0.12) 50%, 
-        rgba(255, 255, 255, 0) 55%, 
-        rgba(255, 255, 255, 0) 100%
-    );
+    background: linear-gradient(45deg,
+            rgba(255, 255, 255, 0) 0%,
+            rgba(255, 255, 255, 0) 45%,
+            rgba(255, 255, 255, 0.12) 50%,
+            rgba(255, 255, 255, 0) 55%,
+            rgba(255, 255, 255, 0) 100%);
     z-index: 3;
     pointer-events: none;
     animation: full-card-shimmer 5s infinite linear;
@@ -2691,8 +2705,13 @@ main.single-post-layout-pro {
 
 /* Animación de reflejo metálico constante */
 @keyframes metallic-shine {
-    0% { background-position: 0% 50%; }
-    100% { background-position: 200% 50%; }
+    0% {
+        background-position: 0% 50%;
+    }
+
+    100% {
+        background-position: 200% 50%;
+    }
 }
 
 /* Borde superpuesto (Efecto Oro Metálico Animado) */
@@ -2707,35 +2726,34 @@ main.single-post-layout-pro {
     z-index: 10 !important;
     pointer-events: none !important;
     display: block !important;
-    
+
     padding: 2px !important;
-    
+
     /* Gradiente dorado con puntos de luz blanca integrados */
-    background: linear-gradient(
-        110deg, 
-        #8e6d31 0%, 
-        #ce9e50 20%, 
-        #f7e0a3 40%, 
-        #ffffff 50%, 
-        #f7e0a3 60%, 
-        #ce9e50 80%, 
-        #8e6d31 100%
-    ) border-box !important;
-    
+    background: linear-gradient(110deg,
+            #8e6d31 0%,
+            #ce9e50 20%,
+            #f7e0a3 40%,
+            #ffffff 50%,
+            #f7e0a3 60%,
+            #ce9e50 80%,
+            #8e6d31 100%) border-box !important;
+
     background-size: 300% 100% !important;
     animation: metallic-shine 4s infinite linear !important;
-    
+
     -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
     -webkit-mask-composite: destination-out !important;
     mask-composite: exclude !important;
-    
+
     opacity: 0.6 !important;
     transition: opacity 0.4s ease !important;
 }
 
 .l3-service-card:hover::after {
     opacity: 1 !important;
-    animation-duration: 2s !important; /* El reflejo se acelera al hacer hover */
+    animation-duration: 2s !important;
+    /* El reflejo se acelera al hacer hover */
 }
 
 /* Desincronización de animaciones para un efecto más natural */
@@ -2821,7 +2839,7 @@ main.single-post-layout-pro {
     height: 90px;
     object-fit: contain;
     margin-bottom: 10px;
-    filter: brightness(0) invert(1) drop-shadow(0 4px 10px rgba(0,0,0,0.6));
+    filter: brightness(0) invert(1) drop-shadow(0 4px 10px rgba(0, 0, 0, 0.6));
     transition: all 0.6s cubic-bezier(0.25, 1, 0.5, 1);
 }
 
@@ -2896,11 +2914,13 @@ main.single-post-layout-pro {
     background-color: #ce9e50;
     color: #ffffff;
 }
+
 /* ========================================================
    ALLIES SLIDER PATTERN
    ======================================================== */
 .l3-allies-section {
-    background-color: #0a2233 !important; /* Mismo color que el header */
+    background-color: #0a2233 !important;
+    /* Mismo color que el header */
     padding: 100px 0 !important;
     width: 100vw !important;
     position: relative !important;
@@ -2918,13 +2938,24 @@ main.single-post-layout-pro {
     font-family: var(--wp--preset--font-family--serif) !important;
 }
 
+.l3-enfoque-table-wrapper {
+    position: relative !important;
+    width: 100% !important;
+    z-index: 10 !important;
+    background-color: transparent !important;
+    /* Limpieza de fondo */
+}
+
 .l3-allies-slider-container {
     position: relative !important;
     width: 100% !important;
-    max-width: 1440px !important; /* Ajustado a 1440px según tus pruebas */
+    max-width: 1440px !important;
+    /* Ajustado a 1440px según tus pruebas */
     margin: 0 auto !important;
-    padding-left: 20px !important; /* Margen de seguridad perpetuo */
-    padding-right: 20px !important; /* Margen de seguridad perpetuo */
+    padding-left: 20px !important;
+    /* Margen de seguridad perpetuo */
+    padding-right: 20px !important;
+    /* Margen de seguridad perpetuo */
     display: flex !important;
     align-items: center !important;
     box-sizing: border-box !important;
@@ -2946,7 +2977,8 @@ main.single-post-layout-pro {
     bottom: 0 !important;
     width: 100px !important;
     z-index: 5 !important;
-    pointer-events: none !important; /* Permite hacer clic a través del degradado */
+    pointer-events: none !important;
+    /* Permite hacer clic a través del degradado */
 }
 
 .l3-allies-slider-viewport::before {
@@ -2971,7 +3003,8 @@ main.single-post-layout-pro {
     background: #ffffff !important;
     border-radius: 4px !important;
     padding: 20px !important;
-    flex: 0 0 220px !important; /* Ancho fijo para mantener la fila */
+    flex: 0 0 220px !important;
+    /* Ancho fijo para mantener la fila */
     height: 100px !important;
     display: flex !important;
     align-items: center !important;
@@ -3016,7 +3049,8 @@ main.single-post-layout-pro {
     height: 40px !important;
     background: #ce9e50 !important;
     border: none !important;
-    border-radius: 4px !important; /* Estilo cuadradito */
+    border-radius: 4px !important;
+    /* Estilo cuadradito */
     box-shadow: 0 4px 10px rgba(206, 158, 80, 0.2) !important;
     cursor: pointer !important;
     display: flex !important;
@@ -3028,7 +3062,8 @@ main.single-post-layout-pro {
 }
 
 .l3-slider-btn:hover {
-    background: #b88b42 !important; /* Un dorado un poco más oscuro al hover */
+    background: #b88b42 !important;
+    /* Un dorado un poco más oscuro al hover */
     transform: translateY(-50%) scale(1.05) !important;
     box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15) !important;
 }
@@ -3124,14 +3159,14 @@ main.single-post-layout-pro {
     color: #ffffff !important;
     font-size: 1.5rem;
     margin-bottom: 8px;
-    text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
 }
 
 .team-contact-sidebar-overlay p {
     font-size: 0.95rem;
     color: #e2e8f0 !important;
     margin-bottom: 0;
-    text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
 }
 
 @media (min-width: 768px) {
@@ -3140,13 +3175,13 @@ main.single-post-layout-pro {
         flex-direction: row;
         gap: 30px;
     }
-    
+
     .team-contact-sidebar {
         flex: 1;
         margin-bottom: 0;
         min-height: 100%;
     }
-    
+
     .team-contact-form-area {
         flex: 2;
         padding: 10px 0;
@@ -3244,7 +3279,8 @@ main.single-post-layout-pro {
 .l3-author-image-frame {
     position: relative;
     padding: 15px;
-    border: 1px solid rgba(206, 158, 80, 0.5); /* Gold border */
+    border: 1px solid rgba(206, 158, 80, 0.5);
+    /* Gold border */
     border-radius: 8px;
     background-color: var(--wp--preset--color--base);
 }
@@ -3298,7 +3334,8 @@ main.single-post-layout-pro {
     margin-bottom: 40px;
     border-left: 3px solid #ce9e50;
     padding: 25px 20px;
-    background-color: #0d1b2a; /* Slightly lighter than the main dark background */
+    background-color: #0d1b2a;
+    /* Slightly lighter than the main dark background */
     border-radius: 0 4px 4px 0;
 }
 
@@ -3350,7 +3387,7 @@ main.single-post-layout-pro {
     color: rgba(255, 255, 255, 0.85);
 }
 
-.l3-trajectory-text > p:first-of-type::first-letter {
+.l3-trajectory-text>p:first-of-type::first-letter {
     float: left;
     font-family: var(--wp--preset--font-family--serif);
     font-size: 5rem;
@@ -3363,16 +3400,22 @@ main.single-post-layout-pro {
 
 
 @media (max-width: 768px) {
-    .l3-author-profile-header, .l3-author-profile-content {
+
+    .l3-author-profile-header,
+    .l3-author-profile-content {
         gap: 30px;
     }
-    .l3-author-profile-title-col, .l3-author-profile-image-col {
+
+    .l3-author-profile-title-col,
+    .l3-author-profile-image-col {
         flex: 1 1 100%;
     }
+
     .l3-author-image-frame {
         width: 100%;
     }
-    .l3-trajectory-text > p:first-of-type::first-letter {
+
+    .l3-trajectory-text>p:first-of-type::first-letter {
         font-size: 4rem;
     }
 }
@@ -3390,7 +3433,8 @@ main.single-post-layout-pro {
     overflow: hidden !important;
     margin-bottom: 30px !important;
     transition: all 0.4s ease !important;
-    height: 320px !important; /* Altura uniforme para todas las cards */
+    height: 320px !important;
+    /* Altura uniforme para todas las cards */
 }
 
 .l3-horizontal-card:hover {
@@ -3426,14 +3470,15 @@ main.single-post-layout-pro {
 .l3-horizontal-card .antigravity-card-content {
     flex: 1 1 60% !important;
     margin-top: 0 !important;
-    overflow: hidden !important; /* Previene desbordamiento si el título es muy largo */
+    overflow: hidden !important;
+    /* Previene desbordamiento si el título es muy largo */
 }
 
 /* Ajustes para el contenido de la card */
 .l3-horizontal-card .antigravity-card-content {
     flex: 1 1 60% !important;
     margin-top: 0 !important;
-    overflow: hidden !important; 
+    overflow: hidden !important;
 }
 
 /* Link "VER TODAS" en el encabezado */
@@ -3461,6 +3506,7 @@ main.single-post-layout-pro {
         align-items: flex-start !important;
         gap: 20px !important;
     }
+
     .team-header-right {
         width: 100% !important;
         text-align: left !important;
@@ -3470,11 +3516,14 @@ main.single-post-layout-pro {
 @media (max-width: 768px) {
     .l3-horizontal-card {
         flex-direction: column !important;
-        height: auto !important; /* Permitir que crezca en móvil */
+        height: auto !important;
+        /* Permitir que crezca en móvil */
     }
+
     .l3-horizontal-card .wp-block-post-featured-image {
         flex: 0 0 auto !important;
     }
+
     .l3-horizontal-card .wp-block-post-featured-image img {
         aspect-ratio: 16/9 !important;
         min-height: auto !important;
@@ -3535,10 +3584,12 @@ main.single-post-layout-pro {
     background-color: #05111b !important;
     border: 1px solid rgba(255, 255, 255, 0.05) !important;
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4) !important;
-    padding-top: 0 !important; /* Handled by badge and internal spacing */
+    padding-top: 0 !important;
+    /* Handled by badge and internal spacing */
     transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1),
-                box-shadow 0.4s cubic-bezier(0.165, 0.84, 0.44, 1) !important;
-    overflow: visible !important; /* Allow ribbon ears to stick out */
+        box-shadow 0.4s cubic-bezier(0.165, 0.84, 0.44, 1) !important;
+    overflow: visible !important;
+    /* Allow ribbon ears to stick out */
 }
 
 /* Horizontal line behind the badge */
@@ -3605,16 +3656,26 @@ main.single-post-layout-pro {
     color: #ffffff !important;
 }
 
-.l3-modalidad-blindaje .l3-modalidad-badge::before { border-color: transparent #8e7045 transparent transparent !important; }
-.l3-modalidad-blindaje .l3-modalidad-badge::after { border-color: #8e7045 transparent transparent transparent !important; }
+.l3-modalidad-blindaje .l3-modalidad-badge::before {
+    border-color: transparent #8e7045 transparent transparent !important;
+}
+
+.l3-modalidad-blindaje .l3-modalidad-badge::after {
+    border-color: #8e7045 transparent transparent transparent !important;
+}
 
 .l3-modalidad-intervencion .l3-modalidad-badge {
     background-color: #9b624c !important;
     color: #ffffff !important;
 }
 
-.l3-modalidad-intervencion .l3-modalidad-badge::before { border-color: transparent #7a4a38 transparent transparent !important; }
-.l3-modalidad-intervencion .l3-modalidad-badge::after { border-color: #7a4a38 transparent transparent transparent !important; }
+.l3-modalidad-intervencion .l3-modalidad-badge::before {
+    border-color: transparent #7a4a38 transparent transparent !important;
+}
+
+.l3-modalidad-intervencion .l3-modalidad-badge::after {
+    border-color: #7a4a38 transparent transparent transparent !important;
+}
 
 /* --- Encabezado de tarjeta: grande, serif, centrado ---------------------- */
 .l3-modalidad-inner h3.wp-block-heading {
@@ -3738,8 +3799,13 @@ main.single-post-layout-pro {
     color: #ffffff !important;
 }
 
-.l3-modalidad-litigio .l3-modalidad-badge::before { border-color: transparent #2a6b5d transparent transparent !important; }
-.l3-modalidad-litigio .l3-modalidad-badge::after { border-color: #2a6b5d transparent transparent transparent !important; }
+.l3-modalidad-litigio .l3-modalidad-badge::before {
+    border-color: transparent #2a6b5d transparent transparent !important;
+}
+
+.l3-modalidad-litigio .l3-modalidad-badge::after {
+    border-color: #2a6b5d transparent transparent transparent !important;
+}
 
 /* Bullet esmeralda */
 .l3-modalidad-litigio .l3-modalidad-list li {
@@ -3798,7 +3864,8 @@ main.single-post-layout-pro {
 /* --- Cobertura Legal Estratégica Section --------------------------------- */
 .l3-cobertura-section {
     position: relative !important;
-    background-color: #020d16 !important; /* Very dark navy from Image 3 */
+    background-color: #020d16 !important;
+    /* Very dark navy from Image 3 */
     padding: 100px 20px !important;
     overflow: hidden !important;
 }
@@ -3846,13 +3913,14 @@ main.single-post-layout-pro {
     margin-bottom: 50px !important;
 }
 
-.l3-cobertura-eyebrow, 
+.l3-cobertura-eyebrow,
 .l3-cobertura-section .services-eyebrow {
     font-size: 0.75rem !important;
     font-weight: 700 !important;
     letter-spacing: 2px !important;
     text-transform: uppercase !important;
-    color: #b89664 !important; /* Gold */
+    color: #b89664 !important;
+    /* Gold */
     margin-bottom: 12px !important;
     text-align: center !important;
 }
@@ -3870,7 +3938,8 @@ main.single-post-layout-pro {
 .l3-cobertura-grid {
     display: flex !important;
     gap: 30px !important;
-    align-items: flex-start !important; /* Align cards at the top */
+    align-items: flex-start !important;
+    /* Align cards at the top */
     margin-bottom: 60px !important;
 }
 
@@ -3891,7 +3960,8 @@ main.single-post-layout-pro {
     left: 0 !important;
     width: 100% !important;
     height: 2px !important;
-    background-color: rgba(184, 150, 100, 0.2) !important; /* Gold subtle */
+    background-color: rgba(184, 150, 100, 0.2) !important;
+    /* Gold subtle */
     z-index: 5 !important;
 }
 
@@ -3903,7 +3973,8 @@ main.single-post-layout-pro {
     left: 0 !important;
     width: 40px !important;
     height: 2px !important;
-    background-color: #b89664 !important; /* Gold solid */
+    background-color: #b89664 !important;
+    /* Gold solid */
     transition: width 0.5s cubic-bezier(0.165, 0.84, 0.44, 1) !important;
     z-index: 10 !important;
 }
@@ -3918,7 +3989,8 @@ main.single-post-layout-pro {
 
 .l3-cobertura-card h3 {
     font-size: 1.4rem !important;
-    color: #b89664 !important; /* Gold */
+    color: #b89664 !important;
+    /* Gold */
     margin-bottom: 20px !important;
     font-family: var(--wp--preset--font-family--serif) !important;
 }
@@ -3960,7 +4032,7 @@ main.single-post-layout-pro {
     .l3-cobertura-grid {
         flex-direction: column !important;
     }
-    
+
     .l3-cobertura-watermark img {
         max-width: 85% !important;
         max-height: 70% !important;
@@ -4011,8 +4083,8 @@ main.single-post-layout-pro {
 }
 
 /* Ocultamos el eyebrow de reserva si ya existe el HTML real para evitar duplicados */
-.l3-experiencia-header .l3-experiencia-eyebrow + h2::before,
-.l3-experiencia-header .l3-experiencia-eyebrow + h2::after {
+.l3-experiencia-header .l3-experiencia-eyebrow+h2::before,
+.l3-experiencia-header .l3-experiencia-eyebrow+h2::after {
     display: none !important;
 }
 
@@ -4069,7 +4141,8 @@ main.single-post-layout-pro {
     line-height: 1.6 !important;
     margin-bottom: 20px !important;
     max-width: 85% !important;
-    padding-left: 0 !important; /* Reseteamos para que hereden del contenedor */
+    padding-left: 0 !important;
+    /* Reseteamos para que hereden del contenedor */
 }
 
 /* El contenedor principal de la izquierda debe tener el padding para todos */
@@ -4108,11 +4181,13 @@ main.single-post-layout-pro {
 /* Accent line animada vinculada al Título h3 */
 .l3-experiencia-feature h3 {
     font-size: 1.5rem !important;
-    color: #b89664 !important; /* Mismo color que la barra */
+    color: #b89664 !important;
+    /* Mismo color que la barra */
     margin-bottom: 15px !important;
     font-family: var(--wp--preset--font-family--serif) !important;
     position: relative !important;
-    display: inline-block !important; /* Para que la barra mida lo mismo que el texto */
+    display: inline-block !important;
+    /* Para que la barra mida lo mismo que el texto */
     padding-bottom: 8px !important;
 }
 
@@ -4177,7 +4252,7 @@ main.single-post-layout-pro {
     .l3-experiencia-col-left p {
         max-width: 100% !important;
     }
-    
+
     .l3-experiencia-separator {
         width: 100% !important;
         height: 2px !important;
@@ -4200,13 +4275,22 @@ main.single-post-layout-pro {
    ========================================================================== */
 
 .l3-enfoque-wrapper {
-    background-color: #030912 !important;
+    /* El fondo se maneja desde el bloque Group en WordPress para permitir edición */
 }
+
+/* Fuerza que el color elegido en el editor se vea en el admin */
+.wp-block-group.l3-enfoque-wrapper[style*="background-color"],
+.wp-block-group.l3-enfoque-wrapper.has-background {
+    background-color: inherit;
+}
+
 
 .l3-enfoque-section {
     padding: 100px 0 !important;
     position: relative !important;
     width: 100% !important;
+    background-color: transparent !important;
+    /* Deja pasar el fondo del Grupo padre */
 }
 
 .l3-enfoque-container {
@@ -4265,7 +4349,7 @@ main.single-post-layout-pro {
 }
 
 /* Si ya existe el HTML real de la etiqueta (porque re-insertaste el bloque), ocultamos el fallback para no duplicar */
-.l3-enfoque-label + .l3-enfoque-title::before {
+.l3-enfoque-label+.l3-enfoque-title::before {
     display: none !important;
 }
 
@@ -4276,7 +4360,7 @@ main.single-post-layout-pro {
     border: 1px solid rgba(184, 150, 100, 0.2) !important;
     border-radius: 4px !important;
     background: rgba(255, 255, 255, 0.02) !important;
-    box-shadow: 0 20px 40px rgba(0,0,0,0.3) !important;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3) !important;
     width: 100% !important;
     position: relative !important;
 }
@@ -4303,12 +4387,12 @@ main.single-post-layout-pro {
     border: 1px solid transparent !important;
     pointer-events: none !important;
     transition: top 0.45s cubic-bezier(0.165, 0.84, 0.44, 1),
-                bottom 0.45s cubic-bezier(0.165, 0.84, 0.44, 1),
-                right 0.45s cubic-bezier(0.165, 0.84, 0.44, 1),
-                left 0.45s cubic-bezier(0.165, 0.84, 0.44, 1),
-                box-shadow 0.45s ease,
-                border-color 0.45s ease,
-                z-index 0s !important;
+        bottom 0.45s cubic-bezier(0.165, 0.84, 0.44, 1),
+        right 0.45s cubic-bezier(0.165, 0.84, 0.44, 1),
+        left 0.45s cubic-bezier(0.165, 0.84, 0.44, 1),
+        box-shadow 0.45s ease,
+        border-color 0.45s ease,
+        z-index 0s !important;
     z-index: -1 !important;
 }
 
@@ -4320,21 +4404,25 @@ main.single-post-layout-pro {
     bottom: -16px !important;
     right: -12px !important;
     left: calc(220px + (100% - 220px) / 2 - 6px) !important;
-    z-index: 20 !important; /* Por encima de todo el contenido de fila */
+    z-index: 20 !important;
+    /* Por encima de todo el contenido de fila */
 }
 
 /* HOVER — Fase 2: col 3 sube aún más para que su contenido sea visible */
 .l3-enfoque-table:has(.l3-enfoque-cell:nth-child(3):hover) .l3-enfoque-cell:nth-child(3) {
     z-index: 30 !important;
     position: relative !important;
-    color: #ffffff !important; /* texto más brillante al destacar */
+    color: #ffffff !important;
+    /* texto más brillante al destacar */
 }
 
 .l3-enfoque-row {
     display: flex !important;
     border-bottom: 1px solid rgba(184, 150, 100, 0.15) !important;
+    background: #0a2233 !important;
     position: relative !important;
-    z-index: auto !important; /* Sin stacking context — hijos compiten a nivel tabla */
+    z-index: auto !important;
+    /* Sin stacking context — hijos compiten a nivel tabla */
 }
 
 /* Celdas: posicionadas pero sin z-index propio en reposo */
@@ -4366,9 +4454,9 @@ main.single-post-layout-pro {
 }
 
 /* Sin hover horizontal en filas */
-.l3-enfoque-row:not(.header-row):hover {
+/*.l3-enfoque-row:not(.header-row):hover {
     background-color: transparent !important;
-}
+}*/
 
 .l3-enfoque-cell {
     padding: 30px 40px !important;
@@ -4382,15 +4470,16 @@ main.single-post-layout-pro {
 
 .l3-enfoque-cell.feature-cell {
     flex: 0 0 220px !important;
-    background-color: rgba(255, 255, 255, 0.03) !important;
-    color: rgb(184, 150, 100) !important;  /* Gold */
+    background-color: #020d16 !important;
+    /* Color sólido protector */
+    color: #b89664 !important;
+    /* Gold */
     font-weight: 600 !important;
     justify-content: flex-start !important;
     text-align: left !important;
     border-right: 1px solid rgba(184, 150, 100, 0.15) !important;
     font-family: var(--wp--preset--font-family--serif) !important;
     font-size: 1.3rem !important;
-    transition: background-color 0.3s ease !important;
 }
 
 /* Hover en feature-cell — resalta toda la fila */
@@ -4398,12 +4487,13 @@ main.single-post-layout-pro {
     outline: 1px solid rgba(184, 150, 100, 0.65) !important;
     outline-offset: -1px !important;
     border-radius: 3px !important;
-    z-index: 15 !important; /* La fila destaca sobre el card */
+    z-index: 15 !important;
+    /* La fila destaca sobre el card */
 }
 
 /* La feature-cell en hover: overlay dorado sutil */
 .l3-enfoque-cell.feature-cell:hover {
-    background-color: rgba(184, 150, 100, 0.12) !important;
+    background-color: transparent !important;
 }
 
 /* Las otras celdas de esa fila: ligeramente más brillantes */
@@ -4438,17 +4528,19 @@ main.single-post-layout-pro {
     font-weight: 400 !important;
 }
 
-/* Col 3 siempre transparente — el fondo viene del card (::after), no de la celda */
+/* Col 3 sólida — protege contra cambios de fondo del padre */
 .l3-enfoque-cell:nth-child(3).highlight,
 .l3-enfoque-cell:nth-child(3).content-cell,
 .l3-enfoque-cell:nth-child(3) {
-    background-color: transparent !important;
+    background-color: #0a2233 !important;
 }
 
 /* ── Check Icons Animados — CSS puro (::before), funciona sin re-insertar el bloque ── */
 
 /* Ocultar el span HTML si existe (evita duplicado cuando se re-inserte el patrón) */
-.l3-check-icon { display: none !important; }
+.l3-check-icon {
+    display: none !important;
+}
 
 /* Las celdas de col 3 son flex para que el icono quede alineado al texto */
 .l3-enfoque-cell:nth-child(3).content-cell {
@@ -4483,7 +4575,7 @@ main.single-post-layout-pro {
     opacity: 0 !important;
     transform: scale(0.3) rotate(-20deg) !important;
     transition: opacity 0.35s ease,
-                transform 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+        transform 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
 }
 
 /* HOVER — los checks aparecen */
@@ -4498,6 +4590,7 @@ main.single-post-layout-pro {
 .l3-enfoque-table:has(.l3-enfoque-cell:nth-child(3):hover) .l3-enfoque-row:nth-child(2) .l3-enfoque-cell:nth-child(3)::before {
     transition-delay: 0ms !important;
 }
+
 .l3-enfoque-table:has(.l3-enfoque-cell:nth-child(3):hover) .l3-enfoque-row:nth-child(2) .l3-enfoque-cell:nth-child(3) {
     transition-delay: 60ms !important;
 }
@@ -4506,6 +4599,7 @@ main.single-post-layout-pro {
 .l3-enfoque-table:has(.l3-enfoque-cell:nth-child(3):hover) .l3-enfoque-row:nth-child(3) .l3-enfoque-cell:nth-child(3)::before {
     transition-delay: 250ms !important;
 }
+
 .l3-enfoque-table:has(.l3-enfoque-cell:nth-child(3):hover) .l3-enfoque-row:nth-child(3) .l3-enfoque-cell:nth-child(3) {
     transition-delay: 310ms !important;
 }
@@ -4514,6 +4608,7 @@ main.single-post-layout-pro {
 .l3-enfoque-table:has(.l3-enfoque-cell:nth-child(3):hover) .l3-enfoque-row:nth-child(4) .l3-enfoque-cell:nth-child(3)::before {
     transition-delay: 500ms !important;
 }
+
 .l3-enfoque-table:has(.l3-enfoque-cell:nth-child(3):hover) .l3-enfoque-row:nth-child(4) .l3-enfoque-cell:nth-child(3) {
     transition-delay: 560ms !important;
 }
@@ -4589,23 +4684,27 @@ main.single-post-layout-pro {
    PATTERN: Síntoma de la Desorganización Jurídica
    ===================================================== */
 .l3-sintoma-wrapper {
-    background-color: #030912 !important;
+    /* El fondo se maneja desde el bloque Group en WordPress */
 }
+
 .l3-sintoma-section {
     background-color: transparent !important;
     padding: 100px 0 !important;
     width: 100% !important;
     position: relative !important;
 }
+
 .l3-sintoma-container {
     max-width: var(--wp--style--global--content-size) !important;
     margin: 0 auto !important;
     padding: 0 20px !important;
 }
+
 .l3-sintoma-header {
     text-align: center !important;
     margin-bottom: 80px !important;
 }
+
 .l3-sintoma-label {
     display: block !important;
     font-size: 0.75rem !important;
@@ -4615,6 +4714,7 @@ main.single-post-layout-pro {
     margin-bottom: 16px !important;
     font-weight: 500 !important;
 }
+
 .l3-sintoma-title {
     font-family: var(--wp--preset--font-family--serif, 'Playfair Display', serif) !important;
     font-size: clamp(2rem, 5vw, 3.2rem) !important;
@@ -4647,12 +4747,14 @@ main.single-post-layout-pro {
     width: 100% !important;
     transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease !important;
 }
+
 .l3-sintoma-card:hover {
     border-color: rgba(184, 150, 100, 0.7) !important;
     background: #0a2233 !important;
-    box-shadow: 0 15px 40px rgba(0,0,0,0.5) !important;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5) !important;
     transform: translateY(-3px) !important;
 }
+
 .l3-sintoma-card-title {
     font-family: var(--wp--preset--font-family--serif, 'Playfair Display', serif) !important;
     font-size: 1.25rem !important;
@@ -4660,9 +4762,10 @@ main.single-post-layout-pro {
     margin: 0 0 8px 0 !important;
     font-weight: 600 !important;
 }
+
 .l3-sintoma-card-text {
     font-size: 0.9rem !important;
-    color: rgba(255,255,255,0.6) !important;
+    color: rgba(255, 255, 255, 0.6) !important;
     line-height: 1.5 !important;
     margin: 0 !important;
 }
@@ -4676,23 +4779,26 @@ main.single-post-layout-pro {
     justify-content: center !important;
     z-index: 5 !important;
 }
+
 .l3-sintoma-circle {
     width: 180px !important;
     height: 180px !important;
     border-radius: 50% !important;
     background: #0a2233 !important;
-    border: 2px solid rgba(184,150,100,0.5) !important;
+    border: 2px solid rgba(184, 150, 100, 0.5) !important;
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
     text-align: center !important;
-    box-shadow: 0 20px 50px rgba(0,0,0,0.6) !important;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6) !important;
     transition: box-shadow 0.4s ease, border-color 0.4s ease !important;
 }
+
 .l3-sintoma-circle:hover {
     border-color: #b89664 !important;
-    box-shadow: 0 25px 60px rgba(184,150,100,0.15), 0 20px 50px rgba(0,0,0,0.6) !important;
+    box-shadow: 0 25px 60px rgba(184, 150, 100, 0.15), 0 20px 50px rgba(0, 0, 0, 0.6) !important;
 }
+
 .l3-sintoma-circle span {
     font-family: var(--wp--preset--font-family--serif, 'Playfair Display', serif) !important;
     font-size: 1rem !important;
@@ -4702,14 +4808,45 @@ main.single-post-layout-pro {
 }
 
 /* Grid Placement */
-.l3-card-tl { grid-column: 1; grid-row: 1; }
-.l3-con-tl  { grid-column: 2; grid-row: 1; }
-.l3-con-tr  { grid-column: 4; grid-row: 1; }
-.l3-card-tr { grid-column: 5; grid-row: 1; }
-.l3-card-bl { grid-column: 1; grid-row: 2; }
-.l3-con-bl  { grid-column: 2; grid-row: 2; }
-.l3-con-br  { grid-column: 4; grid-row: 2; }
-.l3-card-br { grid-column: 5; grid-row: 2; }
+.l3-card-tl {
+    grid-column: 1;
+    grid-row: 1;
+}
+
+.l3-con-tl {
+    grid-column: 2;
+    grid-row: 1;
+}
+
+.l3-con-tr {
+    grid-column: 4;
+    grid-row: 1;
+}
+
+.l3-card-tr {
+    grid-column: 5;
+    grid-row: 1;
+}
+
+.l3-card-bl {
+    grid-column: 1;
+    grid-row: 2;
+}
+
+.l3-con-bl {
+    grid-column: 2;
+    grid-row: 2;
+}
+
+.l3-con-br {
+    grid-column: 4;
+    grid-row: 2;
+}
+
+.l3-card-br {
+    grid-column: 5;
+    grid-row: 2;
+}
 
 /* Connectors — flechas apuntan HACIA las cards (desde el hub) */
 .l3-sintoma-con {
@@ -4717,81 +4854,155 @@ main.single-post-layout-pro {
     height: 2px !important;
     position: relative !important;
 }
+
 .l3-sintoma-con::before {
     content: "" !important;
     position: absolute !important;
-    top: 0; left: 0; right: 0 !important;
+    top: 0;
+    left: 0;
+    right: 0 !important;
     height: 2px !important;
-    background: linear-gradient(90deg, rgba(184,150,100,0.5), rgba(184,150,100,0.15)) !important;
+    background: linear-gradient(90deg, rgba(184, 150, 100, 0.5), rgba(184, 150, 100, 0.15)) !important;
 }
+
 /* Flechas izquierdas: apuntan ← hacia la card izquierda */
-.l3-con-tl::after, .l3-con-bl::after {
+.l3-con-tl::after,
+.l3-con-bl::after {
     content: "" !important;
     position: absolute !important;
-    left: -4px !important; top: -5px !important;
+    left: -4px !important;
+    top: -5px !important;
     border: 6px solid transparent !important;
-    border-right: 8px solid rgba(184,150,100,0.6) !important;
+    border-right: 8px solid rgba(184, 150, 100, 0.6) !important;
 }
+
 /* Flechas derechas: apuntan → hacia la card derecha */
-.l3-con-tr::before, .l3-con-br::before {
-    background: linear-gradient(90deg, rgba(184,150,100,0.15), rgba(184,150,100,0.5)) !important;
+.l3-con-tr::before,
+.l3-con-br::before {
+    background: linear-gradient(90deg, rgba(184, 150, 100, 0.15), rgba(184, 150, 100, 0.5)) !important;
 }
-.l3-con-tr::after, .l3-con-br::after {
+
+.l3-con-tr::after,
+.l3-con-br::after {
     content: "" !important;
     position: absolute !important;
-    right: -4px !important; top: -5px !important;
+    right: -4px !important;
+    top: -5px !important;
     border: 6px solid transparent !important;
-    border-left: 8px solid rgba(184,150,100,0.6) !important;
+    border-left: 8px solid rgba(184, 150, 100, 0.6) !important;
 }
 
 /* ── Responsive Mobile (Síntoma) ── */
 @media (max-width: 767px) {
-    .l3-sintoma-section { padding: 60px 0 !important; }
-    .l3-sintoma-header { margin-bottom: 50px !important; }
+    .l3-sintoma-section {
+        padding: 60px 0 !important;
+    }
+
+    .l3-sintoma-header {
+        margin-bottom: 50px !important;
+    }
+
     .l3-sintoma-diagram {
         display: flex !important;
         flex-direction: column !important;
         align-items: center !important;
         gap: 0 !important;
     }
-    .l3-sintoma-hub { order: -1 !important; margin-bottom: 0 !important; }
-    .l3-sintoma-circle { width: 140px !important; height: 140px !important; }
-    .l3-sintoma-circle span { font-size: 0.85rem !important; }
-    .l3-sintoma-card { max-width: 280px !important; margin: 0 !important; }
+
+    .l3-sintoma-hub {
+        order: -1 !important;
+        margin-bottom: 0 !important;
+    }
+
+    .l3-sintoma-circle {
+        width: 140px !important;
+        height: 140px !important;
+    }
+
+    .l3-sintoma-circle span {
+        font-size: 0.85rem !important;
+    }
+
+    .l3-sintoma-card {
+        max-width: 280px !important;
+        margin: 0 !important;
+    }
+
     /* Conectores verticales con espacio visible */
     .l3-sintoma-con {
         width: 2px !important;
         height: 40px !important;
         margin: 6px 0 !important;
     }
+
     .l3-sintoma-con::before {
-        width: 2px !important; height: 100% !important;
-        left: 0 !important; right: auto !important;
-        background: linear-gradient(180deg, rgba(184,150,100,0.5), rgba(184,150,100,0.2)) !important;
+        width: 2px !important;
+        height: 100% !important;
+        left: 0 !important;
+        right: auto !important;
+        background: linear-gradient(180deg, rgba(184, 150, 100, 0.5), rgba(184, 150, 100, 0.2)) !important;
     }
+
     .l3-sintoma-con::after {
         content: "" !important;
         position: absolute !important;
-        bottom: -4px !important; left: -5px !important;
-        top: auto !important; right: auto !important;
+        bottom: -4px !important;
+        left: -5px !important;
+        top: auto !important;
+        right: auto !important;
         border: 6px solid transparent !important;
-        border-top: 8px solid rgba(184,150,100,0.6) !important;
+        border-top: 8px solid rgba(184, 150, 100, 0.6) !important;
         border-left-color: transparent !important;
         border-right-color: transparent !important;
     }
+
     /* Todos los conectores visibles en mobile */
-    .l3-con-tr, .l3-con-br { display: block !important; }
+    .l3-con-tr,
+    .l3-con-br {
+        display: block !important;
+    }
 
     /* Orden: Hub → ↓ → Empresas → ↓ → Emprendedores → ↓ → Personas → ↓ → Capital */
-    .l3-sintoma-hub { order: 0 !important; }
-    .l3-con-tl  { order: 1; }
-    .l3-card-tl { order: 2; }   /* Empresas */
-    .l3-con-tr  { order: 3; }
-    .l3-card-tr { order: 4; }   /* Emprendedores */
-    .l3-con-bl  { order: 5; }
-    .l3-card-bl { order: 6; }   /* Personas */
-    .l3-con-br  { order: 7; }
-    .l3-card-br { order: 8; }   /* Capital */
+    .l3-sintoma-hub {
+        order: 0 !important;
+    }
+
+    .l3-con-tl {
+        order: 1;
+    }
+
+    .l3-card-tl {
+        order: 2;
+    }
+
+    /* Empresas */
+    .l3-con-tr {
+        order: 3;
+    }
+
+    .l3-card-tr {
+        order: 4;
+    }
+
+    /* Emprendedores */
+    .l3-con-bl {
+        order: 5;
+    }
+
+    .l3-card-bl {
+        order: 6;
+    }
+
+    /* Personas */
+    .l3-con-br {
+        order: 7;
+    }
+
+    .l3-card-br {
+        order: 8;
+    }
+
+    /* Capital */
 }
 
 /* =====================================================
@@ -4800,21 +5011,25 @@ main.single-post-layout-pro {
 .l3-metodologia-wrapper {
     background-color: #030912 !important;
 }
+
 .l3-metodologia-section {
     background-color: transparent !important;
     padding: 100px 0 !important;
     width: 100% !important;
     position: relative !important;
 }
+
 .l3-metodologia-container {
     max-width: var(--wp--style--global--content-size) !important;
     margin: 0 auto !important;
     padding: 0 20px !important;
 }
+
 .l3-metodologia-header {
     text-align: center !important;
     margin-bottom: 80px !important;
 }
+
 .l3-metodologia-label {
     display: block !important;
     font-size: 0.75rem !important;
@@ -4824,6 +5039,7 @@ main.single-post-layout-pro {
     margin-bottom: 16px !important;
     font-weight: 500 !important;
 }
+
 .l3-metodologia-title {
     font-family: var(--wp--preset--font-family--serif, 'Playfair Display', serif) !important;
     font-size: clamp(2rem, 5vw, 3.2rem) !important;
@@ -4856,30 +5072,37 @@ main.single-post-layout-pro {
     z-index: 2 !important;
     animation: l3-card-glow 12s infinite !important;
 }
+
 .l3-metodo-card:hover {
     animation: none !important;
     border-color: rgba(184, 150, 100, 0.7) !important;
     background: #0a2233 !important;
-    box-shadow: 0 15px 40px rgba(0,0,0,0.5) !important;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5) !important;
     transform: translateY(-3px) !important;
     z-index: 10 !important;
 }
 
 /* Auto-Hover Animation */
 @keyframes l3-card-glow {
-    0%, 20%, 100% {
+
+    0%,
+    20%,
+    100% {
         border-color: rgba(184, 150, 100, 0.3) !important;
         background: rgba(255, 255, 255, 0.02) !important;
         box-shadow: none !important;
         transform: translateY(0) !important;
     }
-    5%, 15% {
+
+    5%,
+    15% {
         border-color: rgba(184, 150, 100, 0.7) !important;
         background: #0a2233 !important;
-        box-shadow: 0 15px 40px rgba(0,0,0,0.5) !important;
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5) !important;
         transform: translateY(-3px) !important;
     }
 }
+
 .l3-metodo-card-title {
     font-family: var(--wp--preset--font-family--serif, 'Playfair Display', serif) !important;
     font-size: 1.25rem !important;
@@ -4887,22 +5110,43 @@ main.single-post-layout-pro {
     margin: 0 0 10px 0 !important;
     font-weight: 600 !important;
 }
+
 .l3-metodo-number {
     color: #b89664 !important;
     font-weight: 700 !important;
 }
+
 .l3-metodo-card-text {
     font-size: 0.9rem !important;
-    color: rgba(255,255,255,0.6) !important;
+    color: rgba(255, 255, 255, 0.6) !important;
     line-height: 1.55 !important;
     margin: 0 !important;
 }
 
 /* Grid Placement & Sync Delays (1-2-3-4 Sequential) */
-.l3-metodo-tl { grid-column: 1; grid-row: 1; animation-delay: 0s !important; }
-.l3-metodo-bl { grid-column: 1; grid-row: 2; animation-delay: 3s !important; }
-.l3-metodo-tr { grid-column: 2; grid-row: 1; animation-delay: 6s !important; }
-.l3-metodo-br { grid-column: 2; grid-row: 2; animation-delay: 9s !important; }
+.l3-metodo-tl {
+    grid-column: 1;
+    grid-row: 1;
+    animation-delay: 0s !important;
+}
+
+.l3-metodo-bl {
+    grid-column: 1;
+    grid-row: 2;
+    animation-delay: 3s !important;
+}
+
+.l3-metodo-tr {
+    grid-column: 2;
+    grid-row: 1;
+    animation-delay: 6s !important;
+}
+
+.l3-metodo-br {
+    grid-column: 2;
+    grid-row: 2;
+    animation-delay: 9s !important;
+}
 
 /* Hub — Infinity SVG */
 .l3-metodo-hub {
@@ -4919,11 +5163,12 @@ main.single-post-layout-pro {
     justify-content: center !important;
     pointer-events: none !important;
 }
+
 .l3-metodo-infinity {
     width: 100% !important;
     height: 100% !important;
     color: #b89664 !important;
-    filter: drop-shadow(0 4px 25px rgba(184,150,100,0.2)) !important;
+    filter: drop-shadow(0 4px 25px rgba(184, 150, 100, 0.2)) !important;
     transition: filter 0.4s ease !important;
     overflow: visible !important;
 }
@@ -4934,6 +5179,7 @@ main.single-post-layout-pro {
     stroke: #c0eaff !important;
     filter: drop-shadow(0 0 10px rgba(192, 234, 255, 0.95)) !important;
 }
+
 .trace-over {
     animation: l3-light-trace-over 12s linear infinite !important;
     stroke: #c0eaff !important;
@@ -4941,39 +5187,87 @@ main.single-post-layout-pro {
 }
 
 @keyframes l3-light-trace-under {
-    0% { stroke-dashoffset: 100; opacity: 0; }
-    2.5% { opacity: 1; }
-    47.5% { opacity: 1; }
-    50% { stroke-dashoffset: 0; opacity: 0; }
-    100% { stroke-dashoffset: 0; opacity: 0; }
+    0% {
+        stroke-dashoffset: 100;
+        opacity: 0;
+    }
+
+    2.5% {
+        opacity: 1;
+    }
+
+    47.5% {
+        opacity: 1;
+    }
+
+    50% {
+        stroke-dashoffset: 0;
+        opacity: 0;
+    }
+
+    100% {
+        stroke-dashoffset: 0;
+        opacity: 0;
+    }
 }
 
 @keyframes l3-light-trace-over {
-    0% { stroke-dashoffset: 100; opacity: 0; }
-    49.9% { stroke-dashoffset: 100; opacity: 0; }
-    50% { stroke-dashoffset: 100; opacity: 0; }
-    52.5% { opacity: 1; }
-    97.5% { opacity: 1; }
-    100% { stroke-dashoffset: 0; opacity: 0; }
+    0% {
+        stroke-dashoffset: 100;
+        opacity: 0;
+    }
+
+    49.9% {
+        stroke-dashoffset: 100;
+        opacity: 0;
+    }
+
+    50% {
+        stroke-dashoffset: 100;
+        opacity: 0;
+    }
+
+    52.5% {
+        opacity: 1;
+    }
+
+    97.5% {
+        opacity: 1;
+    }
+
+    100% {
+        stroke-dashoffset: 0;
+        opacity: 0;
+    }
 }
 
 /* Node Highlights (Synced with Light) */
 @keyframes l3-node-highlight {
-    0%, 20%, 100% {
+
+    0%,
+    20%,
+    100% {
         stroke: #b89664 !important;
         filter: none !important;
     }
-    5%, 15% {
+
+    5%,
+    15% {
         stroke: #c0eaff !important;
         filter: drop-shadow(0 0 15px rgba(192, 234, 255, 0.9)) !important;
     }
 }
 
 @keyframes l3-node-text-highlight {
-    0%, 20%, 100% {
+
+    0%,
+    20%,
+    100% {
         fill: #b89664 !important;
     }
-    5%, 15% {
+
+    5%,
+    15% {
         fill: #c0eaff !important;
     }
 }
@@ -4988,24 +5282,43 @@ main.single-post-layout-pro {
     animation: l3-node-text-highlight 12s infinite !important;
 }
 
-.l3-node-1 { animation-delay: 0s !important; }
-.l3-node-2 { animation-delay: 3s !important; }
-.l3-node-3 { animation-delay: 6s !important; }
-.l3-node-4 { animation-delay: 9s !important; }
+.l3-node-1 {
+    animation-delay: 0s !important;
+}
+
+.l3-node-2 {
+    animation-delay: 3s !important;
+}
+
+.l3-node-3 {
+    animation-delay: 6s !important;
+}
+
+.l3-node-4 {
+    animation-delay: 9s !important;
+}
 
 /* ── Responsive Mobile (Metodología) ── */
 @media (max-width: 767px) {
-    .l3-metodologia-section { padding: 60px 0 !important; }
-    .l3-metodologia-header { margin-bottom: 40px !important; }
+    .l3-metodologia-section {
+        padding: 60px 0 !important;
+    }
+
+    .l3-metodologia-header {
+        margin-bottom: 40px !important;
+    }
+
     .l3-metodologia-diagram {
         display: flex !important;
         flex-direction: column !important;
         align-items: center !important;
         gap: 20px !important;
     }
+
     .l3-metodo-hub {
         position: relative !important;
-        top: auto !important; left: auto !important;
+        top: auto !important;
+        left: auto !important;
         transform: none !important;
         width: 85vw !important;
         max-width: 320px !important;
@@ -5014,6 +5327,7 @@ main.single-post-layout-pro {
         order: -1 !important;
         margin-bottom: 20px !important;
     }
+
     .l3-metodo-card {
         max-width: 280px !important;
         width: 100% !important;
@@ -5034,7 +5348,8 @@ main.single-post-layout-pro {
     }
 
     .l3-enfoque-cell.empty-cell {
-        flex: 0 0 160px !important;   /* ← igual que feature-cell → alineación perfecta */
+        flex: 0 0 160px !important;
+        /* ← igual que feature-cell → alineación perfecta */
         min-width: 160px !important;
     }
 
@@ -5052,11 +5367,18 @@ main.single-post-layout-pro {
     .l3-enfoque-table::after {
         left: calc(160px + (100% - 160px) / 2) !important;
     }
+
     .l3-enfoque-table:has(.l3-enfoque-cell:nth-child(3):hover)::after {
         left: calc(160px + (100% - 160px) / 2 - 6px) !important;
     }
-    .l3-enfoque-cell:nth-child(1) { background: #030912 !important; }
-    .l3-enfoque-cell:nth-child(2) { background: #030912 !important; }
+
+    .l3-enfoque-cell:nth-child(1) {
+        background: #030912 !important;
+    }
+
+    .l3-enfoque-cell:nth-child(2) {
+        background: #030912 !important;
+    }
 }
 
 /* ── Responsive: Mobile — Tabla horizontal con etiquetas verticales ── */
@@ -5104,7 +5426,8 @@ main.single-post-layout-pro {
 
     /* ─── FEATURE CELL: texto vertical rotado ─── */
     .l3-enfoque-cell.feature-cell {
-        flex: 0 0 44px !important;        /* Columna estrecha */
+        flex: 0 0 44px !important;
+        /* Columna estrecha */
         min-width: 44px !important;
         padding: 8px 4px !important;
         justify-content: center !important;
@@ -5116,7 +5439,8 @@ main.single-post-layout-pro {
         /* Texto vertical */
         writing-mode: vertical-rl !important;
         text-orientation: mixed !important;
-        transform: rotate(180deg) !important; /* Leer de abajo hacia arriba */
+        transform: rotate(180deg) !important;
+        /* Leer de abajo hacia arriba */
         font-size: 0.8rem !important;
         letter-spacing: 0.08em !important;
     }
@@ -5138,18 +5462,25 @@ main.single-post-layout-pro {
     .l3-enfoque-table::after {
         left: calc(44px + (100% - 44px) / 2) !important;
     }
+
     .l3-enfoque-table:has(.l3-enfoque-cell:nth-child(3):hover)::after {
         left: calc(44px + (100% - 44px) / 2 - 4px) !important;
     }
 
     /* Recalcular fondos sólidos de col 1 y 2 */
-    .l3-enfoque-cell:nth-child(1) { background: #030912 !important; }
-    .l3-enfoque-cell:nth-child(2) { background: #030912 !important; }
+    .l3-enfoque-cell:nth-child(1) {
+        background: #030912 !important;
+    }
+
+    .l3-enfoque-cell:nth-child(2) {
+        background: #030912 !important;
+    }
 
     /* Ocultar check icons en mobile (muy poco espacio) */
     .l3-enfoque-cell:nth-child(3).content-cell::before {
         display: none !important;
     }
+
     .l3-enfoque-cell:nth-child(3).content-cell {
         transform: scale(1) !important;
     }
@@ -5161,3 +5492,18 @@ main.single-post-layout-pro {
     }
 }
 
+/* --- FIX PARA EL EDITOR DE WORDPRESS (GUTENBERG) --- */
+/* Limpieza total de fondos internos para permitir que el color del padre se vea */
+.block-library-html__preview,
+.wp-block-html .block-library-html__preview,
+.l3-enfoque-section,
+.l3-enfoque-container,
+.l3-enfoque-table-wrapper {
+    background-color: transparent !important;
+    background: transparent !important;
+}
+
+.wp-block-html,
+[data-type="core/html"] {
+    background-color: transparent !important;
+}

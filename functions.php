@@ -1260,6 +1260,7 @@ function antigravity_show_extra_profile_fields($user)
 	$prefix = get_the_author_meta('antigravity_user_prefix', $user->ID);
 	$specialty = get_the_author_meta('antigravity_user_specialty', $user->ID);
 	$job_title = get_the_author_meta('antigravity_user_job_title', $user->ID);
+	$order = get_the_author_meta('antigravity_user_order', $user->ID);
 	$quote = get_the_author_meta('antigravity_user_quote', $user->ID);
 	$quote_visible = get_the_author_meta('antigravity_user_quote_visible', $user->ID);
 	$focus = get_the_author_meta('antigravity_user_focus', $user->ID);
@@ -1336,6 +1337,13 @@ function antigravity_show_extra_profile_fields($user)
 	</style>
 	<h3><?php _e('Información Adicional (Linea 3)', 'linea3-legal-child'); ?></h3>
 	<table class="form-table">
+		<tr>
+			<th><label for="antigravity_user_order"><?php _e('Orden de aparición (Equipo)', 'linea3-legal-child'); ?></label></th>
+			<td>
+				<input type="number" name="antigravity_user_order" id="antigravity_user_order" value="<?php echo esc_attr($order); ?>" class="small-text" min="1" step="1" />
+				<p class="description"><?php _e('Define el orden en la cuadrícula de equipo. Los números bajos aparecen primero (ej: 1, 2, 3). Si se deja vacío, se ordena alfabéticamente.', 'linea3-legal-child'); ?></p>
+			</td>
+		</tr>
 		<tr>
 			<th><label for="antigravity_user_prefix"><?php _e('Prefijo Profesional', 'linea3-legal-child'); ?></label></th>
 			<td>
@@ -1535,6 +1543,7 @@ function antigravity_save_extra_profile_fields($user_id)
 		'antigravity_user_excerpt',
 		'antigravity_user_job_title',
 		'antigravity_user_specialty',
+		'antigravity_user_order',
 		'antigravity_user_quote',
 		'antigravity_user_focus',
 		'antigravity_user_languages',
@@ -1580,6 +1589,56 @@ function antigravity_save_extra_profile_fields($user_id)
 }
 add_action('personal_options_update', 'antigravity_save_extra_profile_fields');
 add_action('edit_user_profile_update', 'antigravity_save_extra_profile_fields');
+
+/**
+ * Añade la columna "Orden" a la tabla de usuarios
+ */
+function antigravity_add_user_order_column($columns) {
+    $new_columns = array();
+    foreach ($columns as $key => $value) {
+        $new_columns[$key] = $value;
+        if ($key === 'name') {
+            $new_columns['user_order'] = __('Orden', 'linea3-legal-child');
+        }
+    }
+    return $new_columns;
+}
+add_filter('manage_users_columns', 'antigravity_add_user_order_column', 20);
+
+/**
+ * Muestra el valor del orden en la columna de la tabla de usuarios
+ */
+function antigravity_show_user_order_column_value($value, $column_name, $user_id) {
+    if ('user_order' === $column_name) {
+        $order = get_the_author_meta('antigravity_user_order', $user_id);
+        return !empty($order) ? '<strong>' . esc_html($order) . '</strong>' : '<span style="opacity:0.3">—</span>';
+    }
+    return $value;
+}
+add_filter('manage_users_custom_column', 'antigravity_show_user_order_column_value', 20, 3);
+
+/**
+ * Hace que la columna "Orden" sea ordenable
+ */
+function antigravity_make_user_order_column_sortable($columns) {
+    $columns['user_order'] = 'antigravity_user_order';
+    return $columns;
+}
+add_filter('manage_users_sortable_columns', 'antigravity_make_user_order_column_sortable');
+
+/**
+ * Maneja la lógica de ordenación por el campo meta
+ */
+function antigravity_user_order_column_orderby($query) {
+    if (!is_admin()) return;
+    
+    $orderby = $query->get('orderby');
+    if ('antigravity_user_order' === $orderby) {
+        $query->set('meta_key', 'antigravity_user_order');
+        $query->set('orderby', 'meta_value_num');
+    }
+}
+add_action('pre_get_users', 'antigravity_user_order_column_orderby');
 
 /**
  * Helper para obtener el HTML de la tarjeta de autor.
@@ -1715,11 +1774,27 @@ function antigravity_render_team_grid($attributes): string
 	// Filtrar usuarios activos con rol 'author'.
 	$args = array(
 		'role__in' => array('author'),
-		'orderby' => 'display_name',
-		'order' => 'ASC',
+		'fields'   => 'all',
 	);
 
 	$users = get_users($args);
+
+	// Ordenación personalizada: Prioriza el campo 'antigravity_user_order', luego alfabético
+	usort($users, function ($a, $b) {
+		$order_a = get_the_author_meta('antigravity_user_order', $a->ID);
+		$order_b = get_the_author_meta('antigravity_user_order', $b->ID);
+
+		// Si ambos tienen orden, comparar por orden
+		$val_a = ($order_a !== '') ? (int)$order_a : 999;
+		$val_b = ($order_b !== '') ? (int)$order_b : 999;
+
+		if ($val_a !== $val_b) {
+			return $val_a - $val_b;
+		}
+
+		// Si el orden es igual o no tienen, comparar por nombre
+		return strcasecmp($a->display_name, $b->display_name);
+	});
 
 	// Inyectamos el Header directamente en el renderizado dinámico para asegurar su presencia
 	$output = '<div class="antigravity-team-section">';

@@ -123,14 +123,19 @@ add_action('admin_init', 'l3_info_init');
 function l3_info_init() {
     // Definición de campos y sus visibilidades
     $fields = [
+        'l3_info_foto_sede', // Nueva Foto de Sede
         'l3_info_lugar', 'l3_info_direccion', 'l3_info_ciudad',
         'l3_info_telefono', 'l3_info_movil', 'l3_info_email', 'l3_info_horario',
         'l3_info_linkedin', 'l3_info_instagram', 'l3_info_facebook'
     ];
 
     foreach ($fields as $field) {
-        register_setting('l3_options_group', $field);
-        register_setting('l3_options_group', $field . '_vis'); // Registro de visibilidad (ON/OFF)
+        if ($field === 'l3_info_foto_sede') {
+            register_setting('l3_options_group', $field . '_id'); // Guardamos el ID
+        } else {
+            register_setting('l3_options_group', $field);
+            register_setting('l3_options_group', $field . '_vis');
+        }
     }
 
     add_settings_section('l3_location_section', 'Ubicación Física', null, 'l3_info_settings_page');
@@ -138,6 +143,7 @@ function l3_info_init() {
     add_settings_section('l3_social_section', 'Redes Sociales Corporativas', null, 'l3_info_settings_page');
 
     // Campos Ubicación
+    add_settings_field('field_foto_sede', 'Foto de la Sede', 'l3_render_foto_sede', 'l3_info_settings_page', 'l3_location_section');
     add_settings_field('field_lugar', 'Nombre del Lugar / Edificio', 'l3_render_lugar', 'l3_info_settings_page', 'l3_location_section');
     add_settings_field('field_direccion', 'Dirección Física', 'l3_render_direccion', 'l3_info_settings_page', 'l3_location_section');
     add_settings_field('field_ciudad', 'Ciudad', 'l3_render_ciudad', 'l3_info_settings_page', 'l3_location_section');
@@ -163,6 +169,52 @@ function l3_render_switch($id) {
                     <span class="l3-slider"></span>
                 </label>
             </div>';
+}
+
+function l3_render_foto_sede() {
+    $id = get_option('l3_info_foto_sede_id');
+    $url = wp_get_attachment_image_url($id, 'medium');
+    ?>
+    <div class="l3-image-preview-wrapper">
+        <img id="l3-foto-sede-preview" src="<?php echo esc_url($url); ?>" style="max-width: 250px; display: <?php echo $url ? 'block' : 'none'; ?>; margin-bottom: 10px; border-radius: 4px; border: 1px solid #ccc;">
+        <input type="hidden" name="l3_info_foto_sede_id" id="l3_info_foto_sede_id" value="<?php echo esc_attr($id); ?>">
+        <div class="l3-actions" style="display: flex; gap: 10px;">
+            <button type="button" class="button l3-upload-button" id="l3_upload_foto_btn">Seleccionar Imagen</button>
+            <a href="<?php echo $id ? admin_url('post.php?post=' . $id . '&action=edit') : '#'; ?>" 
+               id="l3_edit_foto_btn" 
+               class="button" 
+               target="_blank" 
+               style="<?php echo !$id ? 'display:none;' : ''; ?>">Ajustar Recorte / Editar</a>
+            <button type="button" class="button l3-remove-button" id="l3_remove_foto_btn" style="<?php echo !$id ? 'display:none;' : ''; ?>; color: #a00;">Eliminar</button>
+        </div>
+    </div>
+    <p class="description">Selecciona una imagen y usa "Ajustar Recorte" si quieres elegir manualmente qué parte de la foto se muestra.</p>
+    
+    <script>
+    jQuery(document).ready(function($){
+        var frame;
+        $('#l3_upload_foto_btn').on('click', function(e) {
+            e.preventDefault();
+            if (frame) { frame.open(); return; }
+            frame = wp.media({ title: 'Seleccionar Foto de la Sede', button: { text: 'Usar esta imagen' }, multiple: false });
+            frame.on('select', function() {
+                var attachment = frame.state().get('selection').first().toJSON();
+                $('#l3_info_foto_sede_id').val(attachment.id);
+                $('#l3-foto-sede-preview').attr('src', attachment.url).show();
+                $('#l3_edit_foto_btn').attr('href', '<?php echo admin_url('post.php?post='); ?>' + attachment.id + '&action=edit').show();
+                $('#l3_remove_foto_btn').show();
+            });
+            frame.open();
+        });
+        $('#l3_remove_foto_btn').on('click', function() {
+            $('#l3_info_foto_sede_id').val('');
+            $('#l3-foto-sede-preview').hide();
+            $('#l3_edit_foto_btn').hide();
+            $(this).hide();
+        });
+    });
+    </script>
+    <?php
 }
 
 function l3_render_lugar() { 
@@ -221,6 +273,7 @@ function l3_render_facebook() {
 
 // 3. Render de la página
 function l3_info_page_render() {
+    wp_enqueue_media(); // Habilita la biblioteca de medios en esta página
     ?>
     <style>
         .l3-switch { position: relative; display: inline-block; width: 40px; height: 22px; }
@@ -338,8 +391,77 @@ add_shortcode('l3_footer_socials', function() {
 
 
 /**
- * Limit search results to specific post types.
+ * Shortcode Maestro para la Sección de la Sede
+ * Renderiza dinámicamente toda la sección de ubicación y contacto.
+ * Uso: [l3_seccion_sede]
  */
+add_shortcode('l3_seccion_sede', function() {
+    $img_id = get_option('l3_info_foto_sede_id');
+    $img_data = wp_get_attachment_image_src($img_id, 'l3_sede_thumb');
+    $default_img = get_stylesheet_directory_uri() . '/assets/images/oficina-bogota.png';
+    $img_path = ($img_data) ? $img_data[0] : $default_img;
+    
+    $direccion = do_shortcode('[l3_info_direccion]');
+    $lugar = do_shortcode('[l3_info_lugar]');
+    $ciudad = do_shortcode('[l3_info_ciudad]');
+    $email = do_shortcode('[l3_info_email]');
+    $telefono = do_shortcode('[l3_info_telefono]');
+    $horario = do_shortcode('[l3_info_horario]');
+    
+    // Fallbacks por si los datos están vacíos
+    $direccion_display = !empty($direccion) ? $direccion . (!empty($lugar) ? ', ' . $lugar : '') : '<span style="color:red;">(Dirección no configurada)</span>';
+    $ciudad_display = !empty($ciudad) ? $ciudad : '';
+    $email_display = !empty($email) ? $email : '<span style="color:red;">(Email no configurado)</span>';
+    $telefono_display = !empty($telefono) ? $telefono : '';
+    $horario_display = !empty($horario) ? $horario : '<span style="color:red;">(Horario no configurado)</span>';
+
+    ob_start();
+    ?>
+    <div class="wp-block-group alignfull antigravity-location-section l3-sede-dinamica">
+        <div class="wp-block-columns alignwide l3-container-standard" style="display: flex; flex-wrap: wrap; gap: 40px;">
+            <!-- Columna Información -->
+            <div class="wp-block-column location-content-col" style="flex-basis:40%; min-width: 320px;">
+                <div class="wp-block-group location-header" style="display: flex; align-items: center; gap: 20px; margin-bottom: 30px;">
+                    <div style="width: 4px; height: 60px; background: #b89664;"></div>
+                    <div>
+                        <p style="margin: 0; font-size: 14px; letter-spacing: 2px; color: #b89664;">UBICACIÓN</p>
+                        <h2 style="margin: 0; font-size: 32px; color: #fff;">Nuestra Sede en Bogotá</h2>
+                    </div>
+                </div>
+
+                <figure class="wp-block-image size-large" style="margin-bottom: 40px;">
+                    <img src="<?php echo $img_path; ?>" alt="Sede Linea 3 Bogotá" style="border-radius: 4px; width: 100%; height: auto; display: block;" />
+                </figure>
+
+                <div class="location-info-grid" style="display: grid; gap: 30px;">
+                    <div>
+                        <h3 style="color: #b89664; font-size: 18px; margin-bottom: 10px; font-weight: 600;">Dirección Principal</h3>
+                        <p style="margin: 0; line-height: 1.6; color: #fff;"><?php echo $direccion_display; ?><br><?php echo $ciudad_display; ?></p>
+                    </div>
+                    <div>
+                        <h3 style="color: #b89664; font-size: 18px; margin-bottom: 10px; font-weight: 600;">Contacto</h3>
+                        <p style="margin: 0; line-height: 1.6; color: #fff;"><?php echo $email_display; ?><br><?php echo $telefono_display; ?></p>
+                    </div>
+                    <div>
+                        <h3 style="color: #b89664; font-size: 18px; margin-bottom: 10px; font-weight: 600;">Horario</h3>
+                        <p style="margin: 0; line-height: 1.6; color: #fff;"><?php echo $horario_display; ?></p>
+                    </div>
+                </div>
+
+                <div style="margin-top: 40px;">
+                    <a class="wp-block-button__link wp-element-button antigravity-modal-trigger" style="background: #b89664; color: #fff !important; padding: 15px 30px; border-radius: 2px; text-decoration: none; cursor: pointer; display: inline-block;">Agendar Consulta</a>
+                </div>
+            </div>
+
+            <!-- Columna Mapa -->
+            <div class="wp-block-column" style="flex-basis:55%; min-width: 320px;">
+                <?php echo do_shortcode('[antigravity_map address="Calle 93 #11-13, Bogotá"]'); ?>
+            </div>
+        </div>
+    </div>
+    <?php
+    return ob_get_clean();
+});
 function linea3_legal_child_limit_search_results($query): void
 {
 	if ($query->is_search() && !is_admin() && $query->is_main_query()) {
@@ -821,95 +943,9 @@ function antigravity_register_block_patterns(): void
 <!-- /wp:cover -->'
 	));
 	register_block_pattern('antigravity/mapa-sede', array(
-		'title' => 'Mapa - Nuestra Sede (Fácil de Editar)',
-		'categories' => array('antigravity-patterns'),
-		'keywords' => array('mapa', 'sede', 'bogotá', 'ubicación', 'contacto', 'foto'),
-		'content' => '<!-- wp:group {"align":"full","className":"antigravity-location-section","layout":{"type":"constrained"}} -->
-<div class="wp-block-group alignfull antigravity-location-section">
-    <!-- wp:columns {"align":"wide","className":"l3-container-standard","style":{"spacing":{"blockGap":{"left":"var:preset|spacing|50"}}}} -->
-    <div class="wp-block-columns alignwide l3-container-standard">
-        <!-- wp:column {"width":"40%","className":"location-content-col"} -->
-        <div class="wp-block-column location-content-col" style="flex-basis:40%">
-            <!-- wp:group {"className":"location-header","layout":{"type":"flex","flexWrap":"nowrap","justifyContent":"left"}} -->
-            <div class="wp-block-group location-header">
-                <!-- wp:group {"className":"section-vertical-line"} -->
-                <div class="wp-block-group section-vertical-line"></div>
-                <!-- /wp:group -->
-
-                <!-- wp:group {"className":"location-header-content"} -->
-                <div class="wp-block-group location-header-content">
-                    <!-- wp:paragraph {"className":"location-eyebrow"} -->
-                    <p class="location-eyebrow">UBICACIÓN</p>
-                    <!-- /wp:paragraph -->
-
-                    <!-- wp:heading {"level":2,"className":"location-title"} -->
-                    <h2 class="wp-block-heading location-title">Nuestra Sede en Bogotá</h2>
-                    <!-- /wp:heading -->
-                </div>
-                <!-- /wp:group -->
-            </div>
-            <!-- /wp:group -->
-            
-            <!-- wp:image {"sizeSlug":"large","linkDestination":"none","className":"location-photo-wrap"} -->
-            <figure class="wp-block-image size-large location-photo-wrap"><img src="' . get_stylesheet_directory_uri() . '/assets/images/oficina-bogota.jpg" alt="Sede Linea 3 Bogotá"/></figure>
-            <!-- /wp:image -->
-
-            <!-- wp:group {"className":"location-info-row","layout":{"type":"constrained"}} -->
-            <div class="wp-block-group location-info-row">
-                <!-- wp:group {"className":"info-block info-main"} -->
-                <div class="wp-block-group info-block info-main">
-                    <!-- wp:heading {"level":3,"className":"info-label"} -->
-                    <h3 class="wp-block-heading info-label">Dirección Principal</h3>
-                    <!-- /wp:heading -->
-                    <!-- wp:paragraph {"className":"info-text"} -->
-                    <p class="info-text">Calle 93 #11-13, Edificio Nou<br>Piso 5, Oficina 502<br>Bogotá D.C., Colombia</p>
-                    <!-- /wp:paragraph -->
-                </div>
-                <!-- /wp:group -->
-
-                <!-- wp:group {"className":"info-block info-contact"} -->
-                <div class="wp-block-group info-block info-contact">
-                    <!-- wp:heading {"level":3,"className":"info-label"} -->
-                    <h3 class="wp-block-heading info-label">Contacto</h3>
-                    <!-- /wp:heading -->
-                    <!-- wp:paragraph {"className":"info-text"} -->
-                    <p class="info-text">bogota@linea3legal.com<br>+57 601 745 8900</p>
-                    <!-- /wp:paragraph -->
-                </div>
-                <!-- /wp:group -->
-
-                <!-- wp:group {"className":"info-block info-hours"} -->
-                <div class="wp-block-group info-block info-hours">
-                    <!-- wp:heading {"level":3,"className":"info-label"} -->
-                    <h3 class="wp-block-heading info-label">Horario</h3>
-                    <!-- /wp:heading -->
-                    <!-- wp:paragraph {"className":"info-text"} -->
-                    <p class="info-text">Lunes a Viernes<br>8:00 AM — 6:00 PM</p>
-                    <!-- /wp:paragraph -->
-                </div>
-                <!-- /wp:group -->
-            </div>
-            <!-- /wp:group -->
-            <!-- wp:buttons -->
-            <div class="wp-block-buttons">
-                <!-- wp:button {"className":"btn-agendar-visita"} -->
-                <div class="wp-block-button btn-agendar-visita"><a class="wp-block-button__link wp-element-button antigravity-modal-trigger">Agendar Consulta</a></div>
-                <!-- /wp:button -->
-            </div>
-            <!-- /wp:buttons -->
-        </div>
-        <!-- /wp:column -->
-        <!-- wp:column {"width":"60%"} -->
-        <div class="wp-block-column" style="flex-basis:60%">
-            <!-- wp:shortcode -->
-            [antigravity_map address="Calle 93 #11-13, Bogotá"]
-            <!-- /wp:shortcode -->
-        </div>
-        <!-- /wp:column -->
-    </div>
-    <!-- /wp:columns -->
-</div>
-<!-- /wp:group -->'
+		'title'       => 'Mapa - Nuestra Sede (Dinámico)',
+		'categories'  => array('antigravity-patterns'),
+		'content'     => '<!-- wp:shortcode -->[l3_seccion_sede]<!-- /wp:shortcode -->',
 	));
 	
 	register_block_pattern('antigravity/servicios', array(
@@ -2231,6 +2267,10 @@ function antigravity_render_posts_columns($column, $post_id)
 }
 add_action('manage_post_posts_custom_column', 'antigravity_render_posts_columns', 10, 2);
 add_action('manage_servicio_posts_custom_column', 'antigravity_render_posts_columns', 10, 2);
+
+add_action('after_setup_theme', function() {
+    add_image_size('l3_sede_thumb', 800, 500, true);
+});
 
 /**
  * Agrega CSS al panel de administración para corregir el tamaño de las imágenes en las columnas.

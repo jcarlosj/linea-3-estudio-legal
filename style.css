@@ -422,12 +422,32 @@ footer.wp-block-group .footer-logo-switch img {
 
     /* Header Specific Adjustment for Mobile */
     .header-main-container {
-        padding: 15px 20px !important; /* Reduced padding for mobile */
+        padding: 10px 15px !important; /* Minimum padding to maximize space */
+    }
+
+    .header-link-logo .logo-horizontal {
+        display: none !important;
     }
 
     .header-link-logo .logo-vertical {
         display: block !important;
-        max-height: 45px !important;
+        max-height: 50px !important;
+        width: auto !important;
+    }
+
+    .header-right-side {
+        gap: 12px !important; /* Compact gap for mobile buttons */
+    }
+
+    /* Hide "CONSULTAR" text on mobile to gain space, keep only icon */
+    .cta-legal-btn .btn-text {
+        display: none !important;
+    }
+
+    .cta-legal-btn .wp-block-button__link {
+        padding: 10px !important;
+        min-width: 44px !important;
+        justify-content: center !important;
     }
 
     /* Título Enlaces */

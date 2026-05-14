@@ -224,14 +224,48 @@ function l3_render_lugar() {
 }
 function l3_render_direccion() { 
     $val = get_option('l3_info_direccion'); 
-    echo '<textarea name="l3_info_direccion" rows="2" placeholder="Ej: Calle 100 # 15-20" class="regular-text">' . esc_textarea($val) . '</textarea>'; 
+    echo '<div style="display:flex; align-items:center; gap:20px;">';
+    echo '<textarea name="l3_info_direccion" id="l3_info_direccion_field" rows="2" placeholder="Ej: Calle 100 # 15-20" class="regular-text">' . esc_textarea($val) . '</textarea>'; 
     echo l3_render_switch('l3_info_direccion');
+    echo '</div>';
+    echo '<p id="l3_address_status" style="margin-top:5px; font-weight:600; display:none;"></p>';
     echo '<p class="description">Independientemente de la visibilidad, el dato registrado aquí se utilizará para generar la ubicación en el <strong>Mapa de Google</strong>.</p>';
+    ?>
+    <script>
+    jQuery(document).ready(function($){
+        var timeout = null;
+        
+        function validateAddress() {
+            clearTimeout(timeout);
+            var address = $('#l3_info_direccion_field').val();
+            var city = $('#l3_info_ciudad_field').val() || 'Bogotá, Colombia';
+            var $status = $('#l3_address_status');
+            
+            if (address.length < 5) { $status.hide(); return; }
+
+            timeout = setTimeout(function() {
+                $.getJSON('https://nominatim.openstreetmap.org/search?format=json&limit=1&q=' + encodeURIComponent(address + ', ' + city), function(data) {
+                    if (data.length > 0) {
+                        $status.text('✓ Dirección localizada correctamente en ' + city).css('color', 'green').show();
+                    } else {
+                        $status.text('⚠ Aviso: Esta dirección podría no ser exacta en ' + city).css('color', '#dc3232').show();
+                    }
+                });
+            }, 800);
+        }
+
+        $('#l3_info_direccion_field, #l3_info_ciudad_field').on('keyup change', function() {
+            validateAddress();
+        });
+    });
+    </script>
+    <?php
 }
 function l3_render_ciudad() { 
     $val = get_option('l3_info_ciudad'); 
-    echo '<input type="text" name="l3_info_ciudad" value="' . esc_attr($val) . '" placeholder="Ej: Bogotá, Colombia" class="regular-text">'; 
+    echo '<input type="text" name="l3_info_ciudad" id="l3_info_ciudad_field" value="' . esc_attr($val) . '" placeholder="Ej: Bogotá, Colombia" class="regular-text">'; 
     echo l3_render_switch('l3_info_ciudad');
+    echo '<p class="description">Ingresa la <strong>Ciudad y el País</strong> (Ej: Bogotá, Colombia). Esto es crucial para que el mapa geolocalice la oficina con precisión y el sistema de validación funcione correctamente.</p>';
 }
 function l3_render_telefono() { 
     $val = get_option('l3_info_telefono'); 
@@ -455,7 +489,10 @@ add_shortcode('l3_seccion_sede', function() {
 
             <!-- Columna Mapa -->
             <div class="wp-block-column" style="flex-basis:55%; min-width: 320px;">
-                <?php echo do_shortcode('[antigravity_map address="Calle 93 #11-13, Bogotá"]'); ?>
+                <?php 
+                $map_address = !empty($direccion) ? $direccion . ', ' . $ciudad : 'Bogotá, Colombia';
+                echo do_shortcode('[antigravity_map address="' . esc_attr($map_address) . '"]'); 
+                ?>
             </div>
         </div>
     </div>

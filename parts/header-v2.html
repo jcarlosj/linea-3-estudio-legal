@@ -1,0 +1,53 @@
+<!-- wp:group {"align":"full","layout":{"type":"flex","flexWrap":"nowrap","justifyContent":"space-between","verticalAlignment":"center"},"style":{"position":{"type":"sticky","top":"0px"},"spacing":{"padding":{"top":"20px","bottom":"20px","left":"50px","right":"50px"},"blockGap":"0px"},"color":{"background":"var:preset|color|base"}},"className":"header-main-container"} -->
+<header class="wp-block-group alignfull header-main-container has-background" style="padding-top:20px;padding-right:50px;padding-bottom:20px;padding-left:50px;position:sticky;top:0px;z-index:9999; background-color: #051320;">
+
+	<!-- wp:group {"className":"responsive-logo-wrapper","layout":{"type":"flex","flexWrap":"nowrap","verticalAlignment":"center"}} -->
+	<div class="wp-block-group responsive-logo-wrapper">
+		<!-- wp:html -->
+		<a href="/" class="header-link-logo">
+			<img src="/wp-content/themes/linea3-legal-child/assets/images/logo-horizontal-oscuro.png" alt="Linea 3 Estudio Legal" style="height:45px; width:auto;" />
+		</a>
+		<!-- /wp:html -->
+	</div>
+	<!-- /wp:group -->
+
+	<!-- wp:group {"className":"header-right-side","layout":{"type":"flex","flexWrap":"nowrap","justifyContent":"right","verticalAlignment":"center"},"style":{"spacing":{"blockGap":"2.5rem"}}} -->
+	<div class="wp-block-group header-right-side" style="gap:2.5rem">
+		
+		<!-- wp:navigation {"slug":"header","overlayMenu":"mobile","overlayBackgroundColor":"base","overlayTextColor":"text-main","style":{"spacing":{"blockGap":"32px"}},"layout":{"type":"flex","justifyContent":"right","orientation":"horizontal","flexWrap":"nowrap"}} /-->
+
+		<!-- wp:buttons {"style":{"spacing":{"blockGap":"1.5rem"}}} -->
+		<div class="wp-block-buttons">
+			<!-- wp:button {"className":"search-btn"} -->
+			<div class="wp-block-button search-btn">
+				<a class="wp-block-button__link wp-element-button" href="#">
+					<span class="btn-icon">
+						<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+					</span>
+				</a>
+			</div>
+			<!-- /wp:button -->
+
+			<!-- wp:button {"className":"cta-legal-btn"} -->
+			<div class="wp-block-button cta-legal-btn">
+				<a class="wp-block-button__link wp-element-button antigravity-modal-trigger" href="#">
+					<span class="btn-icon">
+						<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" /></svg>
+					</span>
+					<span class="btn-text">CONSULTAR</span>
+				</a>
+			</div>
+			<!-- /wp:button -->
+		</div>
+		<!-- /wp:buttons -->
+	</div>
+	<!-- /wp:group -->
+
+	<!-- wp:group {"className":"floating-search-container","layout":{"type":"constrained"}} -->
+	<div class="wp-block-group floating-search-container">
+		<!-- wp:search {"label":"Busca","showLabel":false,"placeholder":"Consulte nuestro archivo legal...","buttonText":"BUSCAR","width":100,"widthUnit":"%","className":"global-search-block"} /-->
+	</div>
+	<!-- /wp:group -->
+
+</header>
+<!-- /wp:group -->

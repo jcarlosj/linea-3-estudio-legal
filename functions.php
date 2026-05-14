@@ -19,18 +19,20 @@ if (!defined('ABSPATH')) {
  */
 function linea3_legal_child_enqueue_styles(): void
 {
+	$version = '1.2.0'; // Versión de Estabilización Total
+
 	wp_enqueue_style(
 		'linea3-legal-child-style',
 		get_stylesheet_uri(),
 		array(),
-		filemtime(get_stylesheet_directory() . '/style.css')
+		$version
 	);
 
 	wp_enqueue_script(
 		'linea3-legal-child-search',
 		get_stylesheet_directory_uri() . '/assets/js/search-toggle.js',
 		array(),
-		filemtime(get_stylesheet_directory() . '/assets/js/search-toggle.js'),
+		$version,
 		true
 	);
 
@@ -38,7 +40,7 @@ function linea3_legal_child_enqueue_styles(): void
 		'antigravity-modal-strategic',
 		get_stylesheet_directory_uri() . '/assets/js/modal-strategic.js',
 		array(),
-		filemtime(get_stylesheet_directory() . '/assets/js/modal-strategic.js'),
+		$version,
 		true
 	);
 }
@@ -144,6 +146,19 @@ function linea3_legal_child_search_result_count()
 	return sprintf('<p class="search-result-count">Se han visualizado <span class="count-number">%d</span> %s</p>', $count, $label);
 }
 add_shortcode('search_result_count', 'linea3_legal_child_search_result_count');
+
+/**
+ * Fuerza el uso de la nueva cabecera header-v2 para evitar problemas de caché o base de datos.
+ */
+add_filter('pre_get_block_template', function ($template, $id, $template_type) {
+	if ('wp_template_part' === $template_type && 'header' === $id) {
+		$template_v2 = get_block_template('linea3-legal-v2:header-v2', 'wp_template_part');
+		if ($template_v2) {
+			return $template_v2;
+		}
+	}
+	return $template;
+}, 10, 3);
 
 /**
  * Inyecta el contenedor HTML del Modal en el footer.

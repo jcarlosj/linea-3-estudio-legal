@@ -59,8 +59,19 @@ button,
 /* --- SISTEMA RESPONSIVO MOBILE FIRST --- */
 
 /* 1. COMPORTAMIENTO DEL LOGO Y HEADER */
-header.wp-block-group,
-footer.wp-block-group {
+/* Reset total de márgenes del Footer y Color Homogéneo */
+body footer.wp-block-template-part,
+body footer.wp-block-template-part > .wp-block-group,
+body footer.wp-block-template-part footer {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    background-color: #0a2233 !important; /* Color corporativo sólido */
+}
+
+header.wp-block-template-part,
+footer.wp-block-template-part {
     background-color: #0a2233 !important;
 }
 
@@ -360,14 +371,20 @@ footer.wp-block-group {
 /* Contenedor principal con padding de WP por defecto */
 .footer-grid-container {
     display: grid !important;
-    gap: 32px;
+    grid-template-columns: 2fr 1fr 1fr !important; /* 50% para Logo, 25% para cada info */
+    column-gap: 60px !important; 
+    row-gap: 2rem !important; /* Espacio editorial amplio solicitado */
+    align-items: start !important; 
     box-sizing: border-box;
     width: 100% !important;
-    max-width: none !important;
-    margin: 0 !important;
+    max-width: 1400px !important;
+    margin: 0 auto !important;
+    padding: 0 50px !important;
 }
 
-/* Mirror header logo alignment strictly - Final Brute Force */
+/* --- BLOQUE DE MÁXIMA ESPECIFICIDAD PARA DISEÑO EDITORIAL DEL FOOTER --- */
+/* Movido al final del archivo para asegurar prioridad absoluta */
+
 footer.wp-block-group .footer-logo-switch {
     display: flex !important;
     margin: 0 !important;
@@ -407,6 +424,12 @@ footer.wp-block-group .footer-logo-switch img {
         grid-template-columns: 1fr;
         justify-items: center;
         text-align: center;
+        gap: 40px !important;
+    }
+
+    .footer-col-oficina h4,
+    .footer-col-contacto h4 {
+        margin-bottom: 0.8rem !important;
     }
 
     /* Logo Switch (Mobile) */
@@ -473,9 +496,16 @@ footer.wp-block-group .footer-logo-switch img {
     /* 1. Contenedor principal pasa a Flex Column para apilar grupos */
     .footer-grid-container {
         display: flex !important;
-        flex-direction: column;
-        align-items: center;
-        gap: 32px;
+        flex-direction: column !important;
+        align-items: center !important;
+        gap: 40px !important;
+        padding: 0 30px !important;
+    }
+
+    /* Mantenemos la barra divisoria y el espacio en Tablet */
+    body footer .footer-bottom-group {
+        margin-top: 40px !important;
+        padding-top: 25px !important;
     }
 
     /* 2. Grupo Superior: Logo + Redes centrados */
@@ -490,31 +520,33 @@ footer.wp-block-group .footer-logo-switch img {
 
     /* 3. Grupo Medio: Oficina y Contacto lado a lado */
     .footer-mid-group {
-        display: grid;
-        /* Desactiva el display: contents global */
-        grid-template-columns: 1fr 1fr;
-        gap: 32px;
-        margin: 0 auto;
-        /* Centrado horizontal del grupo */
-        align-items: flex-start;
-        /* Alineación superior forzada de ambas columnas */
-        text-align: left;
-        width: max-content !important;
-        /* Permite que el margin 0 auto funcione sobre el total disponible */
-        max-width: 100%;
+        display: grid !important;
+        grid-template-columns: 1fr 1fr !important;
+        gap: 60px !important;
+        width: auto !important;
+        max-width: 800px !important;
+        margin: 0 auto !important;
+        justify-content: center !important;
+        text-align: center !important;
     }
 
-    .footer-mid-group h4 {
-        margin-top: 0 !important;
-        /* Elimina desfases generados por encabezados */
-    }
-
-    /* 4. Grupo Inferior: Menú horizontal, título oculto */
+    /* 4. Grupo Inferior: Menú horizontal */
     .footer-bottom-group {
-        display: flex;
-        /* Desactiva el display: contents global */
-        width: 100%;
-        justify-content: center;
+        display: flex !important;
+        flex-direction: column !important;
+        width: 100% !important;
+        align-items: center !important;
+        margin-top: 40px !important;
+    }
+
+    .footer-col-enlaces {
+        width: 100% !important;
+    }
+
+    .footer-nav .wp-block-navigation__container {
+        flex-direction: row !important;
+        justify-content: center !important;
+        gap: 40px !important;
     }
 
     .footer-section-title-enlaces {
@@ -545,8 +577,9 @@ footer.wp-block-group .footer-logo-switch img {
 /* 3. DESKTOP (≥ 1024px) */
 @media (min-width: 1024px) {
     .footer-grid-container {
-        grid-template-columns: repeat(4, 1fr) !important;
+        grid-template-columns: 2fr 1fr 1fr !important; /* 50% Logo, 25% c/u info */
         justify-items: start;
+        align-items: start !important; /* Forzamos alineación superior en Desktop */
         text-align: left;
     }
 
@@ -614,12 +647,7 @@ footer.wp-block-group .footer-logo-switch img {
     display: none !important;
 }
 
-.footer-nav .wp-block-navigation__container {
-    display: flex !important;
-    flex-direction: row !important;
-    flex-wrap: wrap;
-    gap: 24px;
-}
+/* Estilo movido al bloque final de prioridad para evitar conflictos con WP */
 
 /* 5. Redes Sociales - Reset de Fondos (Outline Puro) */
 .social-icons-outline {
@@ -5596,6 +5624,141 @@ main.single-post-layout-pro {
     background-color: transparent !important;
     background: transparent !important;
 }
+
+/* ==========================================================================
+   DISEÑO EDITORIAL - FOOTER (PRIORIDAD MÁXIMA)
+   ========================================================================== */
+
+/* 1. Títulos de Sección (Dorado y Fluido - Refinado) */
+body footer .footer-grid-container h4,
+body footer .footer-grid-container .wp-block-heading {
+    color: #b89664 !important;
+    font-family: 'Outfit', sans-serif !important;
+    font-size: clamp(1.1rem, 1.2vw, 1.35rem) !important; /* Tamaño más equilibrado */
+    text-transform: none !important; /* Solo la primera letra en mayúscula según el HTML */
+    letter-spacing: normal !important;
+    font-weight: 600 !important;
+    margin-top: 0 !important; /* Alineación superior absoluta con el logo */
+    margin-bottom: 1.2rem !important;
+    line-height: 1.2 !important;
+}
+
+/* 2. Textos de Contenido (Legibilidad y Espaciado - Refinado) */
+body footer .footer-grid-container p,
+body footer .footer-grid-container .wp-block-paragraph {
+    color: rgba(255, 255, 255, 0.85) !important;
+    font-family: 'Outfit', sans-serif !important;
+    font-size: clamp(0.9rem, 1vw, 1.05rem) !important; /* Estándar de lectura editorial */
+    line-height: 1.8 !important; 
+    font-weight: 300 !important;
+    margin-top: 0 !important;
+    margin-bottom: 0.4rem !important;
+}
+
+/* 3. Asegurar Centrado en una sola columna */
+@media (max-width: 767px) {
+    body footer .footer-grid-container {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        text-align: center !important;
+        gap: 50px !important;
+    }
+    
+    body footer .footer-grid-container > div {
+        width: 100% !important;
+    }
+}
+
+/* 4. Forzar Menú Legal Horizontal y Centrado (Dentro del Contenedor de Seguridad) */
+body footer .footer-bottom-group {
+    grid-column: 1 / -1 !important;
+    width: 100% !important;
+    border-top: 1px solid rgba(184, 150, 100, 0.15) !important;
+    margin-top: 0 !important; /* Controlado ahora por el row-gap de la rejilla */
+    padding-top: 15px !important; 
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+}
+
+body footer .footer-legal-links {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important; /* Evita que se pongan verticales */
+    justify-content: center !important;
+    gap: 40px !important;
+    width: auto !important;
+    margin-bottom: 15px !important;
+}
+
+body footer .footer-legal-links a {
+    color: rgba(255, 255, 255, 0.7) !important;
+    font-family: 'Outfit', sans-serif !important;
+    font-size: 0.9rem !important;
+    text-decoration: none !important;
+    letter-spacing: 0.1em !important;
+    white-space: nowrap !important;
+    transition: color 0.3s ease;
+}
+
+body footer .footer-legal-links a:hover {
+    color: #b89664 !important;
+}
+
+/* 5. Créditos y Frase Coloquial */
+body footer .footer-credits {
+    margin-top: 20px !important;
+    opacity: 0.8;
+}
+
+body footer .footer-credits p {
+    font-size: 0.8rem !important;
+    color: rgba(255, 255, 255, 0.8) !important;
+    font-family: 'Outfit', sans-serif !important;
+    letter-spacing: 0.05em !important;
+    margin: 0 !important;
+    font-weight: 300 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+/* Animación de Latido (Heartbeat) */
+@keyframes l3-heartbeat {
+    0% { transform: scale(1); }
+    10% { transform: scale(1.3); }
+    20% { transform: scale(1.1); }
+    30% { transform: scale(1.4); }
+    45% { transform: scale(1); }
+    100% { transform: scale(1); }
+}
+
+.heart-icon {
+    display: inline-block !important;
+    animation: l3-heartbeat 1.8s infinite cubic-bezier(0.215, 0.61, 0.355, 1);
+    transform-origin: center;
+}
+
+@media (max-width: 767px) {
+    body footer .footer-legal-links {
+        gap: 20px !important;
+        flex-direction: column !important; /* En móvil muy pequeño, mejor uno sobre otro */
+        align-items: center !important;
+    }
+    
+    body footer .footer-credits p {
+        flex-direction: column !important; /* Apilado de copyright y créditos */
+        gap: 8px !important;
+        font-size: 0.75rem !important;
+        line-height: 1.4 !important;
+    }
+
+    body footer .credits-divider {
+        display: none !important; /* Ocultamos la barra vertical en móvil */
+    }
+}
+
 
 .wp-block-html,
 [data-type="core/html"] {

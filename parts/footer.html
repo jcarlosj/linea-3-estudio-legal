@@ -58,25 +58,19 @@
 
         <!-- wp:group {"className":"footer-bottom-group"} -->
         <div class="wp-block-group footer-bottom-group">
-            <!-- 5. ENLACES (Título oculto en mobile + Links) -->
-            <!-- wp:group {"className":"footer-col-links"} -->
-            <div class="wp-block-group footer-col-links">
-                <!-- wp:heading {"level":4,"className":"footer-section-title-enlaces","style":{"color":{"text":"var:preset|color|text-main"},"typography":{"fontSize":"var:preset|font-size|small"}}} -->
-                <h4 class="wp-block-heading footer-section-title-enlaces has-text-main-color has-text-color has-small-font-size">Enlaces</h4>
-                <!-- /wp:heading -->
-                
-                <!-- wp:navigation {"overlayMenu":"never","className":"footer-nav","layout":{"type":"flex","flexWrap":"wrap","justifyContent":"left"},"style":{"typography":{"fontSize":"var:preset|font-size|small"},"color":{"text":"var:preset|color|text-muted"},"spacing":{"margin":{"top":"0"}}}} -->
-                    <!-- wp:navigation-link {"label":"Privacidad","url":"#","kind":"custom","isTopLevelLink":true} /-->
-                    <!-- wp:navigation-link {"label":"Términos de Servicio","url":"#","kind":"custom","isTopLevelLink":true} /-->
-                    <!-- wp:navigation-link {"label":"Contacto","url":"/contacto/","kind":"custom","isTopLevelLink":true} /-->
-                <!-- /wp:navigation -->
+            <div class="footer-legal-links">
+                <a href="/privacidad/">PRIVACIDAD</a>
+                <a href="/terminos-de-servicio/">TÉRMINOS DE SERVICIO</a>
             </div>
-            <!-- /wp:group -->
+            <div class="footer-credits">
+                <!-- wp:shortcode -->
+                [l3_copyright]
+                <!-- /wp:shortcode -->
+            </div>
         </div>
         <!-- /wp:group -->
 
     </div>
     <!-- /wp:group -->
-
 </footer>
 <!-- /wp:group -->

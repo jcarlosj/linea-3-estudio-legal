@@ -19,7 +19,7 @@ if (!defined('ABSPATH')) {
  */
 function linea3_legal_child_enqueue_styles(): void
 {
-	$version = '1.2.0'; // Versión de Estabilización Total
+	$version = '1.2.1'; // Versión de Estabilización y Diseño Editorial
 
 	wp_enqueue_style(
 		'linea3-legal-child-style',
@@ -63,6 +63,23 @@ function linea3_legal_child_setup(): void
 	add_image_size('l3-ally-logo', 400, 0, false);     // Para logos de aliados (proporcional)
 }
 add_action('after_setup_theme', 'linea3_legal_child_setup');
+
+/**
+ * Shortcode para Copyright Dinámico
+ * Uso: [l3_copyright]
+ */
+function l3_copyright_shortcode() {
+    $start_year = 2026;
+    $current_year = date('Y');
+    $year_display = ($start_year == $current_year) ? $start_year : $start_year . ' – ' . $current_year;
+    
+    $heart_svg = '<svg class="heart-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" style="width: 14px; height: 14px; fill: #b89664; display: inline-block; vertical-align: middle; margin: 0 4px;"><path d="M47.6 300.4L228.3 469.1c7.5 7 17.4 10.9 27.7 10.9s20.2-3.9 27.7-10.9L464.4 300.4c30.4-28.3 47.6-68 47.6-109.5v-5.8c0-69.9-50.5-129.5-119.4-141C347 36.5 300.6 51.4 268 84L256 96 244 84c-32.6-32.6-79-47.5-124.6-39.9C50.5 55.6 0 115.2 0 185.1v5.8c0 41.5 17.2 81.2 47.6 109.5z"/></svg>';
+    
+    return '<span class="copyright-part">Línea 3 Estudio Legal © ' . $year_display . '</span>' . 
+           '<span class="credits-divider"> | </span>' . 
+           '<span class="made-with-part">Hecho con el ' . $heart_svg . ' y las manitas</span>';
+}
+add_shortcode('l3_copyright', 'l3_copyright_shortcode');
 
 /**
  * Limit search results to specific post types.

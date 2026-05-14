@@ -53,6 +53,14 @@ function linea3_legal_child_setup(): void
 {
 	add_theme_support('editor-styles');
 	add_editor_style('style.css');
+	add_theme_support('post-thumbnails');
+
+	// Tamaños de imagen personalizados - Estética Editorial Linea 3
+	add_image_size('l3-team-portrait', 800, 1000, true); // Para grilla de equipo y perfil
+	add_image_size('l3-author-square', 500, 500, true); // Para tarjetas de autor pequeñas
+	add_image_size('l3-blog-cover', 1200, 800, true);  // Para cabecera de artículos
+	add_image_size('l3-blog-card', 600, 400, true);    // Para grillas de blog y destacados
+	add_image_size('l3-ally-logo', 400, 0, false);     // Para logos de aliados (proporcional)
 }
 add_action('after_setup_theme', 'linea3_legal_child_setup');
 
@@ -1692,7 +1700,7 @@ function antigravity_get_author_card_html(int $author_id, int $post_id = 0): str
 	return sprintf(
 		'<a href="%s" class="antigravity-author-card">
 			<div class="author-avatar-wrapper">
-				<img src="%s" alt="%s" class="author-avatar" />
+				<img src="%s" alt="%s" class="author-avatar" width="500" height="500" />
 			</div>
 			<div class="author-data-wrapper">
 				<span class="author-name">%s</span>
@@ -1837,7 +1845,8 @@ function antigravity_render_team_grid($attributes): string
 
 	foreach ($users as $user) {
 		$user_id = $user->ID;
-		$avatar_url = get_avatar_url($user_id, array('size' => 400));
+		// Usamos un tamaño generoso para avatars ya que WP no soporta crop personalizado en get_avatar directamente sin plugins
+		$avatar_url = get_avatar_url($user_id, array('size' => 1000));
 		$name = $user->display_name;
 		$specialty = get_the_author_meta('antigravity_user_specialty', $user_id);
 		$job_title = get_the_author_meta('antigravity_user_job_title', $user_id);
@@ -1852,7 +1861,7 @@ function antigravity_render_team_grid($attributes): string
 		$output .= '<div class="linea3-team-card-image-wrap">';
 		$output .= '<a href="' . esc_url($author_url) . '">';
 		$output .= sprintf(
-			'<img src="%s" alt="%s" class="linea3-team-card-image" />',
+			'<img src="%s" alt="%s" class="linea3-team-card-image" width="800" height="1000" />',
 			esc_url($avatar_url),
 			esc_attr($name)
 		);
@@ -1984,9 +1993,14 @@ function antigravity_render_featured_posts_grid(): string
 	foreach ($posts as $p) {
 		$cat = get_the_category($p->ID);
 		$cat_name = !empty($cat) ? $cat[0]->name : 'Estrategia';
-		$thumb = get_the_post_thumbnail_url($p->ID, 'large') ?: get_stylesheet_directory_uri() . '/assets/images/placeholder-legal.png';
+		$thumb_id = get_post_thumbnail_id($p->ID);
+		$thumb_img = wp_get_attachment_image($thumb_id, 'l3-blog-card', false, array('class' => 'featured-card-image'));
+		if (empty($thumb_img)) {
+			$placeholder_url = get_stylesheet_directory_uri() . '/assets/images/placeholder-legal.png';
+			$thumb_img = sprintf('<img src="%s" alt="%s" class="featured-card-image" width="600" height="400">', esc_url($placeholder_url), esc_attr($p->post_title));
+		}
 		$author_id = (int) $p->post_author;
-		$output .= sprintf('<div class="antigravity-card" onclick="window.location=\'%s\'"><div class="featured-card-image-wrap"><img src="%s" alt="%s" class="featured-card-image"></div><div class="featured-card-overlay"></div><div class="featured-card-content"><div class="featured-card-meta"><span class="featured-card-category">%s</span><h3 class="featured-card-title">%s</h3></div><div class="featured-card-author">%s</div><div class="featured-card-accent-line"></div></div></div>', get_permalink($p->ID), esc_url($thumb), esc_attr($p->post_title), esc_html($cat_name), esc_html($p->post_title), antigravity_get_author_card_html($author_id, $p->ID));
+		$output .= sprintf('<div class="antigravity-card" onclick="window.location=\'%s\'"><div class="featured-card-image-wrap">%s</div><div class="featured-card-overlay"></div><div class="featured-card-content"><div class="featured-card-meta"><span class="featured-card-category">%s</span><h3 class="featured-card-title">%s</h3></div><div class="featured-card-author">%s</div><div class="featured-card-accent-line"></div></div></div>', get_permalink($p->ID), $thumb_img, esc_html($cat_name), esc_html($p->post_title), antigravity_get_author_card_html($author_id, $p->ID));
 	}
 	return $output . '</div></div></section><!-- ANTIGRAVITY_END -->';
 }
@@ -2218,16 +2232,22 @@ function antigravity_services_grid_shortcode($atts) {
             $icon_id = get_post_meta(get_the_ID(), '_servicio_icon_id', true);
             $icon_html = '';
             if ($icon_id) {
-                $icon_url = wp_get_attachment_image_url($icon_id, 'thumbnail');
-                if ($icon_url) {
-                    $icon_html = '<img src="' . esc_url($icon_url) . '" alt="" class="service-icon" />';
+                $icon_img = wp_get_attachment_image($icon_id, 'thumbnail', false, array('class' => 'service-icon'));
+                if ($icon_img) {
+                    $icon_html = $icon_img;
                 }
             }
 
             // HTML de la tarjeta basado en el patrón creado
             $output .= '<div class="wp-block-cover l3-service-card">';
             $output .= '<span aria-hidden="true" class="wp-block-cover__background has-base-background-color has-background-dim-80 has-background-dim"></span>';
-            $output .= '<img class="wp-block-cover__image-background" alt="" src="' . esc_url($bg_image_url) . '" data-object-fit="cover"/>';
+            $thumb_id = get_post_thumbnail_id(get_the_ID());
+            $bg_img = wp_get_attachment_image($thumb_id, 'l3-blog-card', false, array('class' => 'wp-block-cover__image-background', 'data-object-fit' => 'cover'));
+            if (empty($bg_img)) {
+                $placeholder_url = get_stylesheet_directory_uri() . '/assets/images/placeholder-legal.png';
+                $bg_img = sprintf('<img class="wp-block-cover__image-background" alt="" src="%s" data-object-fit="cover" width="600" height="400" />', esc_url($placeholder_url));
+            }
+            $output .= $bg_img;
             
             $output .= '<div class="wp-block-cover__inner-container">';
             $output .= '<div class="wp-block-group">';
@@ -2449,15 +2469,16 @@ function l3_allies_grid_shortcode($atts): string
 	
 	while ($query->have_posts()) {
 		$query->the_post();
-		$logo_url = get_the_post_thumbnail_url(get_the_ID(), 'full');
+		$thumb_id = get_post_thumbnail_id(get_the_ID());
+		$logo_img = wp_get_attachment_image($thumb_id, 'l3-ally-logo');
 		$site_url = get_post_meta(get_the_ID(), '_l3_aliado_url', true);
 
-		if ($logo_url) {
+		if ($logo_img) {
 			$output .= '<div class="ally-card">';
 			if ($site_url) {
 				$output .= '<a href="' . esc_url($site_url) . '" target="_blank" rel="noopener noreferrer">';
 			}
-			$output .= '<img src="' . esc_url($logo_url) . '" alt="' . esc_attr(get_the_title()) . '">';
+			$output .= $logo_img;
 			if ($site_url) {
 				$output .= '</a>';
 			}
@@ -2617,7 +2638,7 @@ function antigravity_author_profile_shortcode($atts) {
     
     $languages = get_the_author_meta('antigravity_user_languages', $author_id);
     
-    $avatar_url = get_avatar_url($author_id, array('size' => 800));
+    $avatar_url = get_avatar_url($author_id, array('size' => 1000));
     
     $languages_visible = get_the_author_meta('antigravity_user_languages_visible', $author_id);
     if ($languages_visible === '' && !empty($languages)) {

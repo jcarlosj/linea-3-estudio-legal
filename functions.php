@@ -82,6 +82,262 @@ function l3_copyright_shortcode() {
 add_shortcode('l3_copyright', 'l3_copyright_shortcode');
 
 /**
+ * ==========================================================================
+ * GESTIÓN CENTRALIZADA DE INFORMACIÓN CORPORATIVA
+ * ==========================================================================
+ */
+
+// 1. Crear la página de ajustes
+add_action('admin_menu', 'l3_info_menu');
+function l3_info_menu() {
+    add_options_page(
+        'Info. General', 
+        'Info. General', 
+        'manage_options', 
+        'l3_info_settings_page', 
+        'l3_info_page_render'
+    );
+}
+
+// Forzar que aparezca de primero en el submenú de Ajustes
+add_action('admin_menu', 'l3_reorder_settings_menu', 999);
+function l3_reorder_settings_menu() {
+    global $submenu;
+    if (isset($submenu['options-general.php'])) {
+        $l3_menu = null;
+        foreach ($submenu['options-general.php'] as $key => $item) {
+            if ($item[2] === 'l3_info_settings_page') {
+                $l3_menu = $submenu['options-general.php'][$key];
+                unset($submenu['options-general.php'][$key]);
+                break;
+            }
+        }
+        if ($l3_menu) {
+            array_unshift($submenu['options-general.php'], $l3_menu);
+        }
+    }
+}
+
+// 2. Registrar los ajustes y campos
+add_action('admin_init', 'l3_info_init');
+function l3_info_init() {
+    // Definición de campos y sus visibilidades
+    $fields = [
+        'l3_info_lugar', 'l3_info_direccion', 'l3_info_ciudad',
+        'l3_info_telefono', 'l3_info_movil', 'l3_info_email', 'l3_info_horario',
+        'l3_info_linkedin', 'l3_info_instagram', 'l3_info_facebook'
+    ];
+
+    foreach ($fields as $field) {
+        register_setting('l3_options_group', $field);
+        register_setting('l3_options_group', $field . '_vis'); // Registro de visibilidad (ON/OFF)
+    }
+
+    add_settings_section('l3_location_section', 'Ubicación Física', null, 'l3_info_settings_page');
+    add_settings_section('l3_contact_section', 'Datos de Contacto y Horarios', null, 'l3_info_settings_page');
+    add_settings_section('l3_social_section', 'Redes Sociales Corporativas', null, 'l3_info_settings_page');
+
+    // Campos Ubicación
+    add_settings_field('field_lugar', 'Nombre del Lugar / Edificio', 'l3_render_lugar', 'l3_info_settings_page', 'l3_location_section');
+    add_settings_field('field_direccion', 'Dirección Física', 'l3_render_direccion', 'l3_info_settings_page', 'l3_location_section');
+    add_settings_field('field_ciudad', 'Ciudad', 'l3_render_ciudad', 'l3_info_settings_page', 'l3_location_section');
+    
+    // Campos Contacto
+    add_settings_field('field_telefono', 'Teléfono Fijo', 'l3_render_telefono', 'l3_info_settings_page', 'l3_contact_section');
+    add_settings_field('field_movil', 'Teléfono Móvil', 'l3_render_movil', 'l3_info_settings_page', 'l3_contact_section');
+    add_settings_field('field_email', 'Correo Electrónico', 'l3_render_email', 'l3_info_settings_page', 'l3_contact_section');
+    add_settings_field('field_horario', 'Horario de Atención', 'l3_render_horario', 'l3_info_settings_page', 'l3_contact_section');
+
+    // Campos Redes Sociales
+    add_settings_field('field_linkedin', 'LinkedIn (Perfil Empresarial)', 'l3_render_linkedin', 'l3_info_settings_page', 'l3_social_section');
+    add_settings_field('field_instagram', 'Instagram', 'l3_render_instagram', 'l3_info_settings_page', 'l3_social_section');
+    add_settings_field('field_facebook', 'Facebook', 'l3_render_facebook', 'l3_info_settings_page', 'l3_social_section');
+}
+
+function l3_render_switch($id) {
+    $checked = get_option($id . '_vis') ? 'checked' : '';
+    return '<div style="display:inline-block; vertical-align:middle; margin-left:20px;">
+                <span style="font-size:12px; color:#666; margin-right:8px;">Mostrar:</span>
+                <label class="l3-switch">
+                    <input type="checkbox" name="' . $id . '_vis" value="1" ' . $checked . '>
+                    <span class="l3-slider"></span>
+                </label>
+            </div>';
+}
+
+function l3_render_lugar() { 
+    $val = get_option('l3_info_lugar'); 
+    echo '<input type="text" name="l3_info_lugar" value="' . esc_attr($val) . '" placeholder="Ej: Edificio Platinum..." class="regular-text">';
+    echo l3_render_switch('l3_info_lugar');
+}
+function l3_render_direccion() { 
+    $val = get_option('l3_info_direccion'); 
+    echo '<textarea name="l3_info_direccion" rows="2" placeholder="Ej: Calle 100 # 15-20" class="regular-text">' . esc_textarea($val) . '</textarea>'; 
+    echo l3_render_switch('l3_info_direccion');
+    echo '<p class="description">Independientemente de la visibilidad, el dato registrado aquí se utilizará para generar la ubicación en el <strong>Mapa de Google</strong>.</p>';
+}
+function l3_render_ciudad() { 
+    $val = get_option('l3_info_ciudad'); 
+    echo '<input type="text" name="l3_info_ciudad" value="' . esc_attr($val) . '" placeholder="Ej: Bogotá, Colombia" class="regular-text">'; 
+    echo l3_render_switch('l3_info_ciudad');
+}
+function l3_render_telefono() { 
+    $val = get_option('l3_info_telefono'); 
+    echo '<input type="text" name="l3_info_telefono" value="' . esc_attr($val) . '" placeholder="Ej: +57 1 234 5678" class="regular-text">'; 
+    echo l3_render_switch('l3_info_telefono');
+}
+function l3_render_movil() { 
+    $val = get_option('l3_info_movil'); 
+    echo '<input type="text" name="l3_info_movil" value="' . esc_attr($val) . '" placeholder="Ej: +57 300 123 4567" class="regular-text">';
+    echo l3_render_switch('l3_info_movil');
+    echo '<p class="description">Este número se utilizará para la futura integración con <strong>WhatsApp</strong>.</p>';
+}
+function l3_render_email() { 
+    $val = get_option('l3_info_email'); 
+    echo '<input type="text" name="l3_info_email" value="' . esc_attr($val) . '" placeholder="Ej: contacto@linea3legal.com" class="regular-text">';
+    echo l3_render_switch('l3_info_email');
+    echo '<p class="description" style="color: #d63638; font-weight: 500; margin-top: 5px;">⚠️ IMPORTANTE: Utiliza únicamente correos bajo el dominio @linea3legal.com.</p>';
+}
+function l3_render_horario() { 
+    $val = get_option('l3_info_horario'); 
+    echo '<input type="text" name="l3_info_horario" value="' . esc_attr($val) . '" placeholder="Ej: Lunes a Viernes..." class="regular-text">'; 
+    echo l3_render_switch('l3_info_horario');
+}
+function l3_render_linkedin() { 
+    $val = get_option('l3_info_linkedin'); 
+    echo '<input type="url" name="l3_info_linkedin" value="' . esc_attr($val) . '" placeholder="https://..." class="regular-text">'; 
+    echo l3_render_switch('l3_info_linkedin');
+}
+function l3_render_instagram() { 
+    $val = get_option('l3_info_instagram'); 
+    echo '<input type="url" name="l3_info_instagram" value="' . esc_attr($val) . '" placeholder="https://..." class="regular-text">'; 
+    echo l3_render_switch('l3_info_instagram');
+}
+function l3_render_facebook() { 
+    $val = get_option('l3_info_facebook'); 
+    echo '<input type="url" name="l3_info_facebook" value="' . esc_attr($val) . '" placeholder="https://..." class="regular-text">'; 
+    echo l3_render_switch('l3_info_facebook');
+}
+
+// 3. Render de la página
+function l3_info_page_render() {
+    ?>
+    <style>
+        .l3-switch { position: relative; display: inline-block; width: 40px; height: 22px; }
+        .l3-switch input { opacity: 0; width: 0; height: 0; }
+        .l3-slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: .4s; border-radius: 34px; }
+        .l3-slider:before { position: absolute; content: ""; height: 16px; width: 16px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; }
+        input:checked + .l3-slider { background-color: #2271b1; }
+        input:checked + .l3-slider:before { transform: translateX(18px); }
+    </style>
+    <div class="wrap">
+        <h1>Gestión de Información Corporativa</h1>
+        <hr>
+        <form method="post" action="options.php">
+            <?php
+            settings_fields('l3_options_group');
+            do_settings_sections('l3_info_settings_page');
+            submit_button('Guardar Información');
+            ?>
+        </form>
+    </div>
+    <?php
+}
+
+// 4. Shortcodes con Lógica de Visibilidad Estricta
+function l3_get_dynamic_info($id) {
+    $val = get_option($id);
+    $vis = get_option($id . '_vis');
+    
+    // 1. Si no hay nada registrado (está vacío), devolvemos vacío siempre
+    if (empty($val)) return '';
+    
+    // 2. Si hay datos pero el interruptor de "Mostrar" está apagado, devolvemos vacío
+    if (!$vis) return ''; 
+    
+    // 3. Solo si hay datos Y está el interruptor encendido, devolvemos el valor
+    return $val;
+}
+
+add_shortcode('l3_info_lugar', function() { return l3_get_dynamic_info('l3_info_lugar'); });
+add_shortcode('l3_info_direccion', function() { 
+    $val = l3_get_dynamic_info('l3_info_direccion');
+    return !empty($val) ? nl2br($val) : ''; 
+});
+add_shortcode('l3_info_ciudad', function() { return l3_get_dynamic_info('l3_info_ciudad'); });
+add_shortcode('l3_info_telefono', function() { return l3_get_dynamic_info('l3_info_telefono'); });
+add_shortcode('l3_info_movil', function() { return l3_get_dynamic_info('l3_info_movil'); });
+add_shortcode('l3_info_email', function() { return l3_get_dynamic_info('l3_info_email'); });
+add_shortcode('l3_info_horario', function() { return l3_get_dynamic_info('l3_info_horario'); });
+
+// Shortcodes de Redes Sociales (devuelven la URL solo si hay dato y está visible)
+add_shortcode('l3_social_linkedin', function() { return l3_get_dynamic_info('l3_info_linkedin'); });
+add_shortcode('l3_social_instagram', function() { return l3_get_dynamic_info('l3_info_instagram'); });
+add_shortcode('l3_social_facebook', function() { return l3_get_dynamic_info('l3_info_facebook'); });
+
+/**
+ * Shortcode Maestro para Redes Sociales en el Footer
+ * Solo renderiza los iconos que tienen datos y están visibles.
+ */
+add_shortcode('l3_footer_socials', function() {
+    $networks = [
+        'instagram' => [
+            'id' => 'l3_info_instagram',
+            'svg' => '<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>'
+        ],
+        'facebook'  => [
+            'id' => 'l3_info_facebook',
+            'svg' => '<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M22.675 0h-21.35c-.732 0-1.325.593-1.325 1.325v21.351c0 .731.593 1.324 1.325 1.324h11.495v-9.294h-3.128v-3.622h3.128v-2.671c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.463.099 2.795.143v3.24l-1.918.001c-1.504 0-1.795.715-1.795 1.763v2.313h3.587l-.467 3.622h-3.12v9.293h6.116c.73 0 1.323-.593 1.323-1.325v-21.35c0-.732-.593-1.325-1.325-1.325z"/></svg>'
+        ],
+        'linkedin'  => [
+            'id' => 'l3_info_linkedin',
+            'svg' => '<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>'
+        ]
+    ];
+    
+    $items_html = '';
+    foreach ($networks as $service => $data) {
+        $url = l3_get_dynamic_info($data['id']);
+        if (!empty($url)) {
+            $items_html .= '<li style="margin:0;">
+                <a href="' . esc_url($url) . '" target="_blank" rel="noopener nofollow" class="l3-social-link">
+                    ' . $data['svg'] . '
+                </a>
+            </li>';
+        }
+    }
+    
+    if (empty($items_html)) return '';
+    
+    $styles = '<style>
+        .l3-social-link { 
+            color: #b89664 !important; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            width: 40px; 
+            height: 40px; 
+            border: 1px solid #b89664; 
+            border-radius: 4px; 
+            padding: 8px; 
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            background: transparent;
+        }
+        .l3-social-link:hover { 
+            background: #b89664 !important; 
+            color: #0a2233 !important; 
+            transform: translateY(-3px);
+            box-shadow: 0 4px 12px rgba(184, 150, 100, 0.3);
+        }
+        .l3-social-link svg { width: 20px; height: 20px; transition: transform 0.3s ease; }
+        .l3-social-link:hover svg { transform: scale(1.1); }
+    </style>';
+    
+    return $styles . '<ul class="l3-footer-socials" style="display: flex; gap: 12px; list-style: none; padding: 0; margin: 15px 0 0 0;">' . $items_html . '</ul>';
+});
+
+
+/**
  * Limit search results to specific post types.
  */
 function linea3_legal_child_limit_search_results($query): void

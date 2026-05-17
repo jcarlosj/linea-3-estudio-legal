@@ -4,7 +4,7 @@ Theme URI: https://linea3legal.com
 Author: Linea 3 Developer
 Author URI: https://linea3legal.com
 Description: Versión 2 - Limpieza total de caché y estructura. Basado en Twenty Twenty-Five.
-Version: 1.1.6
+Version: 1.1.9
 Requires at least: 6.7
 Tested up to: 6.9.4
 Requires PHP: 8.2
@@ -5800,4 +5800,12 @@ body footer .footer-credits p {
 .wp-block-html,
 [data-type="core/html"] {
     background-color: transparent !important;
+}
+
+/* Margen elegante para el divisor en el footer (solo en escritorio/pantallas grandes donde cabe horizontalmente) */
+@media (min-width: 768px) {
+    body footer .credits-divider {
+        margin: 0 12px !important;
+        display: inline-block !important;
+    }
 }

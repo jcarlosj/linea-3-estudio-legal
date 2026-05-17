@@ -19,7 +19,7 @@ if (!defined('ABSPATH')) {
  */
 function linea3_legal_child_enqueue_styles(): void
 {
-	$version = '1.2.1'; // Versión de Estabilización y Diseño Editorial
+	$version = '1.2.5'; // Versión de Estabilización y Diseño Editorial
 
 	wp_enqueue_style(
 		'linea3-legal-child-style',
@@ -2105,10 +2105,42 @@ function antigravity_post_author_box_shortcode()
 		return '';
 
 	$html = antigravity_get_author_card_html($author_id, $post ? $post->ID : 0);
-	// Añadimos la clase legacy para asegurar compatibilidad con estilos específicos de single post
-	return str_replace('antigravity-author-card', 'antigravity-author-card single-post-author-box', $html);
+	
+	// Condicional de extracto manual
+	$author_class = 'single-post-author-box';
+	if (has_excerpt($post ? $post->ID : 0)) {
+		$author_class .= ' has-divider-top';
+	}
+
+	// Añadimos las clases para asegurar compatibilidad con estilos específicos de single post
+	$html = str_replace('antigravity-author-card', 'antigravity-author-card ' . $author_class, $html);
+	
+	// Envolvemos en un div contenedor y eliminamos saltos de línea para evitar que wpautop inyecte etiquetas <p> y rompa el tag <a>
+	return '<div class="antigravity-author-box-wrapper">' . preg_replace('/>\s+</', '><', str_replace(array("\r", "\n"), '', $html)) . '</div>';
 }
 add_shortcode('antigravity_post_author_box', 'antigravity_post_author_box_shortcode');
+
+/**
+ * Filtro dinámico de bloques para ocultar el extracto autogenerado en posts que no tienen extracto manual.
+ */
+add_filter('render_block', function ($block_content, $block) {
+	if (is_singular('post') && 'core/post-excerpt' === $block['blockName']) {
+		if (!has_excerpt()) {
+			return ''; // Si no hay extracto manual, no pintamos el bloque en absoluto
+		}
+	}
+	return $block_content;
+}, 10, 2);
+
+/**
+ * Limpieza de etiquetas <p> inyectadas por wpautop en el bloque de shortcode del autor.
+ */
+add_filter('render_block', function ($block_content, $block) {
+	if ('core/shortcode' === $block['blockName'] && strpos($block_content, 'antigravity-author-box-wrapper') !== false) {
+		return preg_replace('/<\/?p[^>]*>/i', '', $block_content);
+	}
+	return $block_content;
+}, 99, 2);
 
 /**
  * Renderizado de Publicaciones Relacionadas.

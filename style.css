@@ -2219,21 +2219,22 @@ main.single-post-layout-pro {
 
 .single-post-layout-pro .single-post-info-box-inner {
     background-color: #051320 !important;
-    padding: 35px 50px !important;
+    padding: 35px 50px 35px !important;
     box-shadow: 0 40px 100px rgba(0, 0, 0, 0.6);
     border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .single-post-layout-pro .single-post-excerpt {
-    font-size: clamp(1.05rem, 2vw, 1.25rem);
+    font-size: clamp(0.95rem, 1.6vw, 1.15rem);
     /* RWD Excerpt */
     line-height: 1.6;
     color: var(--wp--preset--color--text-main);
     margin-bottom: 0;
     font-weight: 400;
+    font-style: italic;
 }
 
-/* Estilos para el Shortcode de Autor (Dinámico) */
+/* 4. THE AUTHOR CARD */
 .single-post-layout-pro .single-post-author-box,
 .single-post-layout-pro .antigravity-author-card {
     display: flex;
@@ -2244,6 +2245,25 @@ main.single-post-layout-pro {
     padding-top: 25px;
     /* Reducido de 35px */
     border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Ajustes específicos para el cuadro flotante (Info Box) para controlar la barra condicional y espaciados */
+.single-post-info-box-inner .single-post-excerpt,
+.single-post-info-box-inner .single-post-excerpt p,
+.single-post-info-box-inner .wp-block-post-excerpt__excerpt {
+    margin-bottom: 15px !important;
+}
+
+.single-post-info-box-inner .single-post-author-box {
+    margin-top: 0;
+    padding-top: 0;
+    border-top: none !important;
+}
+
+.single-post-info-box-inner .single-post-author-box.has-divider-top {
+    margin-top: 20px;
+    padding-top: 35px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
 }
 
 .single-post-layout-pro .single-author-avatar,
@@ -2282,7 +2302,7 @@ main.single-post-layout-pro {
     width: 90%;
     max-width: 960px;
     margin: 0 auto;
-    padding: 80px 0 120px;
+    padding: 50px 0 120px;
 }
 
 .single-post-layout-pro .single-post-content-container p {

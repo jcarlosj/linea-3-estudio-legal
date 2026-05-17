@@ -4,7 +4,7 @@ Theme URI: https://linea3legal.com
 Author: Linea 3 Developer
 Author URI: https://linea3legal.com
 Description: Versión 2 - Limpieza total de caché y estructura. Basado en Twenty Twenty-Five.
-Version: 1.1.11
+Version: 1.1.15
 Requires at least: 6.7
 Tested up to: 6.9.4
 Requires PHP: 8.2
@@ -5816,5 +5816,65 @@ body footer .footer-credits p {
     body footer .credits-divider {
         margin: 0 12px !important;
         display: inline-block !important;
+    }
+}
+
+/* ========================================================
+   FLOATING WHATSAPP BUTTON (PREMIUM BRANDING)
+   ======================================================== */
+.l3-whatsapp-floating {
+    position: fixed !important;
+    bottom: 30px !important;
+    right: 30px !important;
+    width: 56px !important;
+    height: 56px !important;
+    background-color: #ce9e50 !important; /* Fondo dorado premium como el botón de chat */
+    border: 2px solid transparent !important; /* Evita saltos de píxel en hover */
+    border-radius: 50% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    color: #0a2233 !important; /* Icono en oscuro corporativo */
+    font-size: 28px !important;
+    text-decoration: none !important;
+    box-shadow: 0 4px 20px rgba(10, 34, 51, 0.35) !important;
+    z-index: 999999 !important;
+    transition: all 0.35s cubic-bezier(0.25, 0.8, 0.25, 1) !important;
+    cursor: pointer !important;
+}
+
+.l3-whatsapp-floating:hover {
+    background-color: #0a2233 !important; /* Fondo oscuro al hacer hover */
+    color: #ce9e50 !important; /* Icono dorado al hacer hover */
+    border-color: #ce9e50 !important; /* Borde dorado premium al hacer hover */
+    transform: scale(1.08) translateY(-4px) !important;
+    box-shadow: 0 8px 25px rgba(206, 158, 80, 0.45) !important;
+}
+
+/* Micro-animación de pulso áureo/dorado */
+@keyframes l3-whatsapp-pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(206, 158, 80, 0.45);
+    }
+    70% {
+        box-shadow: 0 0 0 15px rgba(206, 158, 80, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(206, 158, 80, 0);
+    }
+}
+
+.l3-whatsapp-floating {
+    animation: l3-whatsapp-pulse 2s infinite !important;
+}
+
+/* Ajustes responsivos móviles para evitar colisiones con elementos del pie */
+@media (max-width: 767px) {
+    .l3-whatsapp-floating {
+        bottom: 20px !important;
+        right: 20px !important;
+        width: 50px !important;
+        height: 50px !important;
+        font-size: 26px !important;
     }
 }

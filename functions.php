@@ -19,7 +19,14 @@ if (!defined('ABSPATH')) {
  */
 function linea3_legal_child_enqueue_styles(): void
 {
-	$version = '1.3.3'; // Versión de Estabilización y Diseño Editorial
+	$version = '1.3.8'; // Versión de Estabilización y Diseño Editorial
+
+	wp_enqueue_style(
+		'l3-font-awesome',
+		'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css',
+		array(),
+		'6.4.0'
+	);
 
 	wp_enqueue_style(
 		'linea3-legal-child-style',
@@ -160,10 +167,10 @@ function l3_info_init() {
     add_settings_field('field_facebook', 'Facebook', 'l3_render_facebook', 'l3_info_settings_page', 'l3_social_section');
 }
 
-function l3_render_switch($id) {
+function l3_render_switch($id, $label = 'Mostrar:') {
     $checked = get_option($id . '_vis') ? 'checked' : '';
     return '<div style="display:inline-block; vertical-align:middle; margin-left:20px;">
-                <span style="font-size:12px; color:#666; margin-right:8px;">Mostrar:</span>
+                <span style="font-size:12px; color:#666; margin-right:8px;">' . esc_html($label) . '</span>
                 <label class="l3-switch">
                     <input type="checkbox" name="' . $id . '_vis" value="1" ' . $checked . '>
                     <span class="l3-slider"></span>
@@ -275,7 +282,7 @@ function l3_render_telefono() {
 function l3_render_movil() { 
     $val = get_option('l3_info_movil'); 
     echo '<input type="text" name="l3_info_movil" value="' . esc_attr($val) . '" placeholder="Ej: +57 300 123 4567" class="regular-text">';
-    echo l3_render_switch('l3_info_movil');
+    echo l3_render_switch('l3_info_movil', 'Mostrar WhatsApp:');
     echo '<p class="description">Este número se utilizará para la futura integración con <strong>WhatsApp</strong>.</p>';
 }
 function l3_render_email() { 
@@ -3207,3 +3214,52 @@ add_filter('document_title_parts', 'antigravity_force_brand_spelling', 999);
 add_filter('pre_get_document_title', 'antigravity_force_brand_spelling', 999);
 add_filter('bloginfo', 'antigravity_force_brand_spelling', 999, 2);
 add_filter('option_blogname', 'antigravity_force_brand_spelling', 999);
+
+/**
+ * Render floating WhatsApp button in the footer using the dynamic "Teléfono Móvil" field and custom prefilled message.
+ */
+function l3_whatsapp_floating_button(): void
+{
+	// Check if the WhatsApp toggle switch is enabled in the admin settings panel
+	if (!get_option('l3_info_movil_vis')) {
+		return;
+	}
+
+	// Priority 1: Fetch the user's configured "Teléfono Móvil" option
+	$mobile = (string)get_option('l3_info_movil');
+	
+	// Strip spaces, dashes, +, and other non-digit characters
+	$whatsapp_number = preg_replace('/[^0-9]/', '', $mobile);
+
+	// Check if this number is a standard 10-digit mobile (e.g. 3208370098) starting with 3.
+	// In Colombia, mobile numbers require country code 57 for WhatsApp links to work.
+	if (strlen($whatsapp_number) === 10 && strpos($whatsapp_number, '3') === 0) {
+		$whatsapp_number = '57' . $whatsapp_number;
+	}
+
+	// Priority 2 / Fallback: If mobile is empty or invalid (e.g. swapped with landline), check "Teléfono Fijo"
+	if (empty($whatsapp_number) || strlen($whatsapp_number) < 7) {
+		$fixed = (string)get_option('l3_info_telefono');
+		$fixed_digits = preg_replace('/[^0-9]/', '', $fixed);
+		if (strlen($fixed_digits) === 10 && strpos($fixed_digits, '3') === 0) {
+			$whatsapp_number = '57' . $fixed_digits;
+		} elseif (strlen($fixed_digits) >= 10) {
+			$whatsapp_number = $fixed_digits;
+		} else {
+			$whatsapp_number = '573208370098'; // default dynamic corporate mobile from header/footer content
+		}
+	}
+
+	// Create a premium, friendly pre-filled message
+	$message = 'Hola, me gustaría recibir asesoría jurídica. Escribo desde el sitio web de Linea 3 Estudio Legal.';
+	$whatsapp_url = 'https://wa.me/' . $whatsapp_number . '?text=' . rawurlencode($message);
+
+	?>
+	<a href="<?php echo esc_url($whatsapp_url); ?>" class="l3-whatsapp-floating" target="_blank" rel="noopener nofollow" aria-label="Escríbenos por WhatsApp">
+		<i class="fab fa-whatsapp"></i>
+	</a>
+	<?php
+}
+add_action('wp_footer', 'l3_whatsapp_floating_button', 100);
+
+

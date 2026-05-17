@@ -1832,6 +1832,19 @@ html body .blog-listing-wrapper .wp-block-post-template.is-layout-grid {
 }
 
 /* 5. Typography & Spacing Hierarchy */
+.antigravity-card-content p:empty {
+    display: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.antigravity-card-content .antigravity-card-terms:empty,
+.antigravity-card-content .wp-block-post-terms:empty {
+    display: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
 .antigravity-card-content .antigravity-card-terms,
 .antigravity-card-content .wp-block-post-terms {
     color: #c19b5a !important;
@@ -2302,7 +2315,7 @@ main.single-post-layout-pro {
     width: 90%;
     max-width: 960px;
     margin: 0 auto;
-    padding: 50px 0 120px;
+    padding: 50px 0 50px;
 }
 
 .single-post-layout-pro .single-post-content-container p {
@@ -2311,6 +2324,10 @@ main.single-post-layout-pro {
     line-height: 1.8;
     margin-bottom: 1.5em;
     color: var(--wp--preset--color--text-main);
+}
+
+.single-post-layout-pro .single-post-content-container p:last-child {
+    margin-bottom: 0 !important;
 }
 
 /* 5. PILARES DE RESPONSIVIDAD */
@@ -2370,8 +2387,8 @@ main.single-post-layout-pro {
 .related-posts-section {
     width: 90%;
     max-width: 1200px;
-    margin: 40px auto;
-    padding-top: 60px;
+    margin: 0 auto 40px !important;
+    padding-top: 20px !important;
 }
 
 .related-posts-header {

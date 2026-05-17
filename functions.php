@@ -19,7 +19,7 @@ if (!defined('ABSPATH')) {
  */
 function linea3_legal_child_enqueue_styles(): void
 {
-	$version = '1.2.5'; // Versión de Estabilización y Diseño Editorial
+	$version = '1.2.8'; // Versión de Estabilización y Diseño Editorial
 
 	wp_enqueue_style(
 		'linea3-legal-child-style',
@@ -2061,16 +2061,7 @@ function antigravity_get_author_card_html(int $author_id, int $post_id = 0): str
 	$author_url = get_author_posts_url($author_id);
 
 	return sprintf(
-		'<a href="%s" class="antigravity-author-card">
-			<div class="author-avatar-wrapper">
-				<img src="%s" alt="%s" class="author-avatar" width="500" height="500" />
-			</div>
-			<div class="author-data-wrapper">
-				<span class="author-name">%s</span>
-				%s
-				%s
-			</div>
-		</a>',
+		'<a href="%s" class="antigravity-author-card"><div class="author-avatar-wrapper"><img src="%s" alt="%s" class="author-avatar" width="500" height="500" /></div><div class="author-data-wrapper"><span class="author-name">%s</span>%s%s</div></a>',
 		esc_url($author_url),
 		esc_url($avatar_url),
 		esc_attr($name),
@@ -2136,7 +2127,7 @@ add_filter('render_block', function ($block_content, $block) {
  * Limpieza de etiquetas <p> inyectadas por wpautop en el bloque de shortcode del autor.
  */
 add_filter('render_block', function ($block_content, $block) {
-	if ('core/shortcode' === $block['blockName'] && strpos($block_content, 'antigravity-author-box-wrapper') !== false) {
+	if ('core/shortcode' === $block['blockName'] && (strpos($block_content, 'antigravity-author-box-wrapper') !== false || strpos($block_content, 'related-posts-section') !== false)) {
 		return preg_replace('/<\/?p[^>]*>/i', '', $block_content);
 	}
 	return $block_content;

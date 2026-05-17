@@ -601,6 +601,23 @@ add_filter('pre_get_block_template', function ($template, $id, $template_type) {
 }, 10, 3);
 
 /**
+ * Oculta "Sin categoría" o "Uncategorized" en el frontend en todas las vistas de bloque y shortcodes.
+ */
+add_filter('get_the_terms', function ($terms, $post_id, $taxonomy) {
+	if (is_admin() || 'category' !== $taxonomy || !is_array($terms)) {
+		return $terms;
+	}
+	
+	foreach ($terms as $key => $term) {
+		if (in_array(strtolower($term->slug), array('uncategorized', 'sin-categoria', 'sin-categoría'))) {
+			unset($terms[$key]);
+		}
+	}
+	
+	return array_values($terms);
+}, 10, 3);
+
+/**
  * Inyecta el contenedor HTML del Modal en el footer.
  */
 function antigravity_render_strategic_modal()
@@ -2117,7 +2134,9 @@ function antigravity_get_related_posts_html($author_id, $current_post_id = 0) {
     $author_posts_url = get_author_posts_url($author_id);
     $output = '<!-- ANTIGRAVITY_START --><section class="related-posts-section"><div class="related-posts-header"><div class="section-vertical-line"></div><div class="related-header-content"><div class="related-header-top"><span class="related-subtitle">MÁS DEL MISMO AUTOR</span><a href="' . esc_url($author_posts_url) . '" class="view-all-link">Ver todas sus publicaciones</a></div><div class="related-header-main"><h2 class="related-title">Publicaciones Relacionadas</h2></div></div></div><div class="blog-listing-wrapper"><div class="antigravity-grid is-layout-grid columns-3">';
     foreach ($posts as $p) {
-        $output .= sprintf('<div class="antigravity-card" onclick="window.location=\'%s\'"><article class="wp-block-group"><div class="wp-block-post-featured-image">%s</div><div class="antigravity-card-content"><div class="wp-block-post-terms">%s</div><h3 class="wp-block-post-title">%s</h3>%s</div></article></div>', get_permalink($p->ID), antigravity_get_post_thumbnail_html($p->ID, 'medium_large', array('class' => 'related-post-img')), get_the_term_list($p->ID, 'category', '', ' ', ''), get_the_title($p->ID), antigravity_get_author_card_html($author_id, $p->ID));
+		$cat_list = get_the_term_list($p->ID, 'category', '', ' ', '');
+		$cat_html = !empty($cat_list) ? sprintf('<div class="wp-block-post-terms">%s</div>', $cat_list) : '';
+        $output .= sprintf('<div class="antigravity-card" onclick="window.location=\'%s\'"><article class="wp-block-group"><div class="wp-block-post-featured-image">%s</div><div class="antigravity-card-content">%s<h3 class="wp-block-post-title">%s</h3>%s</div></article></div>', get_permalink($p->ID), antigravity_get_post_thumbnail_html($p->ID, 'medium_large', array('class' => 'related-post-img')), $cat_html, get_the_title($p->ID), antigravity_get_author_card_html($author_id, $p->ID));
     }
     $output .= '</div></div></section><!-- ANTIGRAVITY_END -->';
     return preg_replace('/>\s+</', '><', $output);
@@ -2342,7 +2361,7 @@ function antigravity_render_featured_posts_grid(): string
 	$output = '<!-- ANTIGRAVITY_START --><section class="antigravity-featured-posts-grid"><div class="featured-posts-container l3-container-standard"><div class="featured-posts-header"><div class="section-vertical-line"></div><div class="featured-header-left"><span class="featured-eyebrow">Publicaciones de los expertos de nuestro equipo</span><h2 class="featured-title">Publicaciones Destacadas</h2><p class="featured-description">Especialización de alto nivel para blindar cada aspecto de tu organización.</p></div><div class="featured-header-right"><a href="' . esc_url(get_permalink(get_option('page_for_posts'))) . '" class="view-all-link">Ver todas</a></div></div><div class="antigravity-grid">';
 	foreach ($posts as $p) {
 		$cat = get_the_category($p->ID);
-		$cat_name = !empty($cat) ? $cat[0]->name : 'Estrategia';
+		$cat_html = !empty($cat) ? sprintf('<span class="featured-card-category">%s</span>', esc_html($cat[0]->name)) : '';
 		$thumb_id = get_post_thumbnail_id($p->ID);
 		$thumb_img = wp_get_attachment_image($thumb_id, 'l3-blog-card', false, array('class' => 'featured-card-image'));
 		if (empty($thumb_img)) {
@@ -2350,7 +2369,7 @@ function antigravity_render_featured_posts_grid(): string
 			$thumb_img = sprintf('<img src="%s" alt="%s" class="featured-card-image" width="600" height="400">', esc_url($placeholder_url), esc_attr($p->post_title));
 		}
 		$author_id = (int) $p->post_author;
-		$output .= sprintf('<div class="antigravity-card" onclick="window.location=\'%s\'"><div class="featured-card-image-wrap">%s</div><div class="featured-card-overlay"></div><div class="featured-card-content"><div class="featured-card-meta"><span class="featured-card-category">%s</span><h3 class="featured-card-title">%s</h3></div><div class="featured-card-author">%s</div><div class="featured-card-accent-line"></div></div></div>', get_permalink($p->ID), $thumb_img, esc_html($cat_name), esc_html($p->post_title), antigravity_get_author_card_html($author_id, $p->ID));
+		$output .= sprintf('<div class="antigravity-card" onclick="window.location=\'%s\'"><div class="featured-card-image-wrap">%s</div><div class="featured-card-overlay"></div><div class="featured-card-content"><div class="featured-card-meta">%s<h3 class="featured-card-title">%s</h3></div><div class="featured-card-author">%s</div><div class="featured-card-accent-line"></div></div></div>', get_permalink($p->ID), $thumb_img, $cat_html, esc_html($p->post_title), antigravity_get_author_card_html($author_id, $p->ID));
 	}
 	return $output . '</div></div></section><!-- ANTIGRAVITY_END -->';
 }

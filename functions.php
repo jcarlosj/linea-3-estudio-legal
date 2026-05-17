@@ -19,7 +19,7 @@ if (!defined('ABSPATH')) {
  */
 function linea3_legal_child_enqueue_styles(): void
 {
-	$version = '1.3.8'; // Versión de Estabilización y Diseño Editorial
+	$version = '1.3.9'; // Versión de Estabilización y Diseño Editorial
 
 	wp_enqueue_style(
 		'l3-font-awesome',
@@ -3225,29 +3225,21 @@ function l3_whatsapp_floating_button(): void
 		return;
 	}
 
-	// Priority 1: Fetch the user's configured "Teléfono Móvil" option
+	// Fetch the user's configured "Teléfono Móvil" option
 	$mobile = (string)get_option('l3_info_movil');
 	
 	// Strip spaces, dashes, +, and other non-digit characters
 	$whatsapp_number = preg_replace('/[^0-9]/', '', $mobile);
 
+	// CRITICAL SAFETY CHECK: If there is no number, do NOT show the WhatsApp button under any circumstance!
+	if (empty($whatsapp_number)) {
+		return;
+	}
+
 	// Check if this number is a standard 10-digit mobile (e.g. 3208370098) starting with 3.
 	// In Colombia, mobile numbers require country code 57 for WhatsApp links to work.
 	if (strlen($whatsapp_number) === 10 && strpos($whatsapp_number, '3') === 0) {
 		$whatsapp_number = '57' . $whatsapp_number;
-	}
-
-	// Priority 2 / Fallback: If mobile is empty or invalid (e.g. swapped with landline), check "Teléfono Fijo"
-	if (empty($whatsapp_number) || strlen($whatsapp_number) < 7) {
-		$fixed = (string)get_option('l3_info_telefono');
-		$fixed_digits = preg_replace('/[^0-9]/', '', $fixed);
-		if (strlen($fixed_digits) === 10 && strpos($fixed_digits, '3') === 0) {
-			$whatsapp_number = '57' . $fixed_digits;
-		} elseif (strlen($fixed_digits) >= 10) {
-			$whatsapp_number = $fixed_digits;
-		} else {
-			$whatsapp_number = '573208370098'; // default dynamic corporate mobile from header/footer content
-		}
 	}
 
 	// Create a premium, friendly pre-filled message

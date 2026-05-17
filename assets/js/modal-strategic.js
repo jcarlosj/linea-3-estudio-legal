@@ -157,4 +157,75 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    // 3. Funcionalidad Premium de Compartir Perfil
+    const showShareToast = (message) => {
+        let toast = document.querySelector('.l3-share-toast');
+        if (!toast) {
+            toast = document.createElement('div');
+            toast.className = 'l3-share-toast';
+            toast.innerHTML = `
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-circle"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                <span class="l3-share-toast-text"></span>
+            `;
+            document.body.appendChild(toast);
+        }
+        toast.querySelector('.l3-share-toast-text').innerText = message;
+        toast.classList.add('is-visible');
+        
+        setTimeout(() => {
+            toast.classList.remove('is-visible');
+        }, 3000);
+    };
+
+    document.addEventListener('click', async (e) => {
+        const shareBtn = e.target.closest('.l3-share-profile-btn');
+        if (!shareBtn) return;
+        
+        e.preventDefault();
+        
+        const shareUrl = shareBtn.getAttribute('data-share-url') || window.location.href;
+        const shareTitle = shareBtn.getAttribute('data-share-title') || document.title;
+        
+        if (navigator.share) {
+            try {
+                await navigator.share({
+                    title: shareTitle,
+                    url: shareUrl
+                });
+            } catch (err) {
+                if (err.name !== 'AbortError') {
+                    copyToClipboardFallback(shareUrl);
+                }
+            }
+        } else {
+            copyToClipboardFallback(shareUrl);
+        }
+    });
+
+    const copyToClipboardFallback = (text) => {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(text)
+                .then(() => showShareToast('Enlace copiado al portapapeles'))
+                .catch(() => legacyCopyFallback(text));
+        } else {
+            legacyCopyFallback(text);
+        }
+    };
+
+    const legacyCopyFallback = (text) => {
+        const textarea = document.createElement('textarea');
+        textarea.value = text;
+        textarea.style.position = 'fixed';
+        textarea.style.opacity = '0';
+        document.body.appendChild(textarea);
+        textarea.select();
+        try {
+            document.execCommand('copy');
+            showShareToast('Enlace copiado al portapapeles');
+        } catch (err) {
+            console.error('Fallback Copy Error:', err);
+        }
+        document.body.removeChild(textarea);
+    };
+
 });

@@ -19,7 +19,7 @@ if (!defined('ABSPATH')) {
  */
 function linea3_legal_child_enqueue_styles(): void
 {
-	$version = '1.3.9'; // Versión de Estabilización y Diseño Editorial
+	$version = '1.4.0'; // Versión de Estabilización y Diseño Editorial
 
 	wp_enqueue_style(
 		'l3-font-awesome',
@@ -2299,7 +2299,12 @@ function antigravity_render_team_grid($attributes): string
 		$output .= '<div class="linea3-team-social-icons">';
 
 		if ($share_visible === 'yes') {
-			$output .= '<span class="linea3-team-icon-share"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg></span>';
+			$output .= sprintf(
+				'<a href="#" class="linea3-team-icon-share l3-share-profile-btn" data-share-url="%s" data-share-title="%s" aria-label="Compartir perfil de %s"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg></a>',
+				esc_url($author_url),
+				esc_attr(sprintf('Perfil Profesional — %s', $display_name)),
+				esc_attr($display_name)
+			);
 		}
 
 		if (!empty($user->user_email) && $email_visible === 'yes') {
@@ -3006,12 +3011,14 @@ function antigravity_author_profile_shortcode($atts) {
     $twitter_visible = get_the_author_meta('antigravity_user_twitter_visible', $author_id);
     $email_visible = get_the_author_meta('antigravity_user_email_visible', $author_id);
     $whatsapp_visible = get_the_author_meta('antigravity_user_whatsapp_visible', $author_id);
+    $share_visible = get_the_author_meta('antigravity_user_share_visible', $author_id);
     
     if ($website_visible === '' && !empty($website)) $website_visible = 'yes';
     if ($linkedin_visible === '' && !empty($linkedin)) $linkedin_visible = 'yes';
     if ($twitter_visible === '' && !empty($twitter)) $twitter_visible = 'yes';
     if ($whatsapp_visible === '' && !empty($whatsapp)) $whatsapp_visible = 'yes';
     if ($email_visible === '') $email_visible = 'yes';
+    if ($share_visible === '') $share_visible = 'yes';
     
     $job_title = get_the_author_meta('antigravity_user_job_title', $author_id);
     if (empty($job_title)) {
@@ -3059,6 +3066,16 @@ function antigravity_author_profile_shortcode($atts) {
                 
                 <!-- Iconos de Redes y Contacto -->
                 <div class="l3-author-social-header" style="display: flex; gap: 18px; margin-bottom: 25px; align-items: center;">
+                    <?php if ($share_visible === 'yes'): ?>
+                        <a href="#" class="l3-share-profile-btn" 
+                           data-share-url="<?php echo esc_url(get_author_posts_url($author_id)); ?>" 
+                           data-share-title="<?php echo esc_attr(sprintf('Perfil Profesional — %s', $display_name)); ?>" 
+                           title="Compartir"
+                           style="color: var(--wp--preset--color--primary); transition: opacity 0.3s; display: inline-flex; align-items: center; justify-content: center; cursor: pointer;">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
+                        </a>
+                    <?php endif; ?>
+
                     <?php if (!empty($user->user_email) && $email_visible === 'yes'): ?>
                         <a href="#" class="linea3-team-icon-email linea3-team-contact-btn" 
                            data-author-id="<?php echo $author_id; ?>" 

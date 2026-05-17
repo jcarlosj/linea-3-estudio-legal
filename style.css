@@ -4,7 +4,7 @@ Theme URI: https://linea3legal.com
 Author: Linea 3 Developer
 Author URI: https://linea3legal.com
 Description: Versión 2 - Limpieza total de caché y estructura. Basado en Twenty Twenty-Five.
-Version: 1.1.16
+Version: 1.1.17
 Requires at least: 6.7
 Tested up to: 6.9.4
 Requires PHP: 8.2
@@ -2140,7 +2140,7 @@ html body .blog-listing-wrapper .wp-block-post-template.is-layout-grid {
 }
 
 .linea3-team-icon-share {
-    cursor: default;
+    cursor: pointer;
 }
 
 @media screen and (max-width: 767px) {
@@ -5877,4 +5877,39 @@ body footer .footer-credits p {
         height: 50px !important;
         font-size: 26px !important;
     }
+}
+
+/* ========================================================
+   PREMIUM SHARE TOAST NOTIFICATION
+   ======================================================== */
+.l3-share-toast {
+    position: fixed !important;
+    bottom: 40px !important;
+    left: 50% !important;
+    transform: translate(-50%, 20px) !important;
+    background: rgba(10, 34, 51, 0.96) !important;
+    color: #e2e8f0 !important;
+    border: 1px solid #ce9e50 !important;
+    padding: 12px 24px !important;
+    border-radius: 30px !important;
+    font-size: 0.95rem !important;
+    font-family: 'Outfit', 'Inter', sans-serif !important;
+    letter-spacing: 0.5px !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5) !important;
+    backdrop-filter: blur(10px) !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1) !important;
+    z-index: 9999999 !important;
+}
+.l3-share-toast.is-visible {
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: translate(-50%, 0) !important;
+}
+.l3-share-toast svg {
+    color: #ce9e50 !important;
 }

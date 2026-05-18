@@ -4,7 +4,7 @@ Theme URI: https://linea3legal.com
 Author: Linea 3 Developer
 Author URI: https://linea3legal.com
 Description: Versión 2 - Limpieza total de caché y estructura. Basado en Twenty Twenty-Five.
-Version: 1.1.20
+Version: 1.1.21
 Requires at least: 6.7
 Tested up to: 6.9.4
 Requires PHP: 8.2
@@ -5938,4 +5938,15 @@ body footer .footer-credits p {
 }
 .l3-share-toast svg {
     color: #ce9e50 !important;
+}
+
+/* ========================================================
+   OCULTAR CRÉDITOS A PETICIÓN DEL CLIENTE
+   Para volver a habilitar "Hecho con ❤️ y las manitas" 
+   y la barra divisoria, simplemente comenta o elimina 
+   esta sección de estilos.
+   ======================================================== */
+body footer .credits-divider,
+body footer .made-with-part {
+    display: none !important;
 }

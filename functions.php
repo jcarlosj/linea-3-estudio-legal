@@ -19,7 +19,7 @@ if (!defined('ABSPATH')) {
  */
 function linea3_legal_child_enqueue_styles(): void
 {
-	$version = '1.4.1'; // Versión de Estabilización y Diseño Editorial
+	$version = '1.4.2'; // Versión de Estabilización y Diseño Editorial
 
 	wp_enqueue_style(
 		'l3-font-awesome',
@@ -68,11 +68,6 @@ function linea3_legal_child_setup(): void
 	add_image_size('l3-blog-cover', 1200, 800, true);  // Para cabecera de artículos
 	add_image_size('l3-blog-card', 600, 400, true);    // Para grillas de blog y destacados
 	add_image_size('l3-ally-logo', 400, 0, false);     // Para logos de aliados (proporcional)
-
-	// Registrar ubicaciones de menú classic para Block Themes (FSE)
-	register_nav_menus(array(
-		'footer-menu' => __('Menú del Footer (Legal)', 'linea3-legal-child'),
-	));
 }
 add_action('after_setup_theme', 'linea3_legal_child_setup');
 
@@ -92,49 +87,6 @@ function l3_copyright_shortcode() {
            '<span class="made-with-part">Hecho con el ' . $heart_svg . ' y las manitas</span>';
 }
 add_shortcode('l3_copyright', 'l3_copyright_shortcode');
-
-/**
- * Shortcode para Menú del Footer Dinámico
- * Uso: [l3_footer_menu]
- */
-function l3_footer_menu_shortcode() {
-    $menu_location = 'footer-menu';
-    $locations = get_nav_menu_locations();
-    
-    $output = '<div class="footer-legal-links">';
-    
-    if (isset($locations[$menu_location])) {
-        $menu = wp_get_nav_menu_object($locations[$menu_location]);
-        if ($menu) {
-            $menu_items = wp_get_nav_menu_items($menu->term_id);
-            if ($menu_items) {
-                foreach ($menu_items as $item) {
-                    $output .= sprintf(
-                        '<a href="%s" target="%s" title="%s">%s</a>',
-                        esc_url($item->url),
-                        esc_attr($item->target ? $item->target : '_self'),
-                        esc_attr($item->attr_title),
-                        esc_html(mb_strtoupper($item->title, 'UTF-8'))
-                    );
-                }
-            } else {
-                $output .= '<a href="/privacidad/">PRIVACIDAD</a>';
-                $output .= '<a href="/terminos-de-servicio/">TÉRMINOS DE SERVICIO</a>';
-            }
-        } else {
-            $output .= '<a href="/privacidad/">PRIVACIDAD</a>';
-            $output .= '<a href="/terminos-de-servicio/">TÉRMINOS DE SERVICIO</a>';
-        }
-    } else {
-        $output .= '<a href="/privacidad/">PRIVACIDAD</a>';
-        $output .= '<a href="/terminos-de-servicio/">TÉRMINOS DE SERVICIO</a>';
-    }
-    
-    $output .= '</div>';
-    
-    return $output;
-}
-add_shortcode('l3_footer_menu', 'l3_footer_menu_shortcode');
 
 /**
  * ==========================================================================

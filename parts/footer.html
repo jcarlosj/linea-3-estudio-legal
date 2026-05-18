@@ -52,9 +52,12 @@
 
         <!-- wp:group {"className":"footer-bottom-group"} -->
         <div class="wp-block-group footer-bottom-group">
-            <!-- wp:shortcode -->
-            [l3_footer_menu]
-            <!-- /wp:shortcode -->
+            <div class="footer-legal-links">
+                <!-- wp:navigation {"slug":"footer-legal","overlayMenu":"never","style":{"spacing":{"blockGap":"40px"}},"layout":{"type":"flex","justifyContent":"center","orientation":"horizontal","flexWrap":"nowrap"}} -->
+                <!-- wp:navigation-link {"label":"PRIVACIDAD","url":"/privacidad/","kind":"custom"} /-->
+                <!-- wp:navigation-link {"label":"TÉRMINOS DE SERVICIO","url":"/terminos-de-servicio/","kind":"custom"} /-->
+                <!-- /wp:navigation -->
+            </div>
             <div class="footer-credits">
                 <!-- wp:shortcode -->
                 [l3_copyright]

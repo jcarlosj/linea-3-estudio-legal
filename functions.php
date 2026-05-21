@@ -19,7 +19,7 @@ if (!defined('ABSPATH')) {
  */
 function linea3_legal_child_enqueue_styles(): void
 {
-	$version = '1.4.4'; // Versión de Estabilización y Diseño Editorial
+	$version = '1.4.7'; // Versión de Estabilización y Diseño Editorial
 
 	wp_enqueue_style(
 		'l3-font-awesome',
@@ -3269,4 +3269,882 @@ function l3_whatsapp_floating_button(): void
 }
 add_action('wp_footer', 'l3_whatsapp_floating_button', 100);
 
+/**
+ * ============================================================================
+ * Custom Post Type: Reseñas de Clientes
+ * ============================================================================
+ * Las reseñas son enviadas por usuarios desde un formulario en el frontend.
+ * El administrador NO puede crear reseñas desde el panel; solo puede
+ * editar (corregir ortografía), publicar o eliminar.
+ *
+ * Campos (meta fields):
+ *   - _l3_resena_nombre        : Nombre de la persona
+ *   - _l3_resena_linkedin_url  : URL del perfil de LinkedIn
+ *   - _l3_resena_linkedin_auth : Autoriza publicar en su LinkedIn (checkbox)
+ *   - _l3_resena_rating        : Calificación de 0 a 5 (estrellas)
+ *   - _l3_resena_contenido     : Texto de la reseña (máx. 140 caracteres)
+ * ============================================================================
+ */
 
+/**
+ * 1. Registro del CPT l3_resena.
+ */
+function l3_register_resenas_cpt(): void
+{
+	$labels = array(
+		'name'               => 'Reseñas',
+		'singular_name'      => 'Reseña',
+		'menu_name'          => 'Reseñas',
+		'name_admin_bar'     => 'Reseña',
+		'add_new'            => 'Añadir Nueva',
+		'add_new_item'       => 'Añadir Nueva Reseña',
+		'new_item'           => 'Nueva Reseña',
+		'edit_item'          => 'Editar Reseña',
+		'view_item'          => 'Ver Reseña',
+		'all_items'          => 'Todas las Reseñas',
+		'search_items'       => 'Buscar Reseñas',
+		'not_found'          => 'No se encontraron reseñas.',
+		'not_found_in_trash' => 'No hay reseñas en la papelera.',
+	);
+
+	$args = array(
+		'labels'             => $labels,
+		'public'             => true,
+		'publicly_queryable' => false,
+		'show_ui'            => true,
+		'show_in_menu'       => true,
+		'query_var'          => true,
+		'rewrite'            => array('slug' => 'resena'),
+		'capability_type'    => 'post',
+		'has_archive'        => false,
+		'hierarchical'       => false,
+		'menu_position'      => 22,
+		'menu_icon'          => 'dashicons-star-filled',
+		'supports'           => array('title'),
+		'show_in_rest'       => true,
+	);
+
+	register_post_type('l3_resena', $args);
+}
+add_action('init', 'l3_register_resenas_cpt');
+
+/**
+ * 2. Bloquear creación de reseñas desde el admin.
+ *    - Oculta el submenú "Añadir Nueva"
+ *    - Redirecciona si alguien accede directamente a post-new.php?post_type=l3_resena
+ *    - Oculta el botón "Añadir Nueva" por CSS como capa extra
+ */
+function l3_resenas_remove_add_new_submenu(): void
+{
+	remove_submenu_page('edit.php?post_type=l3_resena', 'post-new.php?post_type=l3_resena');
+}
+add_action('admin_menu', 'l3_resenas_remove_add_new_submenu');
+
+function l3_resenas_block_create_screen(): void
+{
+	global $pagenow, $typenow;
+
+	if ($pagenow === 'post-new.php' && (isset($_GET['post_type']) && $_GET['post_type'] === 'l3_resena')) {
+		wp_redirect(admin_url('edit.php?post_type=l3_resena&l3_blocked=1'));
+		exit;
+	}
+}
+add_action('admin_init', 'l3_resenas_block_create_screen');
+
+/**
+ * Muestra un aviso administrativo cuando se intenta crear una reseña desde admin.
+ */
+function l3_resenas_blocked_notice(): void
+{
+	if (isset($_GET['post_type']) && $_GET['post_type'] === 'l3_resena' && isset($_GET['l3_blocked'])) {
+		echo '<div class="notice notice-warning is-dismissible">';
+		echo '<p><strong>Las reseñas no se pueden crear desde el panel de administración.</strong> ';
+		echo 'Las reseñas son enviadas por los clientes a través del formulario en el sitio web. ';
+		echo 'Desde aquí solo puede editar, publicar o eliminar reseñas existentes.</p>';
+		echo '</div>';
+	}
+}
+add_action('admin_notices', 'l3_resenas_blocked_notice');
+
+/**
+ * 3. Meta Box: Datos de la Reseña.
+ */
+function l3_resenas_add_meta_box(): void
+{
+	add_meta_box(
+		'l3_resena_details',
+		'Datos de la Reseña',
+		'l3_resena_details_callback',
+		'l3_resena',
+		'normal',
+		'high'
+	);
+}
+add_action('add_meta_boxes', 'l3_resenas_add_meta_box');
+
+/**
+ * 4. Render del Meta Box con interfaz visual premium enriquecida.
+ */
+function l3_resena_details_callback($post): void
+{
+	wp_nonce_field('l3_resena_save_meta', 'l3_resena_nonce');
+
+	$nombre        = get_post_meta($post->ID, '_l3_resena_nombre', true);
+	$via_linkedin  = get_post_meta($post->ID, '_l3_resena_via_linkedin', true);
+	$linkedin_url  = get_post_meta($post->ID, '_l3_resena_linkedin_url', true);
+	$linkedin_auth = get_post_meta($post->ID, '_l3_resena_linkedin_auth', true);
+	$empresa       = get_post_meta($post->ID, '_l3_resena_empresa', true);
+	$cargo         = get_post_meta($post->ID, '_l3_resena_cargo', true);
+	$foto          = get_post_meta($post->ID, '_l3_resena_foto', true);
+	$rating        = get_post_meta($post->ID, '_l3_resena_rating', true);
+	$contenido     = get_post_meta($post->ID, '_l3_resena_contenido', true);
+	
+	// Nuevos campos para red social opcional (flujo sin LinkedIn)
+	$red_social_tipo = get_post_meta($post->ID, '_l3_resena_red_social_tipo', true);
+	$red_social_url  = get_post_meta($post->ID, '_l3_resena_red_social_url', true);
+
+	if ($rating === '') {
+		$rating = 0;
+	}
+	$rating = intval($rating);
+	$char_count = mb_strlen($contenido);
+
+	// Avatar por defecto si no hay foto
+	$avatar_url = !empty($foto) ? $foto : get_avatar_url(0, array('size' => 120));
+	?>
+	<div class="l3-resena-metabox">
+		
+		<!-- Banner de Origen / Flujo -->
+		<div class="l3-resena-badge-container">
+			<?php if ($via_linkedin === '1'): ?>
+				<div class="l3-resena-badge l3-resena-badge--linkedin">
+					<span class="dashicons dashicons-linkedin"></span>
+					Registrada vía LinkedIn OAuth
+				</div>
+			<?php else: ?>
+				<div class="l3-resena-badge l3-resena-badge--manual">
+					<span class="dashicons dashicons-edit"></span>
+					Registrada vía Formulario Web (Manual)
+				</div>
+			<?php endif; ?>
+		</div>
+
+		<div class="l3-resena-row">
+			<!-- Foto de Perfil (Media Uploader) -->
+			<div class="l3-resena-col-avatar">
+				<label><strong>Foto del Cliente</strong></label>
+				<div class="l3-resena-avatar-preview-wrapper">
+					<img src="<?php echo esc_url($avatar_url); ?>" id="l3-resena-avatar-preview" class="l3-resena-avatar-img" alt="Avatar">
+					<input type="hidden" id="l3_resena_foto" name="l3_resena_foto" value="<?php echo esc_url($foto); ?>">
+					<button type="button" class="button button-secondary" id="l3_resena_upload_btn">Cambiar Imagen</button>
+					<button type="button" class="button link-delete" id="l3_resena_remove_btn" style="<?php echo empty($foto) ? 'display:none;' : ''; ?>">Quitar</button>
+				</div>
+			</div>
+
+			<!-- Nombre y Datos de Empresa -->
+			<div class="l3-resena-col-fields">
+				<!-- Nombre de la persona -->
+				<div class="l3-resena-field">
+					<label for="l3_resena_nombre"><strong>Nombre de la persona *</strong></label>
+					<input
+						type="text"
+						id="l3_resena_nombre"
+						name="l3_resena_nombre"
+						value="<?php echo esc_attr($nombre); ?>"
+						class="widefat"
+						placeholder="Ej: María García López"
+						required
+					>
+				</div>
+
+				<div class="l3-resena-grid-2">
+					<!-- Empresa -->
+					<div class="l3-resena-field">
+						<label for="l3_resena_empresa"><strong>Empresa (opcional)</strong></label>
+						<input
+							type="text"
+							id="l3_resena_empresa"
+							name="l3_resena_empresa"
+							value="<?php echo esc_attr($empresa); ?>"
+							class="widefat"
+							placeholder="Ej: Linea 3 Estudio Legal"
+						>
+					</div>
+
+					<!-- Cargo -->
+					<div class="l3-resena-field">
+						<label for="l3_resena_cargo"><strong>Cargo (opcional)</strong></label>
+						<input
+							type="text"
+							id="l3_resena_cargo"
+							name="l3_resena_cargo"
+							value="<?php echo esc_attr($cargo); ?>"
+							class="widefat"
+							placeholder="Ej: Director Jurídico"
+						>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<hr class="l3-resena-separator">
+
+		<!-- Sección de Redes Sociales (Depende de origen) -->
+		<div class="l3-resena-section-title">Enlace a Red Social</div>
+		
+		<?php if ($via_linkedin === '1'): ?>
+			<!-- Flujo LinkedIn (Solo Lectura) -->
+			<div class="l3-resena-grid-2">
+				<div class="l3-resena-field">
+					<label for="l3_resena_linkedin_url"><strong>URL del perfil de LinkedIn</strong></label>
+					<input
+						type="url"
+						id="l3_resena_linkedin_url"
+						name="l3_resena_linkedin_url"
+						value="<?php echo esc_attr($linkedin_url); ?>"
+						class="widefat"
+						placeholder="https://www.linkedin.com/in/usuario"
+					>
+				</div>
+
+				<div class="l3-resena-field l3-resena-field--checkbox l3-resena-field--readonly">
+					<label style="margin-top: 28px;">
+						<input
+							type="checkbox"
+							id="l3_resena_linkedin_auth"
+							value="1"
+							<?php checked($linkedin_auth, '1'); ?>
+							disabled="disabled"
+						>
+						<strong>Autoriza publicar esta reseña en su perfil de LinkedIn</strong>
+					</label>
+					<p class="description">Este campo fue definido por el usuario vía OAuth y no puede ser modificado.</p>
+				</div>
+			</div>
+		<?php else: ?>
+			<!-- Flujo Manual (Redes sociales variadas) -->
+			<div class="l3-resena-grid-2">
+				<div class="l3-resena-field">
+					<label for="l3_resena_red_social_tipo"><strong>Red Social Vinculada</strong></label>
+					<select name="l3_resena_red_social_tipo" id="l3_resena_red_social_tipo" class="widefat">
+						<option value="" <?php selected($red_social_tipo, ''); ?>>Ninguna</option>
+						<option value="linkedin" <?php selected($red_social_tipo, 'linkedin'); ?>>LinkedIn</option>
+						<option value="instagram" <?php selected($red_social_tipo, 'instagram'); ?>>Instagram</option>
+						<option value="facebook" <?php selected($red_social_tipo, 'facebook'); ?>>Facebook</option>
+					</select>
+				</div>
+
+				<div class="l3-resena-field">
+					<label for="l3_resena_red_social_url"><strong>URL del Perfil</strong></label>
+					<input
+						type="url"
+						id="l3_resena_red_social_url"
+						name="l3_resena_red_social_url"
+						value="<?php echo esc_attr($red_social_url); ?>"
+						class="widefat"
+						placeholder="https://redsocial.com/perfil"
+					>
+				</div>
+			</div>
+		<?php endif; ?>
+
+		<hr class="l3-resena-separator">
+
+		<!-- Calificación con estrellas (solo lectura) -->
+		<div class="l3-resena-field l3-resena-field--readonly">
+			<label><strong>Calificación</strong></label>
+			<div class="l3-resena-stars l3-resena-stars--readonly" id="l3-resena-stars">
+				<?php for ($i = 1; $i <= 5; $i++): ?>
+					<span
+						class="l3-star <?php echo ($i <= $rating) ? 'l3-star--active' : ''; ?>"
+						title="<?php echo $i; ?> estrella<?php echo $i > 1 ? 's' : ''; ?>"
+					>
+						<svg width="28" height="28" viewBox="0 0 24 24" fill="<?php echo ($i <= $rating) ? 'currentColor' : 'none'; ?>" stroke="currentColor" stroke-width="1.5">
+							<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+						</svg>
+					</span>
+				<?php endfor; ?>
+				<span class="l3-star-label" id="l3-star-label">
+					<?php echo $rating > 0 ? $rating . '/5' : 'Sin calificación'; ?>
+				</span>
+			</div>
+			<p class="description">Este campo fue definido por el usuario y no puede ser modificado por el administrador.</p>
+		</div>
+
+		<hr class="l3-resena-separator">
+
+		<!-- Contenido de la reseña -->
+		<div class="l3-resena-field">
+			<label for="l3_resena_contenido"><strong>Contenido de la reseña *</strong></label>
+			<textarea
+				id="l3_resena_contenido"
+				name="l3_resena_contenido"
+				class="widefat"
+				rows="4"
+				maxlength="140"
+				placeholder="Texto de la reseña del cliente (máximo 140 caracteres)"
+				required
+			><?php echo esc_textarea($contenido); ?></textarea>
+			<div class="l3-resena-char-counter" id="l3-resena-char-counter">
+				<span id="l3-resena-char-count"><?php echo $char_count; ?></span>/140 caracteres
+			</div>
+		</div>
+	</div>
+
+	<script>
+	jQuery(document).ready(function($) {
+		// ── WordPress Media Library Uploader ──
+		var mediaUploader;
+		$('#l3_resena_upload_btn').on('click', function(e) {
+			e.preventDefault();
+			if (mediaUploader) {
+				mediaUploader.open();
+				return;
+			}
+			mediaUploader = wp.media({
+				title: 'Seleccionar Foto de Perfil',
+				button: {
+					text: 'Usar Foto'
+				},
+				multiple: false
+			});
+			mediaUploader.on('select', function() {
+				var attachment = mediaUploader.state().get('selection').first().toJSON();
+				$('#l3_resena_foto').val(attachment.url);
+				$('#l3-resena-avatar-preview').attr('src', attachment.url);
+				$('#l3_resena_remove_btn').show();
+			});
+			mediaUploader.open();
+		});
+
+		$('#l3_resena_remove_btn').on('click', function(e) {
+			e.preventDefault();
+			$('#l3_resena_foto').val('');
+			$('#l3-resena-avatar-preview').attr('src', '<?php echo esc_js(get_avatar_url(0, array('size' => 120))); ?>');
+			$(this).hide();
+		});
+
+		// ── Contador de caracteres ──
+		var $textarea = $('#l3_resena_contenido');
+		var $counter = $('#l3-resena-char-count');
+		var $counterWrap = $('#l3-resena-char-counter');
+
+		$textarea.on('input', function() {
+			var len = $(this).val().length;
+			$counter.text(len);
+
+			if (len > 140) {
+				$counterWrap.addClass('l3-resena-char-counter--exceeded');
+				$textarea.addClass('l3-resena-textarea--exceeded');
+			} else if (len >= 120) {
+				$counterWrap.addClass('l3-resena-char-counter--warning');
+				$counterWrap.removeClass('l3-resena-char-counter--exceeded');
+				$textarea.removeClass('l3-resena-textarea--exceeded');
+			} else {
+				$counterWrap.removeClass('l3-resena-char-counter--warning l3-resena-char-counter--exceeded');
+				$textarea.removeClass('l3-resena-textarea--exceeded');
+			}
+		});
+
+		// Disparar el evento al cargar para estado inicial
+		$textarea.trigger('input');
+	});
+	</script>
+	<?php
+}
+
+/**
+ * 5. Guardar los meta fields de la reseña.
+ */
+function l3_resena_save_meta($post_id): void
+{
+	// Verificar nonce
+	if (!isset($_POST['l3_resena_nonce']) || !wp_verify_nonce($_POST['l3_resena_nonce'], 'l3_resena_save_meta')) {
+		return;
+	}
+	// No guardar en autosave
+	if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
+		return;
+	}
+	// Verificar permisos
+	if (!current_user_can('edit_post', $post_id)) {
+		return;
+	}
+	// Verificar que es el CPT correcto
+	if (get_post_type($post_id) !== 'l3_resena') {
+		return;
+	}
+
+	// Campos Editables por Admin:
+	
+	// Nombre
+	if (isset($_POST['l3_resena_nombre'])) {
+		update_post_meta($post_id, '_l3_resena_nombre', sanitize_text_field($_POST['l3_resena_nombre']));
+	}
+
+	// Empresa
+	if (isset($_POST['l3_resena_empresa'])) {
+		update_post_meta($post_id, '_l3_resena_empresa', sanitize_text_field($_POST['l3_resena_empresa']));
+	}
+
+	// Cargo
+	if (isset($_POST['l3_resena_cargo'])) {
+		update_post_meta($post_id, '_l3_resena_cargo', sanitize_text_field($_POST['l3_resena_cargo']));
+	}
+
+	// Foto (URL)
+	if (isset($_POST['l3_resena_foto'])) {
+		update_post_meta($post_id, '_l3_resena_foto', esc_url_raw($_POST['l3_resena_foto']));
+	}
+
+	// LinkedIn URL (Solo si era flujo LinkedIn)
+	if (isset($_POST['l3_resena_linkedin_url'])) {
+		update_post_meta($post_id, '_l3_resena_linkedin_url', esc_url_raw($_POST['l3_resena_linkedin_url']));
+	}
+
+	// Campos Red Social Opcional (Solo si NO es vía LinkedIn)
+	if (isset($_POST['l3_resena_red_social_tipo'])) {
+		update_post_meta($post_id, '_l3_resena_red_social_tipo', sanitize_text_field($_POST['l3_resena_red_social_tipo']));
+	}
+	if (isset($_POST['l3_resena_red_social_url'])) {
+		update_post_meta($post_id, '_l3_resena_red_social_url', esc_url_raw($_POST['l3_resena_red_social_url']));
+	}
+
+	// NOTA: LinkedIn Auth, Rating y Via_LinkedIn NO se guardan desde admin — son datos de usuario (solo lectura)
+
+	// Contenido (máx 140 caracteres)
+	if (isset($_POST['l3_resena_contenido'])) {
+		$contenido = sanitize_textarea_field($_POST['l3_resena_contenido']);
+		$contenido = mb_substr($contenido, 0, 140); // Forzar límite de 140
+		update_post_meta($post_id, '_l3_resena_contenido', $contenido);
+	}
+}
+add_action('save_post', 'l3_resena_save_meta');
+
+/**
+ * 6. Columnas personalizadas en el listado admin.
+ */
+function l3_resena_custom_columns($columns): array
+{
+	$new_columns = array();
+	$new_columns['cb']          = $columns['cb'];
+	$new_columns['l3_foto']     = 'Foto';
+	$new_columns['title']       = 'Nombre';
+	$new_columns['l3_empresa']  = 'Empresa / Cargo';
+	$new_columns['l3_rating']   = 'Calificación';
+	$new_columns['l3_contenido'] = 'Reseña';
+	$new_columns['l3_origen']    = 'Procedencia';
+	$new_columns['l3_social']    = 'Red Social';
+	$new_columns['date']        = $columns['date'];
+
+	return $new_columns;
+}
+add_filter('manage_l3_resena_posts_columns', 'l3_resena_custom_columns');
+
+function l3_resena_custom_column_content($column, $post_id): void
+{
+	switch ($column) {
+		case 'l3_foto':
+			$foto = get_post_meta($post_id, '_l3_resena_foto', true);
+			$avatar_url = !empty($foto) ? $foto : get_avatar_url(0, array('size' => 40));
+			echo '<img src="' . esc_url($avatar_url) . '" class="l3-list-avatar-img" alt="avatar">';
+			break;
+
+		case 'l3_empresa':
+			$empresa = get_post_meta($post_id, '_l3_resena_empresa', true);
+			$cargo   = get_post_meta($post_id, '_l3_resena_cargo', true);
+			$out = array();
+			if (!empty($empresa)) {
+				$out[] = '<strong>' . esc_html($empresa) . '</strong>';
+			}
+			if (!empty($cargo)) {
+				$out[] = esc_html($cargo);
+			}
+			echo !empty($out) ? implode('<br>', $out) : '<span class="l3-col-empty">—</span>';
+			break;
+
+		case 'l3_rating':
+			$rating = intval(get_post_meta($post_id, '_l3_resena_rating', true));
+			$stars_html = '';
+			for ($i = 1; $i <= 5; $i++) {
+				if ($i <= $rating) {
+					$stars_html .= '<span class="l3-col-star l3-col-star--filled">★</span>';
+				} else {
+					$stars_html .= '<span class="l3-col-star l3-col-star--empty">☆</span>';
+				}
+			}
+			echo '<span class="l3-col-stars">' . $stars_html . '</span>';
+			break;
+
+		case 'l3_contenido':
+			$contenido = get_post_meta($post_id, '_l3_resena_contenido', true);
+			if (!empty($contenido)) {
+				echo '<span class="l3-col-contenido">' . esc_html(mb_substr($contenido, 0, 50)) . (mb_strlen($contenido) > 50 ? '…' : '') . '</span>';
+			} else {
+				echo '<span class="l3-col-empty">—</span>';
+			}
+			break;
+
+		case 'l3_origen':
+			$via_linkedin = get_post_meta($post_id, '_l3_resena_via_linkedin', true);
+			if ($via_linkedin === '1') {
+				echo '<span class="l3-badge-col l3-badge-col--linkedin"><span class="dashicons dashicons-linkedin"></span> LinkedIn</span>';
+			} else {
+				echo '<span class="l3-badge-col l3-badge-col--manual"><span class="dashicons dashicons-edit"></span> Web Form</span>';
+			}
+			break;
+
+		case 'l3_social':
+			$via_linkedin = get_post_meta($post_id, '_l3_resena_via_linkedin', true);
+			if ($via_linkedin === '1') {
+				$url  = get_post_meta($post_id, '_l3_resena_linkedin_url', true);
+				$auth = get_post_meta($post_id, '_l3_resena_linkedin_auth', true);
+				$tipo = 'linkedin';
+			} else {
+				$url  = get_post_meta($post_id, '_l3_resena_red_social_url', true);
+				$tipo = get_post_meta($post_id, '_l3_resena_red_social_tipo', true);
+				$auth = '0';
+			}
+
+			if (!empty($url) && !empty($tipo)) {
+				$icon_class = 'dashicons-admin-links';
+				$title = 'Ver perfil';
+				if ($tipo === 'linkedin') {
+					$icon_class = 'dashicons-linkedin';
+					$title = 'Ver LinkedIn';
+				} elseif ($tipo === 'instagram') {
+					$icon_class = 'dashicons-instagram';
+					$title = 'Ver Instagram';
+				} elseif ($tipo === 'facebook') {
+					$icon_class = 'dashicons-facebook';
+					$title = 'Ver Facebook';
+				}
+				
+				echo '<a href="' . esc_url($url) . '" target="_blank" rel="noopener noreferrer" class="l3-col-social-link l3-social-' . esc_attr($tipo) . '" title="' . esc_attr($title) . '">';
+				echo '<span class="dashicons ' . esc_attr($icon_class) . '"></span>';
+				echo '</a>';
+				
+				if ($auth === '1') {
+					echo ' <span class="l3-col-linkedin-auth" title="Autoriza publicar en su LinkedIn">✓</span>';
+				}
+			} else {
+				echo '<span class="l3-col-empty">—</span>';
+			}
+			break;
+	}
+}
+add_action('manage_l3_resena_posts_custom_column', 'l3_resena_custom_column_content', 10, 2);
+
+/**
+ * 7. CSS y estilos administrativos para el CPT Reseñas.
+ */
+function l3_resenas_admin_styles(): void
+{
+	$screen = get_current_screen();
+	if (!$screen || ($screen->post_type !== 'l3_resena')) {
+		return;
+	}
+
+	?>
+	<style>
+		/* ── Ocultar botón "Añadir Nueva" (capa de seguridad extra) ── */
+		.post-type-l3_resena .page-title-action {
+			display: none !important;
+		}
+
+		/* ── Meta Box: Layout general ── */
+		.l3-resena-metabox {
+			padding: 12px 0;
+		}
+		
+		/* ── Badge de Origen ── */
+		.l3-resena-badge-container {
+			margin-bottom: 24px;
+		}
+		.l3-resena-badge {
+			display: inline-flex;
+			align-items: center;
+			gap: 8px;
+			padding: 6px 14px;
+			border-radius: 4px;
+			font-weight: 600;
+			font-size: 13px;
+		}
+		.l3-resena-badge--linkedin {
+			background-color: #e1f0fe;
+			color: #0a66c2;
+			border: 1px solid #b8dbfd;
+		}
+		.l3-resena-badge--manual {
+			background-color: #f0f0f1;
+			color: #50575e;
+			border: 1px solid #d0d1d5;
+		}
+		.l3-resena-badge .dashicons {
+			font-size: 17px;
+			width: 17px;
+			height: 17px;
+		}
+
+		/* ── Layout en columnas ── */
+		.l3-resena-row {
+			display: flex;
+			gap: 24px;
+			align-items: flex-start;
+		}
+		.l3-resena-col-avatar {
+			flex: 0 0 140px;
+			text-align: center;
+		}
+		.l3-resena-col-fields {
+			flex: 1;
+		}
+
+		/* ── Avatar Circle Preview ── */
+		.l3-resena-avatar-preview-wrapper {
+			margin-top: 10px;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			gap: 10px;
+		}
+		.l3-resena-avatar-img {
+			width: 100px;
+			height: 100px;
+			border-radius: 50%;
+			object-fit: cover;
+			border: 3px solid #fff;
+			box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
+			background: #f0f0f1;
+		}
+		.l3-resena-avatar-preview-wrapper .button {
+			width: 100%;
+			font-size: 11px;
+			height: 28px;
+			line-height: 26px;
+			text-align: center;
+		}
+		.l3-resena-avatar-preview-wrapper .link-delete {
+			color: #d63638;
+			text-decoration: none;
+			font-size: 11px;
+			cursor: pointer;
+		}
+		.l3-resena-avatar-preview-wrapper .link-delete:hover {
+			color: #a30000;
+		}
+
+		/* ── Form Fields y Grid ── */
+		.l3-resena-field {
+			margin-bottom: 20px;
+		}
+		.l3-resena-field label {
+			display: block;
+			margin-bottom: 6px;
+			color: #1d2327;
+		}
+		.l3-resena-field input[type="text"],
+		.l3-resena-field input[type="url"],
+		.l3-resena-field select {
+			font-size: 14px;
+			padding: 8px 12px;
+			border-radius: 4px;
+			height: 38px;
+		}
+		.l3-resena-grid-2 {
+			display: grid;
+			grid-template-columns: 1fr 1fr;
+			gap: 20px;
+		}
+		.l3-resena-section-title {
+			font-size: 15px;
+			font-weight: 600;
+			color: #1d2327;
+			margin-bottom: 16px;
+			border-left: 4px solid #d4a843;
+			padding-left: 10px;
+		}
+
+		.l3-resena-field--checkbox label {
+			display: inline-flex;
+			align-items: center;
+			gap: 8px;
+			cursor: pointer;
+		}
+		.l3-resena-field--checkbox .description {
+			margin-top: 4px;
+			color: #646970;
+			font-style: italic;
+		}
+
+		.l3-resena-separator {
+			border: none;
+			border-top: 1px solid #e0e0e0;
+			margin: 24px 0;
+		}
+
+		/* ── Estrellas (solo lectura) ── */
+		.l3-resena-stars {
+			display: flex;
+			align-items: center;
+			gap: 4px;
+			margin-top: 6px;
+		}
+		.l3-star {
+			color: #ccc;
+			display: inline-flex;
+		}
+		.l3-resena-stars--readonly .l3-star {
+			cursor: default;
+			pointer-events: none;
+		}
+		.l3-star--active {
+			color: #d4a843;
+		}
+		.l3-star-label {
+			margin-left: 12px;
+			font-size: 14px;
+			color: #646970;
+			font-weight: 500;
+		}
+
+		/* ── Campos solo lectura ── */
+		.l3-resena-field--readonly {
+			opacity: 0.8;
+			position: relative;
+		}
+		.l3-resena-field--readonly .description {
+			color: #996800;
+			font-style: italic;
+			font-size: 12px;
+			margin-top: 6px;
+		}
+		.l3-resena-field--readonly.l3-resena-field--checkbox label {
+			cursor: default;
+		}
+
+		/* ── Textarea y contador de caracteres ── */
+		#l3_resena_contenido {
+			font-size: 14px;
+			padding: 10px 12px;
+			resize: vertical;
+			transition: border-color 0.3s ease;
+			border-radius: 4px;
+		}
+		.l3-resena-textarea--exceeded {
+			border-color: #d63638 !important;
+			box-shadow: 0 0 0 1px #d63638 !important;
+		}
+		.l3-resena-char-counter {
+			text-align: right;
+			font-size: 13px;
+			color: #646970;
+			margin-top: 6px;
+			transition: color 0.3s ease;
+		}
+		.l3-resena-char-counter--warning {
+			color: #dba617;
+			font-weight: 600;
+		}
+		.l3-resena-char-counter--exceeded {
+			color: #d63638;
+			font-weight: 700;
+		}
+
+		/* ── Columnas del listado admin ── */
+		.l3-col-stars {
+			white-space: nowrap;
+			font-size: 15px;
+		}
+		.l3-col-star--filled {
+			color: #d4a843;
+		}
+		.l3-col-star--empty {
+			color: #ccc;
+		}
+		.l3-col-contenido {
+			color: #50575e;
+			font-style: italic;
+		}
+		.l3-col-empty {
+			color: #ccc;
+		}
+		
+		/* Miniatura de avatar en listado */
+		.l3-list-avatar-img {
+			width: 36px;
+			height: 36px;
+			border-radius: 50%;
+			object-fit: cover;
+			border: 1px solid #d0d1d5;
+			background: #f0f0f1;
+			display: block;
+		}
+
+		/* Badges de origen en listado */
+		.l3-badge-col {
+			display: inline-flex;
+			align-items: center;
+			gap: 4px;
+			padding: 3px 8px;
+			border-radius: 3px;
+			font-size: 11px;
+			font-weight: 600;
+		}
+		.l3-badge-col--linkedin {
+			background: #e1f0fe;
+			color: #0a66c2;
+		}
+		.l3-badge-col--manual {
+			background: #f0f0f1;
+			color: #50575e;
+		}
+		.l3-badge-col .dashicons {
+			font-size: 14px;
+			width: 14px;
+			height: 14px;
+		}
+
+		/* Enlaces sociales en listado */
+		.l3-col-social-link {
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			width: 28px;
+			height: 28px;
+			border-radius: 4px;
+			text-decoration: none;
+			color: #fff !important;
+		}
+		.l3-social-linkedin { background-color: #0a66c2; }
+		.l3-social-linkedin:hover { background-color: #004182; }
+		.l3-social-instagram { background-color: #e1306c; }
+		.l3-social-instagram:hover { background-color: #b3104e; }
+		.l3-social-facebook { background-color: #1877f2; }
+		.l3-social-facebook:hover { background-color: #0d52b3; }
+
+		.l3-col-linkedin-auth {
+			color: #00a32a;
+			font-weight: 700;
+			font-size: 14px;
+			margin-left: 4px;
+			vertical-align: middle;
+		}
+
+		/* Ancho de columnas */
+		.column-l3_foto {
+			width: 50px;
+		}
+		.column-l3_rating {
+			width: 110px;
+		}
+		.column-l3_origen {
+			width: 110px;
+		}
+		.column-l3_social {
+			width: 90px;
+		}
+	</style>
+	<?php
+}
+add_action('admin_head', 'l3_resenas_admin_styles');

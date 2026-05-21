@@ -4148,3 +4148,172 @@ function l3_resenas_admin_styles(): void
 	<?php
 }
 add_action('admin_head', 'l3_resenas_admin_styles');
+
+/**
+ * 8. Encolado de Scripts y Estilos Frontend de Reseñas.
+ */
+function l3_resenas_frontend_scripts(): void
+{
+	// Encolar de forma global en el frontend, pero de forma muy ligera.
+	// El JS solo actuará si encuentra el contenedor "#l3-resenas-form-container".
+	if (!is_admin()) {
+		wp_enqueue_style(
+			'l3-resenas-frontend',
+			get_stylesheet_directory_uri() . '/assets/css/resenas-frontend.css',
+			array(),
+			'1.0.0'
+		);
+		wp_enqueue_script(
+			'l3-resenas-frontend',
+			get_stylesheet_directory_uri() . '/assets/js/resenas-frontend.js',
+			array('jquery'),
+			'1.0.0',
+			true
+		);
+
+		// Pasar variables de AJAX de WordPress al script de JS de forma segura
+		wp_localize_script('l3-resenas-frontend', 'l3_resenas_params', array(
+			'ajax_url' => admin_url('admin-ajax.php'),
+			'nonce'    => wp_create_nonce('l3_resena_submit_nonce'),
+			'default_avatar' => get_avatar_url(0, array('size' => 120))
+		));
+	}
+}
+add_action('wp_enqueue_scripts', 'l3_resenas_frontend_scripts');
+
+/**
+ * 9. AJAX Handler: Procesar el envío de reseñas desde el frontend.
+ */
+function l3_submit_resena_ajax_handler(): void
+{
+	// 1. Verificar Nonce de seguridad
+	if (!isset($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], 'l3_resena_submit_nonce')) {
+		wp_send_json_error(array('message' => 'Error de seguridad. Por favor, recarga la página e intenta de nuevo.'));
+	}
+
+	// 2. Rate Limiting básico (Evitar spam usando transientes)
+	$user_ip = $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1';
+	$transient_key = 'l3_resena_limit_' . md5($user_ip);
+	if (get_transient($transient_key)) {
+		wp_send_json_error(array('message' => 'Has enviado una reseña recientemente. Por favor, espera unos minutos antes de enviar otra.'));
+	}
+
+	// 3. Obtener y sanear campos obligatorios
+	$nombre = isset($_POST['nombre']) ? sanitize_text_field($_POST['nombre']) : '';
+	$contenido = isset($_POST['contenido']) ? sanitize_textarea_field($_POST['contenido']) : '';
+	$rating = isset($_POST['rating']) ? intval($_POST['rating']) : 0;
+	$via_linkedin = isset($_POST['via_linkedin']) && $_POST['via_linkedin'] === '1' ? '1' : '0';
+
+	if (empty($nombre)) {
+		wp_send_json_error(array('message' => 'El campo Nombre es obligatorio.'));
+	}
+	if (empty($contenido)) {
+		wp_send_json_error(array('message' => 'El contenido de la reseña es obligatorio.'));
+	}
+
+	// Forzar límite estricto de 140 caracteres
+	$contenido = mb_substr($contenido, 0, 140);
+	$rating = max(0, min(5, $rating)); // Clamp entre 0 y 5
+
+	// Campos adicionales
+	$empresa = isset($_POST['empresa']) ? sanitize_text_field($_POST['empresa']) : '';
+	$cargo = isset($_POST['cargo']) ? sanitize_text_field($_POST['cargo']) : '';
+
+	// Validación condicional: Si hay empresa, el cargo es obligatorio
+	if (!empty($empresa) && empty($cargo)) {
+		wp_send_json_error(array('message' => 'Si introduces una Empresa, el campo Cargo es obligatorio.'));
+	}
+
+	$foto_url = '';
+	$linkedin_url = '';
+	$linkedin_auth = '0';
+	$red_social_tipo = '';
+	$red_social_url = '';
+
+	// 4. Lógica por Flujos
+	if ($via_linkedin === '1') {
+		// Flujo A (Con LinkedIn)
+		$linkedin_url = isset($_POST['linkedin_url']) ? esc_url_raw($_POST['linkedin_url']) : '';
+		$linkedin_auth = isset($_POST['linkedin_auth']) && $_POST['linkedin_auth'] === '1' ? '1' : '0';
+		$foto_url = isset($_POST['foto_url']) ? esc_url_raw($_POST['foto_url']) : '';
+
+		if (empty($linkedin_url)) {
+			wp_send_json_error(array('message' => 'La URL del perfil de LinkedIn es obligatoria en el flujo verificado.'));
+		}
+	} else {
+		// Flujo B (Manual - Sin LinkedIn)
+		$red_social_tipo = isset($_POST['red_social_tipo']) ? sanitize_text_field($_POST['red_social_tipo']) : '';
+		$red_social_url = isset($_POST['red_social_url']) ? esc_url_raw($_POST['red_social_url']) : '';
+
+		// Procesar Foto de Perfil si se subió un archivo
+		if (isset($_FILES['foto_file']) && !empty($_FILES['foto_file']['name'])) {
+			// Cargar archivos de soporte de WordPress para subidas
+			require_once ABSPATH . 'wp-admin/includes/image.php';
+			require_once ABSPATH . 'wp-admin/includes/file.php';
+			require_once ABSPATH . 'wp-admin/includes/media.php';
+
+			// Validar tamaño máximo de archivo (4MB)
+			$max_size = 4 * 1024 * 1024; // 4 megabytes
+			if ($_FILES['foto_file']['size'] > $max_size) {
+				wp_send_json_error(array('message' => 'La imagen de perfil no debe superar el tamaño máximo de 4MB.'));
+			}
+
+			// Validar tipo de archivo de imagen
+			$file_type = wp_check_filetype(basename($_FILES['foto_file']['name']), null);
+			$allowed_types = array('jpg', 'jpeg', 'png', 'webp');
+			if (!in_array(strtolower($file_type['ext']), $allowed_types)) {
+				wp_send_json_error(array('message' => 'Formato de imagen no permitido. Solo se aceptan archivos JPG, PNG y WEBP.'));
+			}
+
+			// Subir archivo a la biblioteca de medios de WordPress
+			$attachment_id = media_handle_upload('foto_file', 0); // 0 significa desasociado inicialmente
+			if (is_wp_error($attachment_id)) {
+				wp_send_json_error(array('message' => 'Error al procesar la imagen: ' . $attachment_id->get_error_message()));
+			} else {
+				$foto_url = wp_get_attachment_url($attachment_id);
+			}
+		}
+	}
+
+	// 5. Crear el Post en el CPT 'l3_resena' en estado 'pending'
+	$post_data = array(
+		'post_title'   => $nombre,
+		'post_content' => '', // Mantenemos el core vacío ya que guardamos en meta fields
+		'post_status'  => 'pending',
+		'post_type'    => 'l3_resena',
+	);
+
+	$post_id = wp_insert_post($post_data);
+
+	if (is_wp_error($post_id) || $post_id === 0) {
+		wp_send_json_error(array('message' => 'Hubo un error al guardar tu reseña en la base de datos. Por favor, intenta más tarde.'));
+	}
+
+	// 6. Almacenar los metadatos inmutables del usuario de forma segura
+	update_post_meta($post_id, '_l3_resena_nombre', $nombre);
+	update_post_meta($post_id, '_l3_resena_contenido', $contenido);
+	update_post_meta($post_id, '_l3_resena_rating', $rating);
+	update_post_meta($post_id, '_l3_resena_via_linkedin', $via_linkedin);
+	update_post_meta($post_id, '_l3_resena_empresa', $empresa);
+	update_post_meta($post_id, '_l3_resena_cargo', $cargo);
+	update_post_meta($post_id, '_l3_resena_foto', $foto_url);
+
+	if ($via_linkedin === '1') {
+		update_post_meta($post_id, '_l3_resena_linkedin_url', $linkedin_url);
+		update_post_meta($post_id, '_l3_resena_linkedin_auth', $linkedin_auth);
+	} else {
+		update_post_meta($post_id, '_l3_resena_red_social_tipo', $red_social_tipo);
+		update_post_meta($post_id, '_l3_resena_red_social_url', $red_social_url);
+	}
+
+	// Establecer el limitador de spam por IP (10 minutos)
+	set_transient($transient_key, true, 10 * MINUTE_IN_SECONDS);
+
+	// 7. Retornar éxito con diseño premium
+	wp_send_json_success(array(
+		'message' => '¡Tu reseña ha sido enviada con éxito! Será revisada por nuestro equipo antes de ser publicada.',
+		'post_id' => $post_id
+	));
+}
+add_action('wp_ajax_nopriv_l3_submit_resena', 'l3_submit_resena_ajax_handler');
+add_action('wp_ajax_l3_submit_resena', 'l3_submit_resena_ajax_handler');

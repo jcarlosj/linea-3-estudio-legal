@@ -57,6 +57,23 @@ jQuery(document).ready(function($) {
 	// Textareas y contadores
 	var $textareas = $('.l3-resena-textarea');
 
+	// ── Detectar flujo automático desde URL ──
+	var urlParams = new URLSearchParams(window.location.search);
+	var urlFlow = urlParams.get('flow');
+	if (urlFlow === 'manual') {
+		currentFlow = 'manual';
+		$viaLinkedinInput.val('0');
+		setTimeout(function() {
+			resetRating();
+			$step0.removeClass('l3-active-step').hide();
+			$stepB.show().addClass('l3-active-step');
+		}, 100);
+	} else if (urlFlow === 'linkedin') {
+		setTimeout(function() {
+			$linkedinModal.addClass('l3-modal-open');
+		}, 100);
+	}
+
 	// ── 1. Manejo de Flujos y Pasos ──
 
 	function switchStep($fromStep, $toStep) {

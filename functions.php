@@ -19,7 +19,7 @@ if (!defined('ABSPATH')) {
  */
 function linea3_legal_child_enqueue_styles(): void
 {
-	$version = '1.4.9'; // Versión de Estabilización y Diseño Editorial
+	$version = '1.5.0'; // Versión de Estabilización y Diseño Editorial
 
 	wp_enqueue_style(
 		'l3-font-awesome',
@@ -4841,7 +4841,12 @@ function l3_reviews_slider_shortcode($atts): string
 
 	$slider_id = 'l3-reviews-slider-' . uniqid();
 
-	$output = '<div class="l3-reviews-slider-container" id="' . $slider_id . '">';
+	$output = '<div class="l3-experiencias-header">';
+	$output .= '<span class="l3-experiencias-label">EXPERIENCIAS</span>';
+	$output .= '<h2 class="l3-experiencias-title">Testimonios de nuestros clientes</h2>';
+	$output .= '</div>';
+
+	$output .= '<div class="l3-reviews-slider-container" id="' . $slider_id . '">';
 	
 	// Botón anterior
 	$output .= '<button class="l3-slider-btn prev" aria-label="Anterior"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg></button>';
@@ -4952,7 +4957,36 @@ function l3_reviews_slider_shortcode($atts): string
 	
 	$output .= '</div>'; // End container
 
-	// JavaScript para el Slider de Testimonios
+	// Botón "Dejar Reseña" centrado
+	$output .= '<div class="l3-review-cta-wrap">';
+	$output .= '<button id="l3-open-review-modal" class="l3-review-cta-btn">DEJAR MI RESEÑA</button>';
+	$output .= '</div>';
+
+	// Modal de Selección de Flujo
+	$output .= '
+	<div id="l3-review-choice-modal" class="l3-custom-modal-overlay">
+		<div class="l3-custom-modal-box">
+			<div class="l3-custom-modal-header">
+				<button type="button" class="l3-custom-modal-close" id="l3-close-choice-modal">&times;</button>
+				<h3>Escribir una Reseña</h3>
+				<p>Comparte tu testimonio profesional con nosotros. Tu experiencia ayuda a respaldar el prestigio de nuestra firma.</p>
+			</div>
+			<div class="l3-custom-modal-body">
+				<h4>¿Cómo deseas registrar tu reseña?</h4>
+				<p>Te recomendamos conectarte vía LinkedIn para verificar tu perfil al instante. Alternativamente, puedes registrar tus datos manualmente.</p>
+				<div class="l3-custom-modal-buttons">
+					<a href="' . esc_url(home_url('/escribir-resena/?flow=linkedin')) . '" class="l3-custom-btn-flow l3-custom-btn-flow--linkedin">
+						<span class="dashicons dashicons-linkedin"></span> Conectar con mi LinkedIn
+					</a>
+					<a href="' . esc_url(home_url('/escribir-resena/?flow=manual')) . '" class="l3-custom-btn-flow l3-custom-btn-flow--manual">
+						<span class="dashicons dashicons-edit"></span> Registro Manual
+					</a>
+				</div>
+			</div>
+		</div>
+	</div>';
+
+	// JavaScript para el Slider y la Ventana Emergente de Testimonios
 	$output .= "
 	<script>
 	document.addEventListener('DOMContentLoaded', function() {
@@ -5036,6 +5070,37 @@ function l3_reviews_slider_shortcode($atts): string
 
 		window.addEventListener('resize', updateSlider);
 		
+		// Lógica del modal de selección
+		const openBtn = document.getElementById('l3-open-review-modal');
+		const closeBtn = document.getElementById('l3-close-choice-modal');
+		const modalOverlay = document.getElementById('l3-review-choice-modal');
+
+		if (openBtn) {
+			if (modalOverlay) {
+				openBtn.addEventListener('click', function(e) {
+					e.preventDefault();
+					modalOverlay.classList.add('is-visible');
+				});
+			}
+		}
+
+		if (closeBtn) {
+			if (modalOverlay) {
+				closeBtn.addEventListener('click', function(e) {
+					e.preventDefault();
+					modalOverlay.classList.remove('is-visible');
+				});
+			}
+		}
+
+		if (modalOverlay) {
+			modalOverlay.addEventListener('click', function(e) {
+				if (e.target === modalOverlay) {
+					modalOverlay.classList.remove('is-visible');
+				}
+			});
+		}
+
 		// Initial setup
 		setTimeout(updateSlider, 200);
 		startAutoplay();

@@ -597,7 +597,7 @@ add_shortcode('search_result_count', 'linea3_legal_child_search_result_count');
  */
 add_filter('pre_get_block_template', function ($template, $id, $template_type) {
 	if ('wp_template_part' === $template_type && 'header' === $id) {
-		$template_v2 = get_block_template('linea3-legal-v2:header-v2', 'wp_template_part');
+		$template_v2 = get_block_template('linea3-legal-child//header-v2', 'wp_template_part');
 		if ($template_v2) {
 			return $template_v2;
 		}

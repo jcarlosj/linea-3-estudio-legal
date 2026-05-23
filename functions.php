@@ -4609,7 +4609,9 @@ function l3_linkedin_inject_user_data_js() {
 			// Ajustar valores del paso y visibilidad
 			$('input[name="resena_via_linkedin"]').val('1');
 			
-			// Cambiar automáticamente al paso del formulario de LinkedIn
+			// Cambiar automáticamente al paso del formulario de LinkedIn y abrir el modal choice
+			$('#l3-review-choice-modal').addClass('is-visible');
+			$('body').addClass('l3-modal-open-lock');
 			$('#l3-step-welcome').removeClass('l3-active-step').hide();
 			$('#l3-step-linkedin-flow').show().addClass('l3-active-step');
 			
@@ -4975,14 +4977,224 @@ function l3_reviews_slider_shortcode($atts): string
 				<p>Comparte tu testimonio profesional con nosotros. Tu experiencia ayuda a respaldar el prestigio de nuestra firma.</p>
 			</div>
 			<div class="l3-custom-modal-body">
-				<h4>¿Cómo deseas registrar tu reseña?</h4>
-				<p>Te recomendamos conectarte vía LinkedIn para verificar tu perfil al instante. Alternativamente, puedes registrar tus datos manualmente.</p>
-				<div class="l3-custom-modal-buttons">
-					<a href="' . esc_url(home_url('/escribir-resena/?flow=linkedin')) . '" class="l3-custom-btn-flow l3-custom-btn-flow--linkedin">
-						<span class="dashicons dashicons-linkedin"></span> Conectar con mi LinkedIn
-					</a>
-					<a href="' . esc_url(home_url('/escribir-resena/?flow=manual')) . '" class="l3-custom-btn-flow l3-custom-btn-flow--manual">
-						<span class="dashicons dashicons-edit"></span> Registro Manual
+				<div id="l3-resenas-form-container" class="l3-resenas-container" style="padding: 0; box-shadow: none; border: none; background: transparent; margin: 0; max-width: 100%;">
+					
+					<!-- Paso 0: Selección Inicial de Flujo -->
+					<div id="l3-step-welcome" class="l3-resenas-step l3-active-step">
+						<div class="l3-resenas-welcome" style="padding: 0; border: none; background: transparent; box-shadow: none;">
+							<h4 style="font-size: 1.15rem; color: #1e293b; margin-top: 0; margin-bottom: 12px; font-weight: 600;">¿Cómo deseas registrar tu reseña?</h4>
+							<p style="margin-bottom: 24px; font-size: 14px; color: var(--l3-text-muted); line-height: 1.5;">
+								Te recomendamos conectarte vía <strong>LinkedIn</strong> para verificar tu perfil al instante. Alternativamente, puedes registrar tus datos manualmente.
+							</p>
+							
+							<div class="l3-custom-modal-buttons" style="display: flex; flex-direction: column; gap: 12px; width: 100%; box-sizing: border-box;">
+								<button type="button" id="l3-trigger-linkedin" class="l3-custom-btn-flow l3-custom-btn-flow--linkedin" style="cursor: pointer; border: none; font-size: 14px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; width: 100%;">
+									<span class="dashicons dashicons-linkedin"></span> Conectar con mi LinkedIn
+								</button>
+								
+								<button type="button" id="l3-trigger-manual" class="l3-custom-btn-flow l3-custom-btn-flow--manual" style="cursor: pointer; border: 1px solid #cbd5e1; font-size: 14px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; width: 100%;">
+									<span class="dashicons dashicons-edit"></span> Registro Manual
+								</button>
+							</div>
+						</div>
+					</div>
+
+					<!-- Inputs de control ocultos globales -->
+					<input type="hidden" name="resena_rating" value="0">
+					<input type="hidden" name="resena_via_linkedin" value="0">
+
+					<!-- Paso 1A: Formulario Flujo LinkedIn (Verificado) -->
+					<div id="l3-step-linkedin-flow" class="l3-resenas-step" style="display: none;">
+						<form id="l3-form-linkedin" class="l3-resenas-form" method="post" enctype="multipart/form-data">
+							
+							<!-- Tarjeta Perfil Verificado de LinkedIn -->
+							<div class="l3-linkedin-card">
+								<img id="l3-card-avatar" class="l3-linkedin-avatar" src="" alt="avatar">
+								<div class="l3-linkedin-info">
+									<div class="l3-linkedin-name">
+										<span id="l3-card-name">Nombre</span>
+										<span class="l3-linkedin-verified-badge" title="Perfil verificado con OAuth">✓</span>
+									</div>
+									<a id="l3-card-profile-url" class="l3-linkedin-profile-url" href="" target="_blank" rel="noopener noreferrer">perfil</a>
+								</div>
+							</div>
+
+							<!-- Inputs ocultos de perfil recuperados -->
+							<input type="hidden" id="resena_linkedin_url" name="linkedin_url" value="">
+							<input type="hidden" id="resena_linkedin_nombre" name="nombre" value="">
+							<input type="hidden" id="resena_linkedin_avatar" name="foto_url" value="">
+
+							<!-- Fila: Empresa / Cargo -->
+							<div class="l3-form-grid-2">
+								<div class="l3-form-group">
+									<label for="resena_empresa_a">Empresa <span style="font-weight: normal; color: var(--l3-text-muted); font-size: 12px;">(Opcional)</span></label>
+									<input type="text" id="resena_empresa_a" name="empresa" placeholder="Ej: Línea 3 Legal">
+								</div>
+								<div class="l3-form-group">
+									<label for="resena_cargo_a">Cargo <span style="font-weight: normal; color: var(--l3-text-muted); font-size: 12px;">(Obligatorio si introduces empresa)</span></label>
+									<input type="text" id="resena_cargo_a" name="cargo" placeholder="Ej: Director Jurídico">
+								</div>
+							</div>
+
+							<!-- Campo: Calificación por estrellas -->
+							<div class="l3-form-group">
+								<label>Tu Calificación</label>
+								<div class="l3-stars-selector">
+									<span class="l3-frontend-star" data-value="1">★</span>
+									<span class="l3-frontend-star" data-value="2">★</span>
+									<span class="l3-frontend-star" data-value="3">★</span>
+									<span class="l3-frontend-star" data-value="4">★</span>
+									<span class="l3-frontend-star" data-value="5">★</span>
+									<span class="l3-stars-text">Sin calificación</span>
+								</div>
+							</div>
+
+							<!-- Campo: Reseña (Máx 140) -->
+							<div class="l3-form-group">
+								<label for="resena_contenido_a">Tu Reseña <span style="font-weight: normal; color: var(--l3-text-muted); font-size: 12px;">(Máximo 140 caracteres)</span></label>
+								<div class="l3-textarea-wrapper">
+									<textarea id="resena_contenido_a" name="contenido" rows="3" placeholder="Describe tu experiencia con nosotros..." maxlength="140" class="l3-resena-textarea"></textarea>
+									<div class="l3-char-counter"><span>0</span> / 140</div>
+								</div>
+							</div>
+
+							<!-- Checkbox: Autorizo a publicar en LinkedIn -->
+							<div class="l3-form-group l3-form-group--checkbox">
+								<label for="resena_linkedin_auth">
+									<input type="checkbox" id="resena_linkedin_auth" name="linkedin_auth" value="1" checked>
+									<span>Autorizo a publicar esta recomendación en mi perfil personal de LinkedIn una vez sea validada por el administrador.</span>
+								</label>
+							</div>
+
+							<!-- Footer del Formulario -->
+							<div class="l3-form-footer" style="margin-top: 24px; display: flex; gap: 12px; justify-content: flex-end;">
+								<button type="button" class="l3-btn l3-btn-back" style="cursor: pointer; display: inline-flex; align-items: center; gap: 6px; padding: 10px 20px; border-radius: 4px; border: 1px solid #cbd5e1; background: #fff; color: #334155; font-weight: 500;">
+									<span class="dashicons dashicons-arrow-left-alt2"></span> Volver
+								</button>
+								<button type="submit" class="l3-btn l3-btn-submit" style="cursor: pointer; display: inline-flex; align-items: center; gap: 8px; padding: 10px 24px; border-radius: 4px; border: none; background: #ce9e50; color: #fff; font-weight: 600; transition: background 0.2s;">
+									<span>Enviar Reseña</span>
+									<span class="l3-btn-spinner"></span>
+								</button>
+							</div>
+
+						</form>
+					</div>
+
+					<!-- Paso 1B: Formulario Flujo Manual (Sin LinkedIn) -->
+					<div id="l3-step-manual-flow" class="l3-resenas-step" style="display: none;">
+						<form id="l3-form-manual" class="l3-resenas-form" method="post" enctype="multipart/form-data">
+							
+							<!-- Fila: Nombre Completo -->
+							<div class="l3-form-group">
+								<label for="resena_nombre_b">Nombre Completo <span style="color: #ef4444;">*</span></label>
+								<input type="text" id="resena_nombre_b" name="nombre" placeholder="Ej: Carlos Rodríguez" required>
+							</div>
+
+							<!-- Fila: Empresa / Cargo -->
+							<div class="l3-form-grid-2">
+								<div class="l3-form-group">
+									<label for="resena_empresa_b">Empresa <span style="font-weight: normal; color: var(--l3-text-muted); font-size: 12px;">(Opcional)</span></label>
+									<input type="text" id="resena_empresa_b" name="empresa" placeholder="Ej: Cardenas Labs">
+								</div>
+								<div class="l3-form-group">
+									<label for="resena_cargo_b">Cargo <span style="font-weight: normal; color: var(--l3-text-muted); font-size: 12px;">(Obligatorio si introduces empresa)</span></label>
+									<input type="text" id="resena_cargo_b" name="cargo" placeholder="Ej: CEO">
+								</div>
+							</div>
+
+							<!-- Zona de Carga: Drag & Drop Foto de Perfil -->
+							<div class="l3-form-group">
+								<label>Foto de Perfil <span style="font-weight: normal; color: var(--l3-text-muted); font-size: 12px;">(Opcional - Máx 4MB)</span></label>
+								<div id="l3-upload-zone" class="l3-upload-zone">
+									<span class="dashicons dashicons-admin-media l3-upload-icon"></span>
+									<div class="l3-upload-text">
+										Arrastra tu imagen aquí o <strong>selecciona un archivo</strong>
+									</div>
+									<input type="file" id="resena_foto_file" name="foto_file" class="l3-file-input" accept="image/jpeg,image/png,image/webp">
+								</div>
+								
+								<!-- Previsualizador de Imagen Subida -->
+								<div id="l3-avatar-preview-wrap" class="l3-avatar-upload-preview" style="display: none;">
+									<img src="" alt="previsualización">
+									<span>archivo.jpg</span>
+								</div>
+							</div>
+
+							<!-- Fila: Tipo de Red Social y URL vinculada -->
+							<div class="l3-form-grid-2">
+								<div class="l3-form-group">
+									<label for="resena_red_social_tipo">Red Social Vinculada <span style="font-weight: normal; color: var(--l3-text-muted); font-size: 12px;">(Opcional)</span></label>
+									<select id="resena_red_social_tipo" name="red_social_tipo">
+										<option value="">Ninguna</option>
+										<option value="linkedin">LinkedIn</option>
+										<option value="instagram">Instagram</option>
+										<option value="facebook">Facebook</option>
+									</select>
+								</div>
+								<div class="l3-form-group">
+									<label for="resena_red_social_url">Enlace al Perfil de Red Social</label>
+									<input type="url" id="resena_red_social_url" name="red_social_url" placeholder="https://instagram.com/tu_perfil">
+								</div>
+							</div>
+
+							<!-- Campo: Calificación por estrellas -->
+							<div class="l3-form-group">
+								<label>Tu Calificación</label>
+								<div class="l3-stars-selector">
+									<span class="l3-frontend-star" data-value="1">★</span>
+									<span class="l3-frontend-star" data-value="2">★</span>
+									<span class="l3-frontend-star" data-value="3">★</span>
+									<span class="l3-frontend-star" data-value="4">★</span>
+									<span class="l3-frontend-star" data-value="5">★</span>
+									<span class="l3-stars-text">Sin calificación</span>
+								</div>
+							</div>
+
+							<!-- Campo: Reseña (Máx 140) -->
+							<div class="l3-form-group">
+								<label for="resena_contenido_b">Tu Reseña <span style="font-weight: normal; color: var(--l3-text-muted); font-size: 12px;">(Máximo 140 caracteres)</span></label>
+								<div class="l3-textarea-wrapper">
+									<textarea id="resena_contenido_b" name="contenido" rows="3" placeholder="Describe tu experiencia con nosotros..." maxlength="140" class="l3-resena-textarea"></textarea>
+									<div class="l3-char-counter"><span>0</span> / 140</div>
+								</div>
+							</div>
+
+							<!-- Footer del Formulario -->
+							<div class="l3-form-footer" style="margin-top: 24px; display: flex; gap: 12px; justify-content: flex-end;">
+								<button type="button" class="l3-btn l3-btn-back" style="cursor: pointer; display: inline-flex; align-items: center; gap: 6px; padding: 10px 20px; border-radius: 4px; border: 1px solid #cbd5e1; background: #fff; color: #334155; font-weight: 500;">
+									<span class="dashicons dashicons-arrow-left-alt2"></span> Volver
+								</button>
+								<button type="submit" class="l3-btn l3-btn-submit" style="cursor: pointer; display: inline-flex; align-items: center; gap: 8px; padding: 10px 24px; border-radius: 4px; border: none; background: #ce9e50; color: #fff; font-weight: 600; transition: background 0.2s;">
+									<span>Enviar Reseña</span>
+									<span class="l3-btn-spinner"></span>
+								</button>
+							</div>
+
+						</form>
+					</div>
+
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Modal de Conexión Real LinkedIn OAuth -->
+	<div id="l3-linkedin-modal" class="l3-linkedin-modal-overlay">
+		<div class="l3-linkedin-modal">
+			<div class="l3-linkedin-modal-header">
+				<h4>Conectar con tu cuenta</h4>
+				<button type="button" class="l3-linkedin-close" aria-label="Cerrar">&times;</button>
+			</div>
+			<div class="l3-linkedin-modal-body" style="text-align: center; padding: 24px;">
+				<span class="dashicons dashicons-linkedin l3-linkedin-modal-logo" style="font-size: 48px; width: 48px; height: 48px; color: #0077b5; margin-bottom: 15px; display: inline-block;"></span>
+				<p style="font-weight: 500; font-size: 16px; margin-bottom: 10px;">Verificación con LinkedIn</p>
+				<p style="font-size: 13px; color: var(--l3-text-muted); line-height: 1.6; margin-bottom: 24px;">
+					Para garantizar la autenticidad de tu reseña, inicia sesión con tu perfil verificado de LinkedIn. Únicamente leeremos tu nombre de perfil y foto de perfil.
+				</p>
+				<div class="l3-linkedin-connect-btn-wrapper">
+					<a href="#" id="l3-real-linkedin-btn" class="l3-btn-flow l3-btn-flow--linkedin" style="display: inline-flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; width: 100%; box-sizing: border-box; background: #0077b5; color: #fff; border-radius: 4px; padding: 12px; font-weight: 500; transition: background 0.2s;">
+						<span class="dashicons dashicons-linkedin" style="margin-top: 1px;"></span>
+						Iniciar sesión con LinkedIn
 					</a>
 				</div>
 			</div>
@@ -5083,6 +5295,7 @@ function l3_reviews_slider_shortcode($atts): string
 				openBtn.addEventListener('click', function(e) {
 					e.preventDefault();
 					modalOverlay.classList.add('is-visible');
+					document.body.classList.add('l3-modal-open-lock');
 				});
 			}
 		}
@@ -5092,6 +5305,7 @@ function l3_reviews_slider_shortcode($atts): string
 				closeBtn.addEventListener('click', function(e) {
 					e.preventDefault();
 					modalOverlay.classList.remove('is-visible');
+					document.body.classList.remove('l3-modal-open-lock');
 				});
 			}
 		}
@@ -5100,6 +5314,7 @@ function l3_reviews_slider_shortcode($atts): string
 			modalOverlay.addEventListener('click', function(e) {
 				if (e.target === modalOverlay) {
 					modalOverlay.classList.remove('is-visible');
+					document.body.classList.remove('l3-modal-open-lock');
 				}
 			});
 		}

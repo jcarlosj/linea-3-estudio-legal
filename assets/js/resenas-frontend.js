@@ -14,6 +14,16 @@ jQuery(document).ready(function($) {
 		$('#l3-real-linkedin-btn').attr('href', l3_resenas_params.linkedin_auth_url);
 	}
 
+	// Mover los modales al final del body para evitar problemas de stacking context en position: fixed
+	var $choiceModal = $('#l3-review-choice-modal');
+	if ($choiceModal.length) {
+		$choiceModal.appendTo('body');
+	}
+	var $linkedinModal = $('#l3-linkedin-modal');
+	if ($linkedinModal.length) {
+		$linkedinModal.appendTo('body');
+	}
+
 	// ── Variables de Estado ──
 	var currentFlow = ''; // 'linkedin' o 'manual'
 	var selectedRating = 0;
@@ -65,11 +75,15 @@ jQuery(document).ready(function($) {
 		$viaLinkedinInput.val('0');
 		setTimeout(function() {
 			resetRating();
+			$('#l3-review-choice-modal').addClass('is-visible');
+			$('body').addClass('l3-modal-open-lock');
 			$step0.removeClass('l3-active-step').hide();
 			$stepB.show().addClass('l3-active-step');
 		}, 100);
 	} else if (urlFlow === 'linkedin') {
 		setTimeout(function() {
+			$('#l3-review-choice-modal').addClass('is-visible');
+			$('body').addClass('l3-modal-open-lock');
 			$linkedinModal.addClass('l3-modal-open');
 		}, 100);
 	}
@@ -97,6 +111,44 @@ jQuery(document).ready(function($) {
 	$linkedinTrigger.on('click', function(e) {
 		e.preventDefault();
 		$linkedinModal.addClass('l3-modal-open');
+	});
+
+	// Lógica de reseteo al cerrar el modal de selección
+	function resetModalForms() {
+		// Reset forms
+		$('#l3-form-linkedin')[0].reset();
+		$('#l3-form-manual')[0].reset();
+		
+		// Reset rating
+		resetRating();
+		
+		// Reset avatar preview manual
+		$('#l3-avatar-preview-wrap').hide().find('img').attr('src', '');
+		
+		// Reset dynamic alerts
+		$('.l3-resenas-alert').remove();
+		
+		// Reset submit button spinner states
+		$('.l3-btn-submit').removeClass('l3-btn--loading').prop('disabled', false);
+		
+		// Re-enable form fields
+		$('#l3-resenas-form-container').find('input, textarea, select, button').prop('disabled', false);
+		$('#l3-resenas-form-container').find('.l3-frontend-star').css('pointer-events', 'auto');
+		
+		// Reset steps: show step0, hide stepA and stepB
+		$stepA.removeClass('l3-active-step').hide();
+		$stepB.removeClass('l3-active-step').hide();
+		$step0.show().addClass('l3-active-step');
+		currentFlow = '';
+	}
+
+	// Registrar listeners en jQuery para el modal choice
+	$('#l3-close-choice-modal, #l3-review-choice-modal').on('click', function(e) {
+		if (e.target === this || $(e.target).attr('id') === 'l3-close-choice-modal') {
+			resetModalForms();
+			$('#l3-review-choice-modal').removeClass('is-visible');
+			$('body').removeClass('l3-modal-open-lock');
+		}
 	});
 
 	// Cerrar Modal LinkedIn

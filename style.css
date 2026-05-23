@@ -6269,8 +6269,8 @@ body footer .made-with-part {
     position: fixed !important;
     top: 0 !important;
     left: 0 !important;
-    width: 100vw !important;
-    height: 100vh !important;
+    width: 100% !important;
+    height: 100% !important;
     background: rgba(10, 34, 51, 0.7) !important;
     backdrop-filter: blur(12px) !important;
     -webkit-backdrop-filter: blur(12px) !important;
@@ -6287,6 +6287,10 @@ body footer .made-with-part {
     opacity: 1 !important;
 }
 
+body.l3-modal-open-lock {
+    overflow: hidden !important;
+}
+
 /* Contenedor del Modal (Box) */
 .l3-custom-modal-box {
     width: 90% !important;
@@ -6297,6 +6301,9 @@ body footer .made-with-part {
     box-shadow: 0 25px 60px rgba(0, 0, 0, 0.45) !important;
     transform: scale(0.92) !important;
     transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1) !important;
+    max-height: 92vh !important;
+    display: flex !important;
+    flex-direction: column !important;
 }
 
 .l3-custom-modal-overlay.is-visible .l3-custom-modal-box {
@@ -6306,25 +6313,26 @@ body footer .made-with-part {
 /* Cabecera Oscura del Modal */
 .l3-custom-modal-header {
     background: #0d1e33 !important;
-    padding: 40px 30px !important;
+    padding: 30px 30px 24px 30px !important;
     text-align: center !important;
     position: relative !important;
     border-bottom: 3px solid #ce9e50 !important;
     box-sizing: border-box !important;
+    flex-shrink: 0 !important;
 }
 
 .l3-custom-modal-header h3 {
     font-family: 'Outfit', sans-serif !important;
-    font-size: 1.8rem !important;
+    font-size: 1.6rem !important;
     font-weight: 600 !important;
     color: #ffffff !important;
-    margin: 0 0 10px 0 !important;
+    margin: 0 0 8px 0 !important;
 }
 
 .l3-custom-modal-header p {
     font-family: 'Inter', sans-serif !important;
-    font-size: 0.9rem !important;
-    line-height: 1.6 !important;
+    font-size: 0.85rem !important;
+    line-height: 1.5 !important;
     color: rgba(255, 255, 255, 0.7) !important;
     margin: 0 !important;
 }
@@ -6351,9 +6359,11 @@ body footer .made-with-part {
 /* Cuerpo Claro del Modal (Prístino) */
 .l3-custom-modal-body {
     background: #ffffff !important;
-    padding: 40px 35px !important;
-    text-align: center !important;
+    padding: 30px 30px !important;
+    text-align: left !important;
     box-sizing: border-box !important;
+    overflow-y: auto !important;
+    flex-grow: 1 !important;
 }
 
 .l3-custom-modal-body h4 {

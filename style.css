@@ -6275,17 +6275,16 @@ body footer .made-with-part {
     backdrop-filter: blur(12px) !important;
     -webkit-backdrop-filter: blur(12px) !important;
     z-index: 999999 !important;
-    display: flex !important;
+    display: none !important;
     align-items: center !important;
     justify-content: center !important;
     opacity: 0 !important;
-    visibility: hidden !important;
-    transition: opacity 0.4s cubic-bezier(0.165, 0.84, 0.44, 1), visibility 0.4s cubic-bezier(0.165, 0.84, 0.44, 1) !important;
+    transition: opacity 0.4s cubic-bezier(0.165, 0.84, 0.44, 1) !important;
 }
 
 .l3-custom-modal-overlay.is-visible {
+    display: flex !important;
     opacity: 1 !important;
-    visibility: visible !important;
 }
 
 /* Contenedor del Modal (Box) */
@@ -6442,4 +6441,12 @@ body footer .made-with-part {
     .l3-custom-modal-header h3 {
         font-size: 1.5rem !important;
     }
+}
+
+/* Forzar ocultamiento del modal de selección dentro del Editor de Bloques Gutenberg de WordPress */
+.wp-admin .l3-custom-modal-overlay,
+.editor-styles-wrapper .l3-custom-modal-overlay {
+    display: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
 }

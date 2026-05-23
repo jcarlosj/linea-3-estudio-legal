@@ -1210,15 +1210,23 @@ function antigravity_register_block_patterns(): void
 <div class="wp-block-group alignfull l3-allies-section">
     <!-- wp:group {"className":"l3-container-standard","layout":{"type":"constrained"}} -->
     <div class="wp-block-group l3-container-standard">
-        <!-- wp:group {"className":"l3-allies-header-centered","layout":{"type":"constrained"}} -->
-        <div class="wp-block-group l3-allies-header-centered">
-            <!-- wp:paragraph {"className":"services-eyebrow"} -->
-            <p class="services-eyebrow">EXPERIENCIA Y CONFIANZA</p>
-            <!-- /wp:paragraph -->
+        <!-- wp:group {"className":"services-section-header","layout":{"type":"constrained"}} -->
+        <div class="wp-block-group services-section-header">
+            <!-- wp:group {"className":"section-vertical-line","layout":{"type":"constrained"}} -->
+            <div class="wp-block-group section-vertical-line"></div>
+            <!-- /wp:group -->
 
-            <!-- wp:heading {"level":2,"className":"services-title"} -->
-            <h2 class="wp-block-heading services-title">Testimonios de nuestros clientes</h2>
-            <!-- /wp:heading -->
+            <!-- wp:group {"className":"services-header-left","layout":{"type":"constrained"}} -->
+            <div class="wp-block-group services-header-left">
+                <!-- wp:paragraph {"className":"services-eyebrow"} -->
+                <p class="services-eyebrow">EXPERIENCIAS</p>
+                <!-- /wp:paragraph -->
+
+                <!-- wp:heading {"level":2,"className":"services-title"} -->
+                <h2 class="wp-block-heading services-title" style="color: #ffffff !important;">Testimonios de nuestros clientes</h2>
+                <!-- /wp:heading -->
+            </div>
+            <!-- /wp:group -->
         </div>
         <!-- /wp:group -->
 
@@ -4841,12 +4849,7 @@ function l3_reviews_slider_shortcode($atts): string
 
 	$slider_id = 'l3-reviews-slider-' . uniqid();
 
-	$output = '<div class="l3-experiencias-header">';
-	$output .= '<span class="l3-experiencias-label">EXPERIENCIAS</span>';
-	$output .= '<h2 class="l3-experiencias-title">Testimonios de nuestros clientes</h2>';
-	$output .= '</div>';
-
-	$output .= '<div class="l3-reviews-slider-container" id="' . $slider_id . '">';
+	$output = '<div class="l3-reviews-slider-container" id="' . $slider_id . '">';
 	
 	// Botón anterior
 	$output .= '<button class="l3-slider-btn prev" aria-label="Anterior"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg></button>';

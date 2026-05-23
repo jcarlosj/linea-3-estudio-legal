@@ -19,7 +19,7 @@ if (!defined('ABSPATH')) {
  */
 function linea3_legal_child_enqueue_styles(): void
 {
-	$version = '1.4.7'; // Versión de Estabilización y Diseño Editorial
+	$version = '1.4.8'; // Versión de Estabilización y Diseño Editorial
 
 	wp_enqueue_style(
 		'l3-font-awesome',
@@ -143,6 +143,16 @@ function l3_info_init() {
         }
     }
 
+    // Registro de Ajustes de API de LinkedIn (Etapa 1 - Clientes)
+    register_setting('l3_options_group', 'l3_linkedin_client_id');
+    register_setting('l3_options_group', 'l3_linkedin_client_secret');
+    
+    // Registro de Ajustes de API de LinkedIn (Etapa 3 - Empresa/Organización)
+    register_setting('l3_options_group', 'l3_linkedin_org_client_id');
+    register_setting('l3_options_group', 'l3_linkedin_org_client_secret');
+    register_setting('l3_options_group', 'l3_linkedin_org_id');
+    register_setting('l3_options_group', 'l3_linkedin_org_token');
+
     add_settings_section('l3_location_section', 'Ubicación Física', null, 'l3_info_settings_page');
     add_settings_section('l3_contact_section', 'Datos de Contacto y Horarios', null, 'l3_info_settings_page');
     add_settings_section('l3_social_section', 'Redes Sociales Corporativas', null, 'l3_info_settings_page');
@@ -163,6 +173,18 @@ function l3_info_init() {
     add_settings_field('field_linkedin', 'LinkedIn (Perfil Empresarial)', 'l3_render_linkedin', 'l3_info_settings_page', 'l3_social_section');
     add_settings_field('field_instagram', 'Instagram', 'l3_render_instagram', 'l3_info_settings_page', 'l3_social_section');
     add_settings_field('field_facebook', 'Facebook', 'l3_render_facebook', 'l3_info_settings_page', 'l3_social_section');
+
+    // Sección y Campos de API de LinkedIn (Etapa 1 - Clientes)
+    add_settings_section('l3_linkedin_api_section', 'Integración de API de LinkedIn (Clientes / Formulario)', null, 'l3_info_settings_page');
+    add_settings_field('field_linkedin_client_id', 'Client ID (Clientes)', 'l3_render_linkedin_client_id', 'l3_info_settings_page', 'l3_linkedin_api_section');
+    add_settings_field('field_linkedin_client_secret', 'Client Secret (Clientes)', 'l3_render_linkedin_client_secret', 'l3_info_settings_page', 'l3_linkedin_api_section');
+    
+    // Sección y Campos de API de LinkedIn (Etapa 3 - Empresa/Organización)
+    add_settings_section('l3_linkedin_org_api_section', 'Integración de API de LinkedIn (Empresa / Autopublicación)', null, 'l3_info_settings_page');
+    add_settings_field('field_linkedin_org_client_id', 'Client ID (Empresa)', 'l3_render_linkedin_org_client_id', 'l3_info_settings_page', 'l3_linkedin_org_api_section');
+    add_settings_field('field_linkedin_org_client_secret', 'Client Secret (Empresa)', 'l3_render_linkedin_org_client_secret', 'l3_info_settings_page', 'l3_linkedin_org_api_section');
+    add_settings_field('field_linkedin_org_id', 'ID de Página de LinkedIn (Organización)', 'l3_render_linkedin_org_id', 'l3_info_settings_page', 'l3_linkedin_org_api_section');
+    add_settings_field('field_linkedin_org_token', 'Token de Organización de Larga Duración', 'l3_render_linkedin_org_token', 'l3_info_settings_page', 'l3_linkedin_org_api_section');
 }
 
 function l3_render_switch($id, $label = 'Mostrar:') {
@@ -308,6 +330,120 @@ function l3_render_facebook() {
     $val = get_option('l3_info_facebook'); 
     echo '<input type="url" name="l3_info_facebook" value="' . esc_attr($val) . '" placeholder="https://..." class="regular-text">'; 
     echo l3_render_switch('l3_info_facebook');
+}
+
+function l3_render_linkedin_client_id() {
+    $val = get_option('l3_linkedin_client_id');
+    echo '<input type="text" name="l3_linkedin_client_id" value="' . esc_attr($val) . '" class="regular-text">';
+    echo '<p class="description">El Client ID obtenido de tu App en el LinkedIn Developer Portal (para logueo de clientes).</p>';
+}
+
+function l3_render_linkedin_client_secret() {
+    $val = get_option('l3_linkedin_client_secret');
+    echo '<input type="password" name="l3_linkedin_client_secret" value="' . esc_attr($val) . '" class="regular-text">';
+    echo '<p class="description">El Client Secret obtenido de tu App en el LinkedIn Developer Portal (para logueo de clientes).</p>';
+}
+
+function l3_render_linkedin_org_client_id() {
+    $val = get_option('l3_linkedin_org_client_id');
+    echo '<input type="text" name="l3_linkedin_org_client_id" value="' . esc_attr($val) . '" class="regular-text">';
+    echo '<p class="description">El Client ID obtenido de tu App secundaria en el LinkedIn Developer Portal (dedicada exclusivamente a la Empresa).</p>';
+}
+
+function l3_render_linkedin_org_client_secret() {
+    $val = get_option('l3_linkedin_org_client_secret');
+    echo '<input type="password" name="l3_linkedin_org_client_secret" value="' . esc_attr($val) . '" class="regular-text">';
+    echo '<p class="description">El Client Secret obtenido de tu App secundaria en el LinkedIn Developer Portal (dedicada exclusivamente a la Empresa).</p>';
+}
+
+function l3_render_linkedin_org_id() {
+    $val = get_option('l3_linkedin_org_id');
+    echo '<input type="text" name="l3_linkedin_org_id" value="' . esc_attr($val) . '" class="regular-text">';
+    echo '<p class="description">El ID numérico de tu página corporativa de LinkedIn (ej: <code>12345678</code>).</p>';
+}
+
+function l3_render_linkedin_org_token() {
+    $val = get_option('l3_linkedin_org_token');
+    $client_id = get_option('l3_linkedin_org_client_id');
+    $client_secret = get_option('l3_linkedin_org_client_secret');
+
+    echo '<div style="display: flex; flex-direction: column; gap: 10px; max-width: 600px;">';
+    echo '  <textarea name="l3_linkedin_org_token" id="l3_linkedin_org_token" rows="3" class="large-text code" style="font-family: monospace;" readonly>' . esc_textarea($val) . '</textarea>';
+    
+    if (!empty($client_id) && !empty($client_secret)) {
+        $redirect_uri = urlencode(admin_url('options-general.php?page=l3_info_settings_page'));
+        $state = wp_create_nonce('l3_linkedin_admin_oauth');
+        // Scopes estándar activos en tu App de LinkedIn de Empresa (incluyendo el de Empresa)
+        $scope = urlencode('openid profile email w_member_social w_organization_social');
+        $auth_url = "https://www.linkedin.com/oauth/v2/authorization?response_type=code&client_id={$client_id}&redirect_uri={$redirect_uri}&state={$state}&scope={$scope}";
+        
+        echo '  <div>';
+        echo '    <a href="' . esc_url($auth_url) . '" class="button button-secondary" style="background: #0077b5; color: #fff; border-color: #0077b5; font-weight: 500; display: inline-flex; align-items: center; gap: 5px;">';
+        echo '      <span class="dashicons dashicons-linkedin" style="margin-top: 1px;"></span>';
+        echo '      Generar / Actualizar Token de LinkedIn (Empresa)';
+        echo '    </a>';
+        echo '  </div>';
+    } else {
+        echo '  <p style="color: #d63638; font-weight: 500; margin: 0;">⚠️ Ingresa tu Client ID (Empresa) y Client Secret (Empresa) primero, guarda los cambios y luego podrás generar el Token con un clic.</p>';
+    }
+    
+    echo '  <p class="description" style="margin: 0;">Token de acceso de larga duración con permisos de organización (<code>w_organization_social</code>) para publicar reseñas en el perfil de la empresa.</p>';
+    echo '</div>';
+}
+
+// 2.5 Capturar Callback de OAuth Administrativo para Token Corporativo
+add_action('admin_init', 'l3_linkedin_capture_admin_oauth');
+function l3_linkedin_capture_admin_oauth() {
+    if (isset($_GET['page']) && $_GET['page'] === 'l3_info_settings_page' && isset($_GET['code'])) {
+        // Verificar state de seguridad
+        if (!isset($_GET['state']) || !wp_verify_nonce($_GET['state'], 'l3_linkedin_admin_oauth')) {
+            wp_die('Error de validación de seguridad (state incorrecto). Por favor, intenta de nuevo.');
+        }
+        
+        $code = sanitize_text_field($_GET['code']);
+        $client_id = get_option('l3_linkedin_org_client_id');
+        $client_secret = get_option('l3_linkedin_org_client_secret');
+        $redirect_uri = admin_url('options-general.php?page=l3_info_settings_page');
+        
+        // Intercambiar código temporal por token de acceso real
+        $response = wp_remote_post('https://www.linkedin.com/oauth/v2/accessToken', array(
+            'body' => array(
+                'grant_type'    => 'authorization_code',
+                'code'          => $code,
+                'redirect_uri'  => $redirect_uri,
+                'client_id'     => $client_id,
+                'client_secret' => $client_secret,
+            )
+        ));
+        
+        if (is_wp_error($response)) {
+            wp_redirect(admin_url('options-general.php?page=l3_info_settings_page&l3_oauth_error=' . urlencode($response->get_error_message())));
+            exit;
+        }
+        
+        $body = json_decode(wp_remote_retrieve_body($response), true);
+        if (isset($body['access_token'])) {
+            update_option('l3_linkedin_org_token', $body['access_token']);
+            wp_redirect(admin_url('options-general.php?page=l3_info_settings_page&l3_oauth_success=1'));
+            exit;
+        } else {
+            $err_msg = isset($body['error_description']) ? $body['error_description'] : 'Error desconocido al canjear el token.';
+            wp_redirect(admin_url('options-general.php?page=l3_info_settings_page&l3_oauth_error=' . urlencode($err_msg)));
+            exit;
+        }
+    }
+}
+
+// Avisos de éxito/error de OAuth en el panel
+add_action('admin_notices', 'l3_linkedin_oauth_notices');
+function l3_linkedin_oauth_notices() {
+    if (isset($_GET['page']) && $_GET['page'] === 'l3_info_settings_page') {
+        if (isset($_GET['l3_oauth_success'])) {
+            echo '<div class="notice notice-success is-dismissible"><p><strong>✓ ¡Éxito!</strong> El Token de Organización de LinkedIn se ha generado y guardado correctamente.</p></div>';
+        } elseif (isset($_GET['l3_oauth_error'])) {
+            echo '<div class="notice notice-error is-dismissible"><p><strong>❌ Error de LinkedIn:</strong> ' . esc_html(sanitize_text_field($_GET['l3_oauth_error'])) . '</p></div>';
+        }
+    }
 }
 
 // 3. Render de la página
@@ -3496,7 +3632,14 @@ function l3_resena_details_callback($post): void
 			<!-- Flujo LinkedIn (Solo Lectura) -->
 			<div class="l3-resena-grid-2">
 				<div class="l3-resena-field">
-					<label for="l3_resena_linkedin_url"><strong>URL del perfil de LinkedIn</strong></label>
+					<label for="l3_resena_linkedin_url">
+						<strong>URL del perfil de LinkedIn</strong>
+						<?php if (!empty($nombre)): ?>
+							<a href="https://www.linkedin.com/search/results/people/?keywords=<?php echo urlencode($nombre); ?>" target="_blank" style="margin-left: 10px; text-decoration: none; font-size: 11px; padding: 0 8px; line-height: 2; height: 22px;" class="button button-secondary">
+								<span class="dashicons dashicons-search" style="vertical-align: middle; font-size: 13px; width: 13px; height: 13px; margin-top: -3px;"></span> Buscar en LinkedIn
+							</a>
+						<?php endif; ?>
+					</label>
 					<input
 						type="url"
 						id="l3_resena_linkedin_url"
@@ -3520,6 +3663,22 @@ function l3_resena_details_callback($post): void
 					</label>
 					<p class="description">Este campo fue definido por el usuario vía OAuth y no puede ser modificado.</p>
 				</div>
+
+				<?php 
+				$linkedin_logs = get_post_meta($post->ID, '_l3_resena_linkedin_logs', true);
+				if (!empty($linkedin_logs) && is_array($linkedin_logs)): 
+				?>
+					<div class="l3-resena-field" style="grid-column: span 2; margin-top: 20px;">
+						<label><strong>Historial de Publicación Automática (LinkedIn API Logs)</strong></label>
+						<div style="background: #111; color: #00ff66; padding: 12px 15px; border-radius: 6px; font-family: 'Courier New', Courier, monospace; font-size: 12px; line-height: 1.6; max-height: 250px; overflow-y: auto; border: 1px solid #222; margin-top: 8px; box-shadow: inset 0 0 10px rgba(0,0,0,0.8);">
+							<?php foreach ($linkedin_logs as $log): ?>
+								<div style="margin-bottom: 5px; border-bottom: 1px solid #222; padding-bottom: 5px;">
+									<span style="color: #00bcff;">&gt;</span> <?php echo esc_html($log); ?>
+								</div>
+							<?php endforeach; ?>
+						</div>
+					</div>
+				<?php endif; ?>
 			</div>
 		<?php else: ?>
 			<!-- Flujo Manual (Redes sociales variadas) -->
@@ -4161,13 +4320,13 @@ function l3_resenas_frontend_scripts(): void
 			'l3-resenas-frontend',
 			get_stylesheet_directory_uri() . '/assets/css/resenas-frontend.css',
 			array(),
-			'1.0.0'
+			filemtime(get_stylesheet_directory() . '/assets/css/resenas-frontend.css')
 		);
 		wp_enqueue_script(
 			'l3-resenas-frontend',
 			get_stylesheet_directory_uri() . '/assets/js/resenas-frontend.js',
 			array('jquery'),
-			'1.0.0',
+			filemtime(get_stylesheet_directory() . '/assets/js/resenas-frontend.js'),
 			true
 		);
 
@@ -4175,7 +4334,8 @@ function l3_resenas_frontend_scripts(): void
 		wp_localize_script('l3-resenas-frontend', 'l3_resenas_params', array(
 			'ajax_url' => admin_url('admin-ajax.php'),
 			'nonce'    => wp_create_nonce('l3_resena_submit_nonce'),
-			'default_avatar' => get_avatar_url(0, array('size' => 120))
+			'default_avatar' => get_avatar_url(0, array('size' => 120)),
+			'linkedin_auth_url' => l3_get_linkedin_auth_url()
 		));
 	}
 }
@@ -4301,6 +4461,9 @@ function l3_submit_resena_ajax_handler(): void
 	if ($via_linkedin === '1') {
 		update_post_meta($post_id, '_l3_resena_linkedin_url', $linkedin_url);
 		update_post_meta($post_id, '_l3_resena_linkedin_auth', $linkedin_auth);
+		if (isset($_POST['resena_linkedin_user_token'])) {
+			update_post_meta($post_id, '_l3_resena_linkedin_user_token', sanitize_text_field($_POST['resena_linkedin_user_token']));
+		}
 	} else {
 		update_post_meta($post_id, '_l3_resena_red_social_tipo', $red_social_tipo);
 		update_post_meta($post_id, '_l3_resena_red_social_url', $red_social_url);
@@ -4317,3 +4480,315 @@ function l3_submit_resena_ajax_handler(): void
 }
 add_action('wp_ajax_nopriv_l3_submit_resena', 'l3_submit_resena_ajax_handler');
 add_action('wp_ajax_l3_submit_resena', 'l3_submit_resena_ajax_handler');
+
+/**
+ * 10. Lógica de Autenticación de Usuarios con LinkedIn (Flujo OAuth Real Frontend)
+ */
+function l3_get_linkedin_auth_url() {
+	$client_id = get_option('l3_linkedin_client_id');
+	if (empty($client_id)) {
+		return '#';
+	}
+	// URL actual limpia (sin parámetros viejos)
+	$current_url = home_url(wp_make_link_relative(strtok($_SERVER['REQUEST_URI'], '?')));
+	
+	$redirect_uri = urlencode($current_url);
+	$state = wp_create_nonce('l3_linkedin_user_oauth');
+	$scope = urlencode('openid profile email w_member_social');
+	
+	return "https://www.linkedin.com/oauth/v2/authorization?response_type=code&client_id={$client_id}&redirect_uri={$redirect_uri}&state={$state}&scope={$scope}";
+}
+
+add_action('wp', 'l3_linkedin_handle_user_callback');
+function l3_linkedin_handle_user_callback() {
+	if (isset($_GET['code']) && isset($_GET['state']) && !is_admin()) {
+		if (wp_verify_nonce($_GET['state'], 'l3_linkedin_user_oauth')) {
+			$code = sanitize_text_field($_GET['code']);
+			$client_id = get_option('l3_linkedin_client_id');
+			$client_secret = get_option('l3_linkedin_client_secret');
+			$redirect_uri = home_url(wp_make_link_relative(strtok($_SERVER['REQUEST_URI'], '?')));
+			
+			// Intercambiar código por Access Token del usuario
+			$response = wp_remote_post('https://www.linkedin.com/oauth/v2/accessToken', array(
+				'body' => array(
+					'grant_type'    => 'authorization_code',
+					'code'          => $code,
+					'redirect_uri'  => $redirect_uri,
+					'client_id'     => $client_id,
+					'client_secret' => $client_secret,
+				)
+			));
+			
+			if (is_wp_error($response)) {
+				return;
+			}
+			
+			$body = json_decode(wp_remote_retrieve_body($response), true);
+			if (isset($body['access_token'])) {
+				$user_token = $body['access_token'];
+				
+				// Obtener perfil mediante OpenID Connect UserInfo
+				$profile_response = wp_remote_get('https://api.linkedin.com/v2/userinfo', array(
+					'headers' => array(
+						'Authorization' => 'Bearer ' . $user_token
+					)
+				));
+				
+				if (!is_wp_error($profile_response)) {
+					$profile = json_decode(wp_remote_retrieve_body($profile_response), true);
+					if (isset($profile['name'])) {
+						global $l3_linkedin_user_data;
+						$l3_linkedin_user_data = array(
+							'name'   => $profile['name'],
+							'avatar' => isset($profile['picture']) ? $profile['picture'] : '',
+							'url'    => 'https://www.linkedin.com/', // URL base por defecto
+							'token'  => $user_token
+						);
+					}
+				}
+			}
+		}
+	}
+}
+
+add_action('wp_footer', 'l3_linkedin_inject_user_data_js');
+function l3_linkedin_inject_user_data_js() {
+	global $l3_linkedin_user_data;
+	if (!empty($l3_linkedin_user_data)) {
+		?>
+		<script type="text/javascript">
+		jQuery(document).ready(function($) {
+			// Inyectar datos en inputs ocultos del formulario
+			$('#resena_linkedin_nombre').val(<?php echo wp_json_encode($l3_linkedin_user_data['name']); ?>);
+			$('#resena_linkedin_avatar').val(<?php echo wp_json_encode($l3_linkedin_user_data['avatar']); ?>);
+			$('#resena_linkedin_url').val(<?php echo wp_json_encode($l3_linkedin_user_data['url']); ?>);
+			
+			// Previsualizar en la tarjeta interactiva
+			$('#l3-card-name').text(<?php echo wp_json_encode($l3_linkedin_user_data['name']); ?>);
+			if (<?php echo wp_json_encode($l3_linkedin_user_data['avatar']); ?>) {
+				$('#l3-card-avatar').attr('src', <?php echo wp_json_encode($l3_linkedin_user_data['avatar']); ?>);
+			}
+			$('#l3-card-profile-url').attr('href', <?php echo wp_json_encode($l3_linkedin_user_data['url']); ?>).text(<?php echo wp_json_encode($l3_linkedin_user_data['url']); ?>);
+			
+			// Ajustar valores del paso y visibilidad
+			$('input[name="resena_via_linkedin"]').val('1');
+			
+			// Cambiar automáticamente al paso del formulario de LinkedIn
+			$('#l3-step-welcome').removeClass('l3-active-step').hide();
+			$('#l3-step-linkedin-flow').show().addClass('l3-active-step');
+			
+			// Añadir campo para pasar el Token de Usuario al AJAX de envío
+			$('<input>').attr({
+				type: 'hidden',
+				id: 'resena_linkedin_user_token',
+				name: 'resena_linkedin_user_token',
+				value: <?php echo wp_json_encode($l3_linkedin_user_data['token']); ?>
+			}).appendTo('#l3-form-linkedin');
+		});
+		</script>
+		<?php
+	}
+}
+
+/**
+ * 11. Registro del Patrón de Reseñas FSE desde el archivo HTML
+ */
+add_action('init', 'l3_register_formulario_resenas_pattern');
+function l3_register_formulario_resenas_pattern(): void {
+	$file_path = get_stylesheet_directory() . '/patterns/formulario-resenas.html';
+	$content = '';
+	if (file_exists($file_path)) {
+		$content = file_get_contents($file_path);
+		// Eliminar la cabecera PHP para que solo quede el marcado HTML de bloques Gutenberg limpio
+		$content = preg_replace('/<\?php.*?\?>/s', '', $content);
+	}
+	
+	register_block_pattern('linea3-legal-child/formulario-resenas', array(
+		'title'       => 'Formulario de Registro de Reseñas',
+		'description' => 'Formulario interactivo premium de doble flujo para enviar reseñas de clientes.',
+		'categories'  => array('antigravity-patterns'),
+		'content'     => $content,
+	));
+}
+
+/**
+ * 12. Hook de transiciónd de estado: Detectar aprobación y disparar autopublicación
+ */
+add_action('transition_post_status', 'l3_resena_status_transition', 10, 3);
+function l3_resena_status_transition($new_status, $old_status, $post): void {
+	if ($post->post_type !== 'l3_resena') {
+		return;
+	}
+
+	// Ejecutar únicamente cuando pase de cualquier estado a "Publicado" (aprobación)
+	if ($new_status === 'publish' && $old_status !== 'publish') {
+		l3_publish_resena_to_linkedin($post->ID);
+	}
+}
+
+/**
+ * 13. Publicación automática a LinkedIn (Personal y Corporativa)
+ */
+function l3_publish_resena_to_linkedin(int $post_id): void {
+	// Prevenir publicaciones duplicadas por guardado concurrente o re-edición
+	$already_published = get_post_meta($post_id, '_l3_resena_published_to_linkedin', true);
+	if ($already_published === '1') {
+		return;
+	}
+	update_post_meta($post_id, '_l3_resena_published_to_linkedin', '1');
+
+	// Obtener metadatos de la reseña
+	$nombre        = get_post_meta($post_id, '_l3_resena_nombre', true);
+	$contenido     = get_post_meta($post_id, '_l3_resena_contenido', true);
+	$cargo         = get_post_meta($post_id, '_l3_resena_cargo', true);
+	$empresa       = get_post_meta($post_id, '_l3_resena_empresa', true);
+	$via_linkedin  = get_post_meta($post_id, '_l3_resena_via_linkedin', true);
+	$linkedin_auth = get_post_meta($post_id, '_l3_resena_linkedin_auth', true);
+	$user_token    = get_post_meta($post_id, '_l3_resena_linkedin_user_token', true);
+
+	$logs = array();
+	$logs[] = "[" . date('H:i:s') . "] Iniciando motor de publicación para Reseña ID: " . $post_id;
+
+	// ── 1. PUBLICACIÓN CORPORATIVA (Muro de la Empresa) ──
+	$org_id    = get_option('l3_linkedin_org_id');
+	$org_token = get_option('l3_linkedin_org_token');
+
+	if (!empty($org_id) && !empty($org_token)) {
+		$logs[] = "[" . date('H:i:s') . "] Configuración de Organización válida encontrada. ID: " . $org_id;
+
+		// Construir firma del autor
+		$autor_firma = $nombre;
+		if (!empty($cargo)) {
+			$autor_firma .= ", " . $cargo;
+		}
+		if (!empty($empresa)) {
+			$autor_firma .= " en " . $empresa;
+		}
+
+		$post_text = "¡Agradecemos a {$autor_firma} por compartir su valioso testimonio con nosotros!\n\n\"{$contenido}\"\n\n#Testimonio #Linea3Legal #EstudioLegal";
+
+		$payload = array(
+			'author' => 'urn:li:organization:' . trim($org_id),
+			'lifecycleState' => 'PUBLISHED',
+			'specificContent' => array(
+				'com.linkedin.ugc.ShareContent' => array(
+					'shareCommentary' => array(
+						'text' => $post_text
+					),
+					'shareMediaCategory' => 'NONE'
+				)
+			),
+			'visibility' => array(
+				'com.linkedin.ugc.MemberNetworkVisibility' => 'PUBLIC'
+			)
+		);
+
+		$response = wp_remote_post('https://api.linkedin.com/v2/ugcPosts', array(
+			'headers' => array(
+				'Authorization' => 'Bearer ' . $org_token,
+				'Content-Type'  => 'application/json',
+				'X-Restli-Protocol-Version' => '2.0.0'
+			),
+			'body' => json_encode($payload),
+			'timeout' => 15
+		));
+
+		if (is_wp_error($response)) {
+			$logs[] = "[" . date('H:i:s') . "] ERROR (Organización): " . $response->get_error_message();
+		} else {
+			$status_code = wp_remote_retrieve_response_code($response);
+			$body = wp_remote_retrieve_body($response);
+			$logs[] = "[" . date('H:i:s') . "] Respuesta Organización (HTTP {$status_code}): " . esc_html(mb_strimwidth($body, 0, 150, '...'));
+		}
+	} else {
+		$logs[] = "[" . date('H:i:s') . "] Omitiendo publicación en Organización: ID o Token no configurados.";
+	}
+
+	// ── 2. PUBLICACIÓN PERSONAL (Muro del Cliente) ──
+	if ($via_linkedin === '1' && $linkedin_auth === '1' && !empty($user_token)) {
+		$logs[] = "[" . date('H:i:s') . "] Usuario autorizó publicación personal y el token existe.";
+
+		// Recuperar el ID del miembro (sub) dinámicamente mediante el token del usuario
+		$profile_response = wp_remote_get('https://api.linkedin.com/v2/userinfo', array(
+			'headers' => array(
+				'Authorization' => 'Bearer ' . $user_token
+			),
+			'timeout' => 15
+		));
+
+		if (is_wp_error($profile_response)) {
+			$logs[] = "[" . date('H:i:s') . "] ERROR al recuperar ID de miembro: " . $profile_response->get_error_message();
+		} else {
+			$profile_status = wp_remote_retrieve_response_code($profile_response);
+			if ($profile_status === 200) {
+				$profile_data = json_decode(wp_remote_retrieve_body($profile_response), true);
+				$member_id    = $profile_data['sub'] ?? '';
+
+				if (!empty($member_id)) {
+					$logs[] = "[" . date('H:i:s') . "] ID de Miembro recuperado con éxito: " . $member_id;
+
+					// Construir mensaje de recomendación personal
+					$user_post_text = "He dejado mi recomendación para Línea 3 Estudio Legal:\n\n\"{$contenido}\"\n\nOrgulloso de trabajar con profesionales del más alto nivel. #Linea3Legal #Recomendacion #EstudioLegal";
+
+					$user_payload = array(
+						'author' => 'urn:li:person:' . $member_id,
+						'lifecycleState' => 'PUBLISHED',
+						'specificContent' => array(
+							'com.linkedin.ugc.ShareContent' => array(
+								'shareCommentary' => array(
+									'text' => $user_post_text
+								),
+								'shareMediaCategory' => 'NONE'
+							)
+						),
+						'visibility' => array(
+							'com.linkedin.ugc.MemberNetworkVisibility' => 'PUBLIC'
+						)
+					);
+
+					$user_publish_response = wp_remote_post('https://api.linkedin.com/v2/ugcPosts', array(
+						'headers' => array(
+							'Authorization' => 'Bearer ' . $user_token,
+							'Content-Type'  => 'application/json',
+							'X-Restli-Protocol-Version' => '2.0.0'
+						),
+						'body' => json_encode($user_payload),
+						'timeout' => 15
+					));
+
+					if (is_wp_error($user_publish_response)) {
+						$logs[] = "[" . date('H:i:s') . "] ERROR (Perfil Personal): " . $user_publish_response->get_error_message();
+					} else {
+						$user_status_code = wp_remote_retrieve_response_code($user_publish_response);
+						$user_body = wp_remote_retrieve_body($user_publish_response);
+						$logs[] = "[" . date('H:i:s') . "] Respuesta Perfil Personal (HTTP {$user_status_code}): " . esc_html(mb_strimwidth($user_body, 0, 150, '...'));
+					}
+				} else {
+					$logs[] = "[" . date('H:i:s') . "] ERROR: No se encontró el campo 'sub' en la respuesta del perfil.";
+				}
+			} else {
+				$logs[] = "[" . date('H:i:s') . "] ERROR (HTTP {$profile_status}) al consultar perfil de usuario.";
+			}
+		}
+	} else {
+		$logs[] = "[" . date('H:i:s') . "] Omitiendo publicación personal: No autenticado vía OAuth o no autorizó.";
+	}
+
+	$logs[] = "[" . date('H:i:s') . "] Motor de publicación finalizado.";
+
+	// Guardar el historial de ejecución para auditoría del administrador
+}
+
+/**
+ * 14. Forzar el color de fondo exacto del header (#0a2233) dinámicamente vía PHP
+ * Esto evita problemas de caché de archivos estáticos (Nginx sendfile/Docker sync)
+ */
+add_action('wp_head', function(): void {
+	?>
+	<style id="l3-header-background-override">
+	.header-main-container {
+		background-color: #0a2233 !important;
+	}
+	</style>
+	<?php
+}, 999);

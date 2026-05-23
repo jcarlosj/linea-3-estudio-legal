@@ -9,6 +9,11 @@ jQuery(document).ready(function($) {
 		return;
 	}
 
+	// Inyectar URL de OAuth de LinkedIn real en el botón desde el backend
+	if (typeof l3_resenas_params !== 'undefined' && l3_resenas_params.linkedin_auth_url) {
+		$('#l3-real-linkedin-btn').attr('href', l3_resenas_params.linkedin_auth_url);
+	}
+
 	// ── Variables de Estado ──
 	var currentFlow = ''; // 'linkedin' o 'manual'
 	var selectedRating = 0;
@@ -296,7 +301,7 @@ jQuery(document).ready(function($) {
 			return;
 		}
 
-		if (currentFlow === 'linkedin') {
+		if ($form.attr('id') === 'l3-form-linkedin') {
 			// Datos flujo LinkedIn
 			formData.append('nombre', $linkedinNameInput.val());
 			formData.append('linkedin_url', $linkedinUrlInput.val());
@@ -307,6 +312,12 @@ jQuery(document).ready(function($) {
 			
 			var linkedinAuth = $('#resena_linkedin_auth').is(':checked') ? '1' : '0';
 			formData.append('linkedin_auth', linkedinAuth);
+
+			// Adjuntar token de usuario si se recuperó en el redireccionamiento
+			var userToken = $('#resena_linkedin_user_token').val();
+			if (userToken) {
+				formData.append('resena_linkedin_user_token', userToken);
+			}
 		} else {
 			// Datos flujo manual
 			formData.append('nombre', $('#resena_nombre_b').val());

@@ -222,41 +222,27 @@
 </div>
 <!-- /wp:group -->
 
-<!-- ── 5. Modal de Simulación LinkedIn OAuth (Elegancia Absoluta) ── -->
+<!-- ── 5. Modal de Conexión Real LinkedIn OAuth ── -->
 <div id="l3-linkedin-modal" class="l3-linkedin-modal-overlay">
 	<div class="l3-linkedin-modal">
 		
 		<div class="l3-linkedin-modal-header">
-			<h4>Conectar con LinkedIn</h4>
+			<h4>Conectar con tu cuenta</h4>
 			<button type="button" class="l3-linkedin-close" aria-label="Cerrar">&times;</button>
 		</div>
 
-		<div class="l3-linkedin-modal-body">
-			<span class="dashicons dashicons-linkedin l3-linkedin-modal-logo"></span>
-			<p>Línea 3 Estudio Legal solicita acceso a tu nombre, cargo de perfil, empresa y foto de perfil verificados.</p>
-			
-			<p style="font-size: 11px; color: var(--l3-text-muted); margin-bottom: 16px;">
-				Selecciona una cuenta de LinkedIn para la demostración interactiva:
+		<div class="l3-linkedin-modal-body" style="text-align: center; padding: 24px;">
+			<span class="dashicons dashicons-linkedin l3-linkedin-modal-logo" style="font-size: 48px; width: 48px; height: 48px; color: #0077b5; margin-bottom: 15px;"></span>
+			<p style="font-weight: 500; font-size: 16px; margin-bottom: 10px;">Verificación con LinkedIn</p>
+			<p style="font-size: 13px; color: var(--l3-text-muted); line-height: 1.6; margin-bottom: 24px;">
+				Para garantizar la autenticidad de tu reseña, inicia sesión con tu perfil verificado de LinkedIn. Únicamente leeremos tu nombre de perfil y foto de perfil.
 			</p>
-
-			<div class="l3-linkedin-select-profile">
-				
-				<div class="l3-linkedin-profile-option" data-profile="profile1">
-					<img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&h=80&fit=crop&crop=faces" alt="Juan Pérez">
-					<div>
-						<div class="l3-linkedin-profile-option-name">Juan Pérez Alarcón</div>
-						<div class="l3-linkedin-profile-option-title">Director Jurídico en Corporación Alpha</div>
-					</div>
-				</div>
-
-				<div class="l3-linkedin-profile-option" data-profile="profile2">
-					<img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop&crop=faces" alt="Laura Restrepo">
-					<div>
-						<div class="l3-linkedin-profile-option-name">Laura Sofía Restrepo</div>
-						<div class="l3-linkedin-profile-option-title">Coordinadora RRHH en Talent Group</div>
-					</div>
-				</div>
-
+			
+			<div class="l3-linkedin-connect-btn-wrapper">
+				<a href="#" id="l3-real-linkedin-btn" class="l3-btn-flow l3-btn-flow--linkedin" style="display: inline-flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; width: 100%; box-sizing: border-box; background: #0077b5; color: #fff; border-radius: 4px; padding: 12px; font-weight: 500; transition: background 0.2s;">
+					<span class="dashicons dashicons-linkedin" style="margin-top: 1px;"></span>
+					Iniciar sesión con LinkedIn
+				</a>
 			</div>
 		</div>
 

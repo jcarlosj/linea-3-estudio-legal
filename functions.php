@@ -19,7 +19,7 @@ if (!defined('ABSPATH')) {
  */
 function linea3_legal_child_enqueue_styles(): void
 {
-	$version = '1.4.8'; // Versión de Estabilización y Diseño Editorial
+	$version = '1.4.9'; // Versión de Estabilización y Diseño Editorial
 
 	wp_enqueue_style(
 		'l3-font-awesome',
@@ -1196,6 +1196,34 @@ function antigravity_register_block_patterns(): void
 
         <!-- wp:shortcode -->
         [antigravity_allies_grid]
+        <!-- /wp:shortcode -->
+    </div>
+    <!-- /wp:group -->
+</div>
+<!-- /wp:group -->'
+    ));
+
+    register_block_pattern('antigravity/testimonios-slider', array(
+        'title' => 'Testimonios de Clientes (Slider)',
+        'categories' => array('antigravity-patterns'),
+        'content' => '<!-- wp:group {"align":"full","className":"l3-allies-section","layout":{"type":"constrained"}} -->
+<div class="wp-block-group alignfull l3-allies-section">
+    <!-- wp:group {"className":"l3-container-standard","layout":{"type":"constrained"}} -->
+    <div class="wp-block-group l3-container-standard">
+        <!-- wp:group {"className":"l3-allies-header-centered","layout":{"type":"constrained"}} -->
+        <div class="wp-block-group l3-allies-header-centered">
+            <!-- wp:paragraph {"className":"services-eyebrow"} -->
+            <p class="services-eyebrow">EXPERIENCIA Y CONFIANZA</p>
+            <!-- /wp:paragraph -->
+
+            <!-- wp:heading {"level":2,"className":"services-title"} -->
+            <h2 class="wp-block-heading services-title">Testimonios de nuestros clientes</h2>
+            <!-- /wp:heading -->
+        </div>
+        <!-- /wp:group -->
+
+        <!-- wp:shortcode -->
+        [antigravity_reviews_slider]
         <!-- /wp:shortcode -->
     </div>
     <!-- /wp:group -->
@@ -4792,3 +4820,229 @@ add_action('wp_head', function(): void {
 	</style>
 	<?php
 }, 999);
+
+/**
+ * 15. Shortcode para mostrar el Slider de Testimonios/Reseñas de Clientes.
+ */
+function l3_reviews_slider_shortcode($atts): string
+{
+	$args = array(
+		'post_type'      => 'l3_resena',
+		'posts_per_page' => -1,
+		'post_status'    => 'publish',
+		'orderby'        => 'date',
+		'order'          => 'DESC',
+	);
+
+	$query = new WP_Query($args);
+	if (!$query->have_posts()) {
+		return '';
+	}
+
+	$slider_id = 'l3-reviews-slider-' . uniqid();
+
+	$output = '<div class="l3-reviews-slider-container" id="' . $slider_id . '">';
+	
+	// Botón anterior
+	$output .= '<button class="l3-slider-btn prev" aria-label="Anterior"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg></button>';
+	
+	$output .= '<div class="l3-reviews-slider-viewport">';
+	$output .= '<div class="l3-reviews-slider-track">';
+	
+	while ($query->have_posts()) {
+		$query->the_post();
+		$post_id = get_the_ID();
+		
+		// Obtener campos de la reseña
+		$nombre        = get_post_meta($post_id, '_l3_resena_nombre', true);
+		$contenido     = get_post_meta($post_id, '_l3_resena_contenido', true);
+		$rating        = intval(get_post_meta($post_id, '_l3_resena_rating', true));
+		$via_linkedin  = get_post_meta($post_id, '_l3_resena_via_linkedin', true);
+		$empresa       = get_post_meta($post_id, '_l3_resena_empresa', true);
+		$cargo         = get_post_meta($post_id, '_l3_resena_cargo', true);
+		$foto_url      = get_post_meta($post_id, '_l3_resena_foto', true);
+		$linkedin_url  = get_post_meta($post_id, '_l3_resena_linkedin_url', true);
+		
+		// Fallbacks
+		if (empty($nombre)) {
+			$nombre = get_the_title();
+		}
+		if (empty($contenido)) {
+			$contenido = get_the_content();
+		}
+		// Limitar contenido a un tamaño sensato si es muy largo, para mantener homogeneidad
+		if (mb_strlen($contenido) > 180) {
+			$contenido = mb_substr($contenido, 0, 177) . '...';
+		}
+		if ($rating <= 0 || $rating > 5) {
+			$rating = 5;
+		}
+		if (empty($foto_url)) {
+			$foto_url = 'https://secure.gravatar.com/avatar/ad516503a11cd5ca435acc9bb6523536?s=150&d=mm&r=g';
+		}
+		if (empty($cargo)) {
+			$cargo = 'Cliente';
+		}
+		
+		$output .= '<div class="l3-review-card">';
+		
+		// Estrellas
+		$output .= '<div class="l3-review-stars">';
+		for ($i = 0; $i < 5; $i++) {
+			if ($i < $rating) {
+				// Estrella rellena
+				$output .= '<svg viewBox="0 0 24 24"><path d="M12 .587l3.668 7.431 8.2 1.191-5.934 5.787 1.4 8.168L12 18.896l-7.334 3.857 1.4-8.168L.132 9.209l8.2-1.191L12 .587z"/></svg>';
+			} else {
+				// Estrella vacía
+				$output .= '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>';
+			}
+		}
+		$output .= '</div>';
+		
+		// Cita de opinión
+		$output .= '<div class="l3-review-quote">';
+		$output .= esc_html($contenido);
+		$output .= '</div>';
+		
+		// Autor e información profesional
+		$output .= '<div class="l3-review-author">';
+		$output .= '<img class="l3-review-avatar" src="' . esc_url($foto_url) . '" alt="' . esc_attr($nombre) . '" loading="lazy">';
+		
+		$output .= '<div class="l3-review-meta">';
+		
+		// Nombre + Insignia de LinkedIn
+		$output .= '<div class="l3-review-name-row">';
+		$output .= '<span class="l3-review-name">' . esc_html($nombre) . '</span>';
+		
+		if ($via_linkedin) {
+			if (!empty($linkedin_url)) {
+				$output .= '<a href="' . esc_url($linkedin_url) . '" target="_blank" rel="noopener noreferrer" class="l3-review-linkedin-badge" aria-label="Perfil de LinkedIn de ' . esc_attr($nombre) . '">';
+			} else {
+				$output .= '<span class="l3-review-linkedin-badge">';
+			}
+			$output .= '<svg viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>';
+			if (!empty($linkedin_url)) {
+				$output .= '</a>';
+			} else {
+				$output .= '</span>';
+			}
+		}
+		
+		$output .= '</div>'; // End name row
+		
+		// Cargo + Empresa
+		$title_display = esc_html($cargo);
+		if (!empty($empresa)) {
+			$title_display .= ' en ' . esc_html($empresa);
+		}
+		$output .= '<span class="l3-review-title">' . $title_display . '</span>';
+		
+		$output .= '</div>'; // End meta
+		$output .= '</div>'; // End author
+		
+		$output .= '</div>'; // End card
+	}
+	wp_reset_postdata();
+	
+	$output .= '</div>'; // End track
+	$output .= '</div>'; // End viewport
+	
+	// Botón siguiente
+	$output .= '<button class="l3-slider-btn next" aria-label="Siguiente"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg></button>';
+	
+	$output .= '</div>'; // End container
+
+	// JavaScript para el Slider de Testimonios
+	$output .= "
+	<script>
+	document.addEventListener('DOMContentLoaded', function() {
+		const container = document.getElementById('" . $slider_id . "');
+		if (!container) return;
+
+		const track = container.querySelector('.l3-reviews-slider-track');
+		const viewport = container.querySelector('.l3-reviews-slider-viewport');
+		const btnPrev = container.querySelector('.l3-slider-btn.prev');
+		const btnNext = container.querySelector('.l3-slider-btn.next');
+		
+		let index = 0;
+		let autoplayInterval;
+
+		function getVisibleCards() {
+			const cards = container.querySelectorAll('.l3-review-card');
+			if (cards.length === 0) return 1;
+			const cardWidth = cards[0].offsetWidth + 20; // 20 is gap
+			return Math.max(1, Math.floor(viewport.offsetWidth / cardWidth));
+		}
+
+		function updateSlider() {
+			const cards = container.querySelectorAll('.l3-review-card');
+			if (cards.length === 0) return;
+			const cardWidth = cards[0].offsetWidth + 20;
+			const maxIndex = cards.length - getVisibleCards();
+			
+			if (index > maxIndex) index = 0;
+			if (index < 0) index = maxIndex > 0 ? maxIndex : 0;
+
+			const offset = index * cardWidth;
+			track.style.transform = 'translateX(-' + offset + 'px)';
+		}
+
+		function nextSlide() {
+			index++;
+			updateSlider();
+		}
+
+		function prevSlide() {
+			index--;
+			updateSlider();
+		}
+
+		function startAutoplay() {
+			stopAutoplay();
+			autoplayInterval = setInterval(nextSlide, 5000);
+		}
+
+		function stopAutoplay() {
+			if (autoplayInterval) clearInterval(autoplayInterval);
+		}
+
+		btnNext.addEventListener('click', () => {
+			nextSlide();
+			startAutoplay();
+		});
+
+		btnPrev.addEventListener('click', () => {
+			prevSlide();
+			startAutoplay();
+		});
+
+		// Hover triggers to pause/play autoplay
+		container.addEventListener('mouseenter', stopAutoplay);
+		container.addEventListener('mouseleave', startAutoplay);
+
+		// Touch swipe events for mobile devices
+		let touchStartX = 0;
+		viewport.addEventListener('touchstart', (e) => {
+			touchStartX = e.touches[0].clientX;
+			stopAutoplay();
+		}, { passive: true });
+
+		viewport.addEventListener('touchend', (e) => {
+			const touchEndX = e.changedTouches[0].clientX;
+			if (touchStartX - touchEndX > 50) nextSlide();
+			if (touchStartX - touchEndX < -50) prevSlide();
+			startAutoplay();
+		}, { passive: true });
+
+		window.addEventListener('resize', updateSlider);
+		
+		// Initial setup
+		setTimeout(updateSlider, 200);
+		startAutoplay();
+	});
+	</script>";
+
+	return $output;
+}
+add_shortcode('antigravity_reviews_slider', 'l3_reviews_slider_shortcode');
+

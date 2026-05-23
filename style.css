@@ -5950,3 +5950,250 @@ body footer .credits-divider,
 body footer .made-with-part {
     display: none !important;
 }
+
+/* ==========================================================================
+   NUEVO PATRÓN PREMIUM: SLIDER / CAROUSEL DE TESTIMONIOS (RESEÑAS CPT)
+   ========================================================================== */
+.l3-reviews-slider-container {
+    position: relative !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 100% !important;
+    max-width: 1400px !important;
+    margin: 40px auto !important;
+    box-sizing: border-box !important;
+}
+
+.l3-reviews-slider-viewport {
+    width: 100% !important;
+    overflow: hidden !important;
+    padding: 25px 0 !important;
+}
+
+.l3-reviews-slider-track {
+    display: flex !important;
+    transition: transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1) !important;
+    gap: 20px !important;
+    will-change: transform !important;
+}
+
+/* Tarjeta de Reseña (Premium Glassmorphic-Dark) */
+.l3-review-card {
+    flex: 0 0 calc((100% - 40px) / 3) !important; /* Default 3 cards visible */
+    background: #132238 !important;
+    border: 1px solid rgba(184, 150, 100, 0.18) !important;
+    border-radius: 8px !important;
+    padding: 30px !important;
+    box-sizing: border-box !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+    min-height: 360px !important;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25) !important;
+    transition: all 0.3s ease !important;
+}
+
+.l3-review-card:hover {
+    transform: translateY(-6px) !important;
+    border-color: rgba(184, 150, 100, 0.45) !important;
+    box-shadow: 0 12px 40px rgba(184, 150, 100, 0.12) !important;
+}
+
+/* Calificación por Estrellas (Dorado Premium) */
+.l3-review-stars {
+    display: flex !important;
+    gap: 4px !important;
+    margin-bottom: 18px !important;
+    color: #ce9e50 !important;
+}
+
+.l3-review-stars svg {
+    width: 18px !important;
+    height: 18px !important;
+    fill: currentColor !important;
+}
+
+/* Cita Textual de la Opinión */
+.l3-review-quote {
+    font-family: 'Inter', sans-serif !important;
+    font-size: 0.95rem !important;
+    line-height: 1.7 !important;
+    color: rgba(255, 255, 255, 0.9) !important;
+    margin-bottom: 25px !important;
+    flex-grow: 1 !important;
+    font-style: italic !important;
+}
+
+.l3-review-quote::before {
+    content: "“" !important;
+    font-size: 2.2rem !important;
+    color: #ce9e50 !important;
+    font-family: Georgia, serif !important;
+    line-height: 0 !important;
+    margin-right: 4px !important;
+    vertical-align: -0.45rem !important;
+}
+
+.l3-review-quote::after {
+    content: "”" !important;
+    font-size: 2.2rem !important;
+    color: #ce9e50 !important;
+    font-family: Georgia, serif !important;
+    line-height: 0 !important;
+    margin-left: 2px !important;
+    vertical-align: -0.45rem !important;
+}
+
+/* Sección de Autor y Detalles Profesionales */
+.l3-review-author {
+    display: flex !important;
+    align-items: center !important;
+    gap: 15px !important;
+    border-top: 1px solid rgba(255, 255, 255, 0.08) !important;
+    padding-top: 20px !important;
+}
+
+.l3-review-avatar {
+    width: 50px !important;
+    height: 50px !important;
+    border-radius: 50% !important;
+    border: 2px solid #ce9e50 !important;
+    object-fit: cover !important;
+    background: #0b1120 !important;
+    flex-shrink: 0 !important;
+}
+
+.l3-review-meta {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 2px !important;
+}
+
+.l3-review-name-row {
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+}
+
+.l3-review-name {
+    font-family: 'Outfit', sans-serif !important;
+    font-weight: 600 !important;
+    font-size: 1rem !important;
+    color: #b89664 !important;
+    text-decoration: none !important;
+}
+
+.l3-review-title {
+    font-family: 'Outfit', sans-serif !important;
+    font-size: 0.8rem !important;
+    color: rgba(255, 255, 255, 0.65) !important;
+    font-weight: 300 !important;
+}
+
+/* Insignia Profesional de LinkedIn Verificado (Premium) */
+.l3-review-linkedin-badge {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 18px !important;
+    height: 18px !important;
+    border-radius: 3px !important;
+    background: #0077b5 !important;
+    color: #ffffff !important;
+    text-decoration: none !important;
+    transition: transform 0.2s ease !important;
+    flex-shrink: 0 !important;
+}
+
+.l3-review-linkedin-badge:hover {
+    transform: scale(1.2) !important;
+}
+
+.l3-review-linkedin-badge svg {
+    width: 11px !important;
+    height: 11px !important;
+    fill: currentColor !important;
+}
+
+/* Botones de Navegación del Slider */
+.l3-slider-btn {
+    position: absolute !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    width: 44px !important;
+    height: 44px !important;
+    border-radius: 50% !important;
+    background: rgba(19, 34, 56, 0.9) !important;
+    border: 1px solid rgba(184, 150, 100, 0.3) !important;
+    color: #ce9e50 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    cursor: pointer !important;
+    transition: all 0.3s ease !important;
+    z-index: 10 !important;
+    outline: none !important;
+}
+
+.l3-slider-btn:hover {
+    background: #ce9e50 !important;
+    color: #0a2233 !important;
+    border-color: #ce9e50 !important;
+    box-shadow: 0 0 15px rgba(206, 158, 80, 0.45) !important;
+}
+
+.l3-slider-btn.prev {
+    left: -22px !important;
+}
+
+.l3-slider-btn.next {
+    right: -22px !important;
+}
+
+.l3-slider-btn svg {
+    width: 20px !important;
+    height: 20px !important;
+    stroke: currentColor !important;
+    fill: none !important;
+}
+
+/* ==========================================
+   RWD / RESPONSIVE BREAKPOINTS
+   ========================================== */
+
+/* TABLET LAYOUT (<= 1023px) */
+@media (max-width: 1023px) {
+    .l3-review-card {
+        flex: 0 0 calc((100% - 20px) / 2) !important; /* 2 cards visible */
+    }
+
+    .l3-slider-btn.prev {
+        left: -10px !important;
+    }
+
+    .l3-slider-btn.next {
+        right: -10px !important;
+    }
+}
+
+/* MOBILE LAYOUT (<= 767px) */
+@media (max-width: 767px) {
+    .l3-review-card {
+        flex: 0 0 100% !important; /* 1 card visible */
+        min-height: auto !important;
+    }
+
+    .l3-slider-btn {
+        width: 38px !important;
+        height: 38px !important;
+    }
+
+    .l3-slider-btn.prev {
+        left: -5px !important;
+    }
+
+    .l3-slider-btn.next {
+        right: -5px !important;
+    }
+}

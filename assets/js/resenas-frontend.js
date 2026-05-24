@@ -104,13 +104,30 @@ jQuery(document).ready(function($) {
 		currentFlow = 'manual';
 		$viaLinkedinInput.val('0');
 		resetRating();
-		switchStep($step0, $stepB);
+		
+		// Ocultar modal principal con elegancia para dar paso al nuevo formulario
+		$('#l3-review-choice-modal').removeClass('is-visible');
+		
+		setTimeout(function() {
+			// Preparar los pasos internamente
+			$step0.removeClass('l3-active-step').hide();
+			$stepB.show().addClass('l3-active-step');
+			
+			// Restaurar el modal principal revelando el formulario manual
+			$('#l3-review-choice-modal').addClass('is-visible');
+		}, 350);
 	});
 
 	// Acción: Abrir Modal LinkedIn OAuth
 	$linkedinTrigger.on('click', function(e) {
 		e.preventDefault();
-		$linkedinModal.addClass('l3-modal-open');
+		
+		// Ocultar modal principal con elegancia para dar paso al siguiente
+		$('#l3-review-choice-modal').removeClass('is-visible');
+		
+		setTimeout(function() {
+			$linkedinModal.addClass('l3-modal-open');
+		}, 350); // Esperar a que el modal anterior se difumine
 	});
 
 	// Lógica de reseteo al cerrar el modal de selección
@@ -155,6 +172,11 @@ jQuery(document).ready(function($) {
 	$('.l3-linkedin-close, #l3-linkedin-modal').on('click', function(e) {
 		if (e.target === this || $(e.target).hasClass('l3-linkedin-close')) {
 			$linkedinModal.removeClass('l3-modal-open');
+			
+			// Al cancelar, devolvemos al usuario al modal principal con gracia
+			setTimeout(function() {
+				$('#l3-review-choice-modal').addClass('is-visible');
+			}, 350);
 		}
 	});
 
@@ -182,11 +204,17 @@ jQuery(document).ready(function($) {
 			$viaLinkedinInput.val('1');
 			resetRating();
 
-			// Cerrar modal y pasar al Flujo A
+			// Cerrar modal LinkedIn (Mock OAuth)
 			$linkedinModal.removeClass('l3-modal-open');
+			
+			// Preparar los pasos en background de forma instantánea
+			$step0.removeClass('l3-active-step').hide();
+			$stepA.show().addClass('l3-active-step');
+			
+			// Restaurar el modal principal revelando el siguiente paso
 			setTimeout(function() {
-				switchStep($step0, $stepA);
-			}, 300);
+				$('#l3-review-choice-modal').addClass('is-visible');
+			}, 350);
 		}
 	});
 
@@ -211,48 +239,44 @@ jQuery(document).ready(function($) {
 
 	function resetRating() {
 		selectedRating = 0;
-		$ratingInput.val(0);
-		$('.l3-frontend-star').removeClass('l3-frontend-star--active l3-frontend-star--hover');
-		$('.l3-stars-text').text(ratingLabels[0]);
+		$ratingInput.val('');
+		$('.l3-stars-filled').css('width', '0%');
+		$('.l3-rating-range').val(0);
+		$('.l3-stars-text').text('Sin calificación');
 	}
 
-	$('.l3-frontend-star').on('mouseenter', function() {
-		var starVal = $(this).data('value');
-		var $starsContainer = $(this).closest('.l3-stars-selector');
+	function getLabelForValue(val) {
+		if (val == 0) return 'Sin calificación';
+		if (val >= 1 && val < 2) return 'Muy insatisfecho';
+		if (val >= 2 && val < 3) return 'Insatisfecho';
+		if (val >= 3 && val < 4) return 'Satisfecho';
+		if (val >= 4 && val < 5) return 'Muy satisfecho';
+		if (val == 5) return 'Excelente servicio';
+		return '';
+	}
+
+	$('.l3-rating-range').on('input', function() {
+		var val = parseFloat($(this).val());
+		if (val < 1.0) {
+			val = 1.0;
+			$(this).val(1.0);
+		}
+		val = val.toFixed(1);
+		selectedRating = val;
+		$ratingInput.val(val);
 		
-		$starsContainer.find('.l3-frontend-star').each(function() {
-			if ($(this).data('value') <= starVal) {
-				$(this).addClass('l3-frontend-star--hover');
-			} else {
-				$(this).removeClass('l3-frontend-star--hover');
-			}
-		});
-		$starsContainer.find('.l3-stars-text').text(ratingLabels[starVal]);
-	}).on('mouseleave', function() {
-		var $starsContainer = $(this).closest('.l3-stars-selector');
-		$starsContainer.find('.l3-frontend-star').removeClass('l3-frontend-star--hover');
+		var percentage = (val / 5) * 100;
+		var $starsFilled = $(this).siblings('.l3-stars-filled');
+		$starsFilled.css('width', percentage + '%');
 		
-		// Restaurar al valor seleccionado
-		$starsContainer.find('.l3-frontend-star').each(function() {
-			if ($(this).data('value') <= selectedRating) {
-				$(this).addClass('l3-frontend-star--active');
-			} else {
-				$(this).removeClass('l3-frontend-star--active');
-			}
-		});
-		$starsContainer.find('.l3-stars-text').text(ratingLabels[selectedRating]);
-	}).on('click', function() {
-		selectedRating = $(this).data('value');
-		$ratingInput.val(selectedRating);
+		if (val == 5.0) {
+			$starsFilled.addClass('l3-stars-perfect');
+		} else {
+			$starsFilled.removeClass('l3-stars-perfect');
+		}
 		
-		var $starsContainer = $(this).closest('.l3-stars-selector');
-		$starsContainer.find('.l3-frontend-star').each(function() {
-			if ($(this).data('value') <= selectedRating) {
-				$(this).addClass('l3-frontend-star--active');
-			} else {
-				$(this).removeClass('l3-frontend-star--active');
-			}
-		});
+		var label = getLabelForValue(val);
+		$(this).closest('.l3-star-rating-wrapper').find('.l3-stars-text').text(val + ' - ' + label);
 	});
 
 	// ── 3. Drag & Drop y Visualizador de Archivos (Flujo Manual) ──
@@ -324,13 +348,13 @@ jQuery(document).ready(function($) {
 
 		$counterVal.text(len);
 
-		if (len > 140) {
-			// Forzar truncado a 140
-			$(this).val(content.substring(0, 140));
-			$counterVal.text(140);
+		if (len > 240) {
+			// Forzar truncado a 240
+			$(this).val(content.substring(0, 240));
+			$counterVal.text(240);
 			$counterWrap.addClass('l3-char-counter--exceeded').removeClass('l3-char-counter--warning');
 			$(this).addClass('l3-textarea--exceeded');
-		} else if (len >= 120) {
+		} else if (len >= 220) {
 			$counterWrap.addClass('l3-char-counter--warning').removeClass('l3-char-counter--exceeded');
 			$(this).removeClass('l3-textarea--exceeded');
 		} else {

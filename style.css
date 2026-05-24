@@ -5981,7 +5981,7 @@ body footer .made-with-part {
 /* Tarjeta de Reseña (Premium Glassmorphic-Dark) */
 .l3-review-card {
     flex: 0 0 calc((100% - 40px) / 3) !important; /* Default 3 cards visible */
-    background: #132238 !important;
+    background: #020617 !important;
     border: 1px solid rgba(184, 150, 100, 0.18) !important;
     border-radius: 8px !important;
     padding: 30px !important;
@@ -6003,9 +6003,54 @@ body footer .made-with-part {
 /* Calificación por Estrellas (Dorado Premium) */
 .l3-review-stars {
     display: flex !important;
+    align-items: center !important;
     gap: 4px !important;
-    margin-bottom: 18px !important;
+    margin-bottom: 5px !important;
     color: #ce9e50 !important;
+}
+
+/* Animación Especial para Reseñas 5.0 */
+@keyframes starShine {
+    0%, 100% {
+        color: #ce9e50; /* Color corporativo inicial */
+        filter: drop-shadow(0 0 0px transparent);
+        transform: scale(1);
+    }
+    50% {
+        color: #ffd700; /* Amarillo brillante vibrante */
+        filter: drop-shadow(0 0 6px rgba(255, 215, 0, 0.7));
+        transform: scale(1.15);
+    }
+}
+
+.l3-stars-perfect svg {
+    animation: starShine 2.5s ease-in-out infinite;
+    transform-origin: center;
+}
+
+/* Efecto de cascada para el brillo de las estrellas */
+.l3-stars-perfect svg:nth-child(1) { animation-delay: 0s; }
+.l3-stars-perfect svg:nth-child(2) { animation-delay: 0.15s; }
+.l3-stars-perfect svg:nth-child(3) { animation-delay: 0.3s; }
+.l3-stars-perfect svg:nth-child(4) { animation-delay: 0.45s; }
+.l3-stars-perfect svg:nth-child(5) { animation-delay: 0.6s; }
+
+.l3-review-rating-label {
+    color: #ffffff !important;
+    font-family: 'Outfit', sans-serif !important;
+    font-size: 0.82rem !important;
+    font-weight: 400 !important;
+    margin-bottom: 18px !important;
+    opacity: 0.85 !important;
+}
+
+.l3-review-rating-score {
+    color: #ffffff !important;
+    font-family: 'Outfit', sans-serif !important;
+    font-weight: 600 !important;
+    font-size: 2.3rem !important;
+    margin-right: 12px !important;
+    line-height: 1 !important;
 }
 
 .l3-review-stars svg {
@@ -6023,6 +6068,9 @@ body footer .made-with-part {
     margin-bottom: 25px !important;
     flex-grow: 1 !important;
     font-style: italic !important;
+    background-color: #0d1322 !important;
+    padding: 16px 16px !important;
+    border-radius: 8px !important;
 }
 
 .l3-review-quote::before {
@@ -6057,8 +6105,8 @@ body footer .made-with-part {
 .l3-review-avatar {
     width: 50px !important;
     height: 50px !important;
-    border-radius: 50% !important;
-    border: 2px solid #ce9e50 !important;
+    border-radius: 6px !important;
+    border: none !important;
     object-fit: cover !important;
     background: #0b1120 !important;
     flex-shrink: 0 !important;
@@ -6079,16 +6127,26 @@ body footer .made-with-part {
 .l3-review-name {
     font-family: 'Outfit', sans-serif !important;
     font-weight: 600 !important;
-    font-size: 1rem !important;
-    color: #b89664 !important;
+    font-size: 1.05rem !important;
+    color: #ffffff !important;
     text-decoration: none !important;
 }
 
 .l3-review-title {
     font-family: 'Outfit', sans-serif !important;
+    font-size: 0.75rem !important;
+    color: #ce9e50 !important;
+    font-weight: 500 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.5px !important;
+    margin-top: 1px !important;
+}
+
+.l3-review-date {
+    font-family: 'Inter', sans-serif !important;
     font-size: 0.8rem !important;
-    color: rgba(255, 255, 255, 0.65) !important;
-    font-weight: 300 !important;
+    color: rgba(255, 255, 255, 0.6) !important;
+    margin-top: 2px !important;
 }
 
 /* Insignia Profesional de LinkedIn Verificado (Premium) */
@@ -6096,24 +6154,19 @@ body footer .made-with-part {
     display: inline-flex !important;
     align-items: center !important;
     justify-content: center !important;
-    width: 18px !important;
-    height: 18px !important;
-    border-radius: 3px !important;
-    background: #0077b5 !important;
-    color: #ffffff !important;
+    font-size: 15px !important;
+    color: #b89664 !important;
     text-decoration: none !important;
-    transition: transform 0.2s ease !important;
+    transition: transform 0.2s ease, color 0.2s ease !important;
     flex-shrink: 0 !important;
+    background: transparent !important;
+    padding: 0 !important;
+    margin-left: 2px !important;
 }
 
 .l3-review-linkedin-badge:hover {
-    transform: scale(1.2) !important;
-}
-
-.l3-review-linkedin-badge svg {
-    width: 11px !important;
-    height: 11px !important;
-    fill: currentColor !important;
+    transform: scale(1.1) !important;
+    color: #ce9e50 !important;
 }
 
 /* Botones de Navegación del Slider */
@@ -6241,13 +6294,13 @@ body footer .made-with-part {
 }
 
 .l3-review-cta-btn {
-    background: transparent !important;
+    background: #ce9e50 !important;
     border: 1px solid #ce9e50 !important;
-    color: #ce9e50 !important;
+    color: #0a2233 !important;
     font-family: 'Outfit', sans-serif !important;
     font-size: 0.95rem !important;
     font-weight: 600 !important;
-    letter-spacing: 1px !important;
+    letter-spacing: 1.5px !important;
     text-transform: uppercase !important;
     padding: 14px 40px !important;
     border-radius: 4px !important;
@@ -6258,7 +6311,8 @@ body footer .made-with-part {
 }
 
 .l3-review-cta-btn:hover {
-    background: #ce9e50 !important;
+    background: #e6b763 !important;
+    border-color: #e6b763 !important;
     color: #0a2233 !important;
     box-shadow: 0 0 25px rgba(206, 158, 80, 0.4) !important;
     transform: translateY(-2px) !important;
@@ -6295,7 +6349,8 @@ body.l3-modal-open-lock {
 .l3-custom-modal-box {
     width: 90% !important;
     max-width: 580px !important;
-    background: #ffffff !important;
+    background: #0a2233 !important;
+    border: 1px solid rgba(184, 150, 100, 0.18) !important;
     border-radius: 8px !important;
     overflow: hidden !important;
     box-shadow: 0 25px 60px rgba(0, 0, 0, 0.45) !important;
@@ -6312,7 +6367,7 @@ body.l3-modal-open-lock {
 
 /* Cabecera Oscura del Modal */
 .l3-custom-modal-header {
-    background: #0d1e33 !important;
+    background: #0d1322 !important;
     padding: 30px 30px 24px 30px !important;
     text-align: center !important;
     position: relative !important;
@@ -6325,7 +6380,7 @@ body.l3-modal-open-lock {
     font-family: 'Outfit', sans-serif !important;
     font-size: 1.6rem !important;
     font-weight: 600 !important;
-    color: #ffffff !important;
+    color: #ce9e50 !important;
     margin: 0 0 8px 0 !important;
 }
 
@@ -6356,9 +6411,9 @@ body.l3-modal-open-lock {
     color: #ce9e50 !important;
 }
 
-/* Cuerpo Claro del Modal (Prístino) */
+/* Cuerpo del Modal (Tema Oscuro Corporativo) */
 .l3-custom-modal-body {
-    background: #ffffff !important;
+    background: transparent !important;
     padding: 30px 30px !important;
     text-align: left !important;
     box-sizing: border-box !important;
@@ -6370,7 +6425,7 @@ body.l3-modal-open-lock {
     font-family: 'Outfit', sans-serif !important;
     font-size: 1.35rem !important;
     font-weight: 700 !important;
-    color: #1e293b !important;
+    color: #ce9e50 !important;
     margin: 0 0 12px 0 !important;
 }
 
@@ -6378,7 +6433,7 @@ body.l3-modal-open-lock {
     font-family: 'Inter', sans-serif !important;
     font-size: 0.9rem !important;
     line-height: 1.6 !important;
-    color: #64748b !important;
+    color: rgba(255, 255, 255, 0.7) !important;
     margin: 0 0 30px 0 !important;
 }
 
@@ -6408,29 +6463,30 @@ body.l3-modal-open-lock {
     transition: all 0.25s ease !important;
 }
 
-/* Botón LinkedIn */
+/* Botón LinkedIn (Estilo Principal Dorado) */
 .l3-custom-btn-flow--linkedin {
-    background: #0077b5 !important;
-    border: 1px solid #0077b5 !important;
-    color: #ffffff !important;
+    background: #ce9e50 !important;
+    border: 1px solid #ce9e50 !important;
+    color: #020617 !important;
 }
 
 .l3-custom-btn-flow--linkedin:hover {
-    background: #005987 !important;
-    border-color: #005987 !important;
+    background: #b88645 !important;
+    border-color: #b88645 !important;
+    color: #020617 !important;
     transform: translateY(-1px) !important;
 }
 
-/* Botón Manual */
+/* Botón Manual (Estilo Secundario Dorado) */
 .l3-custom-btn-flow--manual {
-    background: #ffffff !important;
-    border: 1px solid #cbd5e1 !important;
-    color: #1e293b !important;
+    background: transparent !important;
+    border: 1px solid rgba(206, 158, 80, 0.5) !important;
+    color: #ce9e50 !important;
 }
 
 .l3-custom-btn-flow--manual:hover {
-    background: #f8fafc !important;
-    border-color: #94a3b8 !important;
+    background: rgba(206, 158, 80, 0.1) !important;
+    border-color: #ce9e50 !important;
     transform: translateY(-1px) !important;
 }
 

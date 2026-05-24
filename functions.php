@@ -32,7 +32,7 @@ function linea3_legal_child_enqueue_styles(): void
 		'linea3-legal-child-style',
 		get_stylesheet_uri(),
 		array(),
-		$version
+		filemtime(get_stylesheet_directory() . '/style.css')
 	);
 
 	wp_enqueue_script(
@@ -4896,8 +4896,14 @@ function l3_reviews_slider_shortcode($atts): string
 		
 		$output .= '<div class="l3-review-card">';
 		
-		// Estrellas
-		$output .= '<div class="l3-review-stars">';
+		// Header de Calificación (Puntaje + Estrellas/Etiqueta)
+		$output .= '<div class="l3-review-rating-header" style="display: flex; align-items: flex-start; margin-bottom: 18px;">';
+		$formatted_rating = number_format((float)$rating, 1, '.', '');
+		$output .= '<span class="l3-review-rating-score">' . esc_html($formatted_rating) . '</span>';
+		
+		$output .= '<div class="l3-review-stars-wrapper" style="display: flex; flex-direction: column; padding-top: 3px;">';
+		$stars_class = ($rating >= 5) ? 'l3-review-stars l3-stars-perfect' : 'l3-review-stars';
+		$output .= '<div class="' . $stars_class . '" style="margin-bottom: 2px !important;">';
 		for ($i = 0; $i < 5; $i++) {
 			if ($i < $rating) {
 				// Estrella rellena
@@ -4908,6 +4914,21 @@ function l3_reviews_slider_shortcode($atts): string
 			}
 		}
 		$output .= '</div>';
+		
+		// Etiqueta de texto de la calificación
+		$rating_labels = array(
+			1 => 'Muy insatisfecho',
+			2 => 'Insatisfecho',
+			3 => 'Satisfecho',
+			4 => 'Muy satisfecho',
+			5 => 'Excelente servicio'
+		);
+		$rating_label_text = isset($rating_labels[$rating]) ? $rating_labels[$rating] : '';
+		if (!empty($rating_label_text)) {
+			$output .= '<div class="l3-review-rating-label" style="margin-bottom: 0 !important;">' . esc_html($rating_label_text) . '</div>';
+		}
+		$output .= '</div>'; // End l3-review-stars-wrapper
+		$output .= '</div>'; // End l3-review-rating-header
 		
 		// Cita de opinión
 		$output .= '<div class="l3-review-quote">';
@@ -4930,7 +4951,7 @@ function l3_reviews_slider_shortcode($atts): string
 			} else {
 				$output .= '<span class="l3-review-linkedin-badge">';
 			}
-			$output .= '<svg viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>';
+			$output .= '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>';
 			if (!empty($linkedin_url)) {
 				$output .= '</a>';
 			} else {
@@ -4946,6 +4967,10 @@ function l3_reviews_slider_shortcode($atts): string
 			$title_display .= ' en ' . esc_html($empresa);
 		}
 		$output .= '<span class="l3-review-title">' . $title_display . '</span>';
+		
+		// Fecha de la reseña
+		$post_date = get_the_date('j F, Y', $post_id);
+		$output .= '<span class="l3-review-date">' . esc_html($post_date) . '</span>';
 		
 		$output .= '</div>'; // End meta
 		$output .= '</div>'; // End author
@@ -4977,22 +5002,22 @@ function l3_reviews_slider_shortcode($atts): string
 				<p>Comparte tu testimonio profesional con nosotros. Tu experiencia ayuda a respaldar el prestigio de nuestra firma.</p>
 			</div>
 			<div class="l3-custom-modal-body">
-				<div id="l3-resenas-form-container" class="l3-resenas-container" style="padding: 0; box-shadow: none; border: none; background: transparent; margin: 0; max-width: 100%;">
+				<div id="l3-resenas-form-container" class="l3-resenas-container" style="padding: 0; box-shadow: none; border: none; background: transparent; margin: 0; max-width: 100%; overflow: visible;">
 					
 					<!-- Paso 0: Selección Inicial de Flujo -->
 					<div id="l3-step-welcome" class="l3-resenas-step l3-active-step">
 						<div class="l3-resenas-welcome" style="padding: 0; border: none; background: transparent; box-shadow: none;">
-							<h4 style="font-size: 1.15rem; color: #1e293b; margin-top: 0; margin-bottom: 12px; font-weight: 600;">¿Cómo deseas registrar tu reseña?</h4>
-							<p style="margin-bottom: 24px; font-size: 14px; color: var(--l3-text-muted); line-height: 1.5;">
+							<h4 style="font-size: 1.15rem; margin-top: 0; margin-bottom: 12px; font-weight: 600;">¿Cómo deseas registrar tu reseña?</h4>
+							<p style="margin-bottom: 24px; font-size: 14px; line-height: 1.5;">
 								Te recomendamos conectarte vía <strong>LinkedIn</strong> para verificar tu perfil al instante. Alternativamente, puedes registrar tus datos manualmente.
 							</p>
 							
 							<div class="l3-custom-modal-buttons" style="display: flex; flex-direction: column; gap: 12px; width: 100%; box-sizing: border-box;">
-								<button type="button" id="l3-trigger-linkedin" class="l3-custom-btn-flow l3-custom-btn-flow--linkedin" style="cursor: pointer; border: none; font-size: 14px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; width: 100%;">
-									<span class="dashicons dashicons-linkedin"></span> Conectar con mi LinkedIn
+								<button type="button" id="l3-trigger-linkedin" class="l3-custom-btn-flow l3-custom-btn-flow--linkedin" style="cursor: pointer; font-size: 14px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; width: 100%;">
+									<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg> Conectar con mi LinkedIn
 								</button>
 								
-								<button type="button" id="l3-trigger-manual" class="l3-custom-btn-flow l3-custom-btn-flow--manual" style="cursor: pointer; border: 1px solid #cbd5e1; font-size: 14px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; width: 100%;">
+								<button type="button" id="l3-trigger-manual" class="l3-custom-btn-flow l3-custom-btn-flow--manual" style="cursor: pointer; font-size: 14px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; width: 100%;">
 									<span class="dashicons dashicons-edit"></span> Registro Manual
 								</button>
 							</div>
@@ -5039,22 +5064,37 @@ function l3_reviews_slider_shortcode($atts): string
 							<!-- Campo: Calificación por estrellas -->
 							<div class="l3-form-group">
 								<label>Tu Calificación</label>
-								<div class="l3-stars-selector">
-									<span class="l3-frontend-star" data-value="1">★</span>
-									<span class="l3-frontend-star" data-value="2">★</span>
-									<span class="l3-frontend-star" data-value="3">★</span>
-									<span class="l3-frontend-star" data-value="4">★</span>
-									<span class="l3-frontend-star" data-value="5">★</span>
+								<div class="l3-star-rating-wrapper" style="position: relative; display: inline-flex; align-items: center; gap: 12px; margin-top: 4px;">
+									<div class="l3-star-rating-container" style="position: relative; display: inline-block; width: max-content;">
+										<!-- Capa base de estrellas (vacías) -->
+										<div class="l3-stars-empty" style="display: flex; gap: 4px; color: rgba(255, 255, 255, 0.2);">
+											<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+											<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+											<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+											<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+											<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+										</div>
+										<!-- Capa superpuesta de estrellas (doradas) -->
+										<div class="l3-stars-filled" style="display: flex; gap: 4px; position: absolute; top: 0; left: 0; overflow: hidden; width: 0%; color: #ce9e50; pointer-events: none;">
+											<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+											<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+											<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+											<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+											<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+										</div>
+										<!-- Input range para controlar la calificación decimal -->
+										<input type="range" class="l3-rating-range" min="0" max="5" step="0.1" value="0" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; margin: 0;">
+									</div>
 									<span class="l3-stars-text">Sin calificación</span>
 								</div>
 							</div>
 
-							<!-- Campo: Reseña (Máx 140) -->
+							<!-- Campo: Reseña (Máx 240) -->
 							<div class="l3-form-group">
-								<label for="resena_contenido_a">Tu Reseña <span style="font-weight: normal; color: var(--l3-text-muted); font-size: 12px;">(Máximo 140 caracteres)</span></label>
+								<label for="resena_contenido_a">Tu Reseña <span style="font-weight: normal; color: var(--l3-text-muted); font-size: 12px;">(Máximo 240 caracteres)</span></label>
 								<div class="l3-textarea-wrapper">
-									<textarea id="resena_contenido_a" name="contenido" rows="3" placeholder="Describe tu experiencia con nosotros..." maxlength="140" class="l3-resena-textarea"></textarea>
-									<div class="l3-char-counter"><span>0</span> / 140</div>
+									<textarea id="resena_contenido_a" name="contenido" rows="3" placeholder="Describe tu experiencia con nosotros..." maxlength="240" class="l3-resena-textarea"></textarea>
+									<div class="l3-char-counter"><span>0</span> / 240</div>
 								</div>
 							</div>
 
@@ -5067,11 +5107,11 @@ function l3_reviews_slider_shortcode($atts): string
 							</div>
 
 							<!-- Footer del Formulario -->
-							<div class="l3-form-footer" style="margin-top: 24px; display: flex; gap: 12px; justify-content: flex-end;">
-								<button type="button" class="l3-btn l3-btn-back" style="cursor: pointer; display: inline-flex; align-items: center; gap: 6px; padding: 10px 20px; border-radius: 4px; border: 1px solid #cbd5e1; background: #fff; color: #334155; font-weight: 500;">
+							<div class="l3-form-footer">
+								<button type="button" class="l3-btn l3-btn-back">
 									<span class="dashicons dashicons-arrow-left-alt2"></span> Volver
 								</button>
-								<button type="submit" class="l3-btn l3-btn-submit" style="cursor: pointer; display: inline-flex; align-items: center; gap: 8px; padding: 10px 24px; border-radius: 4px; border: none; background: #ce9e50; color: #fff; font-weight: 600; transition: background 0.2s;">
+								<button type="submit" class="l3-btn l3-btn-submit">
 									<span>Enviar Reseña</span>
 									<span class="l3-btn-spinner"></span>
 								</button>
@@ -5140,31 +5180,46 @@ function l3_reviews_slider_shortcode($atts): string
 							<!-- Campo: Calificación por estrellas -->
 							<div class="l3-form-group">
 								<label>Tu Calificación</label>
-								<div class="l3-stars-selector">
-									<span class="l3-frontend-star" data-value="1">★</span>
-									<span class="l3-frontend-star" data-value="2">★</span>
-									<span class="l3-frontend-star" data-value="3">★</span>
-									<span class="l3-frontend-star" data-value="4">★</span>
-									<span class="l3-frontend-star" data-value="5">★</span>
+								<div class="l3-star-rating-wrapper" style="position: relative; display: inline-flex; align-items: center; gap: 12px; margin-top: 4px;">
+									<div class="l3-star-rating-container" style="position: relative; display: inline-block; width: max-content;">
+										<!-- Capa base de estrellas (vacías) -->
+										<div class="l3-stars-empty" style="display: flex; gap: 4px; color: rgba(255, 255, 255, 0.2);">
+											<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+											<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+											<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+											<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+											<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+										</div>
+										<!-- Capa superpuesta de estrellas (doradas) -->
+										<div class="l3-stars-filled" style="display: flex; gap: 4px; position: absolute; top: 0; left: 0; overflow: hidden; width: 0%; color: #ce9e50; pointer-events: none;">
+											<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+											<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+											<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+											<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+											<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+										</div>
+										<!-- Input range para controlar la calificación decimal -->
+										<input type="range" class="l3-rating-range" min="0" max="5" step="0.1" value="0" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; margin: 0;">
+									</div>
 									<span class="l3-stars-text">Sin calificación</span>
 								</div>
 							</div>
 
-							<!-- Campo: Reseña (Máx 140) -->
+							<!-- Campo: Reseña (Máx 240) -->
 							<div class="l3-form-group">
-								<label for="resena_contenido_b">Tu Reseña <span style="font-weight: normal; color: var(--l3-text-muted); font-size: 12px;">(Máximo 140 caracteres)</span></label>
+								<label for="resena_contenido_b">Tu Reseña <span style="font-weight: normal; color: var(--l3-text-muted); font-size: 12px;">(Máximo 240 caracteres)</span></label>
 								<div class="l3-textarea-wrapper">
-									<textarea id="resena_contenido_b" name="contenido" rows="3" placeholder="Describe tu experiencia con nosotros..." maxlength="140" class="l3-resena-textarea"></textarea>
-									<div class="l3-char-counter"><span>0</span> / 140</div>
+									<textarea id="resena_contenido_b" name="contenido" rows="3" placeholder="Describe tu experiencia con nosotros..." maxlength="240" class="l3-resena-textarea"></textarea>
+									<div class="l3-char-counter"><span>0</span> / 240</div>
 								</div>
 							</div>
 
 							<!-- Footer del Formulario -->
-							<div class="l3-form-footer" style="margin-top: 24px; display: flex; gap: 12px; justify-content: flex-end;">
-								<button type="button" class="l3-btn l3-btn-back" style="cursor: pointer; display: inline-flex; align-items: center; gap: 6px; padding: 10px 20px; border-radius: 4px; border: 1px solid #cbd5e1; background: #fff; color: #334155; font-weight: 500;">
+							<div class="l3-form-footer">
+								<button type="button" class="l3-btn l3-btn-back">
 									<span class="dashicons dashicons-arrow-left-alt2"></span> Volver
 								</button>
-								<button type="submit" class="l3-btn l3-btn-submit" style="cursor: pointer; display: inline-flex; align-items: center; gap: 8px; padding: 10px 24px; border-radius: 4px; border: none; background: #ce9e50; color: #fff; font-weight: 600; transition: background 0.2s;">
+								<button type="submit" class="l3-btn l3-btn-submit">
 									<span>Enviar Reseña</span>
 									<span class="l3-btn-spinner"></span>
 								</button>

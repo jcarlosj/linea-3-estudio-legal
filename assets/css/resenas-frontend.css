@@ -189,7 +189,10 @@
 .l3-form-group label {
 	font-size: 14px;
 	font-weight: 600;
-	color: var(--l3-blue-dark);
+	color: #ffffff;
+}
+.l3-form-group label span {
+	color: rgba(255, 255, 255, 0.6) !important;
 }
 .l3-form-group input[type="text"],
 .l3-form-group input[type="url"],
@@ -251,17 +254,29 @@
 	margin-left: 12px;
 	font-size: 13px;
 	font-weight: 600;
-	color: var(--l3-text-muted);
+	color: rgba(255, 255, 255, 0.7);
+}
+
+/* Evitar que las estrellas se encojan en el flex container recortado */
+.l3-star-rating-container svg {
+	flex-shrink: 0 !important;
+	min-width: 24px !important;
+	height: 24px !important;
+}
+
+/* Evitar recorte del glow de la animación al llegar a 5.0 */
+.l3-stars-filled.l3-stars-perfect {
+	overflow: visible !important;
 }
 
 /* ── Drag & Drop Foto de Perfil Manual ── */
 .l3-upload-zone {
-	border: 2px dashed var(--l3-gray-border);
+	border: 2px dashed rgba(255, 255, 255, 0.2);
 	border-radius: 8px;
 	padding: 20px;
 	text-align: center;
 	cursor: pointer;
-	background: #fafafa;
+	background: rgba(255, 255, 255, 0.05);
 	transition: var(--l3-transition);
 	display: flex;
 	flex-direction: column;
@@ -275,7 +290,7 @@
 	background: rgba(212, 168, 67, 0.02);
 }
 .l3-upload-icon {
-	color: var(--l3-text-muted);
+	color: rgba(255, 255, 255, 0.7);
 	font-size: 32px;
 	width: 32px;
 	height: 32px;
@@ -283,7 +298,7 @@
 }
 .l3-upload-text {
 	font-size: 13px;
-	color: var(--l3-text-muted);
+	color: rgba(255, 255, 255, 0.85);
 }
 .l3-upload-text strong {
 	color: var(--l3-gold);
@@ -302,7 +317,7 @@
 	align-items: center;
 	gap: 12px;
 	margin-top: 10px;
-	background: #ffffff;
+	background: rgba(255, 255, 255, 0.05);
 	padding: 8px 12px;
 	border-radius: 6px;
 	border: 1px solid var(--l3-gray-border);
@@ -316,7 +331,7 @@
 }
 .l3-avatar-upload-preview span {
 	font-size: 12px;
-	color: var(--l3-text-dark);
+	color: rgba(255, 255, 255, 0.85);
 	max-width: 180px;
 	overflow: hidden;
 	text-overflow: ellipsis;
@@ -348,7 +363,7 @@
 .l3-char-counter {
 	text-align: right;
 	font-size: 12px;
-	color: var(--l3-text-muted);
+	color: rgba(255, 255, 255, 0.6);
 	margin-top: 4px;
 	transition: color 0.2s ease;
 }
@@ -365,42 +380,53 @@
 	box-shadow: 0 0 0 3px rgba(214, 54, 56, 0.15) !important;
 }
 
-/* ── Botones de Control y Envío ── */
+/* ── Botones de Control y Envío (Premium Theme) ── */
 .l3-form-footer {
 	display: flex;
-	justify-content: space-between;
+	justify-content: flex-end;
 	align-items: center;
-	margin-top: 10px;
-	border-top: 1px solid var(--l3-gray-border);
+	gap: 12px;
+	margin-top: 24px;
+	border-top: 1px solid rgba(255, 255, 255, 0.1);
 	padding-top: 24px;
+	width: 100%;
+	box-sizing: border-box;
 }
 .l3-btn {
-	padding: 12px 24px;
-	border-radius: 6px;
+	padding: 10px 24px;
+	border-radius: 4px;
 	font-size: 14px;
 	font-weight: 600;
 	cursor: pointer;
-	transition: var(--l3-transition);
-	border: 1px solid var(--l3-gray-border);
-	background: #ffffff;
-	color: var(--l3-text-muted);
+	transition: all 0.2s;
+	font-family: 'Outfit', sans-serif;
 	display: inline-flex;
 	align-items: center;
+	justify-content: center;
 	gap: 8px;
-}
-.l3-btn:hover {
-	background: var(--l3-gray-light);
-	color: var(--l3-blue-dark);
+	border: 1px solid transparent;
 }
 .l3-btn-submit {
-	background: var(--l3-blue-dark);
-	border-color: var(--l3-blue-dark);
-	color: var(--l3-text-light);
+	background: #ce9e50;
+	border-color: #ce9e50;
+	color: #020617;
 }
 .l3-btn-submit:hover {
-	background: var(--l3-blue-medium);
-	border-color: var(--l3-blue-medium);
-	color: var(--l3-text-light);
+	background: #b88645;
+	border-color: #b88645;
+	transform: translateY(-1px);
+}
+.l3-btn-back {
+	padding: 10px 20px;
+	background: transparent;
+	border-color: rgba(184, 150, 100, 0.45);
+	color: #ce9e50;
+	font-weight: 500;
+	gap: 6px;
+}
+.l3-btn-back:hover {
+	background: rgba(206, 158, 80, 0.1);
+	border-color: #ce9e50;
 }
 
 /* ── Spinner / Loader de carga ── */

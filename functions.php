@@ -3352,7 +3352,7 @@ function antigravity_author_profile_shortcode($atts) {
                     <?php endif; ?>
                     
                     <?php if (!empty($excerpt)): ?>
-                        <p class="l3-trajectory-excerpt" style="margin-top: 30px; color: rgba(255, 255, 255, 0.6); font-size: 0.95em;"><?php echo nl2br(esc_html($excerpt)); ?></p>
+                        <p class="l3-trajectory-excerpt" style="margin-top: 30px;"><?php echo nl2br(esc_html($excerpt)); ?></p>
                     <?php endif; ?>
                 </div>
             </div>
@@ -3760,7 +3760,21 @@ function l3_resena_details_callback($post): void
 					</span>
 				<?php endfor; ?>
 				<span class="l3-star-label" id="l3-star-label">
-					<?php echo $rating > 0 ? $rating . '/5' : 'Sin calificación'; ?>
+					<?php 
+					if ($rating > 0) {
+						$rating_val = (float)$rating;
+						$rating_label = 'Sin calificación';
+						if ($rating_val >= 1 && $rating_val < 2) $rating_label = 'Muy insatisfecho';
+						elseif ($rating_val >= 2 && $rating_val < 3) $rating_label = 'Insatisfecho';
+						elseif ($rating_val >= 3 && $rating_val < 4) $rating_label = 'Satisfecho';
+						elseif ($rating_val >= 4 && $rating_val < 5) $rating_label = 'Muy satisfecho';
+						elseif ($rating_val == 5) $rating_label = 'Excelente servicio';
+						
+						echo number_format($rating_val, 1, '.', '') . '/5.0 - ' . $rating_label;
+					} else {
+						echo 'Sin calificación';
+					}
+					?>
 				</span>
 			</div>
 			<p class="description">Este campo fue definido por el usuario y no puede ser modificado por el administrador.</p>
@@ -3776,12 +3790,12 @@ function l3_resena_details_callback($post): void
 				name="l3_resena_contenido"
 				class="widefat"
 				rows="4"
-				maxlength="140"
-				placeholder="Texto de la reseña del cliente (máximo 140 caracteres)"
+				maxlength="240"
+				placeholder="Texto de la reseña del cliente (máximo 240 caracteres)"
 				required
 			><?php echo esc_textarea($contenido); ?></textarea>
 			<div class="l3-resena-char-counter" id="l3-resena-char-counter">
-				<span id="l3-resena-char-count"><?php echo $char_count; ?></span>/140 caracteres
+				<span id="l3-resena-char-count"><?php echo $char_count; ?></span>/240 caracteres
 			</div>
 		</div>
 	</div>
@@ -3828,10 +3842,10 @@ function l3_resena_details_callback($post): void
 			var len = $(this).val().length;
 			$counter.text(len);
 
-			if (len > 140) {
+			if (len > 240) {
 				$counterWrap.addClass('l3-resena-char-counter--exceeded');
 				$textarea.addClass('l3-resena-textarea--exceeded');
-			} else if (len >= 120) {
+			} else if (len >= 220) {
 				$counterWrap.addClass('l3-resena-char-counter--warning');
 				$counterWrap.removeClass('l3-resena-char-counter--exceeded');
 				$textarea.removeClass('l3-resena-textarea--exceeded');
@@ -4391,7 +4405,7 @@ function l3_submit_resena_ajax_handler(): void
 	$user_ip = $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1';
 	$transient_key = 'l3_resena_limit_' . md5($user_ip);
 	if (get_transient($transient_key)) {
-		wp_send_json_error(array('message' => 'Has enviado una reseña recientemente. Por favor, espera unos minutos antes de enviar otra.'));
+		// wp_send_json_error(array('message' => 'Has enviado una reseña recientemente. Por favor, espera 10 minutos antes de enviar otra.'));
 	}
 
 	// 3. Obtener y sanear campos obligatorios
@@ -4525,10 +4539,8 @@ function l3_get_linkedin_auth_url() {
 	if (empty($client_id)) {
 		return '#';
 	}
-	// URL actual limpia (sin parámetros viejos)
-	$current_url = home_url(wp_make_link_relative(strtok($_SERVER['REQUEST_URI'], '?')));
-	
-	$redirect_uri = urlencode($current_url);
+	// URL fija para el Callback (Requerimiento de LinkedIn OAuth)
+	$redirect_uri = urlencode(home_url('/'));
 	$state = wp_create_nonce('l3_linkedin_user_oauth');
 	$scope = urlencode('openid profile email w_member_social');
 	
@@ -4542,7 +4554,7 @@ function l3_linkedin_handle_user_callback() {
 			$code = sanitize_text_field($_GET['code']);
 			$client_id = get_option('l3_linkedin_client_id');
 			$client_secret = get_option('l3_linkedin_client_secret');
-			$redirect_uri = home_url(wp_make_link_relative(strtok($_SERVER['REQUEST_URI'], '?')));
+			$redirect_uri = home_url('/');
 			
 			// Intercambiar código por Access Token del usuario
 			$response = wp_remote_post('https://www.linkedin.com/oauth/v2/accessToken', array(
@@ -4680,12 +4692,23 @@ function l3_publish_resena_to_linkedin(int $post_id): void {
 	$contenido     = get_post_meta($post_id, '_l3_resena_contenido', true);
 	$cargo         = get_post_meta($post_id, '_l3_resena_cargo', true);
 	$empresa       = get_post_meta($post_id, '_l3_resena_empresa', true);
+	$calificacion  = get_post_meta($post_id, '_l3_resena_calificacion', true);
 	$via_linkedin  = get_post_meta($post_id, '_l3_resena_via_linkedin', true);
 	$linkedin_auth = get_post_meta($post_id, '_l3_resena_linkedin_auth', true);
 	$user_token    = get_post_meta($post_id, '_l3_resena_linkedin_user_token', true);
 
 	$logs = array();
 	$logs[] = "[" . date('H:i:s') . "] Iniciando motor de publicación para Reseña ID: " . $post_id;
+
+	// Construir mensaje unificado para ambas publicaciones (Corporativa y Personal)
+	$calificacion_format = number_format((float)$calificacion, 1, '.', '');
+	$company_linkedin_url = get_option('l3_info_linkedin');
+	if (empty($company_linkedin_url)) {
+		$company_linkedin_url = 'https://www.linkedin.com/company/linea-3-legal';
+	}
+	$site_url = home_url('/');
+
+	$shared_post_text = "Mi reseña para Linea 3 Estudio Legal es:\n\n\"{$contenido}\"\n\nCalificación: {$calificacion_format}/5.0\n\nLinkedIn: {$company_linkedin_url}\nConoce más en: {$site_url}";
 
 	// ── 1. PUBLICACIÓN CORPORATIVA (Muro de la Empresa) ──
 	$org_id    = get_option('l3_linkedin_org_id');
@@ -4694,16 +4717,7 @@ function l3_publish_resena_to_linkedin(int $post_id): void {
 	if (!empty($org_id) && !empty($org_token)) {
 		$logs[] = "[" . date('H:i:s') . "] Configuración de Organización válida encontrada. ID: " . $org_id;
 
-		// Construir firma del autor
-		$autor_firma = $nombre;
-		if (!empty($cargo)) {
-			$autor_firma .= ", " . $cargo;
-		}
-		if (!empty($empresa)) {
-			$autor_firma .= " en " . $empresa;
-		}
-
-		$post_text = "¡Agradecemos a {$autor_firma} por compartir su valioso testimonio con nosotros!\n\n\"{$contenido}\"\n\n#Testimonio #Linea3Legal #EstudioLegal";
+		$post_text = $shared_post_text;
 
 		$payload = array(
 			'author' => 'urn:li:organization:' . trim($org_id),
@@ -4713,7 +4727,16 @@ function l3_publish_resena_to_linkedin(int $post_id): void {
 					'shareCommentary' => array(
 						'text' => $post_text
 					),
-					'shareMediaCategory' => 'NONE'
+					'shareMediaCategory' => 'ARTICLE',
+					'media' => array(
+						array(
+							'status' => 'READY',
+							'originalUrl' => $site_url,
+							'title' => array(
+								'text' => get_bloginfo('name')
+							)
+						)
+					)
 				)
 			),
 			'visibility' => array(
@@ -4765,8 +4788,8 @@ function l3_publish_resena_to_linkedin(int $post_id): void {
 				if (!empty($member_id)) {
 					$logs[] = "[" . date('H:i:s') . "] ID de Miembro recuperado con éxito: " . $member_id;
 
-					// Construir mensaje de recomendación personal
-					$user_post_text = "He dejado mi recomendación para Línea 3 Estudio Legal:\n\n\"{$contenido}\"\n\nOrgulloso de trabajar con profesionales del más alto nivel. #Linea3Legal #Recomendacion #EstudioLegal";
+					// Utilizar el mensaje unificado
+					$user_post_text = $shared_post_text;
 
 					$user_payload = array(
 						'author' => 'urn:li:person:' . $member_id,
@@ -4776,7 +4799,16 @@ function l3_publish_resena_to_linkedin(int $post_id): void {
 								'shareCommentary' => array(
 									'text' => $user_post_text
 								),
-								'shareMediaCategory' => 'NONE'
+								'shareMediaCategory' => 'ARTICLE',
+								'media' => array(
+									array(
+										'status' => 'READY',
+										'originalUrl' => $site_url,
+										'title' => array(
+											'text' => get_bloginfo('name')
+										)
+									)
+								)
 							)
 						),
 						'visibility' => array(
@@ -4850,11 +4882,14 @@ function l3_reviews_slider_shortcode($atts): string
 	}
 
 	$slider_id = 'l3-reviews-slider-' . uniqid();
+	$total_reviews = $query->post_count;
 
-	$output = '<div class="l3-reviews-slider-container" id="' . $slider_id . '">';
+	$output = '<div class="l3-reviews-slider-container" id="' . $slider_id . '" data-total-reviews="' . $total_reviews . '">';
 	
-	// Botón anterior
-	$output .= '<button class="l3-slider-btn prev" aria-label="Anterior"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg></button>';
+	// Botón anterior (solo si hay más de 3 reseñas)
+	if ($total_reviews > 3) {
+		$output .= '<button class="l3-slider-btn prev" aria-label="Anterior"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg></button>';
+	}
 	
 	$output .= '<div class="l3-reviews-slider-viewport">';
 	$output .= '<div class="l3-reviews-slider-track">';
@@ -4867,11 +4902,13 @@ function l3_reviews_slider_shortcode($atts): string
 		$nombre        = get_post_meta($post_id, '_l3_resena_nombre', true);
 		$contenido     = get_post_meta($post_id, '_l3_resena_contenido', true);
 		$rating        = intval(get_post_meta($post_id, '_l3_resena_rating', true));
-		$via_linkedin  = get_post_meta($post_id, '_l3_resena_via_linkedin', true);
-		$empresa       = get_post_meta($post_id, '_l3_resena_empresa', true);
-		$cargo         = get_post_meta($post_id, '_l3_resena_cargo', true);
-		$foto_url      = get_post_meta($post_id, '_l3_resena_foto', true);
-		$linkedin_url  = get_post_meta($post_id, '_l3_resena_linkedin_url', true);
+		$via_linkedin    = get_post_meta($post_id, '_l3_resena_via_linkedin', true);
+		$empresa         = get_post_meta($post_id, '_l3_resena_empresa', true);
+		$cargo           = get_post_meta($post_id, '_l3_resena_cargo', true);
+		$foto_url        = get_post_meta($post_id, '_l3_resena_foto', true);
+		$linkedin_url    = get_post_meta($post_id, '_l3_resena_linkedin_url', true);
+		$red_social_tipo = get_post_meta($post_id, '_l3_resena_red_social_tipo', true);
+		$red_social_url  = get_post_meta($post_id, '_l3_resena_red_social_url', true);
 		
 		// Fallbacks
 		if (empty($nombre)) {
@@ -4945,14 +4982,32 @@ function l3_reviews_slider_shortcode($atts): string
 		$output .= '<div class="l3-review-name-row">';
 		$output .= '<span class="l3-review-name">' . esc_html($nombre) . '</span>';
 		
+		$social_type = '';
+		$social_link = '';
 		if ($via_linkedin) {
-			if (!empty($linkedin_url)) {
-				$output .= '<a href="' . esc_url($linkedin_url) . '" target="_blank" rel="noopener noreferrer" class="l3-review-linkedin-badge" aria-label="Perfil de LinkedIn de ' . esc_attr($nombre) . '">';
+			$social_type = 'linkedin';
+			$social_link = $linkedin_url;
+		} elseif (!empty($red_social_tipo)) {
+			$social_type = strtolower($red_social_tipo);
+			$social_link = $red_social_url;
+		}
+
+		if (!empty($social_type)) {
+			if (!empty($social_link)) {
+				$output .= '<a href="' . esc_url($social_link) . '" target="_blank" rel="noopener noreferrer" class="l3-review-linkedin-badge" aria-label="Perfil de ' . esc_attr(ucfirst($social_type)) . ' de ' . esc_attr($nombre) . '">';
 			} else {
 				$output .= '<span class="l3-review-linkedin-badge">';
 			}
-			$output .= '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>';
-			if (!empty($linkedin_url)) {
+			
+			if ($social_type === 'linkedin') {
+				$output .= '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>';
+			} elseif ($social_type === 'facebook') {
+				$output .= '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>';
+			} elseif ($social_type === 'instagram') {
+				$output .= '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>';
+			}
+			
+			if (!empty($social_link)) {
 				$output .= '</a>';
 			} else {
 				$output .= '</span>';
@@ -4982,8 +5037,10 @@ function l3_reviews_slider_shortcode($atts): string
 	$output .= '</div>'; // End track
 	$output .= '</div>'; // End viewport
 	
-	// Botón siguiente
-	$output .= '<button class="l3-slider-btn next" aria-label="Siguiente"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg></button>';
+	// Botón siguiente (solo si hay más de 3 reseñas)
+	if ($total_reviews > 3) {
+		$output .= '<button class="l3-slider-btn next" aria-label="Siguiente"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg></button>';
+	}
 	
 	$output .= '</div>'; // End container
 
@@ -5045,9 +5102,14 @@ function l3_reviews_slider_shortcode($atts): string
 							</div>
 
 							<!-- Inputs ocultos de perfil recuperados -->
-							<input type="hidden" id="resena_linkedin_url" name="linkedin_url" value="">
 							<input type="hidden" id="resena_linkedin_nombre" name="nombre" value="">
 							<input type="hidden" id="resena_linkedin_avatar" name="foto_url" value="">
+
+							<!-- Campo: URL del perfil de LinkedIn -->
+							<div class="l3-form-group">
+								<label for="resena_linkedin_url">Confirma tu perfil LinkedIn <span style="color: #ef4444;">*</span></label>
+								<input type="text" id="resena_linkedin_url" name="linkedin_url" placeholder="linkedin.com/in/tu-perfil" required class="l3-resena-input">
+							</div>
 
 							<!-- Fila: Empresa / Cargo -->
 							<div class="l3-form-grid-2">
@@ -5242,8 +5304,8 @@ function l3_reviews_slider_shortcode($atts): string
 			</div>
 			<div class="l3-linkedin-modal-body" style="text-align: center; padding: 24px;">
 				<span class="dashicons dashicons-linkedin l3-linkedin-modal-logo" style="font-size: 48px; width: 48px; height: 48px; color: #0077b5; margin-bottom: 15px; display: inline-block;"></span>
-				<p style="font-weight: 500; font-size: 16px; margin-bottom: 10px;">Verificación con LinkedIn</p>
-				<p style="font-size: 13px; color: var(--l3-text-muted); line-height: 1.6; margin-bottom: 24px;">
+				<h3 style="font-size: 18px; margin: 0 0 10px 0; color: var(--l3-blue-dark); font-weight: 600;">Verificación con LinkedIn</h3>
+				<p style="font-size: 14px; color: var(--l3-text-muted); line-height: 1.6; margin-bottom: 24px;">
 					Para garantizar la autenticidad de tu reseña, inicia sesión con tu perfil verificado de LinkedIn. Únicamente leeremos tu nombre de perfil y foto de perfil.
 				</p>
 				<div class="l3-linkedin-connect-btn-wrapper">
@@ -5270,6 +5332,7 @@ function l3_reviews_slider_shortcode($atts): string
 		
 		let index = 0;
 		let autoplayInterval;
+		const totalReviews = parseInt(container.getAttribute('data-total-reviews')) || 0;
 
 		function getVisibleCards() {
 			const cards = container.querySelectorAll('.l3-review-card');
@@ -5303,22 +5366,28 @@ function l3_reviews_slider_shortcode($atts): string
 
 		function startAutoplay() {
 			stopAutoplay();
-			autoplayInterval = setInterval(nextSlide, 5000);
+			if (totalReviews >= 4) {
+				autoplayInterval = setInterval(nextSlide, 5000);
+			}
 		}
 
 		function stopAutoplay() {
 			if (autoplayInterval) clearInterval(autoplayInterval);
 		}
 
-		btnNext.addEventListener('click', () => {
-			nextSlide();
-			startAutoplay();
-		});
+		if (btnNext) {
+			btnNext.addEventListener('click', () => {
+				nextSlide();
+				startAutoplay();
+			});
+		}
 
-		btnPrev.addEventListener('click', () => {
-			prevSlide();
-			startAutoplay();
-		});
+		if (btnPrev) {
+			btnPrev.addEventListener('click', () => {
+				prevSlide();
+				startAutoplay();
+			});
+		}
 
 		// Hover triggers to pause/play autoplay
 		container.addEventListener('mouseenter', stopAutoplay);

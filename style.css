@@ -3543,7 +3543,8 @@ main.single-post-layout-pro {
     flex: 1 1 500px;
 }
 
-.l3-trajectory-text {
+.l3-trajectory-text,
+.l3-trajectory-text p {
     font-size: 1.1rem;
     line-height: 1.8;
     color: rgba(255, 255, 255, 0.85);

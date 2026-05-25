@@ -363,7 +363,17 @@ jQuery(document).ready(function($) {
 		}
 	});
 
-	// ── 5. Envío Asíncrono AJAX ──
+	// ── 5. Actualización de Tarjeta LinkedIn en tiempo real ──
+	$('#resena_linkedin_url').on('input', function() {
+		var val = $(this).val().trim();
+		if (val) {
+			$('#l3-card-profile-url').attr('href', val).text(val);
+		} else {
+			$('#l3-card-profile-url').attr('href', 'https://www.linkedin.com/').text('https://www.linkedin.com/');
+		}
+	});
+
+	// ── 6. Envío Asíncrono AJAX ──
 
 	$('.l3-resenas-form').on('submit', function(e) {
 		e.preventDefault();

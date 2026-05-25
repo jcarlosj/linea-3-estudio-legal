@@ -513,12 +513,13 @@
 	transform: scale(1);
 }
 .l3-linkedin-modal-header {
-	background: #004182;
-	color: #ffffff;
-	padding: 18px 24px;
+	background: var(--l3-blue-dark);
+	color: var(--l3-text-light);
+	padding: 20px 24px;
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
+	border-bottom: 3px solid var(--l3-gold);
 }
 .l3-linkedin-modal-header h4 {
 	margin: 0;

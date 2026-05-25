@@ -3434,9 +3434,15 @@ function l3_whatsapp_floating_button(): void
 	$whatsapp_url = 'https://wa.me/' . $whatsapp_number . '?text=' . rawurlencode($message);
 
 	?>
-	<a href="<?php echo esc_url($whatsapp_url); ?>" class="l3-whatsapp-floating" target="_blank" rel="noopener nofollow" aria-label="Escríbenos por WhatsApp">
-		<i class="fab fa-whatsapp"></i>
-	</a>
+	<div class="l3-whatsapp-container">
+		<div class="l3-whatsapp-tooltip">
+			<span class="l3-whatsapp-tooltip-text">Contáctanos</span>
+			<div class="l3-whatsapp-tooltip-tail"></div>
+		</div>
+		<a href="<?php echo esc_url($whatsapp_url); ?>" class="l3-whatsapp-floating" target="_blank" rel="noopener nofollow" aria-label="Escríbenos por WhatsApp">
+			<i class="fab fa-whatsapp"></i>
+		</a>
+	</div>
 	<?php
 }
 add_action('wp_footer', 'l3_whatsapp_floating_button', 100);

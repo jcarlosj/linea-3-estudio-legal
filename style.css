@@ -5849,60 +5849,165 @@ body footer .footer-credits p {
 /* ========================================================
    FLOATING WHATSAPP BUTTON (PREMIUM BRANDING)
    ======================================================== */
-.l3-whatsapp-floating {
+.l3-whatsapp-container {
     position: fixed !important;
     bottom: 30px !important;
     right: 30px !important;
-    width: 56px !important;
-    height: 56px !important;
-    background-color: #ce9e50 !important; /* Fondo dorado premium como el botón de chat */
-    border: 2px solid transparent !important; /* Evita saltos de píxel en hover */
-    border-radius: 50% !important;
+    z-index: 999999 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-end !important;
+    pointer-events: none !important; /* Permite clics pasen si no es en el botón */
+}
+
+.l3-whatsapp-floating {
+    position: relative !important;
+    width: 48px !important;
+    height: 48px !important;
+    background-color: transparent !important; /* Sin fondo de contenedor */
+    border: none !important; /* Sin borde de contenedor */
+    border-radius: 0 !important;
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
-    color: #0a2233 !important; /* Icono en oscuro corporativo */
-    font-size: 28px !important;
+    color: #ffffff !important; /* White Icon (Borde y teléfono) */
+    font-size: 52px !important; /* El ícono ahora es el botón en sí */
     text-decoration: none !important;
-    box-shadow: 0 4px 20px rgba(10, 34, 51, 0.35) !important;
-    z-index: 999999 !important;
+    box-shadow: none !important;
     transition: all 0.35s cubic-bezier(0.25, 0.8, 0.25, 1) !important;
     cursor: pointer !important;
+    pointer-events: auto !important; /* Reactiva clics solo en el botón */
+    filter: drop-shadow(0 4px 15px rgba(10, 34, 51, 0.25)) !important; /* Sombra en la forma del ícono */
+    z-index: 1 !important;
 }
 
-.l3-whatsapp-floating:hover {
-    background-color: #0a2233 !important; /* Fondo oscuro al hacer hover */
-    color: #ce9e50 !important; /* Icono dorado al hacer hover */
-    border-color: #ce9e50 !important; /* Borde dorado premium al hacer hover */
+/* Relleno verde interno del logo de WhatsApp */
+.l3-whatsapp-floating::before {
+    content: "" !important;
+    position: absolute !important;
+    top: 50% !important;
+    left: 50% !important;
+    width: 40px !important; /* Ligeramente más pequeño que el ícono (52px) para no salir del borde blanco */
+    height: 40px !important;
+    background-color: #25d366 !important;
+    border-radius: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    z-index: -1 !important;
+    transition: all 0.35s ease !important;
+}
+
+.l3-whatsapp-container:hover .l3-whatsapp-floating {
     transform: scale(1.08) translateY(-4px) !important;
-    box-shadow: 0 8px 25px rgba(206, 158, 80, 0.45) !important;
+    filter: drop-shadow(0 8px 25px rgba(37, 211, 102, 0.45)) !important;
 }
 
-/* Micro-animación de pulso áureo/dorado */
+.l3-whatsapp-container:hover .l3-whatsapp-floating::before {
+    background-color: #128c7e !important; /* Darker WhatsApp green on hover */
+}
+
+/* Micro-animación de pulso áureo/dorado y Brillo de Moneda */
 @keyframes l3-whatsapp-pulse {
-    0% {
-        box-shadow: 0 0 0 0 rgba(206, 158, 80, 0.45);
-    }
-    70% {
-        box-shadow: 0 0 0 15px rgba(206, 158, 80, 0);
-    }
-    100% {
-        box-shadow: 0 0 0 0 rgba(206, 158, 80, 0);
-    }
+    0% { box-shadow: 0 0 0 0 rgba(206, 158, 80, 0.45); }
+    70% { box-shadow: 0 0 0 15px rgba(206, 158, 80, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(206, 158, 80, 0); }
+}
+
+@keyframes l3-button-shiver {
+    0%, 22% { transform: translateX(0) scale(1); }
+    23% { transform: translateX(-4px) scale(0.96); } /* Shiver 1 */
+    24% { transform: translateX(2px) scale(1.02); }
+    25%, 28% { transform: translateX(0) scale(1); }
+    29% { transform: translateX(-4px) scale(0.96); } /* Shiver 2 */
+    30% { transform: translateX(2px) scale(1.02); }
+    31%, 100% { transform: translateX(0) scale(1); }
 }
 
 .l3-whatsapp-floating {
     animation: l3-whatsapp-pulse 2s infinite !important;
 }
 
+.l3-whatsapp-container:hover .l3-whatsapp-floating {
+    animation: l3-whatsapp-pulse 2s infinite !important; /* Detener el brillo en hover */
+}
+
+/* Tooltip / Globo Call to Action (Solo Escritorio) */
+@media (min-width: 1024px) {
+    .l3-whatsapp-floating {
+        animation: l3-whatsapp-pulse 2s infinite, l3-button-shiver 10s infinite !important;
+    }
+
+    @keyframes l3-tooltip-tap {
+        0%, 3% { opacity: 0; transform: translateY(-50%) translateX(-10px); visibility: hidden; }
+        6%, 20% { opacity: 1; transform: translateY(-50%) translateX(0px); visibility: visible; } /* Pausa inicial separada */
+        23% { transform: translateY(-50%) translateX(12px); } /* Toca el botón 1 */
+        26% { transform: translateY(-50%) translateX(0px); }  /* Regresa */
+        29% { transform: translateY(-50%) translateX(12px); } /* Toca el botón 2 */
+        32%, 52% { opacity: 1; transform: translateY(-50%) translateX(0px); visibility: visible; } /* Pausa final separada */
+        55%, 100% { opacity: 0; transform: translateY(-50%) translateX(-10px); visibility: hidden; } /* Desaparece */
+    }
+
+    .l3-whatsapp-tooltip {
+        position: absolute !important;
+        right: calc(100% + 24px) !important; /* Separación de ~1.5 rem (24px) */
+        top: 50% !important;
+        transform: translateY(-50%); /* Sin !important para que los keyframes funcionen */
+        display: flex !important;
+        align-items: center !important;
+        opacity: 0;
+        visibility: hidden;
+        animation: l3-tooltip-tap 10s infinite cubic-bezier(0.25, 0.8, 0.25, 1) !important;
+        pointer-events: none !important;
+    }
+
+    .l3-whatsapp-tooltip-text {
+        background-color: #ce9e50 !important;
+        color: #ffffff !important;
+        height: 38px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        padding: 0 16px !important;
+        box-sizing: border-box !important;
+        border-radius: 20px 0 0 20px !important;
+        font-family: 'Outfit', sans-serif !important;
+        font-size: 15px !important;
+        font-weight: 700 !important;
+        letter-spacing: 0.5px !important;
+        white-space: nowrap !important;
+        box-shadow: -5px 5px 20px rgba(10, 34, 51, 0.2) !important;
+    }
+
+    .l3-whatsapp-tooltip-tail {
+        width: 0 !important;
+        height: 0 !important;
+        border-top: 19px solid transparent !important;
+        border-bottom: 19px solid transparent !important;
+        border-left: 12px solid #ce9e50 !important;
+        border-right: none !important;
+    }
+
+    /* Forzar visibilidad y detener animación en hover */
+    .l3-whatsapp-container:hover .l3-whatsapp-tooltip {
+        opacity: 1 !important;
+        visibility: visible !important;
+        transform: translateY(-50%) translateX(0px) !important;
+        animation: none !important;
+        transition: all 0.3s ease !important;
+    }
+}
+
+/* Ocultar tooltip en móvil de seguridad */
+@media (max-width: 1023px) {
+    .l3-whatsapp-tooltip {
+        display: none !important;
+    }
+}
+
 /* Ajustes responsivos móviles para evitar colisiones con elementos del pie */
 @media (max-width: 767px) {
-    .l3-whatsapp-floating {
+    .l3-whatsapp-container {
         bottom: 20px !important;
         right: 20px !important;
-        width: 50px !important;
-        height: 50px !important;
-        font-size: 26px !important;
     }
 }
 

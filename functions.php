@@ -2929,24 +2929,24 @@ function linea3_legal_hide_title_css() {
 }
 
 /**
- * Registro de Custom Post Type: Aliados.
+ * Registro de Custom Post Type: Clientes.
  */
 function l3_register_aliados_cpt(): void
 {
 	$labels = array(
-		'name'                  => 'Aliados',
-		'singular_name'         => 'Aliado',
-		'menu_name'             => 'Aliados',
-		'name_admin_bar'        => 'Aliado',
+		'name'                  => 'Clientes',
+		'singular_name'         => 'Cliente',
+		'menu_name'             => 'Clientes',
+		'name_admin_bar'        => 'Cliente',
 		'add_new'               => 'Añadir Nuevo',
-		'add_new_item'          => 'Añadir Nuevo Aliado',
-		'new_item'              => 'Nuevo Aliado',
-		'edit_item'             => 'Editar Aliado',
-		'view_item'             => 'Ver Aliado',
-		'all_items'             => 'Todos los Aliados',
-		'search_items'          => 'Buscar Aliados',
-		'not_found'             => 'No se encontraron aliados.',
-		'not_found_in_trash'    => 'No hay aliados en la papelera.',
+		'add_new_item'          => 'Añadir Nuevo Cliente',
+		'new_item'              => 'Nuevo Cliente',
+		'edit_item'             => 'Editar Cliente',
+		'view_item'             => 'Ver Cliente',
+		'all_items'             => 'Todos los Clientes',
+		'search_items'          => 'Buscar Clientes',
+		'not_found'             => 'No se encontraron clientes.',
+		'not_found_in_trash'    => 'No hay clientes en la papelera.',
 	);
 
 	$args = array(
@@ -2971,13 +2971,13 @@ function l3_register_aliados_cpt(): void
 add_action('init', 'l3_register_aliados_cpt');
 
 /**
- * Meta Box para la URL del Aliado.
+ * Meta Box para la URL del Cliente.
  */
 function l3_aliados_add_meta_box(): void
 {
 	add_meta_box(
 		'l3_aliado_details',
-		'Información del Aliado',
+		'Información del Cliente',
 		'l3_aliado_details_callback',
 		'l3_aliado',
 		'normal',
@@ -3017,7 +3017,7 @@ function l3_aliado_save_meta($post_id): void
 add_action('save_post', 'l3_aliado_save_meta');
 
 /**
- * Shortcode para mostrar el Slider de Aliados.
+ * Shortcode para mostrar el Slider de Clientes.
  */
 function l3_allies_grid_shortcode($atts): string
 {

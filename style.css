@@ -6076,6 +6076,84 @@ body footer .made-with-part {
 /* ==========================================================================
    NUEVO PATRÓN PREMIUM: SLIDER / CAROUSEL DE TESTIMONIOS (RESEÑAS CPT)
    ========================================================================== */
+
+/* Estado Vacío de Testimonios (3 Tarjetas Animadas) */
+.l3-invitation-card {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+}
+
+.l3-ghost-card {
+    pointer-events: none !important;
+    user-select: none !important;
+    border-color: rgba(255, 255, 255, 0.05) !important;
+}
+
+/* Elementos Fantasma ocultos por defecto */
+.l3-ghost-rating-score,
+.l3-ghost-stars,
+.l3-ghost-quote-text,
+.l3-ghost-author-wrapper {
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.4s ease, visibility 0.4s ease;
+}
+
+.l3-ghost-element-visible {
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+/* Contenedor estricto para las estrellas en ghost cards */
+.l3-ghost-stars {
+    display: flex;
+    gap: 2px;
+}
+
+/* Efecto Máquina de Escribir (Cursor) */
+.l3-ghost-cursor {
+    display: inline-block;
+    width: 2px;
+    height: 1.1em;
+    background-color: #ce9e50;
+    vertical-align: text-bottom;
+    margin-left: 3px;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.l3-ghost-cursor.is-typing {
+    opacity: 1;
+    animation: l3-cursor-blink 0.8s infinite step-end;
+}
+
+@keyframes l3-cursor-blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+}
+
+.l3-empty-review-icon {
+    color: #ce9e50 !important;
+    margin-bottom: 24px !important;
+    opacity: 0.8 !important;
+}
+
+.l3-empty-review-icon svg {
+    width: 48px !important;
+    height: 48px !important;
+}
+
+.l3-empty-review-text {
+    color: rgba(255, 255, 255, 0.85) !important;
+    font-family: var(--wp--preset--font-family--serif) !important;
+    font-size: 1.15rem !important;
+    line-height: 1.6 !important;
+    margin-bottom: 0 !important;
+}
+
 .l3-reviews-slider-container {
     position: relative !important;
     display: flex !important;

@@ -4901,22 +4901,151 @@ function l3_reviews_slider_shortcode($atts): string
 	);
 
 	$query = new WP_Query($args);
-	if (!$query->have_posts()) {
-		return '';
-	}
-
-	$slider_id = 'l3-reviews-slider-' . uniqid();
 	$total_reviews = $query->post_count;
+	
+	$slider_id = 'l3-reviews-slider-' . uniqid();
+	$output = '';
 
-	$output = '<div class="l3-reviews-slider-container" id="' . $slider_id . '" data-total-reviews="' . $total_reviews . '">';
-	
-	// Botón anterior (solo si hay más de 3 reseñas)
-	if ($total_reviews > 3) {
-		$output .= '<button class="l3-slider-btn prev" aria-label="Anterior"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg></button>';
-	}
-	
-	$output .= '<div class="l3-reviews-slider-viewport">';
-	$output .= '<div class="l3-reviews-slider-track">';
+	$output .= '<div class="l3-reviews-slider-container" id="' . $slider_id . '" data-total-reviews="' . $total_reviews . '">';
+
+	if ($total_reviews === 0) {
+		// Estado Vacío: 3 Tarjetas (Esqueleto - Invitación - Esqueleto)
+		$output .= '<div class="l3-reviews-slider-viewport">';
+		$output .= '<div class="l3-reviews-slider-track">';
+		
+		// Ghost card izquierdo
+		$output .= '<div class="l3-review-card l3-ghost-card" id="l3-ghost-left" data-text="Excelente servicio legal y profesional. Me brindaron un gran apoyo corporativo para mi empresa Corporación Alpha.">';
+		$output .= '<div class="l3-review-rating-header" style="margin-bottom: 18px;">';
+		$output .= '<span class="l3-review-rating-score l3-ghost-rating-score">5.0</span>';
+		$output .= '<div class="l3-review-stars-wrapper" style="display: flex; flex-direction: column; padding-top: 3px;"><div class="l3-review-stars l3-stars-perfect l3-ghost-stars" style="margin-bottom: 2px !important;">';
+		for($i=0; $i<5; $i++) {
+			$output .= '<svg viewBox="0 0 24 24"><path d="M12 .587l3.668 7.431 8.2 1.191-5.934 5.787 1.4 8.168L12 18.896l-7.334 3.857 1.4-8.168L.132 9.209l8.2-1.191L12 .587z"/></svg>';
+		}
+		$output .= '</div><div class="l3-review-rating-label l3-ghost-stars" style="margin-bottom: 0 !important;">Excelente servicio</div></div></div>';
+		$output .= '<div class="l3-review-quote"><span class="l3-ghost-quote-text"></span><span class="l3-ghost-cursor"></span></div>';
+		$output .= '<div class="l3-review-author l3-ghost-author-wrapper" style="margin-top: auto;">';
+		$output .= '<img class="l3-review-avatar" src="' . get_stylesheet_directory_uri() . '/assets/images/avatar-juan.jpg" alt="Avatar" loading="lazy">';
+		$output .= '<div class="l3-review-meta"><div class="l3-review-name-row"><span class="l3-review-name">Juan C Jiménez G</span><span class="l3-review-linkedin-badge"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg></span></div>';
+		$output .= '<span class="l3-review-title">Director Jurídico en Corporación Alpha</span>';
+		$output .= '<span class="l3-review-date">23 mayo, 2026</span></div></div>';
+		$output .= '</div>';
+
+		// Tarjeta central de invitación
+		$output .= '<div class="l3-review-card l3-invitation-card">';
+		$output .= '<div class="l3-empty-review-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg></div>';
+		$output .= '<p class="l3-empty-review-text">Su perspectiva es fundamental para nuestra excelencia. Le invitamos a compartir su experiencia trabajando junto a Línea 3 Estudio Legal.</p>';
+		$output .= '<div class="l3-review-cta-wrap" style="margin-top: 24px; text-align: center;">';
+		$output .= '<button id="l3-open-review-modal" class="l3-review-cta-btn">DEJAR MI RESEÑA</button>';
+		$output .= '</div>';
+		$output .= '</div>';
+
+		// Ghost card derecho
+		$output .= '<div class="l3-review-card l3-ghost-card" id="l3-ghost-right" data-text="La atención al detalle y el profundo conocimiento en derecho corporativo marcaron la diferencia. Totalmente recomendados para procesos complejos.">';
+		$output .= '<div class="l3-review-rating-header" style="margin-bottom: 18px;">';
+		$output .= '<span class="l3-review-rating-score l3-ghost-rating-score">5.0</span>';
+		$output .= '<div class="l3-review-stars-wrapper" style="display: flex; flex-direction: column; padding-top: 3px;"><div class="l3-review-stars l3-stars-perfect l3-ghost-stars" style="margin-bottom: 2px !important;">';
+		for($i=0; $i<5; $i++) {
+			$output .= '<svg viewBox="0 0 24 24"><path d="M12 .587l3.668 7.431 8.2 1.191-5.934 5.787 1.4 8.168L12 18.896l-7.334 3.857 1.4-8.168L.132 9.209l8.2-1.191L12 .587z"/></svg>';
+		}
+		$output .= '</div><div class="l3-review-rating-label l3-ghost-stars" style="margin-bottom: 0 !important;">Excelente servicio</div></div></div>';
+		$output .= '<div class="l3-review-quote"><span class="l3-ghost-quote-text"></span><span class="l3-ghost-cursor"></span></div>';
+		$output .= '<div class="l3-review-author l3-ghost-author-wrapper" style="margin-top: auto;">';
+		$output .= '<img class="l3-review-avatar" src="' . get_stylesheet_directory_uri() . '/assets/images/avatar-eva.jpg" alt="Avatar" loading="lazy">';
+		$output .= '<div class="l3-review-meta"><div class="l3-review-name-row"><span class="l3-review-name">Eva Sofía Gutiérrez</span><span class="l3-review-linkedin-badge"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg></span></div>';
+		$output .= '<span class="l3-review-title">CEO en BETA CORP</span>';
+		$output .= '<span class="l3-review-date">24 mayo, 2026</span></div></div>';
+		$output .= '</div>';
+
+		$output .= '</div>'; // End track
+		$output .= '</div>'; // End viewport
+
+		// JavaScript para orquestar la animación Ghost
+		$output .= '<script>
+		document.addEventListener("DOMContentLoaded", function() {
+			const leftCard = document.getElementById("l3-ghost-left");
+			const rightCard = document.getElementById("l3-ghost-right");
+			if (!leftCard || !rightCard) return;
+
+			function typeText(element, text, speed, callback) {
+				let i = 0;
+				element.innerHTML = "";
+				function typeNext() {
+					if (i < text.length) {
+						element.innerHTML += text.charAt(i);
+						i++;
+						setTimeout(typeNext, speed);
+					} else {
+						if (callback) callback();
+					}
+				}
+				typeNext();
+			}
+
+			function animateCard(card, callback) {
+				const score = card.querySelector(".l3-ghost-rating-score");
+				const stars = card.querySelectorAll(".l3-ghost-stars");
+				const quoteText = card.querySelector(".l3-ghost-quote-text");
+				const cursor = card.querySelector(".l3-ghost-cursor");
+				const author = card.querySelector(".l3-ghost-author-wrapper");
+				const text = card.getAttribute("data-text");
+
+				// Reset state
+				score.classList.remove("l3-ghost-element-visible");
+				stars.forEach(s => s.classList.remove("l3-ghost-element-visible"));
+				quoteText.innerHTML = "";
+				quoteText.classList.add("l3-ghost-element-visible");
+				cursor.classList.add("is-typing");
+				cursor.style.display = "inline-block";
+				author.classList.remove("l3-ghost-element-visible");
+
+				// Start sequence
+				setTimeout(() => {
+					score.classList.add("l3-ghost-element-visible");
+					setTimeout(() => {
+						stars.forEach(s => s.classList.add("l3-ghost-element-visible"));
+						setTimeout(() => {
+							typeText(quoteText, text, 35, () => {
+								cursor.classList.remove("is-typing");
+								setTimeout(() => {
+									author.classList.add("l3-ghost-element-visible");
+									setTimeout(callback, 4000); // Wait 4s reading time before next
+								}, 600);
+							});
+						}, 600);
+					}, 400);
+				}, 600);
+			}
+
+			function runLoop() {
+				animateCard(leftCard, () => {
+					// Hide left cursor when right starts typing
+					const leftCursor = leftCard.querySelector(".l3-ghost-cursor");
+					leftCursor.style.display = "none";
+					
+					animateCard(rightCard, () => {
+						const rightCursor = rightCard.querySelector(".l3-ghost-cursor");
+						rightCursor.style.display = "none";
+
+						// Restart loop
+						setTimeout(() => {
+							runLoop();
+						}, 500);
+					});
+				});
+			}
+
+			// Initial start
+			runLoop();
+		});
+		</script>';
+	} else {
+		// Botón anterior (solo si hay más de 3 reseñas)
+		if ($total_reviews > 3) {
+			$output .= '<button class="l3-slider-btn prev" aria-label="Anterior"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg></button>';
+		}
+		
+		$output .= '<div class="l3-reviews-slider-viewport">';
+	    $output .= '<div class="l3-reviews-slider-track">';
 	
 	while ($query->have_posts()) {
 		$query->the_post();
@@ -5061,19 +5190,23 @@ function l3_reviews_slider_shortcode($atts): string
 	$output .= '</div>'; // End track
 	$output .= '</div>'; // End viewport
 	
-	// Botón siguiente (solo si hay más de 3 reseñas)
-	if ($total_reviews > 3) {
-		$output .= '<button class="l3-slider-btn next" aria-label="Siguiente"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg></button>';
-	}
 	
+		// Botón siguiente (solo si hay más de 3 reseñas)
+		if ($total_reviews > 3) {
+			$output .= '<button class="l3-slider-btn next" aria-label="Siguiente"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg></button>';
+		}
+	} // Fin del else (total_reviews > 0)
+		
 	$output .= '</div>'; // End container
 
-	// Botón "Dejar Reseña" centrado
-	$output .= '<div class="l3-review-cta-wrap">';
-	$output .= '<button id="l3-open-review-modal" class="l3-review-cta-btn">DEJAR MI RESEÑA</button>';
-	$output .= '</div>';
+	// Botón "Dejar Reseña" general abajo (solo se muestra si hay testimonios reales)
+	if ($total_reviews > 0) {
+		$output .= '<div class="l3-review-cta-wrap">';
+		$output .= '<button id="l3-open-review-modal" class="l3-review-cta-btn">DEJAR MI RESEÑA</button>';
+		$output .= '</div>';
+	}
 
-	// Modal de Selección de Flujo
+	// Modal de Selección de Flujo (Se imprime siempre)
 	$output .= '
 	<div id="l3-review-choice-modal" class="l3-custom-modal-overlay">
 		<div class="l3-custom-modal-box">
@@ -5346,10 +5479,13 @@ function l3_reviews_slider_shortcode($atts): string
 	$output .= "
 	<script>
 	document.addEventListener('DOMContentLoaded', function() {
-		const container = document.getElementById('" . $slider_id . "');
-		if (!container) return;
+		
+		// Slider Logic
+		(function(){
+			const container = document.getElementById('" . $slider_id . "');
+			if (!container) return;
 
-		const track = container.querySelector('.l3-reviews-slider-track');
+			const track = container.querySelector('.l3-reviews-slider-track');
 		const viewport = container.querySelector('.l3-reviews-slider-viewport');
 		const btnPrev = container.querySelector('.l3-slider-btn.prev');
 		const btnNext = container.querySelector('.l3-slider-btn.next');
@@ -5433,7 +5569,13 @@ function l3_reviews_slider_shortcode($atts): string
 
 		window.addEventListener('resize', updateSlider);
 		
-		// Lógica del modal de selección
+		// Initial setup
+		setTimeout(updateSlider, 200);
+		startAutoplay();
+		
+	})();
+	
+		// Lógica del modal de selección (Fuera del bloque del slider)
 		const openBtn = document.getElementById('l3-open-review-modal');
 		const closeBtn = document.getElementById('l3-close-choice-modal');
 		const modalOverlay = document.getElementById('l3-review-choice-modal');
@@ -5461,15 +5603,10 @@ function l3_reviews_slider_shortcode($atts): string
 		if (modalOverlay) {
 			modalOverlay.addEventListener('click', function(e) {
 				if (e.target === modalOverlay) {
-					modalOverlay.classList.remove('is-visible');
 					document.body.classList.remove('l3-modal-open-lock');
 				}
 			});
 		}
-
-		// Initial setup
-		setTimeout(updateSlider, 200);
-		startAutoplay();
 	});
 	</script>";
 

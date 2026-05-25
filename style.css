@@ -3108,6 +3108,22 @@ main.single-post-layout-pro {
     /* Limpieza de fondo */
 }
 
+/* Ocultar sección completa si no hay clientes */
+.l3-allies-section:has(.l3-empty-allies) {
+    display: none !important;
+}
+
+/* Estado estático (1-4 clientes): Centrado, sin animaciones ni degradados */
+.l3-allies-static .l3-allies-slider-viewport::before,
+.l3-allies-static .l3-allies-slider-viewport::after {
+    display: none !important;
+}
+
+.l3-allies-static .l3-allies-slider-track {
+    justify-content: center !important;
+    flex-wrap: wrap !important;
+}
+
 .l3-allies-slider-container {
     position: relative !important;
     width: 100% !important;

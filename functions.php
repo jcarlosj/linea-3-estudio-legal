@@ -3029,18 +3029,9 @@ function l3_allies_grid_shortcode($atts): string
 	);
 
 	$query = new WP_Query($args);
-	if (!$query->have_posts()) {
-		return '';
-	}
+	$cards_html = '';
+	$valid_count = 0;
 
-	$slider_id = 'l3-slider-' . uniqid();
-
-	$output = '<div class="l3-allies-slider-container" id="' . $slider_id . '">';
-	$output .= '<button class="l3-slider-btn prev" aria-label="Anterior"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg></button>';
-	
-	$output .= '<div class="l3-allies-slider-viewport">';
-	$output .= '<div class="l3-allies-slider-track">';
-	
 	while ($query->have_posts()) {
 		$query->the_post();
 		$thumb_id = get_post_thumbnail_id(get_the_ID());
@@ -3048,105 +3039,132 @@ function l3_allies_grid_shortcode($atts): string
 		$site_url = get_post_meta(get_the_ID(), '_l3_aliado_url', true);
 
 		if ($logo_img) {
-			$output .= '<div class="ally-card">';
+			$valid_count++;
+			$cards_html .= '<div class="ally-card">';
 			if ($site_url) {
-				$output .= '<a href="' . esc_url($site_url) . '" target="_blank" rel="noopener noreferrer">';
+				$cards_html .= '<a href="' . esc_url($site_url) . '" target="_blank" rel="noopener noreferrer">';
 			}
-			$output .= $logo_img;
+			$cards_html .= $logo_img;
 			if ($site_url) {
-				$output .= '</a>';
+				$cards_html .= '</a>';
 			}
-			$output .= '</div>';
+			$cards_html .= '</div>';
 		}
 	}
 	wp_reset_postdata();
 
+	if ($valid_count === 0) {
+		return '<div class="l3-empty-allies" style="display:none;"></div><script>(function(){ var el = document.currentScript.previousElementSibling; if(el) { var wrapper = el.closest(".l3-allies-section") || el.closest(".alignfull"); if(wrapper) { wrapper.style.display = "none"; } } })();</script>';
+	}
+
+	$slider_id = 'l3-slider-' . uniqid();
+	
+	$container_class = 'l3-allies-slider-container';
+	if ($valid_count < 5) {
+		$container_class .= ' l3-allies-static';
+	}
+
+	$output = '<div class="' . $container_class . '" id="' . $slider_id . '">';
+	
+	if ($valid_count >= 5) {
+		$output .= '<button class="l3-slider-btn prev" aria-label="Anterior"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg></button>';
+	}
+	
+	$output .= '<div class="l3-allies-slider-viewport">';
+	$output .= '<div class="l3-allies-slider-track">';
+	
+	$output .= $cards_html;
+
 	$output .= '</div>'; // End track
 	$output .= '</div>'; // End viewport
 	
-	$output .= '<button class="l3-slider-btn next" aria-label="Siguiente"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg></button>';
+	if ($post_count >= 5) {
+		$output .= '<button class="l3-slider-btn next" aria-label="Siguiente"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg></button>';
+	}
 	$output .= '</div>'; // End container
 
-	// JavaScript for the slider
-	$output .= "
-	<script>
-	document.addEventListener('DOMContentLoaded', function() {
-		const container = document.getElementById('" . $slider_id . "');
-		if (!container) return;
+	if ($post_count >= 5) {
+		// JavaScript for the slider
+		$output .= "
+		<script>
+		document.addEventListener('DOMContentLoaded', function() {
+			const container = document.getElementById('" . $slider_id . "');
+			if (!container) return;
 
-		const track = container.querySelector('.l3-allies-slider-track');
-		const viewport = container.querySelector('.l3-allies-slider-viewport');
-		const btnPrev = container.querySelector('.l3-slider-btn.prev');
-		const btnNext = container.querySelector('.l3-slider-btn.next');
-		
-		let index = 0;
-		let autoplayInterval;
-
-		function getVisibleCards() {
-			const cardWidth = container.querySelector('.ally-card').offsetWidth + 20; // 20 is gap
-			return Math.floor(viewport.offsetWidth / cardWidth);
-		}
-
-		function updateSlider() {
-			const cardWidth = container.querySelector('.ally-card').offsetWidth + 20;
-			const maxIndex = track.children.length - getVisibleCards();
+			const track = container.querySelector('.l3-allies-slider-track');
+			const viewport = container.querySelector('.l3-allies-slider-viewport');
+			const btnPrev = container.querySelector('.l3-slider-btn.prev');
+			const btnNext = container.querySelector('.l3-slider-btn.next');
 			
-			if (index > maxIndex) index = 0;
-			if (index < 0) index = maxIndex > 0 ? maxIndex : 0;
+			let index = 0;
+			let autoplayInterval;
 
-			const offset = index * cardWidth;
-			track.style.transform = 'translateX(-' + offset + 'px)';
-		}
+			function getVisibleCards() {
+				const cardWidth = container.querySelector('.ally-card').offsetWidth + 20; // 20 is gap
+				return Math.floor(viewport.offsetWidth / cardWidth);
+			}
 
-		function nextSlide() {
-			index++;
-			updateSlider();
-		}
+			function updateSlider() {
+				const cardWidth = container.querySelector('.ally-card').offsetWidth + 20;
+				const maxIndex = track.children.length - getVisibleCards();
+				
+				if (index > maxIndex) index = 0;
+				if (index < 0) index = maxIndex > 0 ? maxIndex : 0;
 
-		function prevSlide() {
-			index--;
-			updateSlider();
-		}
+				const offset = index * cardWidth;
+				track.style.transform = 'translateX(-' + offset + 'px)';
+			}
 
-		function startAutoplay() {
-			stopAutoplay();
-			autoplayInterval = setInterval(nextSlide, 5000);
-		}
+			function nextSlide() {
+				index++;
+				updateSlider();
+			}
 
-		function stopAutoplay() {
-			if (autoplayInterval) clearInterval(autoplayInterval);
-		}
+			function prevSlide() {
+				index--;
+				updateSlider();
+			}
 
-		btnNext.addEventListener('click', () => {
-			nextSlide();
+			function startAutoplay() {
+				stopAutoplay();
+				autoplayInterval = setInterval(nextSlide, 5000);
+			}
+
+			function stopAutoplay() {
+				if (autoplayInterval) clearInterval(autoplayInterval);
+			}
+
+			btnNext.addEventListener('click', () => {
+				nextSlide();
+				startAutoplay();
+			});
+
+			btnPrev.addEventListener('click', () => {
+				prevSlide();
+				startAutoplay();
+			});
+
+			// Touch events for mobile
+			let touchStartX = 0;
+			viewport.addEventListener('touchstart', (e) => {
+				touchStartX = e.touches[0].clientX;
+				stopAutoplay();
+			});
+
+			viewport.addEventListener('touchend', (e) => {
+				const touchEndX = e.changedTouches[0].clientX;
+				if (touchStartX - touchEndX > 50) nextSlide();
+				if (touchStartX - touchEndX < -50) prevSlide();
+				startAutoplay();
+			});
+
+			window.addEventListener('resize', updateSlider);
+			
+			// Initial start
 			startAutoplay();
 		});
-
-		btnPrev.addEventListener('click', () => {
-			prevSlide();
-			startAutoplay();
-		});
-
-		// Touch events for mobile
-		let touchStartX = 0;
-		viewport.addEventListener('touchstart', (e) => {
-			touchStartX = e.touches[0].clientX;
-			stopAutoplay();
-		});
-
-		viewport.addEventListener('touchend', (e) => {
-			const touchEndX = e.changedTouches[0].clientX;
-			if (touchStartX - touchEndX > 50) nextSlide();
-			if (touchStartX - touchEndX < -50) prevSlide();
-			startAutoplay();
-		});
-
-		window.addEventListener('resize', updateSlider);
-		
-		// Initial start
-		startAutoplay();
-	});
-	</script>";
+		</script>";
+	}
 
 	return $output;
 }

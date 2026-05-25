@@ -3822,6 +3822,54 @@ function l3_resena_details_callback($post): void
 				<span id="l3-resena-char-count"><?php echo $char_count; ?></span>/240 caracteres
 			</div>
 		</div>
+		</div>
+		
+		<hr class="l3-resena-separator">
+
+		<!-- Reseña Destacada -->
+		<div class="l3-resena-field l3-resena-field--checkbox">
+			<label>
+				<?php 
+				$destacada = get_post_meta($post->ID, '_l3_resena_destacada', true);
+				
+				// Calcular total de reseñas destacadas actuales (excluyendo esta misma)
+				$args_destacadas = array(
+					'post_type'      => 'l3_resena',
+					'posts_per_page' => -1,
+					'post_status'    => 'any',
+					'meta_query'     => array(
+						array(
+							'key'     => '_l3_resena_destacada',
+							'value'   => '1',
+							'compare' => '='
+						)
+					),
+					'fields' => 'ids',
+					'post__not_in' => array($post->ID)
+				);
+				$destacadas_query = new WP_Query($args_destacadas);
+				$current_featured_count = $destacadas_query->found_posts;
+				$disable_checkbox = ($destacada !== '1' && $current_featured_count >= 3);
+				?>
+				<input
+					type="checkbox"
+					id="l3_resena_destacada"
+					name="l3_resena_destacada"
+					value="1"
+					<?php checked($destacada, '1'); ?>
+					<?php echo $disable_checkbox ? 'disabled="disabled"' : ''; ?>
+				>
+				<strong>Marcar como Reseña Destacada (Fija)</strong>
+			</label>
+			
+			<?php if ($disable_checkbox): ?>
+				<p class="description l3-admin-inline-error" style="color: #ce9e50; font-weight: 500; margin-top: 8px;">
+					Límite alcanzado: Ya tienes 3 reseñas destacadas. Debes desmarcar otra publicación primero para poder destacar esta.
+				</p>
+			<?php else: ?>
+				<p class="description">Las reseñas marcadas como destacadas aparecerán de primeras en el carrusel (máximo 3).</p>
+			<?php endif; ?>
+		</div>
 	</div>
 
 	<script>
@@ -3881,6 +3929,101 @@ function l3_resena_details_callback($post): void
 
 		// Disparar el evento al cargar para estado inicial
 		$textarea.trigger('input');
+		// ── Validación de Backend (Admin) al guardar ──
+		var $postForm = $('form#post');
+		if ($postForm.length) {
+			$postForm.on('submit', function(e) {
+				var $nombre = $('#l3_resena_nombre');
+				var $contenido = $('#l3_resena_contenido');
+				var $redSocialTipo = $('#l3_resena_red_social_tipo');
+				var $redSocialUrl = $('#l3_resena_red_social_url');
+				
+				$('.l3-admin-inline-error').remove();
+				var hasErrors = false;
+
+				function showError($el, msg) {
+					$el.css('border-color', '#ce9e50');
+					$el.after('<div class="l3-admin-inline-error" style="color: #ce9e50; font-size: 12px; margin-top: 4px;">' + msg + '</div>');
+					hasErrors = true;
+				}
+
+				// Reset borders
+				$nombre.add($contenido).add($redSocialUrl).css('border-color', '');
+
+				// Validar nombre
+				if ($nombre.length && $nombre.val().trim().length < 3) {
+					showError($nombre, 'El nombre debe tener al menos 3 caracteres.');
+				}
+
+				// Validar contenido
+				if ($contenido.length && $contenido.val().trim().length < 10) {
+					showError($contenido, 'La reseña debe tener al menos 10 caracteres.');
+				}
+
+				// Validar Cargo condicional a Empresa
+				var $empresa = $('#l3_resena_empresa');
+				var $cargo = $('#l3_resena_cargo');
+				$cargo.css('border-color', '');
+				if ($empresa.length && $empresa.val().trim() !== '' && $cargo.length && $cargo.val().trim() === '') {
+					showError($cargo, 'Es obligatorio especificar el cargo en la empresa');
+				}
+
+				// Validar URL según red social
+				if ($redSocialTipo.length && $redSocialUrl.length) {
+					var tipo = $redSocialTipo.val();
+					var url = $redSocialUrl.val().trim();
+					
+					if (tipo !== '' && url !== '') {
+						var regex;
+						var expectedPrefix = '';
+						if (tipo === 'linkedin') {
+							regex = /^https?:\/\/(www\.)?linkedin\.com\/(in|company)\/.+/i;
+							expectedPrefix = 'https://linkedin.com/in/ o https://linkedin.com/company/';
+						} else if (tipo === 'instagram') {
+							regex = /^https?:\/\/(www\.)?instagram\.com\/.+/i;
+							expectedPrefix = 'https://instagram.com/';
+						} else if (tipo === 'facebook') {
+							regex = /^https?:\/\/(www\.)?facebook\.com\/.+/i;
+							expectedPrefix = 'https://facebook.com/';
+						}
+
+						if (regex && !regex.test(url)) {
+							if (tipo === 'linkedin') {
+								showError($redSocialUrl, 'Debe contener /in/nombre-usuario o /company/nombre-empresa después de linkedin.com/');
+							} else {
+								showError($redSocialUrl, 'Debe incluir tu nombre de usuario después de ' + tipo + '.com/');
+							}
+						}
+					} else if (tipo !== '' && url === '') {
+						showError($redSocialUrl, 'Debe ingresar la URL si selecciona una red social.');
+					} else if (tipo === '' && url !== '') {
+						showError($redSocialTipo, 'Seleccione el tipo de red social para la URL ingresada.');
+					}
+				}
+
+				if (hasErrors) {
+					e.preventDefault();
+					// Scroll to first error
+					$('html, body').animate({
+						scrollTop: $('.l3-admin-inline-error').first().offset().top - 60
+					}, 300);
+					
+					// Re-enable publish button
+					setTimeout(function() {
+						$('#publish').removeClass('button-primary-disabled').prop('disabled', false);
+						$('.spinner').removeClass('is-active');
+					}, 100);
+					
+					return false;
+				}
+			});
+
+			// Limpiar errores al escribir
+			$('#l3_resena_nombre, #l3_resena_contenido, #l3_resena_red_social_url, #l3_resena_red_social_tipo').on('input change', function() {
+				$(this).css('border-color', '');
+				$(this).next('.l3-admin-inline-error').remove();
+			});
+		}
 	});
 	</script>
 	<?php
@@ -3951,6 +4094,13 @@ function l3_resena_save_meta($post_id): void
 		$contenido = mb_substr($contenido, 0, 140); // Forzar límite de 140
 		update_post_meta($post_id, '_l3_resena_contenido', $contenido);
 	}
+
+	// Reseña Destacada
+	if (isset($_POST['l3_resena_destacada'])) {
+		update_post_meta($post_id, '_l3_resena_destacada', '1');
+	} else {
+		update_post_meta($post_id, '_l3_resena_destacada', '0');
+	}
 }
 add_action('save_post', 'l3_resena_save_meta');
 
@@ -3968,11 +4118,44 @@ function l3_resena_custom_columns($columns): array
 	$new_columns['l3_contenido'] = 'Reseña';
 	$new_columns['l3_origen']    = 'Procedencia';
 	$new_columns['l3_social']    = 'Red Social';
+	$new_columns['l3_destacada'] = 'Destacada';
 	$new_columns['date']        = $columns['date'];
 
 	return $new_columns;
 }
 add_filter('manage_l3_resena_posts_columns', 'l3_resena_custom_columns');
+
+function l3_resena_sortable_columns($columns) {
+	$columns['l3_destacada'] = 'l3_destacada';
+	$columns['l3_rating']    = 'l3_rating';
+	$columns['l3_origen']    = 'l3_origen';
+	$columns['l3_social']    = 'l3_social';
+	return $columns;
+}
+add_filter('manage_edit-l3_resena_sortable_columns', 'l3_resena_sortable_columns');
+
+function l3_resena_sortable_columns_orderby($query) {
+	if (!is_admin() || !$query->is_main_query()) {
+		return;
+	}
+	if ($query->get('post_type') === 'l3_resena') {
+		$orderby = $query->get('orderby');
+		if ($orderby === 'l3_destacada') {
+			$query->set('meta_key', '_l3_resena_destacada');
+			$query->set('orderby', 'meta_value');
+		} elseif ($orderby === 'l3_rating') {
+			$query->set('meta_key', '_l3_resena_rating');
+			$query->set('orderby', 'meta_value_num');
+		} elseif ($orderby === 'l3_origen') {
+			$query->set('meta_key', '_l3_resena_via_linkedin');
+			$query->set('orderby', 'meta_value');
+		} elseif ($orderby === 'l3_social') {
+			$query->set('meta_key', '_l3_resena_red_social_tipo');
+			$query->set('orderby', 'meta_value');
+		}
+	}
+}
+add_action('pre_get_posts', 'l3_resena_sortable_columns_orderby');
 
 function l3_resena_custom_column_content($column, $post_id): void
 {
@@ -4006,7 +4189,7 @@ function l3_resena_custom_column_content($column, $post_id): void
 					$stars_html .= '<span class="l3-col-star l3-col-star--empty">☆</span>';
 				}
 			}
-			echo '<span class="l3-col-stars">' . $stars_html . '</span>';
+			echo '<span class="l3-col-stars">' . $stars_html . '<span class="l3-col-star-numeric">' . number_format($rating, 1) . '/5</span></span>';
 			break;
 
 		case 'l3_contenido':
@@ -4060,6 +4243,15 @@ function l3_resena_custom_column_content($column, $post_id): void
 				if ($auth === '1') {
 					echo ' <span class="l3-col-linkedin-auth" title="Autoriza publicar en su LinkedIn">✓</span>';
 				}
+			} else {
+				echo '<span class="l3-col-empty">—</span>';
+			}
+			break;
+
+		case 'l3_destacada':
+			$destacada = get_post_meta($post_id, '_l3_resena_destacada', true);
+			if ($destacada === '1') {
+				echo '<span class="dashicons dashicons-star-filled" style="color: #ce9e50; font-size: 20px;" title="Reseña Destacada"></span>';
 			} else {
 				echo '<span class="l3-col-empty">—</span>';
 			}
@@ -4289,6 +4481,12 @@ function l3_resenas_admin_styles(): void
 			white-space: nowrap;
 			font-size: 15px;
 		}
+		.l3-col-star-numeric {
+			font-size: 13px;
+			font-weight: 600;
+			color: #646970;
+			margin-left: 6px;
+		}
 		.l3-col-star--filled {
 			color: #d4a843;
 		}
@@ -4376,6 +4574,10 @@ function l3_resenas_admin_styles(): void
 		}
 		.column-l3_social {
 			width: 90px;
+		}
+		.column-l3_destacada {
+			width: 90px;
+			text-align: center;
 		}
 	</style>
 	<?php
@@ -4892,16 +5094,48 @@ add_action('wp_head', function(): void {
  */
 function l3_reviews_slider_shortcode($atts): string
 {
-	$args = array(
+	// 1. Obtener hasta 3 reseñas destacadas
+	$featured_args = array(
 		'post_type'      => 'l3_resena',
-		'posts_per_page' => -1,
+		'posts_per_page' => 3,
+		'post_status'    => 'publish',
+		'orderby'        => 'date',
+		'order'          => 'DESC',
+		'meta_query'     => array(
+			array(
+				'key'     => '_l3_resena_destacada',
+				'value'   => '1',
+				'compare' => '='
+			)
+		)
+	);
+	$featured_query = new WP_Query($featured_args);
+	$featured_posts = $featured_query->posts;
+
+	// Obtener IDs de las destacadas para excluirlas de la siguiente consulta
+	$featured_ids = array();
+	foreach ($featured_posts as $fp) {
+		$featured_ids[] = $fp->ID;
+	}
+
+	// 2. Obtener hasta 9 reseñas recientes (que no sean las destacadas)
+	$recent_args = array(
+		'post_type'      => 'l3_resena',
+		'posts_per_page' => 9,
 		'post_status'    => 'publish',
 		'orderby'        => 'date',
 		'order'          => 'DESC',
 	);
+	if (!empty($featured_ids)) {
+		$recent_args['post__not_in'] = $featured_ids;
+	}
+	
+	$recent_query = new WP_Query($recent_args);
+	$recent_posts = $recent_query->posts;
 
-	$query = new WP_Query($args);
-	$total_reviews = $query->post_count;
+	// 3. Combinar ambos arreglos (Total máximo: 12)
+	$final_posts = array_merge($featured_posts, $recent_posts);
+	$total_reviews = count($final_posts);
 	
 	$slider_id = 'l3-reviews-slider-' . uniqid();
 	$output = '';
@@ -5039,17 +5273,18 @@ function l3_reviews_slider_shortcode($atts): string
 		});
 		</script>';
 	} else {
-		// Botón anterior (solo si hay más de 3 reseñas)
-		if ($total_reviews > 3) {
+		// Botón anterior (solo si hay más de 3 reseñas o items en total)
+		if ($total_reviews + 1 > 3) {
 			$output .= '<button class="l3-slider-btn prev" aria-label="Anterior"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg></button>';
 		}
 		
 		$output .= '<div class="l3-reviews-slider-viewport">';
 	    $output .= '<div class="l3-reviews-slider-track">';
 	
-	while ($query->have_posts()) {
-		$query->the_post();
-		$post_id = get_the_ID();
+	global $post;
+	foreach ($final_posts as $post) {
+		setup_postdata($post);
+		$post_id = $post->ID;
 		
 		// Obtener campos de la reseña
 		$nombre        = get_post_meta($post_id, '_l3_resena_nombre', true);
@@ -5074,8 +5309,8 @@ function l3_reviews_slider_shortcode($atts): string
 		if (mb_strlen($contenido) > 180) {
 			$contenido = mb_substr($contenido, 0, 177) . '...';
 		}
-		if ($rating <= 0 || $rating > 5) {
-			$rating = 5;
+		if ($rating < 0 || $rating > 5) {
+			$rating = 0;
 		}
 		if (empty($foto_url)) {
 			$foto_url = 'https://secure.gravatar.com/avatar/ad516503a11cd5ca435acc9bb6523536?s=150&d=mm&r=g';
@@ -5187,24 +5422,113 @@ function l3_reviews_slider_shortcode($atts): string
 	}
 	wp_reset_postdata();
 	
+	// Añadir siempre la tarjeta de invitación como el último elemento del track
+	$output .= '<div class="l3-review-card l3-invitation-card">';
+	$output .= '<div class="l3-empty-review-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg></div>';
+	$output .= '<p class="l3-empty-review-text">Su perspectiva es fundamental para nuestra excelencia. Le invitamos a compartir su experiencia trabajando junto a Línea 3 Estudio Legal.</p>';
+	$output .= '<div class="l3-review-cta-wrap" style="margin-top: 24px; text-align: center;">';
+	$output .= '<button id="l3-open-review-modal" class="l3-review-cta-btn">DEJAR MI RESEÑA</button>';
+	$output .= '</div>';
+	$output .= '</div>';
+
+	// Si solo hay 1 reseña real, la fila queda coja (Reseña + Invitación = 2). 
+	// Inyectamos 1 tarjeta fantasma animada para completar el diseño perfecto de 3 columnas.
+	if ($total_reviews === 1) {
+		$output .= '<div class="l3-review-card l3-ghost-card" id="l3-ghost-fill" data-text="La atención al detalle y el profundo conocimiento en derecho corporativo marcaron la diferencia. Totalmente recomendados para procesos complejos.">';
+		$output .= '<div class="l3-review-rating-header" style="margin-bottom: 18px;">';
+		$output .= '<span class="l3-review-rating-score l3-ghost-rating-score">5.0</span>';
+		$output .= '<div class="l3-review-stars-wrapper" style="display: flex; flex-direction: column; padding-top: 3px;"><div class="l3-review-stars l3-stars-perfect l3-ghost-stars" style="margin-bottom: 2px !important;">';
+		for($i=0; $i<5; $i++) {
+			$output .= '<svg viewBox="0 0 24 24"><path d="M12 .587l3.668 7.431 8.2 1.191-5.934 5.787 1.4 8.168L12 18.896l-7.334 3.857 1.4-8.168L.132 9.209l8.2-1.191L12 .587z"/></svg>';
+		}
+		$output .= '</div><div class="l3-review-rating-label l3-ghost-stars" style="margin-bottom: 0 !important;">Excelente servicio</div></div></div>';
+		$output .= '<div class="l3-review-quote"><span class="l3-ghost-quote-text"></span><span class="l3-ghost-cursor"></span></div>';
+		$output .= '<div class="l3-review-author l3-ghost-author-wrapper" style="margin-top: auto;">';
+		$output .= '<img class="l3-review-avatar" src="' . get_stylesheet_directory_uri() . '/assets/images/avatar-eva.jpg" alt="Avatar" loading="lazy">';
+		$output .= '<div class="l3-review-meta"><div class="l3-review-name-row"><span class="l3-review-name">Eva Sofía Gutiérrez</span><span class="l3-review-linkedin-badge"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg></span></div>';
+		$output .= '<span class="l3-review-title">CEO en BETA CORP</span>';
+		$output .= '<span class="l3-review-date">24 mayo, 2026</span></div></div>';
+		$output .= '</div>';
+        
+		$output .= '<script>
+		document.addEventListener("DOMContentLoaded", function() {
+			const ghostFill = document.getElementById("l3-ghost-fill");
+			if (!ghostFill) return;
+
+			function typeText(element, text, speed, callback) {
+				let i = 0;
+				element.innerHTML = "";
+				function typeNext() {
+					if (i < text.length) {
+						element.innerHTML += text.charAt(i);
+						i++;
+						setTimeout(typeNext, speed);
+					} else {
+						if (callback) callback();
+					}
+				}
+				typeNext();
+			}
+
+			function animateCard(card, callback) {
+				const score = card.querySelector(".l3-ghost-rating-score");
+				const stars = card.querySelectorAll(".l3-ghost-stars");
+				const quoteText = card.querySelector(".l3-ghost-quote-text");
+				const cursor = card.querySelector(".l3-ghost-cursor");
+				const author = card.querySelector(".l3-ghost-author-wrapper");
+				const text = card.getAttribute("data-text");
+
+				score.classList.remove("l3-ghost-element-visible");
+				stars.forEach(s => s.classList.remove("l3-ghost-element-visible"));
+				quoteText.innerHTML = "";
+				quoteText.classList.add("l3-ghost-element-visible");
+				cursor.classList.add("is-typing");
+				cursor.style.display = "inline-block";
+				author.classList.remove("l3-ghost-element-visible");
+
+				setTimeout(() => {
+					score.classList.add("l3-ghost-element-visible");
+					setTimeout(() => {
+						stars.forEach(s => s.classList.add("l3-ghost-element-visible"));
+						setTimeout(() => {
+							typeText(quoteText, text, 35, () => {
+								cursor.classList.remove("is-typing");
+								setTimeout(() => {
+									author.classList.add("l3-ghost-element-visible");
+									setTimeout(callback, 4000);
+								}, 600);
+							});
+						}, 600);
+					}, 400);
+				}, 600);
+			}
+
+			function runLoop() {
+				animateCard(ghostFill, () => {
+					const fillCursor = ghostFill.querySelector(".l3-ghost-cursor");
+					fillCursor.style.display = "none";
+					setTimeout(() => {
+						runLoop();
+					}, 1000);
+				});
+			}
+
+			runLoop();
+		});
+		</script>';
+	}
+
 	$output .= '</div>'; // End track
 	$output .= '</div>'; // End viewport
 	
 	
-		// Botón siguiente (solo si hay más de 3 reseñas)
-		if ($total_reviews > 3) {
+		// Botón siguiente (solo si hay más de 3 reseñas o items en total)
+		if ($total_reviews + 1 > 3) {
 			$output .= '<button class="l3-slider-btn next" aria-label="Siguiente"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg></button>';
 		}
 	} // Fin del else (total_reviews > 0)
 		
 	$output .= '</div>'; // End container
-
-	// Botón "Dejar Reseña" general abajo (solo se muestra si hay testimonios reales)
-	if ($total_reviews > 0) {
-		$output .= '<div class="l3-review-cta-wrap">';
-		$output .= '<button id="l3-open-review-modal" class="l3-review-cta-btn">DEJAR MI RESEÑA</button>';
-		$output .= '</div>';
-	}
 
 	// Modal de Selección de Flujo (Se imprime siempre)
 	$output .= '
@@ -5498,7 +5822,7 @@ function l3_reviews_slider_shortcode($atts): string
 			const cards = container.querySelectorAll('.l3-review-card');
 			if (cards.length === 0) return 1;
 			const cardWidth = cards[0].offsetWidth + 20; // 20 is gap
-			return Math.max(1, Math.floor(viewport.offsetWidth / cardWidth));
+			return Math.max(1, Math.round(viewport.offsetWidth / cardWidth));
 		}
 
 		function updateSlider() {
@@ -5526,7 +5850,7 @@ function l3_reviews_slider_shortcode($atts): string
 
 		function startAutoplay() {
 			stopAutoplay();
-			if (totalReviews >= 4) {
+			if (totalReviews + 1 > 3) {
 				autoplayInterval = setInterval(nextSlide, 5000);
 			}
 		}
@@ -5614,3 +5938,8 @@ function l3_reviews_slider_shortcode($atts): string
 }
 add_shortcode('antigravity_reviews_slider', 'l3_reviews_slider_shortcode');
 
+/**
+ * 18. Personalizar el pie de página del panel de administración (Quitar mensajes de WordPress)
+ */
+add_filter('admin_footer_text', '__return_empty_string');
+add_filter('update_footer', '__return_empty_string', 11);

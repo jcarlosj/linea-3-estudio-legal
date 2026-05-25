@@ -375,6 +375,9 @@ jQuery(document).ready(function($) {
 
 	// ── 6. Envío Asíncrono AJAX ──
 
+	// Prevenir validación nativa HTML5 para usar la validación personalizada en vivo
+	$('.l3-resenas-form').attr('novalidate', true);
+
 	$('.l3-resenas-form').on('submit', function(e) {
 		e.preventDefault();
 
@@ -388,6 +391,117 @@ jQuery(document).ready(function($) {
 
 		// Limpiar alertas previas
 		$('.l3-resenas-alert').remove();
+		$form.find('.l3-frontend-inline-error').remove();
+		$form.find('.l3-input-error').removeClass('l3-input-error');
+
+		var hasErrors = false;
+
+		function showInlineError($el, msg) {
+			$el.addClass('l3-input-error');
+			$el.after('<div class="l3-frontend-inline-error" style="color: #ce9e50; font-size: 12px; margin-top: 4px;">' + msg + '</div>');
+			hasErrors = true;
+		}
+
+		// Validación Común (Rating)
+		if (parseInt($ratingInput.val()) === 0 || isNaN(parseInt($ratingInput.val()))) {
+			var $starContainer = $form.find('.l3-star-rating-wrapper');
+			$starContainer.after('<div class="l3-frontend-inline-error" style="color: #ce9e50; font-size: 12px; margin-top: 4px;">Por favor, selecciona una calificación con estrellas.</div>');
+			hasErrors = true;
+		}
+
+		// Validar campos específicos según el flujo
+		if ($form.attr('id') === 'l3-form-linkedin') {
+			var $nombreA = $('#resena_linkedin_nombre');
+			var $contenidoA = $('#resena_contenido_a');
+			var $empresaA = $('#resena_empresa_a');
+			var $cargoA = $('#resena_cargo_a');
+			var $urlA = $('#resena_linkedin_url');
+
+			if ($urlA.val().trim() === '') {
+				showInlineError($urlA, 'Este campo es obligatorio.');
+			} else if (!/^https?:\/\/(www\.)?linkedin\.com\/(in|company)\/.+/i.test($urlA.val().trim())) {
+				showInlineError($urlA, 'Debe contener /in/nombre-usuario o /company/nombre-empresa después de linkedin.com/');
+			}
+
+			if ($nombreA.val().trim() === '') {
+				showInlineError($nombreA, 'Este campo es obligatorio.');
+			} else if ($nombreA.val().trim().length < 3) {
+				showInlineError($nombreA, 'El nombre debe tener al menos 3 caracteres.');
+			}
+
+			if ($contenidoA.val().trim() === '') {
+				showInlineError($contenidoA, 'Este campo es obligatorio.');
+			} else if ($contenidoA.val().trim().length < 10) {
+				showInlineError($contenidoA, 'La reseña debe tener al menos 10 caracteres.');
+			}
+			$cargoA.removeClass('l3-input-error');
+			if ($empresaA.val().trim() !== '' && $cargoA.val().trim() === '') {
+				showInlineError($cargoA, 'Es obligatorio especificar el cargo en la empresa');
+			}
+		} else {
+			var $nombreB = $('#resena_nombre_b');
+			var $contenidoB = $('#resena_contenido_b');
+			var $empresaB = $('#resena_empresa_b');
+			var $cargoB = $('#resena_cargo_b');
+			var $tipoB = $('#resena_red_social_tipo');
+			var $urlB = $('#resena_red_social_url');
+
+			if ($nombreB.val().trim() === '') {
+				showInlineError($nombreB, 'Este campo es obligatorio.');
+			} else if ($nombreB.val().trim().length < 3) {
+				showInlineError($nombreB, 'El nombre debe tener al menos 3 caracteres.');
+			}
+
+			if ($contenidoB.val().trim() === '') {
+				showInlineError($contenidoB, 'Este campo es obligatorio.');
+			} else if ($contenidoB.val().trim().length < 10) {
+				showInlineError($contenidoB, 'La reseña debe tener al menos 10 caracteres.');
+			}
+			$cargoB.removeClass('l3-input-error');
+			if ($empresaB.val().trim() !== '' && $cargoB.val().trim() === '') {
+				showInlineError($cargoB, 'Es obligatorio especificar el cargo en la empresa');
+			}
+
+			var tipo = $tipoB.val();
+			var url = $urlB.val().trim();
+			
+			if (tipo !== '' && url !== '') {
+				var regex;
+				var expectedPrefix = '';
+				if (tipo === 'linkedin') {
+					regex = /^https?:\/\/(www\.)?linkedin\.com\/(in|company)\/.+/i;
+					expectedPrefix = 'https://linkedin.com/in/ o https://linkedin.com/company/';
+				} else if (tipo === 'instagram') {
+					regex = /^https?:\/\/(www\.)?instagram\.com\/.+/i;
+					expectedPrefix = 'https://instagram.com/';
+				} else if (tipo === 'facebook') {
+					regex = /^https?:\/\/(www\.)?facebook\.com\/.+/i;
+					expectedPrefix = 'https://facebook.com/';
+				}
+
+				if (regex && !regex.test(url)) {
+					if (tipo === 'linkedin') {
+						showInlineError($urlB, 'Debe contener /in/nombre-usuario o /company/nombre-empresa después de linkedin.com/');
+					} else {
+						showInlineError($urlB, 'Debe incluir tu nombre de usuario después de ' + tipo + '.com/');
+					}
+				}
+			} else if (tipo !== '' && url === '') {
+				showInlineError($urlB, 'Debe ingresar la URL si selecciona una red social.');
+			} else if (tipo === '' && url !== '') {
+				showInlineError($tipoB, 'Seleccione el tipo de red social para la URL ingresada.');
+			}
+		}
+
+		if (hasErrors) {
+			var $firstError = $form.find('.l3-input-error').first();
+			if ($firstError.length) {
+				$('#l3-review-choice-modal').animate({
+					scrollTop: $firstError.offset().top - $('#l3-review-choice-modal').offset().top - 40
+				}, 300);
+			}
+			return;
+		}
 
 		// Crear objeto FormData para soportar la subida binaria de archivos
 		var formData = new FormData();
@@ -397,12 +511,6 @@ jQuery(document).ready(function($) {
 		formData.append('nonce', l3_resenas_params.nonce);
 		formData.append('via_linkedin', $viaLinkedinInput.val());
 		formData.append('rating', $ratingInput.val());
-
-		// Calificación mínima requerida
-		if (parseInt($ratingInput.val()) === 0) {
-			displayAlert($form, 'Por favor, selecciona una calificación con estrellas.', 'error');
-			return;
-		}
 
 		if ($form.attr('id') === 'l3-form-linkedin') {
 			// Datos flujo LinkedIn
@@ -470,7 +578,20 @@ jQuery(document).ready(function($) {
 		});
 	});
 
+	// Limpiar errores en tiempo real al escribir en el frontend
+	$('#l3-resenas-form-container').on('input change', 'input, textarea, select', function() {
+		var $el = $(this);
+		if ($el.hasClass('l3-input-error')) {
+			$el.removeClass('l3-input-error');
+			$el.next('.l3-frontend-inline-error').remove();
+		}
+	});
+
 	function displayAlert($targetForm, message, type) {
+		if (type !== 'success') {
+			return; // Solo mostramos mensajes de éxito en la parte superior.
+		}
+
 		var alertClass = type === 'success' ? 'l3-resenas-alert--success' : 'l3-resenas-alert--error';
 		var icon = type === 'success' ? '✓' : '✗';
 		

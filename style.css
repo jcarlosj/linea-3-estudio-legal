@@ -6716,3 +6716,23 @@ body.l3-modal-open-lock {
     opacity: 0 !important;
     visibility: hidden !important;
 }
+
+/* ── Estilos para Validación en Vivo (Errores) ── */
+.l3-input-error {
+    border-color: #ce9e50 !important;
+    box-shadow: 0 0 0 1px #ce9e50 !important;
+}
+
+.l3-frontend-inline-error,
+.l3-admin-inline-error {
+    color: #ce9e50;
+    font-size: 13px;
+    margin-top: 6px;
+    display: block;
+    animation: l3-fade-in-error 0.3s ease-out forwards;
+}
+
+@keyframes l3-fade-in-error {
+    from { opacity: 0; transform: translateY(-4px); }
+    to { opacity: 1; transform: translateY(0); }
+}

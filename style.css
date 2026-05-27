@@ -92,6 +92,15 @@ footer.wp-block-template-part {
     align-items: center !important;
     justify-content: space-between !important;
     padding: 20px 50px !important; /* Default desktop padding */
+    box-sizing: border-box !important;
+}
+
+/* CONSERVAR ALINEACIÓN Y EVITAR QUE EL LOGO Y LOS BOTONES SE PEGUEN A LOS BORDES EN PANTALLAS ULTRA ANCHAS */
+@media (min-width: 1400px) {
+    .header-main-container {
+        padding-left: calc((100vw - 1400px) / 2 + 50px) !important;
+        padding-right: calc((100vw - 1400px) / 2 + 50px) !important;
+    }
 }
 
 .header-right-side {
@@ -1734,10 +1743,18 @@ footer.wp-block-group .footer-logo-switch img {
 /* --- ANTIGRAVITY BLOG GRID REFACTOR --- */
 
 /* 1. Reset Global Sync */
-.blog-listing-wrapper .wp-block-query.alignwide {
+.blog-listing-wrapper .wp-block-query {
     max-width: 1200px !important;
-    margin: 0 auto !important;
-    width: 100% !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    width: calc(100% - 100px) !important; /* Mantiene un margen homogéneo de 50px en los lados */
+    box-sizing: border-box !important;
+}
+
+@media (max-width: 767px) {
+    .blog-listing-wrapper .wp-block-query {
+        width: calc(100% - 40px) !important; /* Mantiene 20px de margen en móvil */
+    }
 }
 
 /* 2. Responsive Grid System (Mobile-First 1-2-3) */
@@ -2733,9 +2750,11 @@ main.single-post-layout-pro {
     margin-right: auto !important;
     width: 100% !important;
     box-sizing: border-box !important;
+    padding-left: 50px !important;
+    padding-right: 50px !important;
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 767px) {
     .l3-container-standard {
         padding-left: 20px !important;
         padding-right: 20px !important;

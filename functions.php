@@ -19,7 +19,7 @@ if (!defined('ABSPATH')) {
  */
 function linea3_legal_child_enqueue_styles(): void
 {
-	$version = '1.5.0'; // Versión de Estabilización y Diseño Editorial
+	$version = '1.5.1'; // Versión de Estabilización Total - Cache Busting
 
 	wp_enqueue_style(
 		'l3-font-awesome',
@@ -39,7 +39,7 @@ function linea3_legal_child_enqueue_styles(): void
 		'linea3-legal-child-search',
 		get_stylesheet_directory_uri() . '/assets/js/search-toggle.js',
 		array(),
-		$version,
+		filemtime(get_stylesheet_directory() . '/assets/js/search-toggle.js'),
 		true
 	);
 
@@ -47,7 +47,7 @@ function linea3_legal_child_enqueue_styles(): void
 		'antigravity-modal-strategic',
 		get_stylesheet_directory_uri() . '/assets/js/modal-strategic.js',
 		array(),
-		$version,
+		filemtime(get_stylesheet_directory() . '/assets/js/modal-strategic.js'),
 		true
 	);
 }
@@ -174,15 +174,15 @@ function l3_info_init() {
     add_settings_field('field_instagram', 'Instagram', 'l3_render_instagram', 'l3_info_settings_page', 'l3_social_section');
     add_settings_field('field_facebook', 'Facebook', 'l3_render_facebook', 'l3_info_settings_page', 'l3_social_section');
 
-    // Sección y Campos de API de LinkedIn (Etapa 1 - Clientes)
-    add_settings_section('l3_linkedin_api_section', 'Integración de API de LinkedIn (Clientes / Formulario)', null, 'l3_info_settings_page');
-    add_settings_field('field_linkedin_client_id', 'Client ID (Clientes)', 'l3_render_linkedin_client_id', 'l3_info_settings_page', 'l3_linkedin_api_section');
-    add_settings_field('field_linkedin_client_secret', 'Client Secret (Clientes)', 'l3_render_linkedin_client_secret', 'l3_info_settings_page', 'l3_linkedin_api_section');
+    // Sección y Campos de API de LinkedIn (App Principal)
+    add_settings_section('l3_linkedin_api_section', 'Integración de API de LinkedIn (App Principal para Login de Usuarios)', null, 'l3_info_settings_page');
+    add_settings_field('field_linkedin_client_id', 'Client ID (App de Login de Usuarios)', 'l3_render_linkedin_client_id', 'l3_info_settings_page', 'l3_linkedin_api_section');
+    add_settings_field('field_linkedin_client_secret', 'Client Secret (App de Login de Usuarios)', 'l3_render_linkedin_client_secret', 'l3_info_settings_page', 'l3_linkedin_api_section');
     
-    // Sección y Campos de API de LinkedIn (Etapa 3 - Empresa/Organización)
-    add_settings_section('l3_linkedin_org_api_section', 'Integración de API de LinkedIn (Empresa / Autopublicación)', null, 'l3_info_settings_page');
-    add_settings_field('field_linkedin_org_client_id', 'Client ID (Empresa)', 'l3_render_linkedin_org_client_id', 'l3_info_settings_page', 'l3_linkedin_org_api_section');
-    add_settings_field('field_linkedin_org_client_secret', 'Client Secret (Empresa)', 'l3_render_linkedin_org_client_secret', 'l3_info_settings_page', 'l3_linkedin_org_api_section');
+    // Sección y Campos de API de LinkedIn (App Secundaria)
+    add_settings_section('l3_linkedin_org_api_section', 'Integración de API de LinkedIn (App Secundaria para Página de Empresa)', null, 'l3_info_settings_page');
+    add_settings_field('field_linkedin_org_client_id', 'Client ID (App Secundaria para Empresa)', 'l3_render_linkedin_org_client_id', 'l3_info_settings_page', 'l3_linkedin_org_api_section');
+    add_settings_field('field_linkedin_org_client_secret', 'Client Secret (App Secundaria para Empresa)', 'l3_render_linkedin_org_client_secret', 'l3_info_settings_page', 'l3_linkedin_org_api_section');
     add_settings_field('field_linkedin_org_id', 'ID de Página de LinkedIn (Organización)', 'l3_render_linkedin_org_id', 'l3_info_settings_page', 'l3_linkedin_org_api_section');
     add_settings_field('field_linkedin_org_token', 'Token de Organización de Larga Duración', 'l3_render_linkedin_org_token', 'l3_info_settings_page', 'l3_linkedin_org_api_section');
 }
@@ -732,8 +732,8 @@ add_shortcode('search_result_count', 'linea3_legal_child_search_result_count');
  * Fuerza el uso de la nueva cabecera header-v2 para evitar problemas de caché o base de datos.
  */
 add_filter('pre_get_block_template', function ($template, $id, $template_type) {
-	if ('wp_template_part' === $template_type && 'header' === $id) {
-		$template_v2 = get_block_template('linea3-legal-child//header-v2', 'wp_template_part');
+	if ('wp_template_part' === $template_type && strpos($id, 'header') !== false && strpos($id, 'header-v2') === false) {
+		$template_v2 = get_block_template(get_stylesheet() . '//header-v2', 'wp_template_part');
 		if ($template_v2) {
 			return $template_v2;
 		}

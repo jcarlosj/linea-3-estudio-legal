@@ -131,7 +131,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // 1. Inicializar Modal de Consulta Estratégica (Clásico)
     // Este modal NO tiene clase específica más que overlay general en el HTML viejo,
     // pero para no romper compatibilidad tomamos el primer overlay que NO sea del team-contact
-    setupModal('.antigravity-modal-trigger', '.antigravity-modal-overlay:not(.antigravity-team-contact-modal-overlay)');
+    setupModal('.antigravity-modal-trigger, .cta-legal-btn', '.antigravity-modal-overlay:not(.antigravity-team-contact-modal-overlay)');
 
     // 2. Inicializar Nuevo Modal de Contacto de Equipo
     setupModal('.linea3-team-contact-btn', '.antigravity-team-contact-modal-overlay', (trigger, overlay) => {

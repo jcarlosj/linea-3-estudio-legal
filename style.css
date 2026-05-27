@@ -65,9 +65,21 @@ body footer.wp-block-template-part > .wp-block-group,
 body footer.wp-block-template-part footer {
     padding-left: 0 !important;
     padding-right: 0 !important;
-    margin-left: 0 !important;
-    margin-right: 0 !important;
     background-color: #0a2233 !important; /* Color corporativo sólido */
+}
+
+/* FORZAR FOOTER A FULL-WIDTH Y ELIMINAR CUALQUIER RESTRICCIÓN DE MÁRGENES (FIX PARA PÁGINA DE BLOG) */
+body footer.wp-block-template-part {
+    width: 100vw !important;
+    max-width: 100vw !important;
+    margin-left: calc(50% - 50vw) !important;
+    margin-right: calc(50% - 50vw) !important;
+    margin-bottom: 0 !important;
+}
+
+/* Prevenir scroll horizontal en Windows/Linux por el uso de 100vw */
+body {
+    overflow-x: hidden !important;
 }
 
 header.wp-block-template-part,

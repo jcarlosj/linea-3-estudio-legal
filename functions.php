@@ -19,7 +19,7 @@ if (!defined('ABSPATH')) {
  */
 function linea3_legal_child_enqueue_styles(): void
 {
-	$version = '1.6.0'; // Versión de Estabilización Total - Cache Busting
+	$version = '1.6.1'; // Versión de Estabilización Total - Cache Busting
 
 	wp_enqueue_style(
 		'l3-font-awesome',
@@ -368,7 +368,67 @@ function l3_render_linkedin_org_token() {
     $client_secret = get_option('l3_linkedin_org_client_secret');
 
     echo '<div style="display: flex; flex-direction: column; gap: 10px; max-width: 600px;">';
-    echo '  <textarea name="l3_linkedin_org_token" id="l3_linkedin_org_token" rows="3" class="large-text code" style="font-family: monospace;" readonly>' . esc_textarea($val) . '</textarea>';
+    echo '  <div style="position: relative; width: 100%;">';
+    echo '    <textarea name="l3_linkedin_org_token" id="l3_linkedin_org_token" rows="3" class="large-text code" style="font-family: monospace; padding-right: 45px; width: 100%; box-sizing: border-box; resize: vertical;" readonly>' . esc_textarea($val) . '</textarea>';
+    echo '    <button type="button" id="l3_copy_org_token_btn" title="Copiar Token al Portapapeles" style="position: absolute; right: 10px; top: 10px; background: #f0f0f1; border: 1px solid #8c8f94; border-radius: 4px; padding: 4px 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease;">';
+    echo '      <span class="dashicons dashicons-admin-page" style="font-size: 18px; width: 18px; height: 18px; color: #3c434a;"></span>';
+    echo '    </button>';
+    echo '  </div>';
+
+    // Script interactivo y aislado para el copiado con respuesta visual de éxito
+    ?>
+    <script type="text/javascript">
+    jQuery(document).ready(function($) {
+        $('#l3_copy_org_token_btn').on('click', function(e) {
+            e.preventDefault();
+            var $btn = $(this);
+            var $icon = $btn.find('.dashicons');
+            var $textarea = $('#l3_linkedin_org_token');
+            var token = $textarea.val().trim();
+            
+            if (!token) {
+                return;
+            }
+            
+            // Copiar al portapapeles mediante Clipboard API o fallback seguro
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(token).then(showSuccess, handleError);
+            } else {
+                $textarea.select();
+                try {
+                    var successful = document.execCommand('copy');
+                    if (successful) showSuccess();
+                    else handleError();
+                } catch (err) {
+                    handleError();
+                }
+            }
+            
+            function showSuccess() {
+                // Retroalimentación visual instantánea premium
+                $btn.css({
+                    'background': '#00a32a',
+                    'border-color': '#00a32a'
+                });
+                $icon.removeClass('dashicons-admin-page').addClass('dashicons-yes').css('color', '#ffffff');
+                
+                setTimeout(function() {
+                    // Restaurar estado original tras 2 segundos
+                    $btn.css({
+                        'background': '#f0f0f1',
+                        'border-color': '#8c8f94'
+                    });
+                    $icon.removeClass('dashicons-yes').addClass('dashicons-admin-page').css('color', '#3c434a');
+                }, 2000);
+            }
+            
+            function handleError() {
+                alert('No se pudo copiar el token automáticamente. Por favor, selecciónalo y cópialo manualmente.');
+            }
+        });
+    });
+    </script>
+    <?php
     
     if (!empty($client_id) && !empty($client_secret)) {
         $redirect_uri = urlencode(admin_url('options-general.php?page=l3_info_settings_page'));

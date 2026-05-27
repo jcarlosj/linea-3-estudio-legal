@@ -70,9 +70,95 @@ document.addEventListener('DOMContentLoaded', () => {
         const defaultSubmitText = submitBtn ? submitBtn.innerText : 'Enviar';
         
         if (form) {
+            // Deshabilitar validación HTML5 nativa
+            form.setAttribute('novalidate', true);
+
+            // Limpiar errores en tiempo real
+            form.addEventListener('input', (e) => {
+                const target = e.target;
+                if (target.classList.contains('l3-input-error')) {
+                    target.classList.remove('l3-input-error');
+                    const nextEl = target.nextElementSibling;
+                    if (nextEl && nextEl.classList.contains('l3-frontend-inline-error')) {
+                        nextEl.remove();
+                    }
+                }
+            });
+
             form.addEventListener('submit', async (e) => {
                 e.preventDefault();
                 
+                // --- Inicio de Validación ---
+                let hasErrors = false;
+
+                // Limpiar errores previos
+                form.querySelectorAll('.l3-frontend-inline-error').forEach(el => el.remove());
+                form.querySelectorAll('.l3-input-error').forEach(el => el.classList.remove('l3-input-error'));
+
+                const showInlineError = (element, msg) => {
+                    element.classList.add('l3-input-error');
+                    const errorDiv = document.createElement('div');
+                    errorDiv.className = 'l3-frontend-inline-error';
+                    errorDiv.style.color = '#ce9e50';
+                    errorDiv.style.fontSize = '12px';
+                    errorDiv.style.marginTop = '4px';
+                    errorDiv.innerText = msg;
+                    // Insertar debajo del input
+                    element.parentNode.insertBefore(errorDiv, element.nextSibling);
+                    hasErrors = true;
+                };
+
+                // Validar Nombre
+                const inputName = form.querySelector('input[name="consultation_name"]');
+                if (inputName) {
+                    const nameVal = inputName.value.trim();
+                    if (nameVal === '') {
+                        showInlineError(inputName, 'Este campo es obligatorio.');
+                    } else if (nameVal.length < 3) {
+                        showInlineError(inputName, 'El nombre debe tener al menos 3 caracteres.');
+                    }
+                }
+
+                // Validar Email
+                const inputEmail = form.querySelector('input[name="consultation_email"]');
+                if (inputEmail) {
+                    const emailVal = inputEmail.value.trim();
+                    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                    if (emailVal === '') {
+                        showInlineError(inputEmail, 'Este campo es obligatorio.');
+                    } else if (!emailRegex.test(emailVal)) {
+                        showInlineError(inputEmail, 'Por favor, ingresa un correo electrónico válido.');
+                    }
+                }
+
+                // Validar Teléfono
+                const inputPhone = form.querySelector('input[name="consultation_phone"]');
+                if (inputPhone) {
+                    const phoneVal = inputPhone.value.trim();
+                    if (phoneVal === '') {
+                        showInlineError(inputPhone, 'Este campo es obligatorio.');
+                    } else if (phoneVal.length < 7) {
+                        showInlineError(inputPhone, 'Ingresa un número de teléfono válido.');
+                    }
+                }
+
+                // Validar Mensaje
+                const inputMessage = form.querySelector('textarea[name="consultation_message"]');
+                if (inputMessage) {
+                    const msgVal = inputMessage.value.trim();
+                    if (msgVal === '') {
+                        showInlineError(inputMessage, 'Este campo es obligatorio.');
+                    } else if (msgVal.length < 10) {
+                        showInlineError(inputMessage, 'El mensaje debe tener al menos 10 caracteres.');
+                    }
+                }
+
+                // Si hay errores, detener el envío
+                if (hasErrors) {
+                    return;
+                }
+                // --- Fin de Validación ---
+
                 if (submitBtn) {
                     submitBtn.disabled = true;
                     submitBtn.innerText = 'Enviando...';

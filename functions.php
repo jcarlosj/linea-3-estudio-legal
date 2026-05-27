@@ -19,7 +19,7 @@ if (!defined('ABSPATH')) {
  */
 function linea3_legal_child_enqueue_styles(): void
 {
-	$version = '1.5.1'; // Versión de Estabilización Total - Cache Busting
+	$version = '1.5.2'; // Versión de Estabilización Total - Cache Busting
 
 	wp_enqueue_style(
 		'l3-font-awesome',

@@ -19,7 +19,7 @@ if (!defined('ABSPATH')) {
  */
 function linea3_legal_child_enqueue_styles(): void
 {
-	$version = '1.5.8'; // Versión de Estabilización Total - Cache Busting
+	$version = '1.6.0'; // Versión de Estabilización Total - Cache Busting
 
 	wp_enqueue_style(
 		'l3-font-awesome',
@@ -2780,6 +2780,37 @@ function antigravity_enqueue_media_uploader($hook) {
 add_action('admin_enqueue_scripts', 'antigravity_enqueue_media_uploader');
 
 /**
+ * Añadir límite visual e indicador de 180 caracteres para el extracto de Servicios en el Admin
+ */
+function antigravity_servicio_excerpt_limit_js() {
+    global $post_type;
+    if ($post_type !== 'servicio') {
+        return;
+    }
+    ?>
+    <script type="text/javascript">
+    jQuery(document).ready(function($) {
+        function setupExcerptLimiter() {
+            // Soporte para editor clásico y metabox de Gutenberg
+            var $excerpt = $('#excerpt');
+            if ($excerpt.length && !$('#excerpt-limit-notice').length) {
+                $excerpt.attr('maxlength', 180);
+                $excerpt.after('<p id="excerpt-limit-notice" class="description" style="color:#d94f27; font-weight: 500; margin-top: 5px;">Límite recomendado: 180 caracteres. Esto asegura que el texto quepa perfectamente dentro del card cuadrado (1:1) en la grilla de Servicios sin desbordar ni cortarse.</p>');
+            }
+        }
+        
+        // Ejecutar al cargar y reintentar por si se carga dinámicamente en Gutenberg
+        setupExcerptLimiter();
+        setTimeout(setupExcerptLimiter, 1500);
+        setTimeout(setupExcerptLimiter, 3000);
+    });
+    </script>
+    <?php
+}
+add_action('admin_footer-post.php', 'antigravity_servicio_excerpt_limit_js');
+add_action('admin_footer-post-new.php', 'antigravity_servicio_excerpt_limit_js');
+
+/**
  * Shortcode Dinámico para Cuadrícula de Servicios
  */
 function antigravity_services_grid_shortcode($atts) {
@@ -2812,8 +2843,14 @@ function antigravity_services_grid_shortcode($atts) {
             // Recoger datos
             $title = get_the_title();
             $permalink = get_permalink();
-            // Para el contenido, usamos the_excerpt si existe, sino el content cortado.
-            $excerpt = has_excerpt() ? get_the_excerpt() : wp_trim_words(get_the_content(), 25);
+            
+            // Si el post tiene un extracto personalizado escrito en la base de datos, lo usamos tal cual (completo).
+            // Si no tiene extracto, usamos el contenido del editor principal de forma completa sin truncar con tres puntos nativos.
+            $excerpt = has_excerpt() ? get_post()->post_excerpt : get_post()->post_content;
+            
+            // Quitamos los shortcodes o bloques si hay, limpiando el texto de forma que sea texto plano legible.
+            $excerpt = wp_strip_all_tags(strip_shortcodes($excerpt));
+            
             $bg_image_url = get_the_post_thumbnail_url(get_the_ID(), 'large');
             // Imagen por defecto si no hay destacada
             if (!$bg_image_url) {

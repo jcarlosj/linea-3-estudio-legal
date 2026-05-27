@@ -3014,9 +3014,10 @@ main.single-post-layout-pro {
     justify-content: center;
     align-items: center;
     text-align: center;
-    padding: 40px !important;
+    padding: 30px 24px !important; /* More space-conscious padding for desktop */
     width: 100% !important;
     max-width: 100% !important;
+    box-sizing: border-box !important;
 }
 
 /* Contenedor extra para que la animación fluya mejor */
@@ -3025,6 +3026,8 @@ main.single-post-layout-pro {
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    width: 100% !important;
+    box-sizing: border-box !important;
 }
 
 .l3-service-card .service-icon {
@@ -3033,17 +3036,28 @@ main.single-post-layout-pro {
     object-fit: contain;
     margin-bottom: 10px;
     filter: brightness(0) invert(1) drop-shadow(0 4px 10px rgba(0, 0, 0, 0.6));
-    transition: all 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+    transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1) !important;
+    opacity: 1 !important;
+    max-height: 90px !important;
+    display: block !important;
+    overflow: hidden !important;
+}
+
+.l3-service-card:hover .service-icon {
+    opacity: 0 !important;
+    max-height: 0 !important;
+    margin-bottom: 0 !important;
+    transform: scale(0.7) translateY(-10px) !important;
 }
 
 .l3-service-card h3 {
-    font-size: clamp(1.4rem, 2.5vw, 1.9rem) !important;
+    font-size: clamp(1.3rem, 2.2vw, 1.7rem) !important;
     line-height: 1.1 !important;
     margin-bottom: 0 !important;
     font-weight: 700 !important;
     color: #ce9e50 !important;
     text-shadow: 0 2px 12px rgba(0, 0, 0, 0.7);
-    transition: all 0.6s cubic-bezier(0.25, 1, 0.5, 1) !important;
+    transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1) !important;
 }
 
 .l3-service-card .service-excerpt {
@@ -3053,9 +3067,9 @@ main.single-post-layout-pro {
     margin: 0 !important;
     padding: 0 !important;
     visibility: hidden !important;
-    transition: all 0.6s cubic-bezier(0.25, 1, 0.5, 1) !important;
-    font-size: .95rem !important;
-    line-height: 1.5 !important;
+    transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1) !important;
+    font-size: .92rem !important;
+    line-height: 1.45 !important;
     color: rgba(255, 255, 255, 0.95) !important;
     text-shadow: 0 1px 6px rgba(0, 0, 0, 0.9);
 }
@@ -3066,8 +3080,98 @@ main.single-post-layout-pro {
 
 .l3-service-card:hover .service-excerpt {
     opacity: 1 !important;
-    max-height: 300px !important;
+    max-height: 320px !important;
     visibility: visible !important;
+}
+
+/* RESPONSIVE DESIGN ADJUSTMENTS TO PREVENT CARDS OVERFLOW */
+
+/* 1. Mobile (< 768px) - Show icon initially, fade out on hover/tapped state to fit full text */
+@media (max-width: 767px) {
+    .l3-service-card .wp-block-cover__inner-container {
+        padding: 20px 16px !important;
+    }
+    
+    .l3-service-card .service-icon {
+        width: 70px !important;
+        height: 70px !important;
+        max-height: 70px !important;
+        margin-bottom: 8px !important;
+        opacity: 1 !important;
+    }
+    
+    .l3-service-card:hover .service-icon {
+        opacity: 0 !important;
+        max-height: 0 !important;
+        margin-bottom: 0 !important;
+        transform: scale(0.6) translateY(-10px) !important;
+    }
+    
+    .l3-service-card h3 {
+        font-size: 1.25rem !important;
+        line-height: 1.2 !important;
+    }
+    
+    .l3-service-card:hover h3 {
+        margin-bottom: 8px !important;
+    }
+    
+    .l3-service-card .service-excerpt {
+        font-size: 0.82rem !important;
+        line-height: 1.35 !important;
+    }
+}
+
+/* 2. Tablet (768px to 1024px) - Scale down icon and adjust text parameters */
+@media (min-width: 768px) and (max-width: 1024px) {
+    .l3-service-card .wp-block-cover__inner-container {
+        padding: 24px 20px !important;
+    }
+    
+    .l3-service-card .service-icon {
+        width: 70px !important;
+        height: 70px !important;
+        max-height: 70px !important;
+        margin-bottom: 8px !important;
+        opacity: 1 !important;
+    }
+    
+    .l3-service-card:hover .service-icon {
+        opacity: 0 !important;
+        max-height: 0 !important;
+        margin-bottom: 0 !important;
+        transform: scale(0.65) translateY(-10px) !important;
+    }
+    
+    .l3-service-card h3 {
+        font-size: 1.35rem !important;
+        line-height: 1.2 !important;
+    }
+    
+    .l3-service-card:hover h3 {
+        margin-bottom: 12px !important;
+    }
+    
+    .l3-service-card .service-excerpt {
+        font-size: 0.88rem !important;
+        line-height: 1.4 !important;
+    }
+}
+
+/* 3. Small Desktop (1025px to 1280px) */
+@media (min-width: 1025px) and (max-width: 1280px) {
+    .l3-service-card .wp-block-cover__inner-container {
+        padding: 28px 20px !important;
+    }
+    
+    .l3-service-card h3 {
+        font-size: 1.45rem !important;
+    }
+    
+    .l3-service-card .service-excerpt {
+        font-size: 0.90rem !important;
+        line-height: 1.42 !important;
+    }
 }
 
 /* Button with Arrow in Circle */

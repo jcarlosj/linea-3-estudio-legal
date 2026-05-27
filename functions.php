@@ -19,7 +19,7 @@ if (!defined('ABSPATH')) {
  */
 function linea3_legal_child_enqueue_styles(): void
 {
-	$version = '1.5.2'; // Versión de Estabilización Total - Cache Busting
+	$version = '1.5.6'; // Versión de Estabilización Total - Cache Busting
 
 	wp_enqueue_style(
 		'l3-font-awesome',
@@ -899,15 +899,25 @@ function antigravity_render_team_contact_modal()
 							<div class="antigravity-form-group"><label for="team-contact-name">Tu Nombre: *</label><input 
 									type="text" id="team-contact-name" name="contact_name"
 									placeholder="Ej. Juan Pérez" required></div>
+							<div class="antigravity-form-group"><label for="team-contact-company">Empresa (Opcional)</label><input 
+									type="text" id="team-contact-company" name="contact_company"
+									placeholder="Nombre de la empresa"></div>
+							<div class="antigravity-form-group"><label for="team-contact-role">Cargo (Opcional)</label><input 
+									type="text" id="team-contact-role" name="contact_role"
+									placeholder="Ej. Director General"></div>
 							<div class="antigravity-form-group full-width"><label for="team-contact-message">Mensaje: *</label><textarea 
 									id="team-contact-message" name="contact_message" rows="5"
 									placeholder="Escriba su mensaje aquí..." required></textarea></div>
 							<div class="antigravity-form-group full-width">
-								<label for="team-contact-attachment" style="display: flex; justify-content: space-between;">
+								<label style="display: flex; justify-content: space-between; margin-bottom: 8px;">
 									<span>Archivos Adjuntos (Opcional)</span>
 									<span style="font-size: 0.8em; color: #94a3b8; font-weight: normal;">Máx. Total 15MB (PDF, DOC, DOCX, JPG, PNG)</span>
 								</label>
-								<input type="file" id="team-contact-attachment" name="contact_attachment[]" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png" multiple>
+								<div class="antigravity-custom-file-upload">
+									<input type="file" id="team-contact-attachment" name="contact_attachment[]" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png" multiple class="antigravity-file-input-hidden">
+									<label for="team-contact-attachment" class="antigravity-file-btn"><i class="fas fa-paperclip"></i> Adjuntar</label>
+									<span class="antigravity-file-text">Ningún archivo seleccionado.</span>
+								</div>
 							</div>
 						</div>
 
@@ -943,12 +953,19 @@ function antigravity_handle_team_contact_form()
 
 	$email = sanitize_email($_POST['contact_email'] ?? '');
 	$phone = sanitize_text_field($_POST['contact_phone'] ?? '');
+	$company = sanitize_text_field($_POST['contact_company'] ?? '');
+	$role = sanitize_text_field($_POST['contact_role'] ?? '');
 	$subject_input = sanitize_text_field($_POST['contact_subject'] ?? '');
 	$name = sanitize_text_field($_POST['contact_name'] ?? '');
 	$message = sanitize_textarea_field($_POST['contact_message'] ?? '');
 
 	if (empty($email) || empty($subject_input) || empty($message) || empty($name) || !is_email($email)) {
-		wp_send_json_error('Datos inválidos o incompletos.');
+		wp_send_json_error('Datos obligatorios inválidos o incompletos.');
+	}
+
+	// Validar dependencia entre cargo y empresa (backend por seguridad extra)
+	if ((!empty($company) && empty($role)) || (empty($company) && !empty($role))) {
+		wp_send_json_error('Debe completar tanto la empresa como el cargo si proporciona uno de ellos.');
 	}
 
 	$to = $target_user->user_email;
@@ -970,6 +987,7 @@ function antigravity_handle_team_contact_form()
 				<div style='margin-bottom: 25px;'>
 					<p style='margin: 5px 0;'><strong style='color: #0a2233;'>De:</strong> " . esc_html($name) . " &lt;<a href='mailto:" . esc_attr($email) . "' style='color: #ce9e50; text-decoration: none;'>" . esc_html($email) . "</a>&gt;</p>
 					" . (!empty($phone) ? "<p style='margin: 5px 0;'><strong style='color: #0a2233;'>Teléfono:</strong> " . esc_html($phone) . "</p>" : "") . "
+					" . (!empty($company) ? "<p style='margin: 5px 0;'><strong style='color: #0a2233;'>Organización:</strong> " . esc_html($company) . " - " . esc_html($role) . "</p>" : "") . "
 					<p style='margin: 5px 0;'><strong style='color: #0a2233;'>Asunto:</strong> " . esc_html($subject_input) . "</p>
 				</div>
 

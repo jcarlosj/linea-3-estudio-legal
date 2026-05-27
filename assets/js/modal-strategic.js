@@ -103,53 +103,98 @@ document.addEventListener('DOMContentLoaded', () => {
                     errorDiv.style.fontSize = '12px';
                     errorDiv.style.marginTop = '4px';
                     errorDiv.innerText = msg;
-                    // Insertar debajo del input
                     element.parentNode.insertBefore(errorDiv, element.nextSibling);
                     hasErrors = true;
                 };
 
-                // Validar Nombre
-                const inputName = form.querySelector('input[name="consultation_name"]');
-                if (inputName) {
-                    const nameVal = inputName.value.trim();
-                    if (nameVal === '') {
-                        showInlineError(inputName, 'Este campo es obligatorio.');
-                    } else if (nameVal.length < 3) {
-                        showInlineError(inputName, 'El nombre debe tener al menos 3 caracteres.');
-                    }
-                }
+                if (form.classList.contains('antigravity-team-contact-form')) {
+                    // Validar Formulario Contactar Equipo
+                    const inputEmail = form.querySelector('input[name="contact_email"]');
+                    const inputPhone = form.querySelector('input[name="contact_phone"]');
+                    const inputSubject = form.querySelector('input[name="contact_subject"]');
+                    const inputName = form.querySelector('input[name="contact_name"]');
+                    const inputMessage = form.querySelector('textarea[name="contact_message"]');
+                    const inputCompany = form.querySelector('input[name="contact_company"]');
+                    const inputRole = form.querySelector('input[name="contact_role"]');
 
-                // Validar Email
-                const inputEmail = form.querySelector('input[name="consultation_email"]');
-                if (inputEmail) {
-                    const emailVal = inputEmail.value.trim();
-                    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                    if (emailVal === '') {
-                        showInlineError(inputEmail, 'Este campo es obligatorio.');
-                    } else if (!emailRegex.test(emailVal)) {
-                        showInlineError(inputEmail, 'Por favor, ingresa un correo electrónico válido.');
+                    if (inputEmail) {
+                        const val = inputEmail.value.trim();
+                        const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                        if (val === '') showInlineError(inputEmail, 'Este campo es obligatorio.');
+                        else if (!regex.test(val)) showInlineError(inputEmail, 'Por favor, ingresa un correo electrónico válido.');
                     }
-                }
-
-                // Validar Teléfono
-                const inputPhone = form.querySelector('input[name="consultation_phone"]');
-                if (inputPhone) {
-                    const phoneVal = inputPhone.value.trim();
-                    if (phoneVal === '') {
-                        showInlineError(inputPhone, 'Este campo es obligatorio.');
-                    } else if (phoneVal.length < 7) {
-                        showInlineError(inputPhone, 'Ingresa un número de teléfono válido.');
+                    if (inputPhone) {
+                        const val = inputPhone.value.trim();
+                        // Optional field, but if filled must be numeric (can include +, -, spaces, parenthesis)
+                        const phoneRegex = /^[\d\s\+\-\(\)]+$/;
+                        if (val !== '') {
+                            if (!phoneRegex.test(val)) {
+                                showInlineError(inputPhone, 'Por favor, ingresa solo números para el teléfono.');
+                            } else if (val.replace(/[\D]/g, '').length < 7) {
+                                showInlineError(inputPhone, 'Ingresa un número de teléfono válido.');
+                            }
+                        }
                     }
-                }
+                    if (inputSubject) {
+                        const val = inputSubject.value.trim();
+                        if (val === '') showInlineError(inputSubject, 'Este campo es obligatorio.');
+                    }
+                    if (inputName) {
+                        const val = inputName.value.trim();
+                        if (val === '') showInlineError(inputName, 'Este campo es obligatorio.');
+                        else if (val.length < 3) showInlineError(inputName, 'El nombre debe tener al menos 3 caracteres.');
+                    }
+                    if (inputMessage) {
+                        const val = inputMessage.value.trim();
+                        if (val === '') showInlineError(inputMessage, 'Este campo es obligatorio.');
+                        else if (val.length < 10) showInlineError(inputMessage, 'El mensaje debe tener al menos 10 caracteres.');
+                    }
 
-                // Validar Mensaje
-                const inputMessage = form.querySelector('textarea[name="consultation_message"]');
-                if (inputMessage) {
-                    const msgVal = inputMessage.value.trim();
-                    if (msgVal === '') {
-                        showInlineError(inputMessage, 'Este campo es obligatorio.');
-                    } else if (msgVal.length < 10) {
-                        showInlineError(inputMessage, 'El mensaje debe tener al menos 10 caracteres.');
+                    if (inputCompany && inputRole) {
+                        const companyVal = inputCompany.value.trim();
+                        const roleVal = inputRole.value.trim();
+                        if (companyVal !== '' && roleVal === '') {
+                            showInlineError(inputRole, 'Es obligatorio especificar el cargo en la empresa.');
+                        }
+                        if (roleVal !== '' && companyVal === '') {
+                            showInlineError(inputCompany, 'Es obligatorio especificar la empresa.');
+                        }
+                    }
+                } else {
+                    // Validar Formulario Agendar Consulta
+                    const inputName = form.querySelector('input[name="consultation_name"]');
+                    if (inputName) {
+                        const nameVal = inputName.value.trim();
+                        if (nameVal === '') showInlineError(inputName, 'Este campo es obligatorio.');
+                        else if (nameVal.length < 3) showInlineError(inputName, 'El nombre debe tener al menos 3 caracteres.');
+                    }
+
+                    const inputEmail = form.querySelector('input[name="consultation_email"]');
+                    if (inputEmail) {
+                        const emailVal = inputEmail.value.trim();
+                        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                        if (emailVal === '') showInlineError(inputEmail, 'Este campo es obligatorio.');
+                        else if (!emailRegex.test(emailVal)) showInlineError(inputEmail, 'Por favor, ingresa un correo electrónico válido.');
+                    }
+
+                    const inputPhone = form.querySelector('input[name="consultation_phone"]');
+                    if (inputPhone) {
+                        const phoneVal = inputPhone.value.trim();
+                        const phoneRegex = /^[\d\s\+\-\(\)]+$/;
+                        if (phoneVal === '') {
+                            showInlineError(inputPhone, 'Este campo es obligatorio.');
+                        } else if (!phoneRegex.test(phoneVal)) {
+                            showInlineError(inputPhone, 'Por favor, ingresa solo números para el teléfono.');
+                        } else if (phoneVal.replace(/[\D]/g, '').length < 7) {
+                            showInlineError(inputPhone, 'Ingresa un número de teléfono válido.');
+                        }
+                    }
+
+                    const inputMessage = form.querySelector('textarea[name="consultation_message"]');
+                    if (inputMessage) {
+                        const msgVal = inputMessage.value.trim();
+                        if (msgVal === '') showInlineError(inputMessage, 'Este campo es obligatorio.');
+                        else if (msgVal.length < 10) showInlineError(inputMessage, 'El mensaje debe tener al menos 10 caracteres.');
                     }
                 }
 
@@ -192,6 +237,10 @@ document.addEventListener('DOMContentLoaded', () => {
                                 submitBtn.style.backgroundColor = '';
                                 modalContent.style.transform = '';
                                 modalContent.style.opacity = '';
+                                
+                                // Reset custom file text
+                                const fileTextReset = modalOverlay.querySelector('.antigravity-file-text');
+                                if (fileTextReset) fileTextReset.textContent = 'Ningún archivo seleccionado.';
                             }, ANIMATION_DURATION);
                         }, 800);
                         
@@ -211,6 +260,23 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                 }
             });
+
+            // Handlers para input de archivos personalizados
+            const fileInput = modalOverlay.querySelector('.antigravity-file-input-hidden');
+            const fileText = modalOverlay.querySelector('.antigravity-file-text');
+            if (fileInput && fileText) {
+                fileInput.addEventListener('change', (e) => {
+                    if (e.target.files && e.target.files.length > 0) {
+                        if (e.target.files.length === 1) {
+                            fileText.textContent = e.target.files[0].name;
+                        } else {
+                            fileText.textContent = e.target.files.length + ' archivos seleccionados';
+                        }
+                    } else {
+                        fileText.textContent = 'Ningún archivo seleccionado.';
+                    }
+                });
+            }
         }
     };
 

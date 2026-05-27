@@ -6736,3 +6736,53 @@ body.l3-modal-open-lock {
     from { opacity: 0; transform: translateY(-4px); }
     to { opacity: 1; transform: translateY(0); }
 }
+/* Custom File Upload Button */
+.antigravity-custom-file-upload {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-top: 5px;
+}
+
+.antigravity-file-input-hidden {
+    width: 0.1px;
+    height: 0.1px;
+    opacity: 0;
+    overflow: hidden;
+    position: absolute;
+    z-index: -1;
+}
+
+.antigravity-file-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px 20px;
+    background-color: transparent;
+    border: 1px solid rgba(206, 158, 80, 0.5);
+    color: #ce9e50;
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.antigravity-file-btn:hover {
+    background-color: rgba(206, 158, 80, 0.1);
+    border-color: #ce9e50;
+    transform: translateY(-1px);
+}
+
+.antigravity-file-text {
+    font-size: 0.85rem;
+    color: #94a3b8;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 250px;
+}

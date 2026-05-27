@@ -307,9 +307,9 @@ function l3_render_movil() {
 }
 function l3_render_email() { 
     $val = get_option('l3_info_email'); 
-    echo '<input type="text" name="l3_info_email" value="' . esc_attr($val) . '" placeholder="Ej: contacto@linea3legal.com" class="regular-text">';
+    echo '<input type="text" name="l3_info_email" value="' . esc_attr($val) . '" placeholder="Ej: contacto@lineatreslegal.com" class="regular-text">';
     echo l3_render_switch('l3_info_email');
-    echo '<p class="description" style="color: #d63638; font-weight: 500; margin-top: 5px;">⚠️ IMPORTANTE: Utiliza únicamente correos bajo el dominio @linea3legal.com.</p>';
+    echo '<p class="description" style="color: #d63638; font-weight: 500; margin-top: 5px;">⚠️ IMPORTANTE: Utiliza únicamente correos bajo el dominio @lineatreslegal.com.</p>';
 }
 function l3_render_horario() { 
     $val = get_option('l3_info_horario'); 

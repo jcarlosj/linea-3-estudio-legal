@@ -4,7 +4,7 @@ Theme URI: https://linea3legal.com
 Author: Linea 3 Developer
 Author URI: https://linea3legal.com
 Description: Versión 2 - Limpieza total de caché y estructura. Basado en Twenty Twenty-Five.
-Version: 1.7.6
+Version: 1.7.7
 Requires at least: 6.7
 Tested up to: 6.9.4
 Requires PHP: 8.2
@@ -534,6 +534,14 @@ footer.wp-block-group .footer-logo-switch img {
     .footer-nav ul.wp-block-navigation__container {
         justify-content: center !important;
     }
+
+    /* Clean, reduced vertical gaps for team section on Mobile */
+    .antigravity-team-section {
+        padding: 25px 0 50px 0 !important;
+    }
+    .team-section-header {
+        margin-bottom: 25px !important;
+    }
 }
 
 /* 2. MOBILE LANDSCAPE & TABLET PORTRAIT (768px to 1023px) */
@@ -650,6 +658,14 @@ footer.wp-block-group .footer-logo-switch img {
         flex-direction: row !important;
         flex-wrap: nowrap !important; /* Force side-by-side buttons, never stack */
         gap: 8px !important;
+    }
+
+    /* Clean, reduced vertical gaps for team section on Tablet */
+    .antigravity-team-section {
+        padding: 35px 0 60px 0 !important;
+    }
+    .team-section-header {
+        margin-bottom: 35px !important;
     }
 }
 
@@ -2049,15 +2065,14 @@ html body .blog-listing-wrapper .wp-block-post-template.is-layout-grid {
 /* ========== EQUIPO JURÍDICO (TEAM SECTION) - START ========== */
 
 .antigravity-team-section {
-    padding: 90px 0 !important;
-    /* Espaciado ajustado (mitad del anterior) */
+    padding: 50px 0 80px 0 !important; /* Tighter padding on desktop */
     background-color: #051320;
     /* Retornamos al fondo azul profundo anterior */
 }
 
 /* Cabecera de la sección */
 .team-section-header {
-    margin-bottom: 80px;
+    margin-bottom: 50px; /* Reduced from 80px */
     display: flex !important;
     align-items: stretch !important;
     gap: 0;

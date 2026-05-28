@@ -19,7 +19,7 @@ if (!defined('ABSPATH')) {
  */
 function linea3_legal_child_enqueue_styles(): void
 {
-	$version = '1.7.6'; // Versión de Consolidación - Logos Adaptativos Movil/Tablet a Vertical y Spacing Tablet Cabecera
+	$version = '1.7.7'; // Versión de Consolidación - Logos Adaptativos Movil/Tablet y Espaciado Equipo Jurídico
 
 	wp_enqueue_style(
 		'l3-font-awesome',

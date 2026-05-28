@@ -19,7 +19,7 @@ if (!defined('ABSPATH')) {
  */
 function linea3_legal_child_enqueue_styles(): void
 {
-	$version = '1.7.3'; // Versión de Consolidación - Template Parts Unificados con Retrocompatibilidad
+	$version = '1.7.4'; // Versión de Consolidación - Logos Adaptativos Movil/Tablet y Correcciones Multi-navegador
 
 	wp_enqueue_style(
 		'l3-font-awesome',

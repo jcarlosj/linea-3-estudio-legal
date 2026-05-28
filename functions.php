@@ -19,7 +19,7 @@ if (!defined('ABSPATH')) {
  */
 function linea3_legal_child_enqueue_styles(): void
 {
-	$version = '1.7.4'; // Versión de Consolidación - Logos Adaptativos Movil/Tablet y Correcciones Multi-navegador
+	$version = '1.7.6'; // Versión de Consolidación - Logos Adaptativos Movil/Tablet a Vertical y Spacing Tablet Cabecera
 
 	wp_enqueue_style(
 		'l3-font-awesome',

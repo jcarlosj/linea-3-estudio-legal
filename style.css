@@ -4,7 +4,7 @@ Theme URI: https://linea3legal.com
 Author: Linea 3 Developer
 Author URI: https://linea3legal.com
 Description: Versión 2 - Limpieza total de caché y estructura. Basado en Twenty Twenty-Five.
-Version: 1.7.4
+Version: 1.7.6
 Requires at least: 6.7
 Tested up to: 6.9.4
 Requires PHP: 8.2
@@ -620,7 +620,11 @@ footer.wp-block-group .footer-logo-switch img {
         display: none !important;
     }
 
-    /* Header Specific Adjustment for Tablet */
+    /* Header Specific Adjustments for Tablet to prevent overlaps and wraps */
+    .header-main-container {
+        padding: 10px 20px !important; /* Reduce padding on smaller screens */
+    }
+
     .header-link-logo .logo-horizontal {
         display: none !important;
     }
@@ -630,6 +634,22 @@ footer.wp-block-group .footer-logo-switch img {
         max-height: 50px !important;
         width: auto !important;
         height: auto !important;
+    }
+
+    .header-main-container .header-right-side {
+        gap: 1.5rem !important;
+    }
+
+    .header-main-container .wp-block-navigation__container,
+    .header-main-container ul.wp-block-navigation__container {
+        gap: 16px !important; /* Reduce gap between individual menu links to prevent overlapping */
+    }
+
+    .header-main-container .wp-block-buttons {
+        display: flex !important;
+        flex-direction: row !important;
+        flex-wrap: nowrap !important; /* Force side-by-side buttons, never stack */
+        gap: 8px !important;
     }
 }
 

@@ -19,7 +19,7 @@ if (!defined('ABSPATH')) {
  */
 function linea3_legal_child_enqueue_styles(): void
 {
-	$version = '1.6.1'; // Versión de Estabilización Total - Cache Busting
+	$version = '1.7.3'; // Versión de Consolidación - Template Parts Unificados con Retrocompatibilidad
 
 	wp_enqueue_style(
 		'l3-font-awesome',
@@ -788,18 +788,7 @@ function linea3_legal_child_search_result_count()
 }
 add_shortcode('search_result_count', 'linea3_legal_child_search_result_count');
 
-/**
- * Fuerza el uso de la nueva cabecera header-v2 para evitar problemas de caché o base de datos.
- */
-add_filter('pre_get_block_template', function ($template, $id, $template_type) {
-	if ('wp_template_part' === $template_type && strpos($id, 'header') !== false && strpos($id, 'header-v2') === false) {
-		$template_v2 = get_block_template(get_stylesheet() . '//header-v2', 'wp_template_part');
-		if ($template_v2) {
-			return $template_v2;
-		}
-	}
-	return $template;
-}, 10, 3);
+
 
 /**
  * Oculta "Sin categoría" o "Uncategorized" en el frontend en todas las vistas de bloque y shortcodes.
@@ -6058,3 +6047,69 @@ add_shortcode('antigravity_reviews_slider', 'l3_reviews_slider_shortcode');
  */
 add_filter('admin_footer_text', '__return_empty_string');
 add_filter('update_footer', '__return_empty_string', 11);
+
+/**
+ * 19. FORZAR LA CARGA DE ARCHIVOS FÍSICOS DE PLANTILLAS Y PARTES DE PLANTILLA (Sticky Bypasser)
+ * Filtro de nivel dios para anular cualquier personalización corrupta de base de datos en producción
+ * y garantizar consistencia absoluta con los archivos del tema.
+ */
+add_filter('pre_get_block_template', 'linea3_legal_force_template_files', 10, 3);
+function linea3_legal_force_template_files($block_template, $id, $template_type)
+{
+	$slug = $id;
+	if (strpos($id, '//') !== false) {
+		$parts = explode('//', $id);
+		if ($parts[0] !== 'linea3-legal-child') {
+			return $block_template;
+		}
+		$slug = $parts[1];
+	}
+
+	$file_path = '';
+	if ('wp_template' === $template_type) {
+		$file_path = get_theme_file_path("templates/{$slug}.html");
+	} elseif ('wp_template_part' === $template_type) {
+		$file_path = get_theme_file_path("parts/{$slug}.html");
+	}
+
+	if (!empty($file_path) && file_exists($file_path)) {
+		$content = file_get_contents($file_path);
+
+		$template = new WP_Block_Template();
+		$template->id          = 'linea3-legal-child//' . $slug;
+		$template->theme       = 'linea3-legal-child';
+		$template->content     = $content;
+		$template->slug        = $slug;
+		$template->type        = $template_type;
+		$template->source      = 'theme';
+		$template->status      = 'publish';
+		$template->title       = ucwords(str_replace(array('-', '_'), ' ', $slug));
+		$template->is_custom   = false;
+
+		return $template;
+	}
+
+	return $block_template;
+}
+
+
+/**
+ * 21. PURGA PROGRAMÁTICA DE LITESPEED CACHE (Cache Flusher)
+ * Ejecuta una purga completa del caché de LiteSpeed al visitar cualquier URL con ?purge_all_lscache=1
+ */
+add_action('init', function() {
+	if (isset($_GET['purge_all_lscache'])) {
+		if (class_exists('LiteSpeed\Purge')) {
+			LiteSpeed\Purge::purge_all();
+			echo 'LiteSpeed Cache Purged Successfully!';
+			exit;
+		} else {
+			echo 'LiteSpeed Cache class not found, but trying standard WordPress clear...';
+			if (function_exists('wp_cache_flush')) {
+				wp_cache_flush();
+				echo ' wp_cache_flush completed!';
+			}
+			exit;
+		}
+	}
+});

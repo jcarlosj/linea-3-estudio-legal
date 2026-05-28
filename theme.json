@@ -60,6 +60,16 @@
 	},
 	"templateParts": [
 		{
+			"area": "header",
+			"name": "header",
+			"title": "Header Principal"
+		},
+		{
+			"area": "footer",
+			"name": "footer",
+			"title": "Footer Principal"
+		},
+		{
 			"area": "uncategorized",
 			"name": "cta-strategic-consultation",
 			"title": "CTA Consulta Estratégica"

@@ -4,7 +4,7 @@ Theme URI: https://linea3legal.com
 Author: Linea 3 Developer
 Author URI: https://linea3legal.com
 Description: Versión 2 - Limpieza total de caché y estructura. Basado en Twenty Twenty-Five.
-Version: 1.1.24
+Version: 1.7.3
 Requires at least: 6.7
 Tested up to: 6.9.4
 Requires PHP: 8.2
@@ -80,6 +80,28 @@ body footer.wp-block-template-part {
 /* Prevenir scroll horizontal en Windows/Linux por el uso de 100vw */
 body {
     overflow-x: hidden !important;
+}
+
+/* Sticky Footer universal para garantizar que el footer se mantenga al fondo en páginas cortas */
+.wp-site-blocks {
+    display: flex !important;
+    flex-direction: column !important;
+    min-height: 100vh !important;
+    gap: 0 !important; /* Eliminar gap residual de WordPress FSE que genera espacio blanco bajo el footer */
+}
+
+.wp-site-blocks > main {
+    flex: 1 0 auto !important;
+}
+
+.wp-site-blocks > footer {
+    margin-top: auto !important;
+}
+
+/* Asegurar que el footer no tenga margin-bottom residual en ningún contexto */
+.wp-site-blocks > footer.wp-block-template-part:last-child {
+    margin-bottom: 0 !important;
+    padding-bottom: 0 !important;
 }
 
 header.wp-block-template-part,

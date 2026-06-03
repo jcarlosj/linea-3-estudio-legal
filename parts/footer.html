@@ -9,10 +9,9 @@
             <!-- 1. LOGO WRAPPER -->
             <!-- wp:group {"className":"footer-logo-switch"} -->
             <div class="wp-block-group footer-logo-switch">
-               <!-- wp:html -->
-               <a href="/" class="footer-link-logo"><img src="/wp-content/themes/linea3-legal-child/assets/images/logo-vertical-oscuro.png" alt="Logo Vertical" class="logo-vertical" width="422" height="501"/></a>
-               <a href="/" class="footer-link-logo"><img src="/wp-content/themes/linea3-legal-child/assets/images/logo-horizontal-oscuro.png" alt="Logo Horizontal" class="logo-horizontal" width="672" height="229"/></a>
-               <!-- /wp:html -->
+                <!-- wp:shortcode -->
+                [l3_footer_logo]
+                <!-- /wp:shortcode -->
             </div>
             <!-- /wp:group -->
 
@@ -52,12 +51,9 @@
 
         <!-- wp:group {"className":"footer-bottom-group"} -->
         <div class="wp-block-group footer-bottom-group">
-            <div class="footer-legal-links">
-                <!-- wp:navigation {"slug":"footer-legal","overlayMenu":"never","style":{"spacing":{"blockGap":"40px"}},"layout":{"type":"flex","justifyContent":"center","orientation":"horizontal","flexWrap":"nowrap"}} -->
-                <!-- wp:navigation-link {"label":"POLÍTICA DE PRIVACIDAD","url":"/privacidad/","kind":"custom"} /-->
-                <!-- wp:navigation-link {"label":"TÉRMINOS DE SERVICIO","url":"/terminos-de-servicio/","kind":"custom"} /-->
-                <!-- /wp:navigation -->
-            </div>
+            <!-- wp:shortcode -->
+            [l3_footer_legal_links]
+            <!-- /wp:shortcode -->
             <div class="footer-credits">
                 <!-- wp:shortcode -->
                 [l3_copyright]

@@ -712,10 +712,10 @@ footer.wp-block-group .footer-logo-switch img {
         grid-row: 1 / 3;
     }
 
-    .footer-col-links {
+    /* .footer-col-links {
         grid-column: 4;
         grid-row: 1 / 3;
-    }
+    } */
 
     /* Logo Switch Desktop */
     .logo-vertical {
@@ -728,9 +728,9 @@ footer.wp-block-group .footer-logo-switch img {
         width: auto;
     }
 
-    .footer-section-title-enlaces {
+    /* .footer-section-title-enlaces {
         display: block !important;
-    }
+    } */
 
     .footer-nav .wp-block-navigation__container {
         justify-content: flex-start !important;

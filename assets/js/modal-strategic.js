@@ -35,14 +35,14 @@ document.addEventListener('DOMContentLoaded', () => {
             }, ANIMATION_DURATION);
         };
 
-        if (modalTriggers.length > 0) {
-            modalTriggers.forEach(trigger => {
-                trigger.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    openModal(trigger);
-                });
-            });
-        }
+        // Use event delegation for trigger clicks to make them extremely resilient to DOM changes and caching
+        document.addEventListener('click', (e) => {
+            const trigger = e.target.closest(triggersSelector);
+            if (trigger) {
+                e.preventDefault();
+                openModal(trigger);
+            }
+        });
 
         if (closeBtn) {
             closeBtn.addEventListener('click', (e) => {

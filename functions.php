@@ -153,6 +153,12 @@ function l3_info_init() {
     register_setting('l3_options_group', 'l3_linkedin_org_id');
     register_setting('l3_options_group', 'l3_linkedin_org_token');
 
+    // Registro de Enlaces Legales del Footer
+    register_setting('l3_options_group', 'l3_footer_link1_name');
+    register_setting('l3_options_group', 'l3_footer_link1_url');
+    register_setting('l3_options_group', 'l3_footer_link2_name');
+    register_setting('l3_options_group', 'l3_footer_link2_url');
+
     add_settings_section('l3_location_section', 'Ubicación Física', null, 'l3_info_settings_page');
     add_settings_section('l3_contact_section', 'Datos de Contacto y Horarios', null, 'l3_info_settings_page');
     add_settings_section('l3_social_section', 'Redes Sociales Corporativas', null, 'l3_info_settings_page');
@@ -185,6 +191,13 @@ function l3_info_init() {
     add_settings_field('field_linkedin_org_client_secret', 'Client Secret (App Secundaria para Empresa)', 'l3_render_linkedin_org_client_secret', 'l3_info_settings_page', 'l3_linkedin_org_api_section');
     add_settings_field('field_linkedin_org_id', 'ID de Página de LinkedIn (Organización)', 'l3_render_linkedin_org_id', 'l3_info_settings_page', 'l3_linkedin_org_api_section');
     add_settings_field('field_linkedin_org_token', 'Token de Organización de Larga Duración', 'l3_render_linkedin_org_token', 'l3_info_settings_page', 'l3_linkedin_org_api_section');
+
+    // Sección y Campos de Enlaces Legales del Footer
+    add_settings_section('l3_footer_links_section', 'Enlaces Legales del Footer', null, 'l3_info_settings_page');
+    add_settings_field('field_footer_link1_name', 'Nombre Enlace 1', 'l3_render_footer_link1_name', 'l3_info_settings_page', 'l3_footer_links_section');
+    add_settings_field('field_footer_link1_url', 'Dirección URL Enlace 1', 'l3_render_footer_link1_url', 'l3_info_settings_page', 'l3_footer_links_section');
+    add_settings_field('field_footer_link2_name', 'Nombre Enlace 2', 'l3_render_footer_link2_name', 'l3_info_settings_page', 'l3_footer_links_section');
+    add_settings_field('field_footer_link2_url', 'Dirección URL Enlace 2', 'l3_render_footer_link2_url', 'l3_info_settings_page', 'l3_footer_links_section');
 }
 
 function l3_render_switch($id, $label = 'Mostrar:') {
@@ -330,6 +343,23 @@ function l3_render_facebook() {
     $val = get_option('l3_info_facebook'); 
     echo '<input type="url" name="l3_info_facebook" value="' . esc_attr($val) . '" placeholder="https://..." class="regular-text">'; 
     echo l3_render_switch('l3_info_facebook');
+}
+
+function l3_render_footer_link1_name() {
+    $val = get_option('l3_footer_link1_name', 'POLÍTICA DE PRIVACIDAD');
+    echo '<input type="text" name="l3_footer_link1_name" value="' . esc_attr($val) . '" class="regular-text">';
+}
+function l3_render_footer_link1_url() {
+    $val = get_option('l3_footer_link1_url', '/privacidad/');
+    echo '<input type="text" name="l3_footer_link1_url" value="' . esc_attr($val) . '" class="regular-text">';
+}
+function l3_render_footer_link2_name() {
+    $val = get_option('l3_footer_link2_name', 'TÉRMINOS DE SERVICIO');
+    echo '<input type="text" name="l3_footer_link2_name" value="' . esc_attr($val) . '" class="regular-text">';
+}
+function l3_render_footer_link2_url() {
+    $val = get_option('l3_footer_link2_url', '/terminos-de-servicio/');
+    echo '<input type="text" name="l3_footer_link2_url" value="' . esc_attr($val) . '" class="regular-text">';
 }
 
 function l3_render_linkedin_client_id() {
@@ -562,6 +592,58 @@ add_shortcode('l3_info_horario', function() { return l3_get_dynamic_info('l3_inf
 add_shortcode('l3_social_linkedin', function() { return l3_get_dynamic_info('l3_info_linkedin'); });
 add_shortcode('l3_social_instagram', function() { return l3_get_dynamic_info('l3_info_instagram'); });
 add_shortcode('l3_social_facebook', function() { return l3_get_dynamic_info('l3_info_facebook'); });
+
+/**
+ * Shortcode para el Logo Dinámico del Header (Vertical/Horizontal con URL del tema)
+ */
+add_shortcode('l3_header_logo', function() {
+    $theme_uri = esc_url(get_stylesheet_directory_uri());
+    $home_url  = esc_url(home_url('/'));
+    return '
+    <a href="' . $home_url . '" class="header-link-logo">
+        <img src="' . $theme_uri . '/assets/images/logo-vertical-oscuro.png" alt="Linea 3 Estudio Legal" class="logo-vertical" width="422" height="501" style="height:45px; width:auto;" />
+        <img src="' . $theme_uri . '/assets/images/logo-horizontal-oscuro.png" alt="Linea 3 Estudio Legal" class="logo-horizontal" width="672" height="229" style="height:45px; width:auto;" />
+    </a>';
+});
+
+/**
+ * Shortcode para el Logo Dinámico del Footer (Vertical/Horizontal con URL del tema)
+ */
+add_shortcode('l3_footer_logo', function() {
+    $theme_uri = esc_url(get_stylesheet_directory_uri());
+    $home_url  = esc_url(home_url('/'));
+    return '
+    <a href="' . $home_url . '" class="footer-link-logo">
+        <img src="' . $theme_uri . '/assets/images/logo-vertical-oscuro.png" alt="Logo Vertical" class="logo-vertical" width="422" height="501"/>
+    </a>
+    <a href="' . $home_url . '" class="footer-link-logo">
+        <img src="' . $theme_uri . '/assets/images/logo-horizontal-oscuro.png" alt="Logo Horizontal" class="logo-horizontal" width="672" height="229"/>
+    </a>';
+});
+
+/**
+ * Shortcode para los Enlaces Legales Dinámicos del Footer
+ */
+add_shortcode('l3_footer_legal_links', function() {
+    $link1_name = get_option('l3_footer_link1_name', 'POLÍTICA DE PRIVACIDAD');
+    $link1_url  = get_option('l3_footer_link1_url', '/privacidad/');
+    $link2_name = get_option('l3_footer_link2_name', 'TÉRMINOS DE SERVICIO');
+    $link2_url  = get_option('l3_footer_link2_url', '/terminos-de-servicio/');
+    
+    return '
+    <div class="footer-legal-links">
+        <nav class="wp-block-navigation">
+            <ul class="wp-block-navigation__container">
+                <li class="wp-block-navigation-item">
+                    <a class="wp-block-navigation-item__content" href="' . esc_url($link1_url) . '">' . esc_html($link1_name) . '</a>
+                </li>
+                <li class="wp-block-navigation-item">
+                    <a class="wp-block-navigation-item__content" href="' . esc_url($link2_url) . '">' . esc_html($link2_name) . '</a>
+                </li>
+            </ul>
+        </nav>
+    </div>';
+});
 
 /**
  * Shortcode Maestro para Redes Sociales en el Footer

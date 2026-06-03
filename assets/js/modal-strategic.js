@@ -226,29 +226,127 @@ document.addEventListener('DOMContentLoaded', () => {
                     
                     if (data.success) {
                         if (form.classList.contains('antigravity-team-contact-form')) {
-                            // Comportamiento por defecto del formulario de contacto del equipo
                             submitBtn.innerText = '¡Enviado!';
-                            submitBtn.style.backgroundColor = '#38a169'; 
+                            submitBtn.style.backgroundColor = '#38a169';
+
+                            // Ocultar temporalmente el botón de cerrar del modal
+                            const modalCloseBtn = modalOverlay.querySelector('.antigravity-modal-close');
+                            if (modalCloseBtn) {
+                                modalCloseBtn.style.display = 'none';
+                            }
+
+                            // Aplicar el efecto de blur al header del modal
+                            const modalHeader = modalOverlay.querySelector('.antigravity-modal-header');
+                            if (modalHeader) {
+                                modalHeader.style.transition = 'filter 0.5s ease, opacity 0.5s ease';
+                                modalHeader.style.filter = 'blur(6px)';
+                                modalHeader.style.opacity = '0.3';
+                            }
+
+                            // Aplicar el efecto de blur y desactivar eventos en el formulario
+                            form.style.transition = 'filter 0.5s ease, opacity 0.5s ease';
+                            form.style.filter = 'blur(6px)';
+                            form.style.opacity = '0.3';
+                            form.style.pointerEvents = 'none';
+
+                            // Crear y añadir la superposición del contador
+                            const countdownOverlay = document.createElement('div');
+                            countdownOverlay.className = 'antigravity-success-countdown-overlay';
                             
-                            modalContent.style.transition = 'all 0.5s ease';
-                            modalContent.style.transform = 'scale(0.95)';
-                            modalContent.style.opacity = '0';
-                            
-                            setTimeout(() => {
-                                closeModal();
-                                setTimeout(() => {
-                                    form.reset();
-                                    submitBtn.disabled = false;
-                                    submitBtn.innerText = defaultSubmitText;
-                                    submitBtn.style.backgroundColor = '';
-                                    modalContent.style.transform = '';
-                                    modalContent.style.opacity = '';
-                                    
-                                    // Reset custom file text
-                                    const fileTextReset = modalOverlay.querySelector('.antigravity-file-text');
-                                    if (fileTextReset) fileTextReset.textContent = 'Ningún archivo seleccionado.';
-                                }, ANIMATION_DURATION);
-                            }, 800);
+                            // Estilos inline de la superposición para centrar en modalContent
+                            countdownOverlay.style.position = 'absolute';
+                            countdownOverlay.style.top = '0';
+                            countdownOverlay.style.left = '0';
+                            countdownOverlay.style.width = '100%';
+                            countdownOverlay.style.height = '100%';
+                            countdownOverlay.style.display = 'flex';
+                            countdownOverlay.style.flexDirection = 'column';
+                            countdownOverlay.style.justifyContent = 'center';
+                            countdownOverlay.style.alignItems = 'center';
+                            countdownOverlay.style.zIndex = '10';
+                            countdownOverlay.style.color = '#ffffff';
+                            countdownOverlay.style.textAlign = 'center';
+                            countdownOverlay.style.padding = '20px';
+                            countdownOverlay.style.boxSizing = 'border-box';
+
+                            countdownOverlay.innerHTML = `
+                                <div class="countdown-number" style="font-size: 80px; font-weight: bold; color: #ce9e50; transition: transform 0.2s ease; text-shadow: 0 4px 10px rgba(0,0,0,0.5);">5</div>
+                            `;
+                            modalContent.appendChild(countdownOverlay);
+
+                            let count = 5;
+                            const countdownEl = countdownOverlay.querySelector('.countdown-number');
+
+                            const interval = setInterval(() => {
+                                count--;
+                                if (count > 0) {
+                                    countdownEl.textContent = count;
+                                    countdownEl.style.transform = 'scale(1.2)';
+                                    setTimeout(() => {
+                                        countdownEl.style.transform = 'scale(1)';
+                                    }, 150);
+                                } else {
+                                    clearInterval(interval);
+
+                                    // Mostrar mensaje de éxito final al llegar a cero (sin mostrar el cero)
+                                    const profName = modalOverlay.getAttribute('data-professional-name') || 'el miembro del equipo';
+                                    countdownOverlay.innerHTML = `
+                                        <div class="countdown-success-message" style="opacity: 0; transform: translateY(10px); transition: all 0.5s ease; text-shadow: 0 2px 4px rgba(0,0,0,0.5);">
+                                            <h3 style="color: #ce9e50; font-size: 24px; margin: 0 0 15px 0; font-family: 'Playfair Display', serif; font-weight: bold; line-height: 1.3;">¡Mensaje enviado!</h3>
+                                            <p style="color: #ffffff; font-size: 16px; line-height: 1.6; max-width: 320px; margin: 0 auto;">Debes esperar a ser contactado por ${profName}</p>
+                                        </div>
+                                    `;
+
+                                    // Fade in del mensaje
+                                    setTimeout(() => {
+                                        const msgEl = countdownOverlay.querySelector('.countdown-success-message');
+                                        if (msgEl) {
+                                            msgEl.style.opacity = '1';
+                                            msgEl.style.transform = 'translateY(0)';
+                                        }
+                                    }, 50);
+
+                                    // Cerrar modal automáticamente después de 3 segundos
+                                    setTimeout(() => {
+                                        modalContent.style.transition = 'all 0.5s ease';
+                                        modalContent.style.transform = 'scale(0.95)';
+                                        modalContent.style.opacity = '0';
+
+                                        setTimeout(() => {
+                                            // Remover el overlay para permitir el cierre en closeModal()
+                                            countdownOverlay.remove();
+                                            closeModal();
+
+                                            setTimeout(() => {
+                                                // Reestablecer todo a su estado original
+                                                form.reset();
+                                                form.style.filter = '';
+                                                form.style.opacity = '';
+                                                form.style.pointerEvents = '';
+                                                if (modalHeader) {
+                                                    modalHeader.style.filter = '';
+                                                    modalHeader.style.opacity = '';
+                                                }
+                                                if (modalCloseBtn) {
+                                                    modalCloseBtn.style.display = '';
+                                                }
+
+                                                // Reset custom file text
+                                                const fileTextReset = modalOverlay.querySelector('.antigravity-file-text');
+                                                if (fileTextReset) {
+                                                    fileTextReset.textContent = 'Ningún archivo seleccionado.';
+                                                }
+
+                                                submitBtn.disabled = false;
+                                                submitBtn.innerText = defaultSubmitText;
+                                                submitBtn.style.backgroundColor = '';
+                                                modalContent.style.transform = '';
+                                                modalContent.style.opacity = '';
+                                            }, ANIMATION_DURATION);
+                                        }, 500);
+                                    }, 3000);
+                                }
+                            }, 1000);
                         } else {
                             // Formulario general "Agendar Consulta": Efecto de Blur y Conteo Regresivo
                             submitBtn.innerText = '¡Enviado!';
@@ -422,13 +520,13 @@ document.addEventListener('DOMContentLoaded', () => {
         const titleEl = overlay.querySelector('#team-contact-modal-title');
         if (titleEl && authorName) {
             titleEl.innerText = 'Contactar a ' + authorName;
+            overlay.setAttribute('data-professional-name', authorName);
         }
 
-        // Modificar imagen del modal
-        const imageEl = overlay.querySelector('#team-contact-modal-image');
-        if (imageEl && authorImage) {
-            imageEl.src = authorImage;
-            imageEl.alt = authorName;
+        // Modificar subtítulo del modal
+        const subtitleEl = overlay.querySelector('#team-contact-modal-subtitle');
+        if (subtitleEl) {
+            subtitleEl.innerText = 'Complete el siguiente formulario y se pondrá en contacto pronto.';
         }
     });
 

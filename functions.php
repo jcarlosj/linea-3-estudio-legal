@@ -1000,62 +1000,57 @@ function antigravity_render_team_contact_modal()
 {
 	?>
 	<div class="antigravity-modal-overlay antigravity-team-contact-modal-overlay">
-		<div class="antigravity-modal-content team-contact-split-content">
+		<div class="antigravity-modal-content">
 			<button class="antigravity-modal-close" aria-label="Cerrar modal">&times;</button>
-			<div class="antigravity-modal-body team-contact-split-layout">
-				<div class="team-contact-sidebar">
-					<img id="team-contact-modal-image" src="" alt="Profesional" class="team-contact-sidebar-bg">
-					<div class="team-contact-sidebar-overlay">
-						<h3 id="team-contact-modal-title">Contactar Profesional</h3>
-						<p>Envíe un mensaje directo y confidencial. Le responderemos a la brevedad.</p>
-					</div>
-				</div>
-				<div class="team-contact-form-area">
-					<form action="<?php echo esc_url(admin_url('admin-post.php')); ?>" method="POST"
-						class="antigravity-modal-form antigravity-team-contact-form" enctype="multipart/form-data">
-						<?php wp_nonce_field('antigravity_team_contact_action', 'antigravity_team_contact_nonce'); ?>
-						<input type="hidden" name="action" value="antigravity_submit_team_contact">
-						<input type="hidden" name="target_author_id" id="target_author_id" value="">
+			<div class="antigravity-modal-header">
+				<h3 id="team-contact-modal-title">Contactar Profesional</h3>
+				<p id="team-contact-modal-subtitle">Complete el siguiente formulario y nos pondremos en contacto pronto.</p>
+			</div>
+			<div class="antigravity-modal-body">
+				<form action="<?php echo esc_url(admin_url('admin-post.php')); ?>" method="POST"
+					class="antigravity-modal-form antigravity-team-contact-form" enctype="multipart/form-data">
+					<?php wp_nonce_field('antigravity_team_contact_action', 'antigravity_team_contact_nonce'); ?>
+					<input type="hidden" name="action" value="antigravity_submit_team_contact">
+					<input type="hidden" name="target_author_id" id="target_author_id" value="">
 
-						<div class="antigravity-form-grid">
-							<div class="antigravity-form-group"><label for="team-contact-email">De: (Su Correo) *</label><input 
-									type="email" id="team-contact-email" name="contact_email"
-									placeholder="ejemplo@correo.com" required></div>
-							<div class="antigravity-form-group"><label for="team-contact-phone">Teléfono</label><input 
-									type="tel" id="team-contact-phone" name="contact_phone"
-									placeholder="Su número de teléfono"></div>
-							<div class="antigravity-form-group"><label for="team-contact-subject">Asunto: *</label><input 
-									type="text" id="team-contact-subject" name="contact_subject"
-									placeholder="Motivo de la consulta" required></div>
-							<div class="antigravity-form-group"><label for="team-contact-name">Tu Nombre: *</label><input 
-									type="text" id="team-contact-name" name="contact_name"
-									placeholder="Ej. Juan Pérez" required></div>
-							<div class="antigravity-form-group"><label for="team-contact-company">Empresa (Opcional)</label><input 
-									type="text" id="team-contact-company" name="contact_company"
-									placeholder="Nombre de la empresa"></div>
-							<div class="antigravity-form-group"><label for="team-contact-role">Cargo (Opcional)</label><input 
-									type="text" id="team-contact-role" name="contact_role"
-									placeholder="Ej. Director General"></div>
-							<div class="antigravity-form-group full-width"><label for="team-contact-message">Mensaje: *</label><textarea 
-									id="team-contact-message" name="contact_message" rows="5"
-									placeholder="Escriba su mensaje aquí..." required></textarea></div>
-							<div class="antigravity-form-group full-width">
-								<label style="display: flex; justify-content: space-between; margin-bottom: 8px;">
-									<span>Archivos Adjuntos (Opcional)</span>
-									<span style="font-size: 0.8em; color: #94a3b8; font-weight: normal;">Máx. Total 15MB (PDF, DOC, DOCX, JPG, PNG)</span>
-								</label>
-								<div class="antigravity-custom-file-upload">
-									<input type="file" id="team-contact-attachment" name="contact_attachment[]" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png" multiple class="antigravity-file-input-hidden">
-									<label for="team-contact-attachment" class="antigravity-file-btn"><i class="fas fa-paperclip"></i> Adjuntar</label>
-									<span class="antigravity-file-text">Ningún archivo seleccionado.</span>
-								</div>
+					<div class="antigravity-form-grid">
+						<div class="antigravity-form-group"><label for="team-contact-email">De: (Su Correo) *</label><input 
+								type="email" id="team-contact-email" name="contact_email"
+								placeholder="ejemplo@correo.com" required></div>
+						<div class="antigravity-form-group"><label for="team-contact-phone">Teléfono</label><input 
+								type="tel" id="team-contact-phone" name="contact_phone"
+								placeholder="Su número de teléfono"></div>
+						<div class="antigravity-form-group"><label for="team-contact-subject">Asunto: *</label><input 
+								type="text" id="team-contact-subject" name="contact_subject"
+								placeholder="Motivo de la consulta" required></div>
+						<div class="antigravity-form-group"><label for="team-contact-name">Tu Nombre: *</label><input 
+								type="text" id="team-contact-name" name="contact_name"
+								placeholder="Ej. Juan Pérez" required></div>
+						<div class="antigravity-form-group"><label for="team-contact-company">Empresa (Opcional)</label><input 
+								type="text" id="team-contact-company" name="contact_company"
+								placeholder="Nombre de la empresa"></div>
+						<div class="antigravity-form-group"><label for="team-contact-role">Cargo (Opcional)</label><input 
+								type="text" id="team-contact-role" name="contact_role"
+								placeholder="Ej. Director General"></div>
+						<div class="antigravity-form-group full-width"><label for="team-contact-message">Mensaje: *</label><textarea 
+								id="team-contact-message" name="contact_message" rows="5"
+								placeholder="Escriba su mensaje aquí..." required></textarea></div>
+						<div class="antigravity-form-group full-width">
+							<label style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+								<span>Archivos Adjuntos (Opcional)</span>
+								<span style="font-size: 0.8em; color: #94a3b8; font-weight: normal;">Máx. Total 15MB (PDF, DOC, DOCX, JPG, PNG)</span>
+							</label>
+							<div class="antigravity-custom-file-upload">
+								<input type="file" id="team-contact-attachment" name="contact_attachment[]" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png" multiple class="antigravity-file-input-hidden">
+								<label for="team-contact-attachment" class="antigravity-file-btn"><i class="fas fa-paperclip"></i> Adjuntar</label>
+								<span class="antigravity-file-text">Ningún archivo seleccionado.</span>
 							</div>
 						</div>
+					</div>
 
-						<div class="antigravity-form-group submit-group" style="text-align: right;"><button type="submit"
-								class="antigravity-btn-submit">Enviar Mensaje</button></div>
-					</form>
-				</div>
+					<div class="antigravity-form-group submit-group" style="text-align: right;"><button type="submit"
+							class="antigravity-btn-submit">Enviar Mensaje</button></div>
+				</form>
 			</div>
 		</div>
 	</div>

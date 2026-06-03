@@ -1526,6 +1526,7 @@ footer.wp-block-group .footer-logo-switch img {
     position: relative;
     max-height: 90vh;
     overflow-y: auto;
+    overflow-x: hidden;
     padding: 40px;
 
     /* Dimensiones Responsivas Iniciales (Mobile) */

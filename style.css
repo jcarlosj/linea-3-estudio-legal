@@ -1572,7 +1572,9 @@ footer.wp-block-group .footer-logo-switch img {
 }
 
 .antigravity-modal-close:hover {
-    color: var(--wp--preset--color--primary, #ce9e50);
+    background-color: var(--wp--preset--color--primary, #ce9e50);
+    color: #ffffff;
+    cursor: pointer;
 }
 
 .antigravity-modal-header {

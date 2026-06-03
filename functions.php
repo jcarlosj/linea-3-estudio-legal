@@ -900,7 +900,7 @@ function antigravity_render_strategic_modal()
 			<button class="antigravity-modal-close" aria-label="Cerrar modal">&times;</button>
 			<div class="antigravity-modal-header">
 				<h3>Agendar Consulta</h3>
-				<p>Complete el siguiente formulario y un especialista de Linea 3 se pondrá en contacto pronto.</p>
+				<p>Complete el siguiente formulario y Linea 3 Legal se pondrá en contacto pronto.</p>
 			</div>
 			<div class="antigravity-modal-body">
 				<form action="<?php echo esc_url(admin_url('admin-post.php')); ?>" method="POST"

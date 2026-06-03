@@ -6764,6 +6764,7 @@ body.l3-modal-open-lock {
     border: 1px solid rgba(184, 150, 100, 0.18) !important;
     border-radius: 8px !important;
     overflow: hidden !important;
+    position: relative !important;
     box-shadow: 0 25px 60px rgba(0, 0, 0, 0.45) !important;
     transform: scale(0.92) !important;
     transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1) !important;
@@ -6932,6 +6933,11 @@ body.l3-modal-open-lock {
 .l3-input-error {
     border-color: #ce9e50 !important;
     box-shadow: 0 0 0 1px #ce9e50 !important;
+}
+
+/* Countdown overlay dentro del modal de reseñas */
+.l3-custom-modal-box > .antigravity-success-countdown-overlay {
+    border-radius: 8px;
 }
 
 .l3-frontend-inline-error,

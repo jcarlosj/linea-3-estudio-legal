@@ -557,16 +557,109 @@ jQuery(document).ready(function($) {
 			success: function(response) {
 				$btnSubmit.removeClass('l3-btn--loading');
 				if (response.success) {
-					displayAlert($form, response.data.message, 'success');
-					
-					// Deshabilitar y limpiar formulario
-					$form.find('input, textarea, select, button').prop('disabled', true);
-					$form.find('.l3-frontend-star').css('pointer-events', 'none');
-					
-					// Animación de regreso al inicio tras éxito (4 segundos)
-					setTimeout(function() {
-						location.reload();
-					}, 4000);
+
+					// --- Inicio Secuencia de Éxito Premium ---
+
+					// 1. Cambiar estado del botón a enviado
+					$btnSubmit.text('¡Enviado!').css('background-color', '#38a169');
+					$btnSubmit.prop('disabled', true);
+
+					// 2. Ocultar botón de cerrar modal durante la animación
+					var $closeBtn = $('#l3-close-choice-modal');
+					$closeBtn.hide();
+
+					// 3. Aplicar blur al header y al formulario activo
+					var $modalHeader = $('.l3-custom-modal-header');
+					$modalHeader.css({
+						'transition': 'filter 0.5s ease, opacity 0.5s ease',
+						'filter': 'blur(6px)',
+						'opacity': '0.3'
+					});
+					$form.css({
+						'transition': 'filter 0.5s ease, opacity 0.5s ease',
+						'filter': 'blur(6px)',
+						'opacity': '0.3',
+						'pointer-events': 'none'
+					});
+
+					// 4. Inyectar overlay del countdown en el modal box
+					var $modalBox = $('.l3-custom-modal-box');
+					var $countdownOverlay = $('<div class="antigravity-success-countdown-overlay"></div>').css({
+						'position': 'absolute',
+						'top': '0',
+						'left': '0',
+						'width': '100%',
+						'height': '100%',
+						'display': 'flex',
+						'flex-direction': 'column',
+						'justify-content': 'center',
+						'align-items': 'center',
+						'z-index': '10',
+						'color': '#ffffff',
+						'text-align': 'center',
+						'padding': '20px',
+						'box-sizing': 'border-box'
+					});
+					$countdownOverlay.html('<div class="l3-countdown-number" style="font-size: 80px; font-weight: bold; color: #ce9e50; transition: transform 0.2s ease; text-shadow: 0 4px 10px rgba(0,0,0,0.5);">5</div>');
+					$modalBox.append($countdownOverlay);
+
+					// 5. Contador regresivo 5 → 1
+					var count = 5;
+					var $countEl = $countdownOverlay.find('.l3-countdown-number');
+
+					var interval = setInterval(function() {
+						count--;
+						if (count > 0) {
+							$countEl.text(count).css('transform', 'scale(1.2)');
+							setTimeout(function() { $countEl.css('transform', 'scale(1)'); }, 150);
+						} else {
+							clearInterval(interval);
+
+							// 6. Mostrar mensaje de éxito (sin mostrar el cero)
+							$countdownOverlay.html(
+								'<div class="l3-success-message" style="opacity:0; transform:translateY(10px); transition: all 0.5s ease; text-shadow: 0 2px 4px rgba(0,0,0,0.5);">' +
+									'<h3 style="color:#ce9e50; font-size:24px; margin:0 0 15px 0; font-family:\'Playfair Display\', serif; font-weight:bold; line-height:1.3;">¡Reseña enviada!</h3>' +
+									'<p style="color:#ffffff; font-size:16px; line-height:1.6; max-width:320px; margin:0 auto;">Tu testimonio será revisado por el equipo de Línea 3 Legal antes de ser publicado.</p>' +
+								'</div>'
+							);
+							setTimeout(function() {
+								$countdownOverlay.find('.l3-success-message').css({ 'opacity': '1', 'transform': 'translateY(0)' });
+							}, 50);
+
+							// 7. Cerrar y resetear el modal tras 3 segundos
+							setTimeout(function() {
+								$modalBox.css({ 'transition': 'all 0.5s ease', 'transform': 'scale(0.95)', 'opacity': '0' });
+
+								setTimeout(function() {
+									// Eliminar overlay
+									$countdownOverlay.remove();
+
+									// Cerrar modal principal
+									$('#l3-review-choice-modal').removeClass('is-visible');
+									$('body').removeClass('l3-modal-open-lock');
+
+									setTimeout(function() {
+										// Restaurar estilos del modal box
+										$modalBox.css({ 'transform': '', 'opacity': '', 'transition': '' });
+
+										// Restaurar blur del header y formulario
+										$modalHeader.css({ 'filter': '', 'opacity': '', 'transition': '' });
+										$form.css({ 'filter': '', 'opacity': '', 'transition': '', 'pointer-events': '' });
+
+										// Restaurar botón X y submit
+										$closeBtn.show();
+										$btnSubmit.text('Enviar Reseña').css('background-color', '').prop('disabled', false);
+
+										// Resetear formulario completo (campos, rating, avatar, pasos)
+										resetModalForms();
+									}, 300);
+								}, 500);
+							}, 3000);
+						}
+					}, 1000);
+
+					// --- Fin Secuencia de Éxito Premium ---
+
 				} else {
 					displayAlert($form, response.data.message, 'error');
 				}

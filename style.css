@@ -1,10 +1,10 @@
 /*
-Theme Name: Linea 3 Legal v2
+Theme Name: Linea 3 Legal v1.8.0
 Theme URI: https://linea3legal.com
-Author: Linea 3 Developer
-Author URI: https://linea3legal.com
-Description: Versión 2 - Limpieza total de caché y estructura. Basado en Twenty Twenty-Five.
-Version: 1.7.7
+Author: jcarlosj
+Author URI: https://www.linkedin.com/in/jcarlosj/
+Description: Un tema personalizado con funcionalidades totalmente integradas al mismo, compatible con FSE, WordPress 7.0
+Version: 1.8.0
 Requires at least: 6.7
 Tested up to: 6.9.4
 Requires PHP: 8.2
@@ -61,11 +61,12 @@ button,
 /* 1. COMPORTAMIENTO DEL LOGO Y HEADER */
 /* Reset total de márgenes del Footer y Color Homogéneo */
 body footer.wp-block-template-part,
-body footer.wp-block-template-part > .wp-block-group,
+body footer.wp-block-template-part>.wp-block-group,
 body footer.wp-block-template-part footer {
     padding-left: 0 !important;
     padding-right: 0 !important;
-    background-color: #0a2233 !important; /* Color corporativo sólido */
+    background-color: #0a2233 !important;
+    /* Color corporativo sólido */
 }
 
 /* FORZAR FOOTER A FULL-WIDTH Y ELIMINAR CUALQUIER RESTRICCIÓN DE MÁRGENES (FIX PARA PÁGINA DE BLOG) */
@@ -87,19 +88,20 @@ body {
     display: flex !important;
     flex-direction: column !important;
     min-height: 100vh !important;
-    gap: 0 !important; /* Eliminar gap residual de WordPress FSE que genera espacio blanco bajo el footer */
+    gap: 0 !important;
+    /* Eliminar gap residual de WordPress FSE que genera espacio blanco bajo el footer */
 }
 
-.wp-site-blocks > main {
+.wp-site-blocks>main {
     flex: 1 0 auto !important;
 }
 
-.wp-site-blocks > footer {
+.wp-site-blocks>footer {
     margin-top: auto !important;
 }
 
 /* Asegurar que el footer no tenga margin-bottom residual en ningún contexto */
-.wp-site-blocks > footer.wp-block-template-part:last-child {
+.wp-site-blocks>footer.wp-block-template-part:last-child {
     margin-bottom: 0 !important;
     padding-bottom: 0 !important;
 }
@@ -113,7 +115,8 @@ footer.wp-block-template-part {
     display: flex !important;
     align-items: center !important;
     justify-content: space-between !important;
-    padding: 20px 50px !important; /* Default desktop padding */
+    padding: 20px 50px !important;
+    /* Default desktop padding */
     box-sizing: border-box !important;
 }
 
@@ -182,7 +185,8 @@ footer.wp-block-template-part {
     width: auto !important;
     height: auto !important;
     max-height: 50px !important;
-    flex-shrink: 0 !important; /* Prevent squashing on small screens */
+    flex-shrink: 0 !important;
+    /* Prevent squashing on small screens */
     transition: max-height 0.3s ease;
 }
 
@@ -414,10 +418,12 @@ footer.wp-block-template-part {
 /* Contenedor principal con padding de WP por defecto */
 .footer-grid-container {
     display: grid !important;
-    grid-template-columns: 2fr 1fr 1fr !important; /* 50% para Logo, 25% para cada info */
-    column-gap: 60px !important; 
-    row-gap: 2rem !important; /* Espacio editorial amplio solicitado */
-    align-items: start !important; 
+    grid-template-columns: 2fr 1fr 1fr !important;
+    /* 50% para Logo, 25% para cada info */
+    column-gap: 60px !important;
+    row-gap: 2rem !important;
+    /* Espacio editorial amplio solicitado */
+    align-items: start !important;
     box-sizing: border-box;
     width: 100% !important;
     max-width: 1400px !important;
@@ -491,7 +497,8 @@ footer.wp-block-group .footer-logo-switch img {
 
     /* Header Specific Adjustment for Mobile */
     .header-main-container {
-        padding: 10px 15px !important; /* Minimum padding to maximize space */
+        padding: 10px 15px !important;
+        /* Minimum padding to maximize space */
     }
 
     .header-link-logo .logo-horizontal {
@@ -505,7 +512,8 @@ footer.wp-block-group .footer-logo-switch img {
     }
 
     .header-right-side {
-        gap: 12px !important; /* Compact gap for mobile buttons */
+        gap: 12px !important;
+        /* Compact gap for mobile buttons */
     }
 
     /* Hide "CONSULTAR" text on mobile to gain space, keep only icon */
@@ -539,6 +547,7 @@ footer.wp-block-group .footer-logo-switch img {
     .antigravity-team-section {
         padding: 25px 0 50px 0 !important;
     }
+
     .team-section-header {
         margin-bottom: 25px !important;
     }
@@ -630,7 +639,8 @@ footer.wp-block-group .footer-logo-switch img {
 
     /* Header Specific Adjustments for Tablet to prevent overlaps and wraps */
     .header-main-container {
-        padding: 10px 20px !important; /* Reduce padding on smaller screens */
+        padding: 10px 20px !important;
+        /* Reduce padding on smaller screens */
     }
 
     .header-link-logo .logo-horizontal {
@@ -650,13 +660,15 @@ footer.wp-block-group .footer-logo-switch img {
 
     .header-main-container .wp-block-navigation__container,
     .header-main-container ul.wp-block-navigation__container {
-        gap: 16px !important; /* Reduce gap between individual menu links to prevent overlapping */
+        gap: 16px !important;
+        /* Reduce gap between individual menu links to prevent overlapping */
     }
 
     .header-main-container .wp-block-buttons {
         display: flex !important;
         flex-direction: row !important;
-        flex-wrap: nowrap !important; /* Force side-by-side buttons, never stack */
+        flex-wrap: nowrap !important;
+        /* Force side-by-side buttons, never stack */
         gap: 8px !important;
     }
 
@@ -664,6 +676,7 @@ footer.wp-block-group .footer-logo-switch img {
     .antigravity-team-section {
         padding: 35px 0 60px 0 !important;
     }
+
     .team-section-header {
         margin-bottom: 35px !important;
     }
@@ -672,9 +685,11 @@ footer.wp-block-group .footer-logo-switch img {
 /* 3. DESKTOP (≥ 1024px) */
 @media (min-width: 1024px) {
     .footer-grid-container {
-        grid-template-columns: 2fr 1fr 1fr !important; /* 50% Logo, 25% c/u info */
+        grid-template-columns: 2fr 1fr 1fr !important;
+        /* 50% Logo, 25% c/u info */
         justify-items: start;
-        align-items: start !important; /* Forzamos alineación superior en Desktop */
+        align-items: start !important;
+        /* Forzamos alineación superior en Desktop */
         text-align: left;
     }
 
@@ -1824,13 +1839,15 @@ footer.wp-block-group .footer-logo-switch img {
     max-width: 1200px !important;
     margin-left: auto !important;
     margin-right: auto !important;
-    width: calc(100% - 100px) !important; /* Mantiene un margen homogéneo de 50px en los lados */
+    width: calc(100% - 100px) !important;
+    /* Mantiene un margen homogéneo de 50px en los lados */
     box-sizing: border-box !important;
 }
 
 @media (max-width: 767px) {
     .blog-listing-wrapper .wp-block-query {
-        width: calc(100% - 40px) !important; /* Mantiene 20px de margen en móvil */
+        width: calc(100% - 40px) !important;
+        /* Mantiene 20px de margen en móvil */
     }
 }
 
@@ -2068,14 +2085,16 @@ html body .blog-listing-wrapper .wp-block-post-template.is-layout-grid {
 /* ========== EQUIPO JURÍDICO (TEAM SECTION) - START ========== */
 
 .antigravity-team-section {
-    padding: 50px 0 80px 0 !important; /* Tighter padding on desktop */
+    padding: 50px 0 80px 0 !important;
+    /* Tighter padding on desktop */
     background-color: #051320;
     /* Retornamos al fondo azul profundo anterior */
 }
 
 /* Cabecera de la sección */
 .team-section-header {
-    margin-bottom: 50px; /* Reduced from 80px */
+    margin-bottom: 50px;
+    /* Reduced from 80px */
     display: flex !important;
     align-items: stretch !important;
     gap: 0;
@@ -3013,7 +3032,7 @@ main.single-post-layout-pro {
     .l3-enfoque-footer {
         padding-top: 30px !important;
     }
-    
+
     .l3-enfoque-footer-text {
         font-size: 1.1rem !important;
     }
@@ -3090,7 +3109,8 @@ main.single-post-layout-pro {
     justify-content: center;
     align-items: center;
     text-align: center;
-    padding: 30px 24px !important; /* More space-conscious padding for desktop */
+    padding: 30px 24px !important;
+    /* More space-conscious padding for desktop */
     width: 100% !important;
     max-width: 100% !important;
     box-sizing: border-box !important;
@@ -3167,7 +3187,7 @@ main.single-post-layout-pro {
     .l3-service-card .wp-block-cover__inner-container {
         padding: 20px 16px !important;
     }
-    
+
     .l3-service-card .service-icon {
         width: 70px !important;
         height: 70px !important;
@@ -3175,23 +3195,23 @@ main.single-post-layout-pro {
         margin-bottom: 8px !important;
         opacity: 1 !important;
     }
-    
+
     .l3-service-card:hover .service-icon {
         opacity: 0 !important;
         max-height: 0 !important;
         margin-bottom: 0 !important;
         transform: scale(0.6) translateY(-10px) !important;
     }
-    
+
     .l3-service-card h3 {
         font-size: 1.25rem !important;
         line-height: 1.2 !important;
     }
-    
+
     .l3-service-card:hover h3 {
         margin-bottom: 8px !important;
     }
-    
+
     .l3-service-card .service-excerpt {
         font-size: 0.82rem !important;
         line-height: 1.35 !important;
@@ -3203,7 +3223,7 @@ main.single-post-layout-pro {
     .l3-service-card .wp-block-cover__inner-container {
         padding: 24px 20px !important;
     }
-    
+
     .l3-service-card .service-icon {
         width: 70px !important;
         height: 70px !important;
@@ -3211,23 +3231,23 @@ main.single-post-layout-pro {
         margin-bottom: 8px !important;
         opacity: 1 !important;
     }
-    
+
     .l3-service-card:hover .service-icon {
         opacity: 0 !important;
         max-height: 0 !important;
         margin-bottom: 0 !important;
         transform: scale(0.65) translateY(-10px) !important;
     }
-    
+
     .l3-service-card h3 {
         font-size: 1.35rem !important;
         line-height: 1.2 !important;
     }
-    
+
     .l3-service-card:hover h3 {
         margin-bottom: 12px !important;
     }
-    
+
     .l3-service-card .service-excerpt {
         font-size: 0.88rem !important;
         line-height: 1.4 !important;
@@ -3239,11 +3259,11 @@ main.single-post-layout-pro {
     .l3-service-card .wp-block-cover__inner-container {
         padding: 28px 20px !important;
     }
-    
+
     .l3-service-card h3 {
         font-size: 1.45rem !important;
     }
-    
+
     .l3-service-card .service-excerpt {
         font-size: 0.90rem !important;
         line-height: 1.42 !important;
@@ -5908,11 +5928,14 @@ body footer .footer-grid-container h4,
 body footer .footer-grid-container .wp-block-heading {
     color: #b89664 !important;
     font-family: 'Outfit', sans-serif !important;
-    font-size: clamp(1.1rem, 1.2vw, 1.35rem) !important; /* Tamaño más equilibrado */
-    text-transform: none !important; /* Solo la primera letra en mayúscula según el HTML */
+    font-size: clamp(1.1rem, 1.2vw, 1.35rem) !important;
+    /* Tamaño más equilibrado */
+    text-transform: none !important;
+    /* Solo la primera letra en mayúscula según el HTML */
     letter-spacing: normal !important;
     font-weight: 600 !important;
-    margin-top: 0 !important; /* Alineación superior absoluta con el logo */
+    margin-top: 0 !important;
+    /* Alineación superior absoluta con el logo */
     margin-bottom: 1.2rem !important;
     line-height: 1.2 !important;
 }
@@ -5922,8 +5945,9 @@ body footer .footer-grid-container p,
 body footer .footer-grid-container .wp-block-paragraph {
     color: rgba(255, 255, 255, 0.85) !important;
     font-family: 'Outfit', sans-serif !important;
-    font-size: clamp(0.9rem, 1vw, 1.05rem) !important; /* Estándar de lectura editorial */
-    line-height: 1.8 !important; 
+    font-size: clamp(0.9rem, 1vw, 1.05rem) !important;
+    /* Estándar de lectura editorial */
+    line-height: 1.8 !important;
     font-weight: 300 !important;
     margin-top: 0 !important;
     margin-bottom: 0.4rem !important;
@@ -5938,8 +5962,8 @@ body footer .footer-grid-container .wp-block-paragraph {
         text-align: center !important;
         gap: 50px !important;
     }
-    
-    body footer .footer-grid-container > div {
+
+    body footer .footer-grid-container>div {
         width: 100% !important;
     }
 }
@@ -5949,8 +5973,9 @@ body footer .footer-bottom-group {
     grid-column: 1 / -1 !important;
     width: 100% !important;
     border-top: 1px solid rgba(184, 150, 100, 0.15) !important;
-    margin-top: 0 !important; /* Controlado ahora por el row-gap de la rejilla */
-    padding-top: 15px !important; 
+    margin-top: 0 !important;
+    /* Controlado ahora por el row-gap de la rejilla */
+    padding-top: 15px !important;
     display: flex !important;
     flex-direction: column !important;
     align-items: center !important;
@@ -5959,7 +5984,8 @@ body footer .footer-bottom-group {
 body footer .footer-legal-links {
     display: flex !important;
     flex-direction: row !important;
-    flex-wrap: nowrap !important; /* Evita que se pongan verticales */
+    flex-wrap: nowrap !important;
+    /* Evita que se pongan verticales */
     justify-content: center !important;
     gap: 40px !important;
     width: auto !important;
@@ -6025,12 +6051,29 @@ body footer .footer-credits p {
 
 /* Animación de Latido (Heartbeat) */
 @keyframes l3-heartbeat {
-    0% { transform: scale(1); }
-    10% { transform: scale(1.3); }
-    20% { transform: scale(1.1); }
-    30% { transform: scale(1.4); }
-    45% { transform: scale(1); }
-    100% { transform: scale(1); }
+    0% {
+        transform: scale(1);
+    }
+
+    10% {
+        transform: scale(1.3);
+    }
+
+    20% {
+        transform: scale(1.1);
+    }
+
+    30% {
+        transform: scale(1.4);
+    }
+
+    45% {
+        transform: scale(1);
+    }
+
+    100% {
+        transform: scale(1);
+    }
 }
 
 .heart-icon {
@@ -6040,22 +6083,26 @@ body footer .footer-credits p {
 }
 
 @media (max-width: 767px) {
+
     body footer .footer-legal-links,
     body footer .footer-legal-links .wp-block-navigation__container {
         gap: 20px !important;
-        flex-direction: column !important; /* En móvil muy pequeño, mejor uno sobre otro */
+        flex-direction: column !important;
+        /* En móvil muy pequeño, mejor uno sobre otro */
         align-items: center !important;
     }
-    
+
     body footer .footer-credits p {
-        flex-direction: column !important; /* Apilado de copyright y créditos */
+        flex-direction: column !important;
+        /* Apilado de copyright y créditos */
         gap: 8px !important;
         font-size: 0.75rem !important;
         line-height: 1.4 !important;
     }
 
     body footer .credits-divider {
-        display: none !important; /* Ocultamos la barra vertical en móvil */
+        display: none !important;
+        /* Ocultamos la barra vertical en móvil */
     }
 }
 
@@ -6084,27 +6131,34 @@ body footer .footer-credits p {
     display: flex !important;
     align-items: center !important;
     justify-content: flex-end !important;
-    pointer-events: none !important; /* Permite clics pasen si no es en el botón */
+    pointer-events: none !important;
+    /* Permite clics pasen si no es en el botón */
 }
 
 .l3-whatsapp-floating {
     position: relative !important;
     width: 48px !important;
     height: 48px !important;
-    background-color: transparent !important; /* Sin fondo de contenedor */
-    border: none !important; /* Sin borde de contenedor */
+    background-color: transparent !important;
+    /* Sin fondo de contenedor */
+    border: none !important;
+    /* Sin borde de contenedor */
     border-radius: 0 !important;
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
-    color: #ffffff !important; /* White Icon (Borde y teléfono) */
-    font-size: 52px !important; /* El ícono ahora es el botón en sí */
+    color: #ffffff !important;
+    /* White Icon (Borde y teléfono) */
+    font-size: 52px !important;
+    /* El ícono ahora es el botón en sí */
     text-decoration: none !important;
     box-shadow: none !important;
     transition: all 0.35s cubic-bezier(0.25, 0.8, 0.25, 1) !important;
     cursor: pointer !important;
-    pointer-events: auto !important; /* Reactiva clics solo en el botón */
-    filter: drop-shadow(0 4px 15px rgba(10, 34, 51, 0.25)) !important; /* Sombra en la forma del ícono */
+    pointer-events: auto !important;
+    /* Reactiva clics solo en el botón */
+    filter: drop-shadow(0 4px 15px rgba(10, 34, 51, 0.25)) !important;
+    /* Sombra en la forma del ícono */
     z-index: 1 !important;
 }
 
@@ -6114,7 +6168,8 @@ body footer .footer-credits p {
     position: absolute !important;
     top: 50% !important;
     left: 50% !important;
-    width: 40px !important; /* Ligeramente más pequeño que el ícono (52px) para no salir del borde blanco */
+    width: 40px !important;
+    /* Ligeramente más pequeño que el ícono (52px) para no salir del borde blanco */
     height: 40px !important;
     background-color: #25d366 !important;
     border-radius: 50% !important;
@@ -6129,24 +6184,59 @@ body footer .footer-credits p {
 }
 
 .l3-whatsapp-container:hover .l3-whatsapp-floating::before {
-    background-color: #128c7e !important; /* Darker WhatsApp green on hover */
+    background-color: #128c7e !important;
+    /* Darker WhatsApp green on hover */
 }
 
 /* Micro-animación de pulso áureo/dorado y Brillo de Moneda */
 @keyframes l3-whatsapp-pulse {
-    0% { box-shadow: 0 0 0 0 rgba(206, 158, 80, 0.45); }
-    70% { box-shadow: 0 0 0 15px rgba(206, 158, 80, 0); }
-    100% { box-shadow: 0 0 0 0 rgba(206, 158, 80, 0); }
+    0% {
+        box-shadow: 0 0 0 0 rgba(206, 158, 80, 0.45);
+    }
+
+    70% {
+        box-shadow: 0 0 0 15px rgba(206, 158, 80, 0);
+    }
+
+    100% {
+        box-shadow: 0 0 0 0 rgba(206, 158, 80, 0);
+    }
 }
 
 @keyframes l3-button-shiver {
-    0%, 22% { transform: translateX(0) scale(1); }
-    23% { transform: translateX(-4px) scale(0.96); } /* Shiver 1 */
-    24% { transform: translateX(2px) scale(1.02); }
-    25%, 28% { transform: translateX(0) scale(1); }
-    29% { transform: translateX(-4px) scale(0.96); } /* Shiver 2 */
-    30% { transform: translateX(2px) scale(1.02); }
-    31%, 100% { transform: translateX(0) scale(1); }
+
+    0%,
+    22% {
+        transform: translateX(0) scale(1);
+    }
+
+    23% {
+        transform: translateX(-4px) scale(0.96);
+    }
+
+    /* Shiver 1 */
+    24% {
+        transform: translateX(2px) scale(1.02);
+    }
+
+    25%,
+    28% {
+        transform: translateX(0) scale(1);
+    }
+
+    29% {
+        transform: translateX(-4px) scale(0.96);
+    }
+
+    /* Shiver 2 */
+    30% {
+        transform: translateX(2px) scale(1.02);
+    }
+
+    31%,
+    100% {
+        transform: translateX(0) scale(1);
+    }
 }
 
 .l3-whatsapp-floating {
@@ -6154,7 +6244,8 @@ body footer .footer-credits p {
 }
 
 .l3-whatsapp-container:hover .l3-whatsapp-floating {
-    animation: l3-whatsapp-pulse 2s infinite !important; /* Detener el brillo en hover */
+    animation: l3-whatsapp-pulse 2s infinite !important;
+    /* Detener el brillo en hover */
 }
 
 /* Tooltip / Globo Call to Action (Solo Escritorio) */
@@ -6164,20 +6255,62 @@ body footer .footer-credits p {
     }
 
     @keyframes l3-tooltip-tap {
-        0%, 3% { opacity: 0; transform: translateY(-50%) translateX(-10px); visibility: hidden; }
-        6%, 20% { opacity: 1; transform: translateY(-50%) translateX(0px); visibility: visible; } /* Pausa inicial separada */
-        23% { transform: translateY(-50%) translateX(12px); } /* Toca el botón 1 */
-        26% { transform: translateY(-50%) translateX(0px); }  /* Regresa */
-        29% { transform: translateY(-50%) translateX(12px); } /* Toca el botón 2 */
-        32%, 52% { opacity: 1; transform: translateY(-50%) translateX(0px); visibility: visible; } /* Pausa final separada */
-        55%, 100% { opacity: 0; transform: translateY(-50%) translateX(-10px); visibility: hidden; } /* Desaparece */
+
+        0%,
+        3% {
+            opacity: 0;
+            transform: translateY(-50%) translateX(-10px);
+            visibility: hidden;
+        }
+
+        6%,
+        20% {
+            opacity: 1;
+            transform: translateY(-50%) translateX(0px);
+            visibility: visible;
+        }
+
+        /* Pausa inicial separada */
+        23% {
+            transform: translateY(-50%) translateX(12px);
+        }
+
+        /* Toca el botón 1 */
+        26% {
+            transform: translateY(-50%) translateX(0px);
+        }
+
+        /* Regresa */
+        29% {
+            transform: translateY(-50%) translateX(12px);
+        }
+
+        /* Toca el botón 2 */
+        32%,
+        52% {
+            opacity: 1;
+            transform: translateY(-50%) translateX(0px);
+            visibility: visible;
+        }
+
+        /* Pausa final separada */
+        55%,
+        100% {
+            opacity: 0;
+            transform: translateY(-50%) translateX(-10px);
+            visibility: hidden;
+        }
+
+        /* Desaparece */
     }
 
     .l3-whatsapp-tooltip {
         position: absolute !important;
-        right: calc(100% + 24px) !important; /* Separación de ~1.5 rem (24px) */
+        right: calc(100% + 24px) !important;
+        /* Separación de ~1.5 rem (24px) */
         top: 50% !important;
-        transform: translateY(-50%); /* Sin !important para que los keyframes funcionen */
+        transform: translateY(-50%);
+        /* Sin !important para que los keyframes funcionen */
         display: flex !important;
         align-items: center !important;
         opacity: 0;
@@ -6264,11 +6397,13 @@ body footer .footer-credits p {
     transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1) !important;
     z-index: 9999999 !important;
 }
+
 .l3-share-toast.is-visible {
     opacity: 1 !important;
     visibility: visible !important;
     transform: translate(-50%, 0) !important;
 }
+
 .l3-share-toast svg {
     color: #ce9e50 !important;
 }
@@ -6342,8 +6477,15 @@ body footer .made-with-part {
 }
 
 @keyframes l3-cursor-blink {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0; }
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0;
+    }
 }
 
 .l3-empty-review-icon {
@@ -6391,7 +6533,8 @@ body footer .made-with-part {
 
 /* Tarjeta de Reseña (Premium Glassmorphic-Dark) */
 .l3-review-card {
-    flex: 0 0 calc((100% - 40px) / 3) !important; /* Default 3 cards visible */
+    flex: 0 0 calc((100% - 40px) / 3) !important;
+    /* Default 3 cards visible */
     background: #020617 !important;
     border: 1px solid rgba(184, 150, 100, 0.18) !important;
     border-radius: 8px !important;
@@ -6422,13 +6565,18 @@ body footer .made-with-part {
 
 /* Animación Especial para Reseñas 5.0 */
 @keyframes starShine {
-    0%, 100% {
-        color: #ce9e50; /* Color corporativo inicial */
+
+    0%,
+    100% {
+        color: #ce9e50;
+        /* Color corporativo inicial */
         filter: drop-shadow(0 0 0px transparent);
         transform: scale(1);
     }
+
     50% {
-        color: #ffd700; /* Amarillo brillante vibrante */
+        color: #ffd700;
+        /* Amarillo brillante vibrante */
         filter: drop-shadow(0 0 6px rgba(255, 215, 0, 0.7));
         transform: scale(1.15);
     }
@@ -6440,11 +6588,25 @@ body footer .made-with-part {
 }
 
 /* Efecto de cascada para el brillo de las estrellas */
-.l3-stars-perfect svg:nth-child(1) { animation-delay: 0s; }
-.l3-stars-perfect svg:nth-child(2) { animation-delay: 0.15s; }
-.l3-stars-perfect svg:nth-child(3) { animation-delay: 0.3s; }
-.l3-stars-perfect svg:nth-child(4) { animation-delay: 0.45s; }
-.l3-stars-perfect svg:nth-child(5) { animation-delay: 0.6s; }
+.l3-stars-perfect svg:nth-child(1) {
+    animation-delay: 0s;
+}
+
+.l3-stars-perfect svg:nth-child(2) {
+    animation-delay: 0.15s;
+}
+
+.l3-stars-perfect svg:nth-child(3) {
+    animation-delay: 0.3s;
+}
+
+.l3-stars-perfect svg:nth-child(4) {
+    animation-delay: 0.45s;
+}
+
+.l3-stars-perfect svg:nth-child(5) {
+    animation-delay: 0.6s;
+}
 
 .l3-review-rating-label {
     color: #ffffff !important;
@@ -6629,7 +6791,8 @@ body footer .made-with-part {
 /* TABLET LAYOUT (<= 1023px) */
 @media (max-width: 1023px) {
     .l3-review-card {
-        flex: 0 0 calc((100% - 20px) / 2) !important; /* 2 cards visible */
+        flex: 0 0 calc((100% - 20px) / 2) !important;
+        /* 2 cards visible */
     }
 
     .l3-slider-btn.prev {
@@ -6644,7 +6807,8 @@ body footer .made-with-part {
 /* MOBILE LAYOUT (<= 767px) */
 @media (max-width: 767px) {
     .l3-review-card {
-        flex: 0 0 100% !important; /* 1 card visible */
+        flex: 0 0 100% !important;
+        /* 1 card visible */
         min-height: auto !important;
     }
 
@@ -6913,9 +7077,11 @@ body.l3-modal-open-lock {
     .l3-custom-modal-body {
         padding: 30px 20px !important;
     }
+
     .l3-custom-modal-header {
         padding: 30px 20px !important;
     }
+
     .l3-custom-modal-header h3 {
         font-size: 1.5rem !important;
     }
@@ -6936,7 +7102,7 @@ body.l3-modal-open-lock {
 }
 
 /* Countdown overlay dentro del modal de reseñas */
-.l3-custom-modal-box > .antigravity-success-countdown-overlay {
+.l3-custom-modal-box>.antigravity-success-countdown-overlay {
     border-radius: 8px;
 }
 
@@ -6950,9 +7116,17 @@ body.l3-modal-open-lock {
 }
 
 @keyframes l3-fade-in-error {
-    from { opacity: 0; transform: translateY(-4px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+        opacity: 0;
+        transform: translateY(-4px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
+
 /* Custom File Upload Button */
 .antigravity-custom-file-upload {
     display: flex;

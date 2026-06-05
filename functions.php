@@ -6169,6 +6169,68 @@ function linea3_legal_force_template_files($block_template, $id, $template_type)
 	return $block_template;
 }
 
+/**
+ * 20. NAVEGACIÓN BLINDADA DEL HEADER (Navigation Enforcer)
+ * Intercepta el renderizado del bloque core/navigation y garantiza que los links
+ * del menú principal siempre estén presentes, incluso cuando WordPress los descarta
+ * al priorizar posts wp_navigation de la base de datos sobre los links inline del tema.
+ *
+ * El problema: WordPress 6.x+ ignora los navigation-link definidos inline en los
+ * archivos de template parts cuando detecta posts wp_navigation en la BD.
+ * Esto causa que el contenedor de navegación se renderice vacío en producción.
+ *
+ * La solución: Detectar cuando el contenedor sale vacío e inyectar los links
+ * canónicos definidos aquí como fuente de verdad del menú principal.
+ */
+add_filter('render_block_core/navigation', 'linea3_legal_enforce_header_navigation', 10, 3);
+function linea3_legal_enforce_header_navigation($block_content, $parsed_block, $block_instance)
+{
+	// Solo intervenir si el contenedor de contenido de navegación está presente
+	if (strpos($block_content, 'wp-block-navigation__responsive-container-content') === false) {
+		return $block_content;
+	}
+
+	// Verificar si el contenido está realmente vacío (no tiene ningún link de navegación)
+	if (strpos($block_content, 'wp-block-navigation-item__content') !== false) {
+		return $block_content; // Ya tiene links, no intervenir
+	}
+
+	// Links canónicos del menú principal del tema (Fuente de Verdad Única)
+	$nav_items = array(
+		array('label' => 'Nosotros',       'url' => '/nosotros/'),
+		array('label' => 'Nuestro Equipo', 'url' => '/nuestro-equipo/'),
+		array('label' => 'Servicios',      'url' => '/servicios/'),
+		array('label' => 'Blog',           'url' => '/blog/'),
+	);
+
+	// Construir el HTML de los links de navegación
+	$links_html = '';
+	foreach ($nav_items as $item) {
+		$current_class = '';
+		// Detectar página activa para marcar con aria-current
+		$request_uri = isset($_SERVER['REQUEST_URI']) ? parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH) : '';
+		if (!empty($request_uri) && rtrim($request_uri, '/') === rtrim($item['url'], '/')) {
+			$current_class = ' current-menu-item';
+		}
+
+		$links_html .= '<li class="wp-block-navigation-item wp-block-navigation-link' . $current_class . '">'
+			. '<a class="wp-block-navigation-item__content" href="' . esc_url($item['url']) . '">'
+			. '<span class="wp-block-navigation-item__label">' . esc_html($item['label']) . '</span>'
+			. '</a></li>';
+	}
+
+	$nav_list = '<ul class="wp-block-navigation__container">' . $links_html . '</ul>';
+
+	// Inyectar los links dentro del contenedor vacío de navegación
+	$block_content = preg_replace(
+		'/(<div[^>]*wp-block-navigation__responsive-container-content[^>]*>)\s*(<\/div>)/s',
+		'$1' . $nav_list . '$2',
+		$block_content
+	);
+
+	return $block_content;
+}
+
 
 /**
  * 21. PURGA PROGRAMÁTICA DE LITESPEED CACHE (Cache Flusher)
@@ -6190,3 +6252,67 @@ add_action('init', function() {
 		}
 	}
 });
+
+/**
+ * 22. INYECCIÓN DEFENSIVA DEL BUSCADOR FLOTANTE (Search Injector)
+ * Garantiza que el contenedor .floating-search-container siempre exista en el DOM
+ * independientemente de si WordPress FSE renderizó o descartó el bloque wp:search
+ * del template part header.html.
+ *
+ * El problema: WordPress FSE puede descartar el bloque wp:group que contiene el
+ * wp:search dentro del header, dejando el DOM sin el contenedor que search-toggle.js
+ * necesita para funcionar. El botón de búsqueda existe pero no tiene target.
+ *
+ * Estrategia: Usamos wp_footer para inyectar un micro-script que verifica si el
+ * contenedor ya existe (protección contra duplicados) y si no, lo crea dinámicamente
+ * dentro del header con la misma estructura HTML que WordPress genera nativamente.
+ * search-toggle.js usa delegación de eventos global, funciona sin importar cuándo
+ * se inserte el contenedor.
+ */
+add_action('wp_footer', 'linea3_legal_inject_floating_search');
+function linea3_legal_inject_floating_search()
+{
+	// Solo inyectar en el frontend, nunca en el admin
+	if (is_admin()) {
+		return;
+	}
+
+	$home_url = esc_url(home_url('/'));
+	?>
+	<script>
+	(function() {
+		// Solo inyectar si NO existe ya en el DOM (defensa contra duplicados)
+		if (document.querySelector('.floating-search-container')) return;
+
+		var header = document.querySelector('.header-main-container');
+		if (!header) return;
+
+		var searchContainer = document.createElement('div');
+		searchContainer.className = 'wp-block-group floating-search-container';
+		searchContainer.setAttribute('aria-expanded', 'false');
+		
+		// Inyectamos el HTML junto con un bloque de estilos de altísima especificidad
+		// para inmunizarlo contra problemas de caché (LiteSpeed) o sobreescrituras de WP Core.
+		searchContainer.innerHTML = `
+			<style>
+				.floating-search-container { position: absolute; top: 100%; left: 0; width: 100%; background-color: transparent !important; padding: 20px; opacity: 0; visibility: hidden; transform: translateY(-10px); transition: all 0.3s ease; z-index: 998; border-top: none; box-shadow: none; }
+				.floating-search-container.is-open { opacity: 1; visibility: visible; transform: translateY(0); }
+				.floating-search-container .wp-block-search__inside-wrapper { max-width: 800px !important; margin: 0 auto !important; background-color: #ffffff !important; display: flex !important; flex-direction: row !important; align-items: stretch !important; padding: 5px !important; border: none !important; box-shadow: 0px 15px 50px rgba(0, 0, 0, 0.5) !important; border-radius: 4px !important; width: 100%; }
+				.floating-search-container .wp-block-search__input { background: transparent url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="%236b7b8f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>') no-repeat left 20px center !important; padding: 15px 20px 15px 50px !important; font-size: 1rem !important; color: #111111 !important; flex-grow: 1 !important; border: none !important; margin: 0 !important; border-radius: 0 !important; outline: none !important; box-shadow: none !important; }
+				.floating-search-container .wp-block-search__input::placeholder { color: #888888 !important; font-weight: normal; }
+				.floating-search-container .wp-block-search__button { background-color: #05141f !important; color: #ffffff !important; border: none !important; margin: 0 !important; padding: 15px 35px !important; font-weight: bold !important; letter-spacing: 1px !important; font-size: 0.85rem !important; white-space: nowrap !important; transition: background-color 0.3s ease !important; border-radius: 2px !important; cursor: pointer !important; }
+				.floating-search-container .wp-block-search__button:hover { background-color: var(--wp--preset--color--primary, #b89664) !important; }
+			</style>
+			<form role="search" method="get" action="<?php echo $home_url; ?>" class="wp-block-search__button-outside wp-block-search__text-button wp-block-search global-search-block">
+				<div class="wp-block-search__inside-wrapper">
+					<input class="wp-block-search__input" name="s" type="search" placeholder="Consulte nuestro archivo legal..." required />
+					<button aria-label="Buscar" class="wp-block-search__button wp-element-button" type="submit">BUSCAR</button>
+				</div>
+			</form>
+		`;
+
+		header.appendChild(searchContainer);
+	})();
+	</script>
+	<?php
+}

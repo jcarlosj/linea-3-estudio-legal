@@ -365,6 +365,7 @@ footer.wp-block-template-part {
     /* Separación interna para que el botón parezca encapsulado */
     background-color: #ffffff;
     /* Fondea toda la caja interna en blanco brillante */
+    display: flex !important;
     flex-direction: row !important;
     align-items: stretch;
     box-shadow: 0px 15px 50px rgba(0, 0, 0, 0.5);
